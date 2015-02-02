@@ -1,0 +1,33 @@
+/* CSS Document */
+
+.enquiries h2 {font-size:large; font-weight:bolder; text-align:center; color:#FE3C00; background-color:#A0BF7C; line-height:45px;}
+
+.enquiries p { line-height:40px; margin-top:20px; text-indent:13px;}
+
+.enquiries h4 { font-size:14px; font-weight:bolder; line-height:30px; color:#03230E; padding:0 13px; background-color:#EEE; }
+
+.enquiries .view-list { margin:15px 0; border:none;}
+
+.enquiries .view-list li {font-size:100%; }
+
+.enquiries table.property { width:72%; }
+
+.enquiries fieldset { margin:15px 8px; }
+
+.enquiries div.submit { padding:8px; }
+
+.enquiries li div.input label { padding-bottom:5px;}
+
+.enquiries li div.checkbox label { padding-bottom:0 !important;}
+
+.enquiries li input[type=text] { width:70%; height:20px; }
+
+.enquiries select option { height:20px;}
+
+.enquiries .error-message { width:70%; }
+
+.enquiries .profile .frame-1-1-l { padding-top:4px;}
+
+.enquiries select#EnquiryViewingTrip { width:323px; }
+
+.enquiries textarea { width:70%;}

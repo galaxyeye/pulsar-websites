@@ -1,0 +1,64 @@
+/* CSS Document */
+
+.enquiries h2 {font-size:large; font-weight:bolder; text-align:center; color:#FE3C00; background-color:#A0BF7C; line-height:45px;}
+
+.enquiries p { line-height:40px; margin-top:20px; text-indent:13px;}
+
+.enquiries h4 { font-size:14px; font-weight:bolder; line-height:30px; color:#03230E; padding:0 13px; background-color:#EEE; }
+
+.enquiries fieldset { margin:15px 8px; }
+
+.enquiries div.submit { padding:8px; }
+
+.enquiries li div.input label { padding-bottom:5px;}
+
+.enquiries li div.checkbox label { padding-bottom:0 !important;}
+
+.enquiries li input[type=text], .enquiries li input[type=select] { width:70%; height:20px; }
+
+.enquiries .error-message { width:70%; }
+
+.enquiries .profile .frame-1-1-l { padding-top:4px;}
+
+.enquiries li div.budget div.frame-1-1 span { display:inline; float:none; width:auto;}
+
+.enquiries li div.budget div.frame-1-1 .col-l { width:140px; }
+
+.enquiries li div.budget div.frame-1-1 .col-r { width:320px; }
+
+.enquiries li div.budget input { width:90px; }
+
+.enquiries li div.lease-term label { width:125px; }
+
+.enquiries label[for=EnquiryLeaseTerm6-12Months] { width:121px !important;}
+
+.enquiries li div.bedrooms label { width:52px !important;}
+
+.enquiries li div.bedrooms label[for=EnquiryBedrooms4Brs] { width:50px !important;}
+
+.enquiries li div.radio fieldset { margin-left:0; margin:10px 0 0;}
+
+.enquiries li div.radio label { display:inline-block; float:none; }
+
+.enquiries li div.radio input { width:20px; display:inline-block; float:none; }
+
+.enquiries li div.select div.checkbox { display:inline-block; width:140px;}
+
+.enquiries li div.select fieldset { margin-left:0; margin:10px 0 0;}
+
+.enquiries li div.select div.checkbox label { width:120px; display:inline-block; float:none; }
+
+.enquiries li div.select div.checkbox input { width:20px; display:inline-block; float:none; }
+
+.enquiries li div.city input { width:173px; margin-left:10px; height:21px; }
+
+.enquiries .preferred_areas input { width:452px !important;}
+
+.enquiries li.area-list div { border:1px dotted #999; width:448px; padding:2px;}
+
+.enquiries li.area-list a { margin:3px; color:#666; cursor:pointer;}
+
+.enquiries li textarea { width:452px; height:113px }
+
+.enquiries .view-list { margin:0; }
+

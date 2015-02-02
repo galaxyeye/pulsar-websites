@@ -1,0 +1,104 @@
+
+html, html body { height:100%; width:100%; overflow:hidden; margin:0; padding:0; font:normal 12px/14px Arial; background:#fff; }
+
+.map table { border:none; }
+
+.map table tr td, table tr th { border:none; }
+
+.back-home { padding:0 6px 6px 0; }
+
+.float_layer { cursor:default; background-color:#FFFFFF; border: 1px solid #767575; position: absolute; z-index: 1000; }
+
+.float_layer a {cursor: pointer; display:inline-block; min-width:10em; margin:5px auto 5px 3px;}
+
+div.chooser { border-bottom:1px solid #fff; line-height:24px;}
+
+div.chooser div.float_layer { width:108px !important; top:164px;}
+
+div.chooser div.float_layer a { line-height:normal; }
+
+
+
+
+
+.map-menu-area { float: left; background:url(/img/sinorelo/mapicon.gif) no-repeat 0 -20px; padding: 0 0 0 20px; margin-left:5px; width: 102px; cursor: pointer; border-bottom:1px solid #fff; line-height:24px;}
+
+.map-menu-area .float_layer { top: 126px; }
+
+.map-menu-area .div_areas { width: 102px; }
+
+
+.map-menu-school { float: left; background:url(/img/sinorelo/mapicon.gif) no-repeat 0 -20px; padding: 0 0 0 20px; margin-left:5px; width: 102px; cursor: pointer; border-bottom:1px solid #fff; line-height:24px;}
+
+.map-menu-school .float_layer { top: 126px; }
+
+.map-menu-school .div_area_schools { width:120px;}
+
+.map-menu-school .div_area_schools .div_schools { width:100%; height:25px; }
+
+.map-menu-school .div_area_schools .div_schools .float_layer { position:relative; left:122px; top:-25px;}
+
+
+
+
+.price-chooser { float:left; background:url(/img/sinorelo/mapicon.gif) no-repeat 0 2px; width:102px; padding:0 0 0 20px; margin-left:5px; cursor:pointer; }
+
+.price-chooser div.float_layer { left:5px; }
+
+.size-chooser { float:left; background:url(/img/sinorelo/mapicon.gif) no-repeat 0 2px; width:95px; padding:0 0 0 20px; cursor:pointer; }
+
+.size-chooser div.float_layer { left:127px; }
+
+.bedrooms-chooser { float:left; background:url(/img/sinorelo/mapicon.gif) no-repeat 0 2px; width:95px; padding:0 0 0 20px; cursor:pointer; }
+
+.bedrooms-chooser div.float_layer { left:242px; }
+
+.tc_price-chooser { float:left; background:url(/img/sinorelo/mapicon.gif) no-repeat 0 -450px; cursor:pointer; width:92px; padding:0 0 0 3px; }
+
+.tc_size-chooser_bedrooms { float:left; background:url(/img/sinorelo/mapicon.gif) no-repeat 0 -420px; cursor:pointer; width:78px; padding:0 0 0 3px; }
+
+.apartment { padding:0 10px 0 22px; }
+
+.villa { padding:0 10px 0 22px; }
+
+.old-house { padding:0 0 0 22px; }
+
+/* compound view */
+
+div.compound { width:510px; overflow:hidden; font-size:90%; }
+
+div.compound h4 { line-height:30px; width:485px; padding-left:5px; }
+
+div.compound .bedrooms, div.compound .size { line-height:25px; }
+
+div.compound .filter { padding-left:5px; }
+
+div.compound h5 { line-height:25px; }
+
+div.compound .filter h5 a { font-size:12px; font-weight:normal; margin-left:16px; display:inline;}
+
+div.compound .filter a { display:inline-block; width:50px; font-size:82%; cursor:pointer; }
+
+.frame-1-3 .col-l { width:110px; }
+
+.frame-1-3 .col-r { width:374px; min-height:200px; border-left:1px solid #999; }
+
+table.property { margin: 5px 0; }
+
+table.property tr td { font-size:90%; line-height:2ex; }
+
+div.property-list { margin:0; margin-bottom:20px; }
+
+div.property-list h5 { padding-left:20px; border-bottom:1px solid #999; margin-bottom:14px; font-size:80%; }
+
+div.property-list table { margin-left:15px; width:320px; }
+
+div.property-list h5 span.rent { margin:0 10px; }
+
+div.property-list h5 span { font-size:12px; font-weight:normal; }
+
+table.property img { border:1px solid #CCC; margin:3px }
+
+table.property .payment { padding-top:0 !important; width:90px; }
+
+table.property .payment .price { font-family:Arial !important; }

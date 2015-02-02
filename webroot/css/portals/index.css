@@ -1,0 +1,30 @@
+@charset "utf-8";
+
+.character {
+    list-style: none outside none;
+    margin: 17px 0 0;
+    padding: 0;
+    width: 100%;
+}
+
+.character li a {
+    -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+    background: url("/img/white-grad.png") repeat-x scroll left top #EAEAEA;
+    border-color: #DEDEDE #BBBBBB #BFBFBF #DEDEDE;
+    border-style: solid;
+    border-width: 1px;
+    color: #555555;
+    display: block;
+    height: 100%;
+    line-height: 40px;
+    margin: 1px;
+    padding: 1px 1px 1px 16px;
+    text-decoration: none;
+}
+
+.character li a:hover {
+    border: 2px solid #999999;
+    color: #222222;
+    font-weight: bold;
+    padding: 0 0 0 15px;
+}

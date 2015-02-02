@@ -1,0 +1,1209 @@
+# LANGUAGE translation of CakePHP Application
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2011-02-15 15:21+0800\n"
+"PO-Revision-Date: 2011-02-15 20:55+0800\n"
+"Last-Translator: Vincent Zhang <ivincent.zhang@gmail.com>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: /cache.php:595
+msgid "Method write() not implemented in %s"
+msgstr ""
+
+#: /cache.php:606
+msgid "Method read() not implemented in %s"
+msgstr ""
+
+#: /cache.php:618
+msgid "Method increment() not implemented in %s"
+msgstr ""
+
+#: /cache.php:629
+msgid "Method decrement() not implemented in %s"
+msgstr ""
+
+#: /cake_log.php:101
+msgid "Missing logger classname"
+msgstr ""
+
+#: /cake_log.php:133
+msgid "Could not load logger class %s"
+msgstr ""
+
+#: /cake_log.php:138
+msgid "logger class %s does not implement a write method."
+msgstr ""
+
+#: /cake_session.php:280
+msgid "Deleting session key {%s}"
+msgstr ""
+
+#: /cake_session.php:285
+msgid "%s doesn't exist"
+msgstr ""
+
+#: /cake_session.php:444
+msgid "Writing session key {%s}: %s"
+msgstr ""
+
+#: /cake_session.php:503
+msgid "You must set the all Configure::write('Session.*') in core.php to use database storage"
+msgstr ""
+
+#: /cake_socket.php:238
+msgid "Connection timed out"
+msgstr ""
+
+#: /class_registry.php:153
+msgid "(ClassRegistry::init() could not create instance of %1$s class %2$s "
+msgstr ""
+
+#: /class_registry.php:163
+msgid "(ClassRegistry::init() Attempted to create instance of a class with a numeric name"
+msgstr ""
+
+#: /configure.php:265
+msgid "Configure::load() - no variable $config found in %s.php"
+msgstr ""
+
+#: /configure.php:392
+msgid "Can't find application core file. Please create %score.php, and make sure it is readable by PHP."
+msgstr ""
+
+#: /configure.php:399
+msgid "Cache not configured properly. Please check Cache::config(); in APP/config/core.php"
+msgstr ""
+
+#: /configure.php:433
+msgid "Can't find application bootstrap file. Please create %sbootstrap.php, and make sure it is readable by PHP."
+msgstr ""
+
+#: /debugger.php:684
+msgid "Please change the value of 'Security.salt' in app/config/core.php to a salt value specific to your application"
+msgstr ""
+
+#: /debugger.php:688
+msgid "Please change the value of 'Security.cipherSeed' in app/config/core.php to a numeric (digits only) seed value specific to your application"
+msgstr ""
+
+#: /error.php:161
+msgid "Not Found"
+msgstr ""
+
+#: /error.php:184
+msgid "An Internal Error Has Occurred"
+msgstr ""
+
+#: /error.php:203
+#: /view/errors/missing_controller.ctp:20
+msgid "Missing Controller"
+msgstr ""
+
+#: /error.php:222
+msgid "Missing Method in Controller"
+msgstr ""
+
+#: /error.php:239
+msgid "Trying to access private method in class"
+msgstr ""
+
+#: /error.php:258
+#: /view/errors/missing_table.ctp:20
+msgid "Missing Database Table"
+msgstr ""
+
+#: /error.php:273
+msgid "Scaffold Missing Database Connection"
+msgstr ""
+
+#: /error.php:291
+#: /view/errors/missing_view.ctp:20
+msgid "Missing View"
+msgstr ""
+
+#: /error.php:308
+#: /view/errors/missing_layout.ctp:20
+msgid "Missing Layout"
+msgstr ""
+
+#: /error.php:326
+#: /view/errors/missing_connection.ctp:20
+#: /view/errors/missing_scaffolddb.ctp:20
+msgid "Missing Database Connection"
+msgstr ""
+
+#: /error.php:343
+#: /view/errors/missing_helper_file.ctp:20
+msgid "Missing Helper File"
+msgstr ""
+
+#: /error.php:360
+#: /view/errors/missing_helper_class.ctp:20
+msgid "Missing Helper Class"
+msgstr ""
+
+#: /error.php:377
+#: /view/errors/missing_behavior_file.ctp:20
+msgid "Missing Behavior File"
+msgstr ""
+
+#: /error.php:394
+#: /view/errors/missing_behavior_class.ctp:20
+msgid "Missing Behavior Class"
+msgstr ""
+
+#: /error.php:412
+#: /view/errors/missing_component_file.ctp:20
+msgid "Missing Component File"
+msgstr ""
+
+#: /error.php:430
+#: /view/errors/missing_component_class.ctp:20
+msgid "Missing Component Class"
+msgstr ""
+
+#: /error.php:446
+#: /view/errors/missing_model.ctp:20
+msgid "Missing Model"
+msgstr ""
+
+#: /folder.php:379;400
+msgid "%s changed to %s"
+msgstr ""
+
+#: /folder.php:383;402
+msgid "%s NOT changed to %s"
+msgstr ""
+
+#: /folder.php:489
+msgid "%s is a file"
+msgstr ""
+
+#: /folder.php:499;664
+msgid "%s created"
+msgstr ""
+
+#: /folder.php:503
+msgid "%s NOT created"
+msgstr ""
+
+#: /folder.php:578;592
+msgid "%s removed"
+msgstr ""
+
+#: /folder.php:580;589
+msgid "%s NOT removed"
+msgstr ""
+
+#: /folder.php:628
+msgid "%s not found"
+msgstr ""
+
+#: /folder.php:637
+msgid "%s not writable"
+msgstr ""
+
+#: /folder.php:651
+msgid "%s copied to %s"
+msgstr ""
+
+#: /folder.php:653
+msgid "%s NOT copied to %s"
+msgstr ""
+
+#: /folder.php:668
+msgid "%s not created"
+msgstr ""
+
+#: /http_socket.php:523
+msgid "HttpSocket::_decodeBody - Unknown encoding: %s. Activate quirks mode to surpress error."
+msgstr ""
+
+#: /http_socket.php:549
+msgid "HttpSocket::_decodeChunkedBody - Could not parse malformed chunk. Activate quirks mode to do this."
+msgstr ""
+
+#: /http_socket.php:811
+msgid "HttpSocket::_buildRequestLine - Passed an invalid request line string. Activate quirks mode to do this."
+msgstr ""
+
+#: /http_socket.php:826
+msgid "HttpSocket::_buildRequestLine - The \"*\" asterisk character is only allowed for the following methods: %s. Activate quirks mode to work outside of HTTP/1.1 specs."
+msgstr ""
+
+#: /overloadable_php4.php:73;133
+#: /overloadable_php5.php:48;80
+msgid "Magic method handler call__ not defined in %s"
+msgstr ""
+
+#: /router.php:281
+msgid "Route classes must extend CakeRoute"
+msgstr ""
+
+#: /security.php:173
+msgid "You cannot use an empty key for Security::cipher()"
+msgstr ""
+
+#: /validation.php:342
+msgid "You must define the $operator parameter for Validation::comparison()"
+msgstr ""
+
+#: /validation.php:366
+msgid "You must define a regular expression for Validation::custom()"
+msgstr ""
+
+#: /validation.php:927
+msgid "Could not find %s class, unable to complete validation."
+msgstr ""
+
+#: /validation.php:931
+msgid "Method %s does not exist on %s unable to complete validation."
+msgstr ""
+
+#: /xml.php:405
+msgid "Cannot append a node to itself."
+msgstr ""
+
+#: /xml.php:912
+msgid "XML cannot be read"
+msgstr ""
+
+#: /cache/file.php:267
+msgid "%s is not writable"
+msgstr ""
+
+#: /cache/memcache.php:139
+msgid "Method increment() not implemented for compressed cache in %s"
+msgstr ""
+
+#: /cache/memcache.php:155
+msgid "Method decrement() not implemented for compressed cache in %s"
+msgstr ""
+
+#: /controller/controller.php:366
+msgid "Controller::__construct() : Can not get or parse my own class name, exiting."
+msgstr ""
+
+#: /controller/controller.php:807
+#: /controller/components/auth.php:564
+msgid "%s::isAuthorized() is not defined."
+msgstr ""
+
+#: /controller/controller.php:1103
+msgid "Controller::paginate() - can't find model %1$s in controller %2$sController"
+msgstr ""
+
+#: /controller/scaffold.php:180
+msgid "Scaffold :: "
+msgstr ""
+
+#: /controller/scaffold.php:293
+msgid "updated"
+msgstr ""
+
+#: /controller/scaffold.php:296
+msgid "saved"
+msgstr "已保存"
+
+#: /controller/scaffold.php:340
+msgid "Please correct errors below."
+msgstr ""
+
+#: /controller/components/acl.php:55
+msgid "Could not find %s."
+msgstr ""
+
+#: /controller/components/acl.php:180
+msgid "[acl_base] The AclBase class constructor has been called, or the class was instantiated. This class must remain abstract. Please refer to the Cake docs for ACL configuration."
+msgstr ""
+
+#: /controller/components/acl.php:273
+msgid ""
+"DbAcl::check() - Failed ARO/ACO node lookup in permissions check.  Node references:\n"
+"Aro: "
+msgstr ""
+
+#: /controller/components/acl.php:278
+msgid ""
+"DbAcl::check() - Failed ACO node lookup in permissions check.  Node references:\n"
+"Aro: "
+msgstr ""
+
+#: /controller/components/acl.php:286
+msgid "ACO permissions key %s does not exist in DbAcl::check()"
+msgstr ""
+
+#: /controller/components/acl.php:361
+msgid "DbAcl::allow() - Invalid node"
+msgstr ""
+
+#: /controller/components/auth.php:421
+msgid "Could not find AclComponent. Please include Acl in Controller::$components."
+msgstr ""
+
+#: /controller/components/auth.php:464
+msgid "Could not find $userModel. Please set AuthComponent::$userModel in beforeFilter()."
+msgstr ""
+
+#: /controller/components/auth.php:476
+msgid "Login failed. Invalid username or password."
+msgstr ""
+
+#: /controller/components/auth.php:477
+msgid "You are not authorized to access that location."
+msgstr ""
+
+#: /controller/components/auth.php:533
+msgid "Auth::startup() - Attempted access of un-mapped action \"%1$s\" in controller \"%2$s\""
+msgstr ""
+
+#: /controller/components/auth.php:558
+msgid "Could not find %s. Set AuthComponent::$object in beforeFilter() or pass a valid object"
+msgstr ""
+
+#: /controller/components/auth.php:572
+msgid "Auth::isAuthorized() - $authorize is set to an incorrect value.  Allowed settings are: \"actions\", \"crud\", \"model\" or null."
+msgstr ""
+
+#: /controller/components/auth.php:827
+msgid "Auth::getModel() - Model is not set or could not be found"
+msgstr ""
+
+#: /controller/components/email.php:694
+msgid "_lineLength cannot be accessed please use lineLength"
+msgstr ""
+
+#: /controller/components/security.php:337
+msgid "SecurityComponent::loginCredentials() - Server does not support digest authentication"
+msgstr ""
+
+#: /model/cake_schema.php:548
+msgid "Schema generation error: invalid column type %s does not exist in DBO"
+msgstr ""
+
+#: /model/connection_manager.php:102
+msgid "ConnectionManager::getDataSource - Non-existent data source %s"
+msgstr ""
+
+#: /model/connection_manager.php:110
+msgid "ConnectionManager::getDataSource - Could not load class %s"
+msgstr ""
+
+#: /model/connection_manager.php:185
+msgid "ConnectionManager::loadDataSource - Unable to import DataSource class %s"
+msgstr ""
+
+#: /model/db_acl.php:146
+msgid "Model class '%s' not found in AclNode::node() when trying to bind %s object"
+msgstr ""
+
+#: /model/db_acl.php:191
+msgid "AclNode::node() - Couldn't find %s node identified by \"%s\""
+msgstr ""
+
+#: /model/model.php:952
+msgid "(Model::getColumnTypes) Unable to build model field data. If you are using a model without a database table, try implementing schema()"
+msgstr ""
+
+#: /model/model.php:2531
+msgid "This field cannot be left blank"
+msgstr ""
+
+#: /model/model.php:2579
+msgid "Could not find validation handler %s for %s"
+msgstr ""
+
+#: /model/model.php:2889
+msgid "Invalid join model settings in %s"
+msgstr ""
+
+#: /model/model_behavior.php:448
+msgid "BehaviorCollection::dispatchMethod() - Method %s not found in any attached behavior"
+msgstr ""
+
+#: /model/behaviors/acl.php:63
+msgid "Callback parentNode() not defined in %s"
+msgstr ""
+
+#: /model/behaviors/containable.php:363
+msgid "Model \"%s\" is not associated with model \"%s\""
+msgstr ""
+
+#: /model/behaviors/translate.php:59
+msgid "Datasource %s for TranslateBehavior of model %s is not connected"
+msgstr ""
+
+#: /model/behaviors/translate.php:455
+msgid "Association %s is already binded to model %s"
+msgstr ""
+
+#: /model/datasources/dbo_source.php:681
+msgid "SQL Error:"
+msgstr ""
+
+#: /model/datasources/dbo_source.php:683
+msgid "Aff:%s Num:%s Took:%sms"
+msgstr ""
+
+#: /model/datasources/dbo_source.php:685
+msgid "Query:"
+msgstr ""
+
+#: /model/datasources/dbo_source.php:916
+#: /model/datasources/dbo/dbo_oracle.php:997
+msgid "SQL Error in model %s:"
+msgstr ""
+
+#: /model/datasources/dbo_source.php:2522
+msgid "FIXME: Can't parse field: "
+msgstr ""
+
+#: /model/datasources/dbo_source.php:2633;2695
+#: /model/datasources/dbo/dbo_mysql.php:334
+#: /model/datasources/dbo/dbo_oracle.php:1147
+msgid "Invalid schema object"
+msgstr ""
+
+#: /model/datasources/dbo_source.php:2721
+#: /model/datasources/dbo/dbo_sqlite.php:493
+msgid "Column name or type not defined in schema"
+msgstr ""
+
+#: /model/datasources/dbo_source.php:2726
+#: /model/datasources/dbo/dbo_sqlite.php:498
+msgid "Column type %s does not exist"
+msgstr ""
+
+#: /model/datasources/dbo/dbo_mssql.php:121
+msgid "PHP SQL Server interface is not installed, cannot continue. For troubleshooting information, see http://php.net/mssql/"
+msgstr ""
+
+#: /model/datasources/dbo/dbo_oracle.php:586
+msgid "Must specify table to operate on constraints"
+msgstr ""
+
+#: /model/datasources/dbo/dbo_oracle.php:644
+msgid "DboOracle::constraint() accepts only enable, disable, or list"
+msgstr ""
+
+#: /view/helper.php:154
+msgid "Method %1$s::%2$s does not exist"
+msgstr ""
+
+#: /view/view.php:442
+msgid "Error in view %s, got: <blockquote>%s</blockquote>"
+msgstr ""
+
+#: /view/view.php:486
+msgid "Error in layout %s, got: <blockquote>%s</blockquote>"
+msgstr ""
+
+#: /view/errors/error404.ctp:22
+#: /view/errors/error500.ctp:22
+#: /view/errors/missing_action.ctp:22;26
+#: /view/errors/missing_behavior_class.ctp:22;26
+#: /view/errors/missing_behavior_file.ctp:22;26
+#: /view/errors/missing_component_class.ctp:22;26
+#: /view/errors/missing_component_file.ctp:22;26
+#: /view/errors/missing_connection.ctp:22;26
+#: /view/errors/missing_controller.ctp:22;26
+#: /view/errors/missing_helper_class.ctp:22;26
+#: /view/errors/missing_helper_file.ctp:22;26
+#: /view/errors/missing_layout.ctp:22;26
+#: /view/errors/missing_model.ctp:22;26
+#: /view/errors/missing_scaffolddb.ctp:22;26
+#: /view/errors/missing_table.ctp:22
+#: /view/errors/missing_view.ctp:22;26
+#: /view/errors/private_action.ctp:22
+#: /view/errors/scaffold_error.ctp:22
+msgid "Error"
+msgstr ""
+
+#: /view/errors/error404.ctp:23
+msgid "The requested address %s was not found on this server."
+msgstr ""
+
+#: /view/errors/error500.ctp:23
+msgid "An Internal Error Has Occurred."
+msgstr ""
+
+#: /view/errors/missing_action.ctp:20
+msgid "Missing Method in %s"
+msgstr ""
+
+#: /view/errors/missing_action.ctp:23
+msgid "The action %1$s is not defined in controller %2$s"
+msgstr ""
+
+#: /view/errors/missing_action.ctp:27
+msgid "Create %1$s%2$s in file: %3$s."
+msgstr ""
+
+#: /view/errors/missing_action.ctp:44
+#: /view/errors/missing_behavior_class.ctp:37
+#: /view/errors/missing_behavior_file.ctp:37
+#: /view/errors/missing_component_class.ctp:37
+#: /view/errors/missing_component_file.ctp:37
+#: /view/errors/missing_connection.ctp:30
+#: /view/errors/missing_controller.ctp:38
+#: /view/errors/missing_helper_class.ctp:37
+#: /view/errors/missing_helper_file.ctp:37
+#: /view/errors/missing_layout.ctp:30
+#: /view/errors/missing_model.ctp:39
+#: /view/errors/missing_scaffolddb.ctp:30
+#: /view/errors/missing_table.ctp:26
+#: /view/errors/missing_view.ctp:30
+#: /view/errors/private_action.ctp:26
+#: /view/errors/scaffold_error.ctp:26
+msgid "Notice"
+msgstr ""
+
+#: /view/errors/missing_action.ctp:45
+#: /view/errors/missing_connection.ctp:31
+msgid "If you want to customize this error message, create %s."
+msgstr ""
+
+#: /view/errors/missing_behavior_class.ctp:23
+msgid "The behavior class <em>%s</em> can not be found or does not exist."
+msgstr ""
+
+#: /view/errors/missing_behavior_class.ctp:27
+#: /view/errors/missing_behavior_file.ctp:27
+#: /view/errors/missing_helper_class.ctp:27
+#: /view/errors/missing_helper_file.ctp:27
+msgid "Create the class below in file: %s"
+msgstr ""
+
+#: /view/errors/missing_behavior_class.ctp:38
+#: /view/errors/missing_behavior_file.ctp:38
+#: /view/errors/missing_component_class.ctp:38
+#: /view/errors/missing_component_file.ctp:38
+#: /view/errors/missing_controller.ctp:39
+#: /view/errors/missing_helper_class.ctp:38
+#: /view/errors/missing_helper_file.ctp:38
+#: /view/errors/missing_layout.ctp:31
+#: /view/errors/missing_model.ctp:40
+#: /view/errors/missing_scaffolddb.ctp:31
+#: /view/errors/missing_table.ctp:27
+#: /view/errors/missing_view.ctp:31
+#: /view/errors/private_action.ctp:27
+#: /view/errors/scaffold_error.ctp:27
+msgid "If you want to customize this error message, create %s"
+msgstr ""
+
+#: /view/errors/missing_behavior_file.ctp:23
+msgid "The Behavior file %s can not be found or does not exist."
+msgstr ""
+
+#: /view/errors/missing_component_class.ctp:23
+msgid "Component class %1$s in %2$s was not found."
+msgstr ""
+
+#: /view/errors/missing_component_class.ctp:27
+#: /view/errors/missing_component_file.ctp:27
+#: /view/errors/missing_model.ctp:27
+msgid "Create the class %s in file: %s"
+msgstr ""
+
+#: /view/errors/missing_component_file.ctp:23
+msgid "The component file was not found."
+msgstr ""
+
+#: /view/errors/missing_connection.ctp:23
+msgid "%s requires a database connection"
+msgstr ""
+
+#: /view/errors/missing_connection.ctp:27
+msgid "Confirm you have created the file : %s."
+msgstr ""
+
+#: /view/errors/missing_controller.ctp:23
+msgid "%s could not be found."
+msgstr ""
+
+#: /view/errors/missing_controller.ctp:27
+msgid "Create the class %s below in file: %s"
+msgstr ""
+
+#: /view/errors/missing_helper_class.ctp:23
+msgid "The helper class <em>%s</em> can not be found or does not exist."
+msgstr ""
+
+#: /view/errors/missing_helper_file.ctp:23
+msgid "The helper file %s can not be found or does not exist."
+msgstr ""
+
+#: /view/errors/missing_layout.ctp:23
+msgid "The layout file %s can not be found or does not exist."
+msgstr ""
+
+#: /view/errors/missing_layout.ctp:27
+#: /view/errors/missing_scaffolddb.ctp:27
+#: /view/errors/missing_view.ctp:27
+msgid "Confirm you have created the file: %s"
+msgstr ""
+
+#: /view/errors/missing_model.ctp:23
+msgid "<em>%s</em> could not be found."
+msgstr ""
+
+#: /view/errors/missing_scaffolddb.ctp:23
+msgid "Scaffold requires a database connection"
+msgstr ""
+
+#: /view/errors/missing_table.ctp:23
+msgid "Database table %1$s for model %2$s was not found."
+msgstr ""
+
+#: /view/errors/missing_view.ctp:23
+msgid "The view for %1$s%2$s was not found."
+msgstr ""
+
+#: /view/errors/private_action.ctp:20
+msgid "Private Method in %s"
+msgstr ""
+
+#: /view/errors/private_action.ctp:23
+msgid "%s%s cannot be accessed directly."
+msgstr ""
+
+#: /view/errors/scaffold_error.ctp:20
+msgid "Scaffold Error"
+msgstr ""
+
+#: /view/errors/scaffold_error.ctp:23
+msgid "Method _scaffoldError in was not found in the controller"
+msgstr ""
+
+#: /view/helpers/form.php:365;1307
+#: /view/scaffolds/edit.ctp:24
+msgid "Submit"
+msgstr "提交"
+
+#: /view/helpers/form.php:511
+msgid "Error in field %s"
+msgstr ""
+
+#: /view/helpers/form.php:628
+#: /view/scaffolds/edit.ctp:40
+#: /view/scaffolds/index.ctp:79;86
+#: /view/scaffolds/view.ctp:56;63;155
+msgid "New %s"
+msgstr ""
+
+#: /view/helpers/form.php:634
+#: /view/scaffolds/view.ctp:53;94
+msgid "Edit %s"
+msgstr ""
+
+#: /view/helpers/form.php:2114
+msgid "January"
+msgstr "一月"
+
+#: /view/helpers/form.php:2115
+msgid "February"
+msgstr "二月"
+
+#: /view/helpers/form.php:2116
+msgid "March"
+msgstr "三月"
+
+#: /view/helpers/form.php:2117
+msgid "April"
+msgstr "四月"
+
+#: /view/helpers/form.php:2118
+msgid "May"
+msgstr "五月"
+
+#: /view/helpers/form.php:2119
+msgid "June"
+msgstr "六月"
+
+#: /view/helpers/form.php:2120
+msgid "July"
+msgstr "七月"
+
+#: /view/helpers/form.php:2121
+msgid "August"
+msgstr "八月"
+
+#: /view/helpers/form.php:2122
+msgid "September"
+msgstr "九月"
+
+#: /view/helpers/form.php:2123
+msgid "October"
+msgstr "十月"
+
+#: /view/helpers/form.php:2124
+msgid "November"
+msgstr "十一月"
+
+#: /view/helpers/form.php:2125
+msgid "December"
+msgstr "十二月"
+
+#: /view/helpers/js.php:154
+msgid "JsHelper:: Missing Method %s is undefined"
+msgstr ""
+
+#: /view/helpers/js.php:791
+msgid "%s does not have get() implemented"
+msgstr ""
+
+#: /view/helpers/js.php:810
+msgid "%s does not have event() implemented"
+msgstr ""
+
+#: /view/helpers/js.php:821
+msgid "%s does not have domReady() implemented"
+msgstr ""
+
+#: /view/helpers/js.php:831
+msgid "%s does not have each() implemented"
+msgstr ""
+
+#: /view/helpers/js.php:859
+msgid "%s does not have effect() implemented"
+msgstr ""
+
+#: /view/helpers/js.php:889
+msgid "%s does not have request() implemented"
+msgstr ""
+
+#: /view/helpers/js.php:913
+msgid "%s does not have drag() implemented"
+msgstr ""
+
+#: /view/helpers/js.php:935
+msgid "%s does not have drop() implemented"
+msgstr ""
+
+#: /view/helpers/js.php:961
+msgid "%s does not have sortable() implemented"
+msgstr ""
+
+#: /view/helpers/js.php:986
+msgid "%s does not have slider() implemented"
+msgstr ""
+
+#: /view/helpers/js.php:1006
+msgid "%s does not have serializeForm() implemented"
+msgstr ""
+
+#: /view/helpers/mootools_engine.php:310
+msgid "MootoolsEngine::drop() requires a \"drag\" option to properly function"
+msgstr ""
+
+#: /view/helpers/number.php:93
+msgid "%d KB"
+msgstr ""
+
+#: /view/helpers/number.php:95
+msgid "%.2f MB"
+msgstr ""
+
+#: /view/helpers/number.php:97
+msgid "%.2f GB"
+msgstr ""
+
+#: /view/helpers/number.php:99
+msgid "%.2f TB"
+msgstr ""
+
+#: /view/helpers/number.php:91
+msgid "%d Byte"
+msgid_plural "%d Bytes"
+msgstr[0] ""
+msgstr[1] ""
+
+#: /view/helpers/paginator.php:98
+msgid "%s does not implement a link() method, it is incompatible with PaginatorHelper"
+msgstr ""
+
+#: /view/helpers/paginator.php:533
+msgid " of "
+msgstr ""
+
+#: /view/helpers/session.php:184
+msgid "You can not write to a Session from the view"
+msgstr ""
+
+#: /view/helpers/time.php:230
+msgid "Today, %s"
+msgstr ""
+
+#: /view/helpers/time.php:232
+msgid "Yesterday, %s"
+msgstr ""
+
+#: /view/helpers/time.php:579
+msgid "on %s"
+msgstr ""
+
+#: /view/helpers/time.php:613
+msgid "%s ago"
+msgstr ""
+
+#: /view/helpers/time.php:583
+msgid "year"
+msgid_plural "years"
+msgstr[0] "年"
+msgstr[1] "年"
+
+#: /view/helpers/time.php:584;589
+msgid "month"
+msgid_plural "months"
+msgstr[0] "月"
+msgstr[1] "月"
+
+#: /view/helpers/time.php:585;590;594
+msgid "week"
+msgid_plural "weeks"
+msgstr[0] "周"
+msgstr[1] "周"
+
+#: /view/helpers/time.php:586;591;595;598
+msgid "day"
+msgid_plural "days"
+msgstr[0] "天"
+msgstr[1] "天"
+
+#: /view/helpers/time.php:599;602
+msgid "hour"
+msgid_plural "hours"
+msgstr[0] "小时"
+msgstr[1] "小时"
+
+#: /view/helpers/time.php:603;606
+msgid "minute"
+msgid_plural "minutes"
+msgstr[0] "分"
+msgstr[1] "分"
+
+#: /view/helpers/time.php:609
+msgid "second"
+msgid_plural "seconds"
+msgstr[0] "秒"
+msgstr[1] "秒"
+
+#: /view/helpers/time.php:61
+msgid "abday"
+msgstr ""
+
+#: /view/helpers/time.php:73
+msgid "d_t_fmt"
+msgstr ""
+
+#: /view/helpers/time.php:86
+msgid "abmon"
+msgstr ""
+
+#: /view/helpers/time.php:92
+msgid "mon"
+msgstr ""
+
+#: /view/helpers/time.php:103
+msgid "am_pm"
+msgstr ""
+
+#: /view/helpers/time.php:110
+msgid "t_fmt_ampm"
+msgstr ""
+
+#: /view/helpers/time.php:124
+msgid "d_fmt"
+msgstr ""
+
+#: /view/helpers/time.php:130
+msgid "t_fmt"
+msgstr ""
+
+#: /view/layouts/default.ctp:25
+msgid "CakePHP: the rapid development php framework:"
+msgstr ""
+
+#: /view/layouts/default.ctp:39;50
+msgid "CakePHP: the rapid development php framework"
+msgstr ""
+
+#: /view/pages/home.ctp:23
+msgid "Release Notes for CakePHP %s."
+msgstr ""
+
+#: /view/pages/home.ctp:24
+msgid "Read the changelog"
+msgstr ""
+
+#: /view/pages/home.ctp:34
+msgid "Your tmp directory is writable."
+msgstr ""
+
+#: /view/pages/home.ctp:38
+msgid "Your tmp directory is NOT writable."
+msgstr ""
+
+#: /view/pages/home.ctp:48
+msgid "The %s is being used for caching. To change the config edit APP/config/core.php "
+msgstr ""
+
+#: /view/pages/home.ctp:52
+msgid "Your cache is NOT working. Please check the settings in APP/config/core.php"
+msgstr ""
+
+#: /view/pages/home.ctp:62
+msgid "Your database configuration file is present."
+msgstr ""
+
+#: /view/pages/home.ctp:67
+msgid "Your database configuration file is NOT present."
+msgstr ""
+
+#: /view/pages/home.ctp:69
+msgid "Rename config/database.php.default to config/database.php"
+msgstr ""
+
+#: /view/pages/home.ctp:86
+msgid "Cake is able to connect to the database."
+msgstr ""
+
+#: /view/pages/home.ctp:90
+msgid "Cake is NOT able to connect to the database."
+msgstr ""
+
+#: /view/pages/home.ctp:96
+msgid "Editing this Page"
+msgstr ""
+
+#: /view/pages/home.ctp:99
+msgid ""
+"To change the content of this page, create: APP/views/pages/home.ctp.<br />\n"
+"To change its layout, create: APP/views/layouts/default.ctp.<br />\n"
+"You can also add some CSS styles for your pages at: APP/webroot/css."
+msgstr ""
+
+#: /view/pages/home.ctp:105
+msgid "Getting Started"
+msgstr ""
+
+#: /view/pages/home.ctp:109
+msgid "new"
+msgstr ""
+
+#: /view/pages/home.ctp:109
+msgid "CakePHP 1.3 Docs"
+msgstr ""
+
+#: /view/pages/home.ctp:118
+msgid "The 15 min Blog Tutorial"
+msgstr ""
+
+#: /view/pages/home.ctp:125
+msgid "More about Cake"
+msgstr ""
+
+#: /view/pages/home.ctp:127
+msgid "CakePHP is a rapid development framework for PHP which uses commonly known design patterns like Active Record, Association Data Mapping, Front Controller and MVC."
+msgstr ""
+
+#: /view/pages/home.ctp:130
+msgid "Our primary goal is to provide a structured framework that enables PHP users at all levels to rapidly develop robust web applications, without any loss to flexibility."
+msgstr ""
+
+#: /view/pages/home.ctp:134
+msgid "Cake Software Foundation"
+msgstr ""
+
+#: /view/pages/home.ctp:135
+msgid "Promoting development related to CakePHP"
+msgstr ""
+
+#: /view/pages/home.ctp:136
+msgid "CakePHP"
+msgstr ""
+
+#: /view/pages/home.ctp:137
+msgid "The Rapid Development Framework"
+msgstr ""
+
+#: /view/pages/home.ctp:138
+msgid "CakePHP Documentation"
+msgstr ""
+
+#: /view/pages/home.ctp:139
+msgid "Your Rapid Development Cookbook"
+msgstr ""
+
+#: /view/pages/home.ctp:140
+msgid "CakePHP API"
+msgstr ""
+
+#: /view/pages/home.ctp:141
+msgid "Quick Reference"
+msgstr ""
+
+#: /view/pages/home.ctp:142
+msgid "The Bakery"
+msgstr ""
+
+#: /view/pages/home.ctp:143
+msgid "Everything CakePHP"
+msgstr ""
+
+#: /view/pages/home.ctp:144
+msgid "The Show"
+msgstr ""
+
+#: /view/pages/home.ctp:145
+msgid "The Show is a live and archived internet radio broadcast CakePHP-related topics and answer questions live via IRC, Skype, and telephone."
+msgstr ""
+
+#: /view/pages/home.ctp:146
+msgid "CakePHP Google Group"
+msgstr ""
+
+#: /view/pages/home.ctp:147
+msgid "Community mailing list"
+msgstr ""
+
+#: /view/pages/home.ctp:149
+msgid "Live chat about CakePHP"
+msgstr ""
+
+#: /view/pages/home.ctp:150
+msgid "CakePHP Code"
+msgstr ""
+
+#: /view/pages/home.ctp:151
+msgid "For the Development of CakePHP Git repository, Downloads"
+msgstr ""
+
+#: /view/pages/home.ctp:152
+msgid "CakePHP Lighthouse"
+msgstr ""
+
+#: /view/pages/home.ctp:153
+msgid "CakePHP Tickets, Wiki pages, Roadmap"
+msgstr ""
+
+#: /view/pages/home.ctp:154
+msgid "CakeForge"
+msgstr ""
+
+#: /view/pages/home.ctp:155
+msgid "Open Development for CakePHP"
+msgstr ""
+
+#: /view/pages/home.ctp:156
+msgid "Book Store"
+msgstr ""
+
+#: /view/pages/home.ctp:157
+msgid "Recommended Software Books"
+msgstr ""
+
+#: /view/pages/home.ctp:158
+msgid "CakePHP gear"
+msgstr ""
+
+#: /view/pages/home.ctp:159
+msgid "Get your own CakePHP gear - Doughnate to Cake"
+msgstr ""
+
+#: /view/scaffolds/edit.ctp:28
+#: /view/scaffolds/index.ctp:27;77
+#: /view/scaffolds/view.ctp:50
+msgid "Actions"
+msgstr "操作"
+
+#: /view/scaffolds/edit.ctp:31
+#: /view/scaffolds/index.ctp:57
+#: /view/scaffolds/view.ctp:146
+msgid "Delete"
+msgstr "删除"
+
+#: /view/scaffolds/edit.ctp:31
+#: /view/scaffolds/index.ctp:57
+#: /view/scaffolds/view.ctp:54;146
+msgid "Are you sure you want to delete"
+msgstr "你确定要删除吗"
+
+#: /view/scaffolds/edit.ctp:33
+msgid "List"
+msgstr "列表"
+
+#: /view/scaffolds/edit.ctp:39
+#: /view/scaffolds/index.ctp:85
+#: /view/scaffolds/view.ctp:55;62
+msgid "List %s"
+msgstr ""
+
+#: /view/scaffolds/index.ctp:55
+#: /view/scaffolds/view.ctp:144
+msgid "View"
+msgstr "查看"
+
+#: /view/scaffolds/index.ctp:56
+#: /view/scaffolds/view.ctp:145
+msgid "Edit"
+msgstr "编辑"
+
+#: /view/scaffolds/index.ctp:67
+msgid "Page %page% of %pages%, showing %current% records out of %count% total, starting on record %start%, ending on %end%"
+msgstr "第%page%页/共%pages%页, 显示%count%中的%current%条记录"
+
+#: /view/scaffolds/index.ctp:71
+msgid "previous"
+msgstr "上一页"
+
+#: /view/scaffolds/index.ctp:73
+msgid "next"
+msgstr "下一页"
+
+#: /view/scaffolds/view.ctp:21
+msgid "View %s"
+msgstr ""
+
+#: /view/scaffolds/view.ctp:54
+msgid "Delete %s"
+msgstr ""
+
+#: /view/scaffolds/view.ctp:75;114
+msgid "Related %s"
+msgstr ""
+
+msgid "The order has been saved"
+msgstr "订单已保存"
+
+msgid "The order has been modified"
+msgstr "订单已保存！"
+
+msgid "The order has been modified!"
+msgstr "订单已保存！"
+
+msgid "The order could not be saved. Please, try again."
+msgstr "不能保存订单，请重新尝试。"
+
+msgid "Can not renew this order!"
+msgstr "不能重建这个订单！"
+
+msgid "Order has been renewed successfully!"
+msgstr "订单重建成功！"
+
+msgid "The order has been modified!"
+msgstr "订单修改成功！"
+
+msgid "The bill has been saved"
+msgstr "账单保存成功！"
+
+msgid "Only the orders with Dispatched status can do this"
+msgstr "只有已分派待完成的订单才能执行此操作"
+
