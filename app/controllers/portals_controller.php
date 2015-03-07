@@ -12,4 +12,3 @@ class PortalsController extends AppController {
 	public function admin_index() {
 	}
 }
-?>

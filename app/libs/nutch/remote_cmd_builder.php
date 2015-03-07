@@ -1,7 +1,6 @@
 <?php 
 
-App::import('Lib', array('nutch/job_config'));
-App::import('Lib', array('nutch/remote_command'));
+App::import('Lib', array('nutch/job_config', 'nutch/outlink_filter', 'nutch/remote_command'));
 
 class RemoteCmdBuilder {
 	public static $JobType = array (
@@ -12,6 +11,7 @@ class RemoteCmdBuilder {
 			"UPDATEDB" => "UPDATEDB",
 			"INDEX" => "INDEX",
 			"READDB" => "READDB",
+			"PARSECHECKER" => "PARSECHECKER",
 			"EXTRACT" => "EXTRACT",
 			"CLASS" => "CLASS"
 	);
@@ -33,6 +33,7 @@ class RemoteCmdBuilder {
 
 	public function __construct($crawl) {
 		assert(isset($crawl['Crawl']));
+		assert(isset($crawl['CrawlFilter']));
 
 		$this->crawl = $crawl;
 	}
@@ -44,7 +45,8 @@ class RemoteCmdBuilder {
 		$nutchSeeds = array();
 		for ($i = 0; $i < count($crawl['Seed']); ++$i) {
 			$seed = $crawl['Seed'][$i];
-			array_push($nutchSeeds, array('id' => $seed['id'], 'url' => $seed['url']));
+			// seed url should add "isSeed=true" metadata
+			array_push($nutchSeeds, array('id' => $seed['id'], 'url' => $seed['url'].'\tisSeed=true'));
 		}
 
 		$nutchSeedList = array(
@@ -59,19 +61,27 @@ class RemoteCmdBuilder {
 	public function buildNutchConfig() {
 		$crawl = $this->crawl;
 
-		if (empty($crawl['CrawlFilter'])) {
-			return new NutchConfig();
+		$allUrlFilters = "";
+		$outlinkFilters = array('outlinkFilters' => array());
+		foreach ($crawl['CrawlFilter'] as $f) {
+			$f['url_filter'] = normalizeUrlFilter($f['url_filter']);
+
+			$outlinkFilter = new OutlinkFilter($f['page_type'], $f['url_filter'], $f['text_filter'], $f['parse_block_filter']);
+			array_push($outlinkFilters['outlinkFilters'], $outlinkFilter->data());
+			$allUrlFilters .= $f['url_filter'];
 		}
 
-		$urlPatterns = array();
-		foreach ($crawl['CrawlFilter'] as $crawlFilter) {
-			array_push($urlPatterns, $crawlFilter['url_patterns']);
-		}
-		$urlPatterns = implode(",", $urlPatterns);
+//   	$s = json_encode($outlinkFilters, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+// 		pr($s);
+// 		pr($allUrlFilters);
 
-		$configId = $crawl['Crawl']['user_id'].'-'.$crawl['Crawl']['id'];
-		$paras = array(URLFILTER_REGEX_RULES => $urlPatterns);
-		$nutchConfig = new NutchConfig($configId, $paras);
+		// TODO : support multiple outlink filters
+		$params = array(
+				URLFILTER_REGEX_RULES => $allUrlFilters .'-.',
+				CRAWL_OUTLINK_FILTER_RULES => json_encode($outlinkFilters['outlinkFilters'][0])
+		);
+		$configId = $crawl['Crawl']['user_id'].'-'.$crawl['Crawl']['id'].'-'.date("md-his");
+		$nutchConfig = new NutchConfig($configId, $params);
 
 		return $nutchConfig;
 	}
@@ -81,21 +91,21 @@ class RemoteCmdBuilder {
 	 * */
 	public function createCommands() {
 		$crawl = $this->crawl['Crawl'];
-	
+
 		array_push($this->remoteCommands, $this->createInjectCommand());
 		for ($i = 0; $i < $crawl['rounds']; $i++) {
 			$this->createBatchCommands();
 		}
-	
+
 		return $this->remoteCommands;
 	}
-	
+
 	/**
 	 * For test only
 	 * */
 	public function createBatchCommands() {
 		$this->batchId = uniqid().'-'.time();
-	
+
 		array_push($this->remoteCommands, $this->createGenerateCommand());
 		array_push($this->remoteCommands, $this->createFetchCommand());
 		array_push($this->remoteCommands, $this->createParseCommand());
@@ -153,6 +163,16 @@ class RemoteCmdBuilder {
 
 		return $this->createCommand(
 				$crawl['crawlId'], self::$JobType['EXTRACT'], $crawl['batchId'], $crawl['configId']);
+	}
+
+	public function createParseCheckerCommand() {
+		$crawl = $this->crawl['Crawl'];
+
+		$jobConfig = new JobConfig($crawl['crawlId'], self::$JobType['PARSECHECKER'], $crawl['configId']);
+		$jobConfig->setArgument("url", $crawl['test_url']);
+		$jobConfig->setArgument("dumpText", true);
+
+		return new RemoteCommand($jobConfig);
 	}
 
 	private function createCommand($crawlId, $jobType, $batchId, $configId) {

@@ -1,4 +1,4 @@
-<?php
+<?php 
 class NutchJob extends AppModel {
 	var $name = 'NutchJob';
 	var $validate = array(

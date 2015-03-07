@@ -4,8 +4,17 @@ class DashboardsController extends AppController {
 	var $name = 'Dashboards';
 
 	function index() {
-		$this->Dashboard->recursive = 0;
-		$this->set('dashboards', $this->paginate());
+    $this->loadModel("Crawl");
+    $this->Crawl->recursive = -1;
+    $crawls = $this->Crawl->find('all', 
+    		array('Crawl.user_id' => $this->currentUser['id'], 'limit' => 5, 'order' => 'Crawl.id DESC'));
+
+    $this->loadModel("Extraction");
+    $this->Extraction->recursive = -1;
+    $extractions = $this->Extraction->find('all', 
+    		array('Extraction.user_id' => $this->currentUser['id'], 'limit' => 5, 'order' => 'Extraction.id DESC'));
+
+    $this->set(compact('crawls', 'extractions'));
 	}
 
 	function view($id = null) {
@@ -14,18 +23,6 @@ class DashboardsController extends AppController {
 			$this->redirect(array('action' => 'index'));
 		}
 		$this->set('dashboard', $this->Dashboard->read(null, $id));
-	}
-
-	function add() {
-		if (!empty($this->data)) {
-			$this->Dashboard->create();
-			if ($this->Dashboard->save($this->data)) {
-				$this->Session->setFlash(__('The dashboard has been saved', true));
-				$this->redirect(array('action' => 'index'));
-			} else {
-				$this->Session->setFlash(__('The dashboard could not be saved. Please, try again.', true));
-			}
-		}
 	}
 
 	function edit($id = null) {

@@ -13,7 +13,7 @@ class Crawl extends AppModel {
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
 		),
-		'round' => array(
+		'rounds' => array(
 			'numeric' => array(
 				'rule' => array('numeric'),
 				//'message' => 'Your custom message here',
@@ -23,16 +23,16 @@ class Crawl extends AppModel {
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
 		),
-		'batchid' => array(
-			'notempty' => array(
-				'rule' => array('notempty'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
+// 		'batchid' => array(
+// 			'notempty' => array(
+// 				'rule' => array('notempty'),
+// 				//'message' => 'Your custom message here',
+// 				//'allowEmpty' => false,
+// 				//'required' => false,
+// 				//'last' => false, // Stop validation after this rule
+// 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
+// 			),
+// 		),
 		'crawl_phrase' => array(
 			'notempty' => array(
 				'rule' => array('notempty'),

@@ -21,7 +21,12 @@ class JobInfo {
 		$this->info['jobClassName'] = $jobClassName;
 	}
 
+	public function data() {
+		return $this->data;
+	}
+	
 	public function __toString() {
-		return json_encode($this->info);
+  	// return json_encode($this->data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+  	return json_encode($this->data);
 	}
 }

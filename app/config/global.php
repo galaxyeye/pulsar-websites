@@ -1,6 +1,6 @@
 <?php 
   global $allExtractors, $jobChangeMap, $crawlStatusChangeMap, $jobType2Status, $jsEvents,
-	  $urlFilterTemplate, $textFilterTemplate, $parseBlockTemplate;
+	  $seedTemplate, $urlFilterTemplate, $textFilterTemplate, $parseBlockTemplate;
 
   $allExtractors = array(
   		'TextExtractor' => 'TextExtractor',
@@ -45,6 +45,12 @@
   		'mouseup'
   );
 
+  $seedTemplate = 
+<<<END
+http://www.example.com/products
+http://www.example.com/hotels
+END;
+
   $urlFilterTemplate =
 <<<END
 +http://item.example.com/.+.html
@@ -54,17 +60,17 @@ END;
   $textFilterTemplate =
 <<<END
 {
-    containsAll:"Example,手机,平板,超级本",
+    contains:"Example,手机,平板,超级本",
     containsAny:"Example,数码相机,超级本,小米手机",
-    notContainsAll:"Example,电脑,一体机,相机",
-    notContainsAny:"Example,雅虎,谷歌,华为"
+    notContains:"Example,电脑,一体机,相机",
+    containsNone:"Example,雅虎,谷歌,华为"
 }
 END;
 
   $parseBlockTemplate =
 <<<END
 {
-    "allow": ["#exampleId .content > div", "#paginate"],
-    "disallow": ["#exampleId #comment", ".shopDetail"]
+    "allow": [".exampleConent", "#paginate"],
+    "disallow": ["#exampleComment", ".shopDetail"]
 }
 END;

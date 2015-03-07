@@ -8,7 +8,6 @@
 			<th><?php echo $this->Paginator->sort('job_type');?></th>
 			<th><?php echo $this->Paginator->sort('job_state');?></th>
 			<th><?php echo $this->Paginator->sort('created');?></th>
-			<th><?php echo $this->Paginator->sort('finished');?></th>
 			<th class="actions"><?php __('Actions');?></th>
 	</tr>
 	<?php 
@@ -26,7 +25,6 @@
 		<td><?php echo $crawl['Crawl']['job_type']; ?>&nbsp;</td>
 		<td><?php echo $crawl['Crawl']['job_state']; ?>&nbsp;</td>
 		<td><?php echo $crawl['Crawl']['created']; ?>&nbsp;</td>
-		<td><?php echo $crawl['Crawl']['finished']; ?>&nbsp;</td>
 		<td class="actions">
 			<?php echo $this->Html->link(__('View', true), array('action' => 'view', $crawl['Crawl']['id'])); ?>
 			<?php echo $this->Html->link(__('Edit', true), array('action' => 'edit', $crawl['Crawl']['id'])); ?>
@@ -51,6 +49,7 @@
 <div class="actions">
 	<h3><?php __('Actions'); ?></h3>
 	<ul>
+		<li><?php echo $this->Html->link(__('New Wes', true), array('action' => 'add_wes'), array('target' => '_blank')); ?> </li>
 		<li><?php echo $this->Html->link(__('New Crawl', true), array('action' => 'add')); ?></li>
 	</ul>
 </div>

@@ -1,9 +1,7 @@
 <?php 
-class Webpage extends AppModel {
+class System extends AppModel {
 
-	var $name = 'Webpage';
-
-	var $displayField = 'title';
+	var $name = 'System';
 
 	var $useTable = false;
 }

@@ -49,11 +49,16 @@ class NutchConfig {
 		$this->data['jobClass'] = $jobClass;
 	}
 
+	public function data() {
+		return $this->data;
+	}
+	
 	public function __toString() {
 		if (empty($this->data['params'])) {
 			$this->data['params'] = new stdClass();
 		}
 
-		return json_encode($this->data);
+  	// return json_encode($this->data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+  	return json_encode($this->data);
 	}
 }

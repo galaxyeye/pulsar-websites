@@ -228,7 +228,7 @@ a.preview { color:#DDB03C }
 
 .note { -moz-border-radius: 20px 20px 20px 20px; background: none repeat scroll 0 0 #C6E79A; border-bottom: 1px solid #B7D58B; border-right: 1px solid #B7D58B; bottom: -2px; padding: 5px 28px; }
 
-.message { margin:15px 0; padding:10px; border:1px solid #CCC}
+.message { margin:15px 0; padding:10px; border:1px solid #CCC; text-align:left; }
 
 .error-message { color:red;}
 
@@ -317,7 +317,11 @@ form div.submit { border: 0; clear: both; margin-top: 10px; margin-left: 140px; 
 
 form div.datetime select { font-size: 120%; vertical-align: text-bottom; margin:auto; width:auto; }
 
-div.long input { width:72%; }
+form div.medium input { width:55%; }
+
+form div.long input { width:72%; }
+
+form div.input button.appended { font-size: small; vertical-align: top; margin-top: -2em; margin-left: 1em; }
 
 input[type=radio] { float:left; width:auto; margin: 0 3px 7px 0; }
 
@@ -477,3 +481,4 @@ div.actions ul li a:hover { text-decoration: underline; }
 /*************************
  * Project relative
  ************************/
+.seed-url-testing-message { margin-left: 13em; padding: 2px;}

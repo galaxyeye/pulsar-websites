@@ -921,7 +921,7 @@ class FormHelper extends AppHelper {
 	}
 
 	/*
-	 * By Vincent
+	 * By vincent
 	 * */
 	function input_item($fieldName, $options = array()) {
 		$options['before'] = '<span>';

@@ -38,9 +38,57 @@ function updateTips(t) {
   tips.text(t).addClass("ui-state-highlight");
 
   setTimeout(function() {
-    tips.removeClass("ui-state-highlight", 1500 );
-  }, 500 );
+    tips.removeClass("ui-state-highlight", 1500);
+  }, 500);
 } // update tips
+
+function isValidURL(url){
+  var reg = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+
+  if(reg.test(url)) {
+    return true;
+  }
+  else {
+    return false;
+  }
+}
+
+function exponentialIncrease(base, ceil) {
+  base *= 2;
+  if (base > ceil) base = ceil;
+
+  return base;
+}
+
+function exponentialDecrease(base, floor) {
+  base /= 2;
+  if (base < floor) base = floor;
+
+  return base;
+}
+
+function getCakePHPUrl(controller, action, params) {
+	var url = globalPageData.webroot + controller 
+		+ "/" + action;
+
+	var type = typeof params;
+	if (type === 'boolean' || type === 'number' || type === 'string') {
+		url += "/";
+		url += params;
+	}
+	else if (type === 'object') {
+		for (var key in params) {
+			url += "/";
+			url += key + ":" + params[key];
+		}
+	}
+
+	return url;
+}
+
+function parseChecker(url) {
+	
+}
 
 function registerCommonEventHander() {
   $('div.form.auto-validate').submit(function() {
@@ -55,26 +103,25 @@ function registerCommonEventHander() {
     return notEmpty;
   });
 
+  // Tips
   $('form div.input input')
   .add('form div.input textarea')
   .add('form div.input select')
-  .on('mouseenter', function() {
-	// $(".xubox_tips+.xubox_close").trigger("click");
-    var tip = $(this).parent().find('.m').html();
-    if (tip) {
-      openTip(tip, this, 1, 30);
-    }
-  });
-
-  $('div.view h2 span')
+  .add('div.view h2 span')
   .add('div.related h3 span')
   .on('mouseenter', function() {
 	// $(".xubox_tips+.xubox_close").trigger("click");
-    var tip = $(this).parent().find('.m').html();
+    var tip = $(this).parent().find('.m.hidden').html();
     if (tip) {
-      openTip(tip, this, 1, 30);
+      openTip(tip, this, 1, 60);
     }
-  });
+  })
+  .on('mouseout', function() {
+    $(".xubox_tips").parent().parent().hide();
+  })
+  .on('blur', function() {
+	$(".xubox_tips").parent().parent().hide();
+   });
 }
 
 function openUrlInLayer(url, params = {}) {
@@ -116,7 +163,7 @@ $(document).ready(function() {
   registerCommonEventHander();
 
   var flashMessage = $('#flashMessage').text();
-  if (flashMessage != '') {
-    layer.msg($('#flashMessage').html(), 1, 1);
+  if (flashMessage) {
+    layer.msg($('#flashMessage').html(), 3, 1);
   }
 });

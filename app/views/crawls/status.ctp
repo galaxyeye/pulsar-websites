@@ -19,7 +19,6 @@
 		</dd>
 		{{/props}}
 	</dl>
-
 </script>
 
 <div class="crawls view">
@@ -42,7 +41,7 @@
 		</dd>
 		<dt<?php if ($i % 2 == 0) echo $class;?>><?php __('Finished Rounds'); ?></dt>
 		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
-			<?php echo $crawl['Crawl']['finished_rounds']; ?>
+			<span id='finishedRounds'><?php echo $crawl['Crawl']['finished_rounds']; ?></span>
 			&nbsp;
 		</dd>
 		<dt<?php if ($i % 2 == 0) echo $class;?>><?php __('Created'); ?></dt>
@@ -58,6 +57,12 @@
 	</dl>
 </div>
 
+<div class="actions">
+	<ul>
+		<li><?php echo $this->Html->link(__('View Crawl', true), array('action' => 'view', $crawl['Crawl']['id'])); ?> </li>
+	</ul>
+</div>
+
 <div class="crawls view">
 	<h3><?php  __('爬虫服务器实时消息');?></h3>
 
@@ -67,10 +72,4 @@
 <div id="jobInfoRaw" class="crawls view">
 	<h3><?php  __('爬虫服务器原始消息');?></h3>
 	<pre></pre>
-</div>
-
-<div class="actions">
-	<ul>
-		<li><?php echo $this->Html->link(__('View Crawl', true), array('action' => 'view', $crawl['Crawl']['id'])); ?> </li>
-	</ul>
 </div>

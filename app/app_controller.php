@@ -114,7 +114,8 @@ class AppController extends Controller {
 
 		$this->JobManager->scheduleCrawlJobs();
 
-		if ($this->RequestHandler->isAjax()) {
+		if ($this->_isAjax() || $this->RequestHandler->isAjax()) {
+			$this->autoRender = false;
 			$this->autoLayout = false;
 		}
 	}
@@ -243,6 +244,15 @@ class AppController extends Controller {
     $this->currentUser = array_merge($user, $data[0]['User']);
   }
 
+  protected function redirect2Index($msg = '', $logLevel = false) {
+  	if ($logLevel && !empty($msg)) {
+  		$this->log($msg, $logLevel);
+  	}
+
+  	$this->Session->setFlash($msg);
+  	$this->redirect(array('action' => 'index'));
+  }
+
   protected function redirect2View($id, $msg = '', $logLevel = false) {
   	if ($logLevel && !empty($msg)) {
   		$this->log($msg, $logLevel);
@@ -253,6 +263,8 @@ class AppController extends Controller {
   }
 
 	protected function checkTenantPrivilege($id, $modelClass = null) {
+		return true;
+
 		if ($modelClass == null) {
 			$modelClass = $this->modelClass;
 		}

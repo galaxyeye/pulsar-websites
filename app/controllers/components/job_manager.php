@@ -1,10 +1,15 @@
 <?php 
 
-App::import('Lib', array('nutch/nutch_config', 'nutch/nutch_client', 'nutch/remote_cmd_executor'));
+App::import('Lib', array(
+	'nutch/nutch_utils',
+	'nutch/nutch_config', 
+	'nutch/nutch_client', 
+	'nutch/remote_cmd_executor')
+);
 
 class JobManagerComponent extends Object {
 
-	public static $JOB_INTERVAL = 5; // 5 s
+	public static $JOB_INTERVAL = 5; // 5s
 
 	private $controller;
 	private $currentUser;
@@ -17,9 +22,8 @@ class JobManagerComponent extends Object {
 	}
 
   public function createNutchConfig($crawl) {
-    if (empty($crawl['CrawlFilter'])) {
-      return 'default';
-    }
+		assert(isset($crawl['Crawl']));
+		assert(isset($crawl['CrawlFilter']));
 
     $configId = $this->remoteCmdExecutor->createNutchConfig($crawl);
 
@@ -41,12 +45,12 @@ class JobManagerComponent extends Object {
   }
 
   public function createSeed($crawl) {
-    assert(isset($crawl['Crawl']));
+  	$this->_validate($crawl);
 
     $seedDirectory = $this->remoteCmdExecutor->createSeed($crawl);
 
     if (strpos($seedDirectory, 'exception') !== false) {
-      $this->log("seed directory : $seedDirectory", 'info');
+      $this->log("Seed directory : $seedDirectory", 'info');
       $seedDirectory = false;
     }
 
@@ -61,7 +65,7 @@ class JobManagerComponent extends Object {
   }
 
   public function inject($crawl) {
-    assert(isset($crawl['Crawl']));
+  	$this->_validate($crawl);
 
     if ($crawl['Crawl']['job_type'] !== 'NONE') {
       $this->log("Failed to inect, job type is not NONE");
@@ -91,6 +95,17 @@ class JobManagerComponent extends Object {
     return $jobId;
   }
 
+  public function runParseChecker($crawl) {
+  	$this->_validate($crawl);
+
+  	$url = $crawl['Crawl']['test_url'];
+  	$jobId = $this->remoteCmdExecutor->executeRemoteJob($crawl, RemoteCmdBuilder::$JobType['PARSECHECKER']);
+
+  	$this->log("parser checker, job id : $jobId, url : $url", 'info');
+
+  	return $jobId;
+  }
+
   /**
    * Schedule crawl jobs, for each page view, we select one or more pending
    * crawl jobs to execute.
@@ -108,7 +123,7 @@ class JobManagerComponent extends Object {
    *    "PARSE" => "UPDATEDB",
    *    "UPDATEDB" => "GENERATE"
    *  );
-   * 	
+   * 
    * */
   public function scheduleCrawlJobs() {
     if (!$this->_check_timeout("crawl_jobs_scheduler", 5)) {
@@ -121,7 +136,7 @@ class JobManagerComponent extends Object {
 
     // TODO : random select
     $sql = "SELECT * from `crawls` AS `Crawl` 
-      WHERE `finished_rounds`<`rounds` LIMIT $limit";
+      WHERE `finished_rounds`<`rounds` AND `job_state`!='FAILED' LIMIT $limit";
 
     $crawls = $db->query($sql);
 
@@ -177,6 +192,10 @@ class JobManagerComponent extends Object {
    * schedule next job inside a crawl round
    * */
   private function _scheduleNextJob($crawl) {
+  	if (empty($crawl['Crawl']) || empty($crawl['CrawlFilter'])) {
+  		return;
+  	}
+
     if ($crawl['Crawl']['job_state'] != 'FINISHED') {
       return;
     }
@@ -222,8 +241,7 @@ class JobManagerComponent extends Object {
     } // if
   }
 
-  // a simple inter process timer
-  // TODO : better solution?
+  // TODO : This is a very simple inter process timer, find better solution!
   private function _check_timeout($timerId, $timeout) {
     $lockFile = LOCK_DIR . 'timer-' . $timerId;
     if(file_exists($lockFile)) {
@@ -251,7 +269,8 @@ class JobManagerComponent extends Object {
 
     return true;
   }
-  
+
+  // TODO : This is a very simple and slow lock, find better solution!
   private function _try_lock($id) {
     $lockFile = LOCK_DIR . $id;
     if(file_exists($lockFile)) {
@@ -285,5 +304,10 @@ class JobManagerComponent extends Object {
 //    $this->log("Unlock $id OK", "info");
 
     unlink($lockFile);
+  }
+
+  private function _validate($crawl) {
+  	assert(isset($crawl['Crawl']));
+  	assert(isset($crawl['CrawlFilter']));
   }
 }

@@ -87,7 +87,7 @@
 	define('JQUERY_UI', 'jquery/jquery-ui-1.11.3/jquery-ui');
 	define('JSRENDER', 'jquery/jsrender');
 	define('LAYER', 'layer-v1.8.5/layer/layer.min');
-	
+
 	define('COMMON', 'common');
 	define('BAIDU_MAP', 'http://api.map.baidu.com/api?v=1.2');
 	define('GOOGLE_MAP', 'http://maps.googleapis.com/maps/api/js?key=AIzaSyBr-GLMowalQV8XsRVlIm6Qni0R0rYLI0o&amp;sensor=false&language=en');
@@ -104,11 +104,15 @@
 	define('OPEN_SMS', false);
 
 	// NUTCH specified constants
+	define('NUTCH_SERVER', "http://localhost:8081");
 	define('URLFILTER_REGEX_RULES', "urlfilter.regex.rules");
-	
+	define('CRAWL_OUTLINK_FILTER_RULES', "crawl.outlink.filter.rules");
+
 	require('global.php');
 
 	Inflector::rules('plural', array('irregular' => array(
-		'system' => 'system', 
-		'common' => 'common', 
-		'stat' => 'stat')));
+		'system' => 'system',
+		'common' => 'common',
+		'stat' => 'stat',
+		'nutch' => 'nutch'
+  )));

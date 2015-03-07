@@ -39,33 +39,15 @@ class CrawlsController extends AppController {
 
   function add() {
     if (!empty($this->data)) {
-//     	pr($this->data);
-//     	die();
-
-    	$success = true;
-      $message = "";
-
-      // basic validation
-    	$notEmptyRequirement = array(
-    			$this->data['Crawl']['name'],
-    			$this->data['Seed'][0]['url'],
-    			$this->data['CrawlFilter'][0]['index_url_patterns'],
-    			$this->data['CrawlFilter'][0]['item_url_patterns'],
-    			$this->data['CrawlFilter'][0]['keywords'],
-    			$this->data['CrawlFilter'][0]['bad_words'],
-    			$this->data['PageEntity'][0]['name']
-    	);
-
-    	foreach ($notEmptyRequirement as $field) {
-    		if (empty($field)) {
-    			$success = false;
-	        $message .= 'The crawl could not be saved, please check if any required field is empty.';
-  	      $this->Session->setFlash(__($message, true));
-  	      return;
-    		}
+    	if (!$this->_validateAdd($this->data)) {
+    		$message = 'The Crawl could not be saved, please check if any required field is empty.';
+    		$this->Session->setFlash(__($message, true));
+    		return;
     	}
 
-    	$itemUrlPatterns = false;
+    	$success = true;
+    	$message = "";
+
       $this->data['Crawl']['status'] = 'CREATED';
       $this->data['Crawl']['rounds'] = 100;
       $this->data['Crawl']['limit'] = 20000;
@@ -75,120 +57,82 @@ class CrawlsController extends AppController {
       $this->Crawl->create();
       if ($success && !$this->Crawl->save($this->data['Crawl'])) {
         $success = false;
-        $message .= 'The crawl can not be saved.';
+        $message .= 'The Crawl could not be saved.';
       }
       else {
       	$crawlId = $this->Crawl->id;
 
-        $message .= "The crawl has been saved as #$crawlId.<br />";
+        $message .= "The Crawl has been saved as #$crawlId.<br />";
       }
 
-      // Save relative models
-      unset($this->data['Crawl']);
       $this->Crawl->recursive = -1;
       $crawl = $this->Crawl->read(null, $crawlId);
 
-      /***************************************************
-       * create the default seed
-       ***************************************************/
-      if (!empty($this->data['Seed'])) {
-      	$this->data['Seed'][0]['crawl_id'] = $crawl['Crawl']['id'];
-      	$seedId = 0;
-      	$this->Crawl->Seed->create();
-      	if ($success && !$this->Crawl->Seed->saveAll($this->data['Seed'])) {
-      		$success = false;
-      		$message .= 'The seed can not be saved.';
-      	}
-      	else {
-      		$seedId = $this->Crawl->Seed->id;
+      // add a custom metadata
+//       foreach ($this->data['Seed'] as &$seed) {
+//       	$seed['url'] .= "\tisSeed=true";
+//       }
 
-      		$message .= "The seed has been saved as #$seedId.<br />";
-      	}
-      }
-
-      /***************************************************
-       * create the default crawl filter
-       ***************************************************/
-      if (!empty($this->data['CrawlFilter'])) {
-      	$this->data['CrawlFilter'][0]['crawl_id'] = $crawl['Crawl']['id'];
-
-      	$itemUrlPatterns = $this->data['CrawlFilter'][0]['item_url_patterns'];
-      	if (empty($itemUrlPatterns)) {
-      		$success = false;
-      	}
-      	$crawlFilterId = 0;
-      	$this->Crawl->CrawlFilter->create();
-      	if ($success && !$this->Crawl->CrawlFilter->saveAll($this->data['CrawlFilter'])) {
-      		$success = false;
-      		$message .= 'The crawl filter can not be saved.';
-      	}
-      	else {
-      		$crawlFilterId = $this->Crawl->CrawlFilter->id;
-
-      		$message .= "The crawl filter has been saved as #$crawlFilterId.";
-      	}
-      }
-
-      /***************************************************
-       * create the default extraction
-       ***************************************************/
-      $this->data['Extraction'] = array(
-      		'name' => $crawl['Crawl']['name'],
-      		'status' => 'CREATED',
-      		'user_id' => $this->currentUser['id'],
-      		'crawl_id' => $crawl['Crawl']['id']
-      );
-      $extractionId = 0;
-      if (!empty($this-> data['Extraction'])) {
-      	$this->Crawl->Extraction->create();
-      	if ($success && !$this->Crawl->Extraction->save($this->data['Extraction'])) {
-      		$success = false;
-      		$message .= 'The extraction can not be saved.';
-      	}
-      	else {
-      		$extractionId = $this->Crawl->Extraction->id;
-
-      		$message .= "The extraction has been saved as #$extractionId.<br />";
-      	}
-      }
-
-      /***************************************************
-       * create the default page entity
-       ***************************************************/
-      if ($extractionId != 0 && !empty($this->data['PageEntity'])) {
-	      	$name = $this->data['PageEntity'][0]['name'];
-      		$this->data['Extraction']['PageEntity'][0] = array(
-      			'name' => $name,
-      			'url_pattern' => $itemUrlPatterns,
-      			'css_path' => ':root',
-      			'extraction_id' => $extractionId,
-      			'user_id' => $this->currentUser['id'],
-      			'crawl_id' => $crawl['Crawl']['id']
-	      	);
-
-      		$this->loadModel('PageEntity');
-      		$pageEntityId = 0;
-      		$this->PageEntity->create();
-      		if ($success && !$this->PageEntity->saveAll($this->data['Extraction']['PageEntity'])) {
-      			$success = false;
-      			$message .= 'The root page entity can not be saved.';
-      		}
-      		else {
-      			$pageEntityId = $this->PageEntity->id;
-
-      			$message .= "The root page entity has been saved as #$pageEntityId.<br />";
-      		}
-      }
-
-      if (!$success) {
-        $message .= 'The crawl could not be saved. Please, try again.';
-
-        $this->Session->setFlash(__($message, true));
-        // $this->redirect(array('action' => 'index'));
+      // Save relative models
+      foreach (array('Seed', 'CrawlFilter', 'WebAuthorization', 'HumanAction') as $relatedModel) {
+      	if (!$success) break;
+      	$message .= $this->_saveRelated($relatedModel, $crawl, $success);
       }
 
       $this->Session->setFlash(__($message, true));
-      // $this->redirect(array('action' => 'index'));
+      if ($success) $this->redirect(array('action' => 'view', $crawlId));
+    }
+  }
+
+  function add_wes() {
+    if (!empty($this->data)) {
+    	if (!$this->_validateAddWes($this->data)) {
+    		$message = 'The Crawl could not be saved, please check if any required field is empty.';
+    		$this->Session->setFlash(__($message, true));
+    		return;
+    	}
+
+    	$success = true;
+    	$message = "";
+
+    	$crawlName = "WES-".$this->data['PageEntity'][0]['name'].'-'.date('YmdHis');
+    	$crawlName = preg_replace("/\s+/", "-", $crawlName);
+
+    	$this->data['Crawl']['name'] = $crawlName;
+      $this->data['Crawl']['status'] = 'CREATED';
+      $this->data['Crawl']['rounds'] = 100;
+      $this->data['Crawl']['limit'] = 20000;
+      $this->data['Crawl']['user_id'] = $this->currentUser['id'];
+
+      $crawlId = 0;
+      $this->Crawl->create();
+      if ($success && !$this->Crawl->save($this->data['Crawl'])) {
+        $success = false;
+        $message .= 'The Crawl could not be saved.';
+      }
+      else {
+      	$crawlId = $this->Crawl->id;
+
+        $message .= "The Crawl has been saved as #$crawlId.<br />";
+      }
+
+      // Save relative models
+      $this->Crawl->recursive = -1;
+      $crawl = $this->Crawl->read(null, $crawlId);
+
+      // add a custom metadata
+//       foreach ($this->data['Seed'] as &$seed) {
+//       	$seed['url'] .= "\tisSeed=true";
+//       }
+
+      // Save related models
+      foreach (array('Seed', 'CrawlFilter') as $relatedModel) {
+      	if (!$success) break;
+      	$message .= $this->_saveRelated($relatedModel, $crawl, $success);
+      }
+
+      $this->Session->setFlash(__($message, true));
+      if ($success) $this->redirect(array('action' => 'view', $crawlId));
     }
   }
 
@@ -228,48 +172,44 @@ class CrawlsController extends AppController {
 
   function startCrawl() {
   	if (empty($this->data)) {
-  		$this->Session->setFlash(__('You must specify a crawl id', true));
-  		$this->redirect(array('action' => 'index'));
+  		$this->redirect2Index(__("You must specify a crawl id.", true));
   	}
 
   	if (!empty($this->data)) {
-  		if(!$this->checkTenantPrivilege($this->data['Crawl']['id'])) {
-        $this->Session->setFlash(__('Privilege denied', true));
-    		$this->redirect(array('action' => 'index'));
+  		if(!$this->checkTenantPrivilege($this->data)) {
+	  		$this->redirect2Index(__("Privilege denied.", true));
   		}
 
   		$id = $this->data['Crawl']['id'];
-			$this->Crawl->contain(array(
-					'Seed' => array('fields' => array('id', 'url')),
-					'CrawlFilter' => array('fields' => array('id', 'url_patterns'))
-			));
+			$this->Crawl->contain(array('Seed', 'CrawlFilter', 'HumanAction', 'WebAuthorization'));
   		$crawl = $this->Crawl->read(null, $id);
 
-  		if ($crawl['Crawl']['job_type'] !== 'NONE') {
-  			$this->log("The crawl is already in progress!");
+  		if (empty($crawl['Crawl']) || empty($crawl['CrawlFilter'])) {
+	  		$this->redirect2View($id, "Incomplete Crawl or CrawlFilter.");
+  		}
 
-	  		$this->Session->setFlash(__('The crawl is already in progress!', true));
-	  		$this->redirect(array('action' => 'view', $id));
+  		if ($crawl['Crawl']['job_type'] !== 'NONE') {
+  			$this->redirect2View($id, "Crawl #$id is already in progress!");
   		}
 
   		// create nutch config
   		$configId = $this->JobManager->createNutchConfig($crawl);
   		if (empty($configId)) {
-  			$this->redirect2View($id, __("Failed to create nutch config for $id", true));
+  			$this->redirect2View($id, "Failed to create nutch config for #$id");
   		}
   		$crawl['Crawl']['configId'] = $configId;
 
   		// create seed
   		$seedDirectory = $this->JobManager->createSeed($crawl);
   		if (empty($seedDirectory)) {
-  			$this->redirect2View($id, __("Failed to create seed for $id", true));
+  			$this->redirect2View($id, "Failed to create seed for $id");
   		}
   		$crawl['Crawl']['seedDirectory'] = $seedDirectory;
 
   		// inject
   		$jobId = $this->JobManager->inject($crawl);
   		if ($jobId === false) {
-  			$this->redirect2View($id, __("Failed to inject for crawl #$id", true), 'error');
+  			$this->redirect2View($id, "Failed to inject for crawl #$id", 'error');
   		}
 
   		$this->redirect2View($id, __('Start crawl successfully', true));
@@ -278,18 +218,37 @@ class CrawlsController extends AppController {
 	  $this->redirect(array('action' => 'view', $id));
   }
 
+  function ajax_get($id) {
+  	$this->autoRender = false;
+
+  	$this->Crawl->recursive = -1;
+  	echo $this->jsonify($id);
+  }
+
   function ajax_getStatus() {
+  	$this->autoRender = false;
+
   	$client = new NutchClient();
   	$output = $client->getNutchStatus();
-
-  	$this->autoRender = false;
 
   	echo $output;
   }
 
   function ajax_getJobInfo($crawlId, $realTime = false) {
+  	$this->autoRender = false;
+
+  	$errno = 0;
+  	if (empty($crawlId)) {
+  		$errno = 404;
+  	}
+
   	if(!$this->checkTenantPrivilege($crawlId)) {
-  		return "401";
+  		$errno = 401;
+  	}
+
+  	if ($errno) {
+  		echo "{errno : $errno}";
+  		return;
   	}
 
   	$this->Crawl->recursive = -1;
@@ -302,8 +261,6 @@ class CrawlsController extends AppController {
   	else {
   		echo $crawl['Crawl']['job_raw_msg'];
   	}
-
-  	$this->autoRender = false;
   }
 
   function resetCrawl($id = null) {
@@ -317,7 +274,14 @@ class CrawlsController extends AppController {
     	$this->redirect(array('action' => 'index'));
     }
 
+    $this->Crawl->recursive = -1;
+    $crawl = $this->Crawl->read(null, $id);
+    if (empty($crawl['Crawl']['id'])) {
+    	$this->redirect(array('action' => 'index'));
+    }
+
     $crawl = array('Crawl' => array(
+    		'id' => $id,
     		'finished_rounds' => 0,
     		'batchId' => null,
     		'configId' => null,
@@ -354,23 +318,30 @@ class CrawlsController extends AppController {
     $this->redirect(array('action' => 'index'));
   }
 
+  function _load($id) {
+		return $this->Crawl->read(null, $id);
+  }
+
   function admin_testNutchMessage($id = null) {
+  	$this->autoRender = false;
+
   	$crawl = $this->Crawl->read(null, $id);
 
   	$cmdBuilder = new RemoteCmdBuilder($crawl);
 
+  	pr("-----nutch config-----");
   	$nutchConfig = $cmdBuilder->buildNutchConfig();
   	pr($nutchConfig->__toString());
 
+  	pr("-----nutch seed list-----");
   	$nutchSeedList = $cmdBuilder->buildNutchSeedList();
   	pr(json_encode($nutchSeedList));
 
+  	pr("-----nutch commands-----");
   	$commands = $cmdBuilder->createCommands($crawl);
-  	foreach ($commands as $command) {
-  		pr($command->getJobConfig()->__toString());
-		}
-
-  	$this->autoRender = false;
+  	for ($i = 0; $i < min(count($commands), 10); ++$i) {
+  		pr($commands[$i]->getJobConfig()->__toString());
+  	}
   }
 
   function admin_index() {
@@ -435,4 +406,84 @@ class CrawlsController extends AppController {
     $this->redirect(array('action' => 'index'));
   }
 
+  private function _validateAdd($data) {
+  	if (!isset($data['Crawl']['name']) 
+  			|| !isset($data['Seed'][0]['url']) 
+  			|| !isset($data['CrawlFilter'][0]['url_filter'])) 
+  	{
+  		return false;
+  	}
+
+  	// basic validation
+  	$notEmptyRequirement = array(
+  			$data['Crawl']['name'],
+  			$data['Seed'][0]['url'],
+  			$data['CrawlFilter'][0]['url_filter']
+  	);
+
+  	foreach ($notEmptyRequirement as $field) {
+  		if (empty($field)) {
+  			return false;
+  		}
+  	}
+
+  	return true;
+  }
+
+  private function _validateAddWes($data) {
+  	if (!isset($data['PageEntity'][0]['name']) 
+  			|| !isset($data['Seed'][0]['url']) 
+  			|| !isset($data['CrawlFilter'][0]['url_filter'])
+  			|| !isset($data['CrawlFilter'][1]['url_filter'])) 
+  	{
+  		return false;
+  	}
+
+  	// basic validation
+  	$notEmptyRequirement = array(
+  			$data['PageEntity'][0]['name'],
+  			$data['Seed'][0]['url'],
+  			$data['CrawlFilter'][0]['url_filter'],
+  			$data['CrawlFilter'][1]['url_filter']
+  	);
+
+  	foreach ($notEmptyRequirement as $field) {
+  		if (empty($field)) {
+  			return false;
+  		}
+  	}
+  
+  	return true;
+  }
+
+  private function _saveRelated($model, $crawl, &$success) {
+  	if (!$success || !isset($this->data[$model]) || !is_array($this->data[$model]) || empty($this->data[$model])) {
+  		$this->log("We can not save $model, please check the data again.");
+  		return;
+  	}
+
+  	// calculated requried fields
+  	// TODO : use beforeSave?
+  	foreach($this->data[$model] as &$instance) {
+  		$instance['crawl_id'] = $crawl['Crawl']['id'];
+  		$instance['user_id'] = $this->currentUser['id'];
+  	}
+
+  	$id = 0;
+  	$message = '';
+
+  	$this->Crawl->{$model}->create();
+  	if ($success && !$this->Crawl->{$model}->saveAll($this->data[$model])) {
+  		$success = false;
+  		$message = "$model(s) can not be saved.<br />";
+  	}
+  	else {
+  		$id = $this->Crawl->{$model}->id;
+
+  		$message = "Last $model have been saved as #$id.<br />";
+  	}
+
+  	return $message;
+  }
+  
 }

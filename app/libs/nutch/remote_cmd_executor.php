@@ -1,9 +1,8 @@
 <?php 
 
-App::import('Lib', array('nutch/nutch_client'));
-App::import('Lib', array('nutch/remote_cmd_builder'));
+App::import('Lib', array('nutch/nutch_client', 'nutch/remote_cmd_builder'));
 
-class RemoteCmdExecutor {
+class RemoteCmdExecutor extends Object {
 
 	private $client;
 
@@ -28,39 +27,45 @@ class RemoteCmdExecutor {
 	function executeRemoteJob($crawl, $jobType) {
 		$cmdBuilder = new RemoteCmdBuilder($crawl);
 
-		if ($jobType == 'INJECT') {
+		if ($jobType == RemoteCmdBuilder::$JobType['INJECT']) {
 			$command = $cmdBuilder->createInjectCommand();
 		}
-		else if ($jobType == 'GENERATE') {
+		else if ($jobType == RemoteCmdBuilder::$JobType['GENERATE']) {
 			$command = $cmdBuilder->createGenerateCommand();
 		}
-		else if ($jobType == 'FETCH') {
+		else if ($jobType == RemoteCmdBuilder::$JobType['FETCH']) {
 			$command = $cmdBuilder->createFetchCommand();
 		}
-		else if ($jobType == 'PARSE') {
+		else if ($jobType == RemoteCmdBuilder::$JobType['PARSE']) {
 			$command = $cmdBuilder->createParseCommand();
 		}
-		else if ($jobType == 'UPDATEDB') {
+		else if ($jobType == RemoteCmdBuilder::$JobType['UPDATEDB']) {
 			$command = $cmdBuilder->createUpdateDbCommand();
 		}
-		else if ($jobType == 'INDEX') {
+		else if ($jobType == RemoteCmdBuilder::$JobType['INDEX']) {
 			$command = $cmdBuilder->createIndexCommand();
 		}
-		else if ($jobType == 'EXTRACT') {
+		else if ($jobType == RemoteCmdBuilder::$JobType['PARSECHECKER']) {
+			$command = $cmdBuilder->createParseCheckerCommand();
+		}
+		else if ($jobType == RemoteCmdBuilder::$JobType['EXTRACT']) {
 			$command = $cmdBuilder->createExtractCommand();
 		}
 		else {
+			$this->log("Unkown job type $jobType");
 			return false;
 		}
 
-		$jobId = $this->submitJob($command);
-
-		return $jobId;
+		return $this->submitJob($command);
 	}
 
 	private function submitJob($remoteCommand) {
-		$jobInfo = $this->client->executeJob($remoteCommand->getJobConfig());
+		$jobId = false;
 
-		return $jobInfo;
+		if ($remoteCommand !== false) {
+			$jobId = $this->client->executeJob($remoteCommand->getJobConfig());
+		}
+
+		return $jobId;
 	}
 }

@@ -2,7 +2,7 @@
 <?php echo $this->Form->create('HumanAction');?>
 	<fieldset>
  		<legend>
- 			<?php __('Add Crawl Filter'); ?>
+ 			<?php __('Add Human Action'); ?>
  			<?php echo " For " ?>
  			<?php echo $this->Html->link($crawl['Crawl']['name'],
  					array('controller' => 'crawls', 'action' => 'view', $crawl['Crawl']['id'])); ?>

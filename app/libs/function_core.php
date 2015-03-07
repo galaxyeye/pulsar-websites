@@ -274,12 +274,12 @@
 		for($i = 0; $i < $strlen; $i++) {
 			$str = substr($string, $i, 1);
 			$str1 = trim($str);
-			if(ord($str) > 0xA0 ){
+			if(ord($str) > 0xA0 ) {
 				$tmpstr .= substr($string, $i, 3);
 				$i = $i + 2;
 			}
 
-			if(is_numeric($str1)){
+			if(is_numeric($str1)) {
 				$tmpstr.= $str1;
 			}
 		}
@@ -299,4 +299,47 @@
 		return false;
 	}
 
-?>
+	/**
+	 * 简单对称加密算法之加密
+	 * @param String $string 需要加密的字串
+	 * @param String $skey 加密EKY
+	 * @author Anyon Zou <zoujingli@qq.com>
+	 * @date 2013-08-13 19:30
+	 * @update 2014-10-10 10:10
+	 * @return String
+	 */
+	function simple_encode($string = '', $skey = 'cxphp') {
+		$strArr = str_split(base64_encode($string));
+		$strCount = count($strArr);
+		foreach (str_split($skey) as $key => $value)
+			$key < $strCount && $strArr[$key].=$value;
+		return str_replace(array('=', '+', '/'), array('O0O0O', 'o000o', 'oo00o'), join('', $strArr));
+	}
+
+	/**
+	 * 简单对称加密算法之解密
+	 * @param String $string 需要解密的字串
+	 * @param String $skey 解密KEY
+	 * @author Anyon Zou <zoujingli@qq.com>
+	 * @date 2013-08-13 19:30
+	 * @update 2014-10-10 10:10
+	 * @return String
+	 */
+	function simple_decode($string = '', $skey = 'cxphp') {
+		$strArr = str_split(str_replace(array('O0O0O', 'o000o', 'oo00o'), array('=', '+', '/'), $string), 2);
+		$strCount = count($strArr);
+		foreach (str_split($skey) as $key => $value)
+			$key <= $strCount && $strArr[$key][1] === $value && $strArr[$key] = $strArr[$key][0];
+		return base64_decode(join('', $strArr));
+	}
+
+	function startsWith($haystack, $needle) {
+		// search backwards starting from haystack length characters from the end
+		return $needle === "" || strrpos($haystack, $needle, -strlen($haystack)) !== FALSE;
+	}
+
+	function endsWith($haystack, $needle) {
+		// search forward starting from end minus needle length characters
+		return $needle === "" || (($temp = strlen($haystack) - strlen($needle)) >= 0 && strpos($haystack, $needle, $temp) !== FALSE);
+	}
+

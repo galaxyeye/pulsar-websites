@@ -25,7 +25,7 @@
     <div class="user"><?php echo $currentUser['name'] ?></div>
     <ul id="menu" class="clearfix">
       <li class="item">
-        <a href="<?php echo Router::url('/dashboards') ?>">dashboard</a>
+        <a href="<?php echo Router::url('/') ?>">dashboard</a>
       </li>
       <li class="item3">
         <a href="<?php echo Router::url('/crawls') ?>">crawls</a>

@@ -42,7 +42,7 @@ class ExtractionsController extends AppController {
 	}
 
 	function addForCrawl() {
-		$crawl_id = 0;
+		$crawlId = 0;
 
 		if (empty($this->data)) {
 			if (!isset($this->params['named']['crawl_id'])) {
@@ -50,24 +50,24 @@ class ExtractionsController extends AppController {
 				$this->redirect(array('controller' => 'crawls', 'action' => 'index'));
 			}
 	
-			$crawl_id = $this->params['named']['crawl_id'];
+			$crawlId = $this->params['named']['crawl_id'];
 		}
 
 		if (!empty($this->data)) {
-			$crawl_id = $this->data['Extraction']['crawl_id'];
-	
+			$crawlId = $this->data['Extraction']['crawl_id'];
+
 			$this->Extraction->create();
 			$this->data['Extraction']['user_id'] = $this->currentUser['id'];
 			if ($this->Extraction->save($this->data)) {
 				$this->Session->setFlash(__('The extraction has been saved', true));
-				$this->redirect(array('controller' => 'crawls', 'action' => 'view', $crawl_id));
+				$this->redirect(array('controller' => 'crawls', 'action' => 'view', $crawlId));
 			} else {
 				$this->Session->setFlash(__('The extraction could not be saved. Please, try again.', true));
 			}
 		}
 
 		$this->Extraction->Crawl->recursive = -1;
-		$crawl = $this->Extraction->Crawl->read(null, $crawl_id);
+		$crawl = $this->Extraction->Crawl->read(null, $crawlId);
 		$this->set(compact('crawl'));
 	}
 
