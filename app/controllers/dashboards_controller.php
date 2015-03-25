@@ -9,12 +9,12 @@ class DashboardsController extends AppController {
     $crawls = $this->Crawl->find('all', 
     		array('Crawl.user_id' => $this->currentUser['id'], 'limit' => 5, 'order' => 'Crawl.id DESC'));
 
-    $this->loadModel("Extraction");
-    $this->Extraction->recursive = -1;
-    $extractions = $this->Extraction->find('all', 
-    		array('Extraction.user_id' => $this->currentUser['id'], 'limit' => 5, 'order' => 'Extraction.id DESC'));
+    $this->loadModel("PageEntity");
+    $this->PageEntity->recursive = -1;
+    $pageEntities = $this->PageEntity->find('all', 
+    		array('PageEntity.user_id' => $this->currentUser['id'], 'limit' => 5, 'order' => 'PageEntity.id DESC'));
 
-    $this->set(compact('crawls', 'extractions'));
+    $this->set(compact('crawls', 'pageEntities'));
 	}
 
 	function view($id = null) {

@@ -27,7 +27,7 @@
 		echo $this->Form->input('text_validate_regex', array('value' => '.+', 'after' => $m['text_validate_regex']));
 		echo $this->Form->input('sql_data_type', array('value' => 'varchar(256) default ""', 
 				'after' => $m['sql_data_type']));
-		echo $this->Form->input('description');
+		echo $this->Form->input('description', array('rows' => '1'));
 
 		echo $this->Form->hidden('page_entity_id', array('value' => $pageEntity['PageEntity']['id']));
 		echo $this->Form->hidden('crawl_id', array('value' => $crawl_id));

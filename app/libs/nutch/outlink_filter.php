@@ -1,14 +1,16 @@
 <?php 
+namespace Nutch;
+
 class OutlinkFilter {
 
   private $data = array(
       'pageType' => 'NONE',
       'urlFilter' => null,
       'textFilter' => null,
-      'parseBlockFilter' => null
+      'blockFilter' => null
   );
 
-  public function __construct($pageType, $urlFilter, $textFilter = null, $parseBlockFilter = null) {
+  public function __construct($pageType, $urlFilter, $textFilter = null, $blockFilter = null) {
     $this->data['pageType'] = $pageType;
     $this->data['urlFilter'] = $urlFilter;
 
@@ -16,14 +18,14 @@ class OutlinkFilter {
     	$this->data['textFilter'] = json_decode($textFilter, true, 4);
     }
     else if (is_array($textFilter)) {
-    	$this->data['parseBlockFilter'] = $textFilter;
+    	$this->data['blockFilter'] = $textFilter;
     }
 
-    if (is_string($parseBlockFilter)) {
-	    $this->data['parseBlockFilter'] = json_decode($parseBlockFilter, true, 4);
+    if (is_string($blockFilter)) {
+	    $this->data['blockFilter'] = json_decode($blockFilter, true, 4);
     }
-    else if (is_array($parseBlockFilter)) {
-    	$this->data['parseBlockFilter'] = $parseBlockFilter;
+    else if (is_array($blockFilter)) {
+    	$this->data['blockFilter'] = $blockFilter;
     }
   }
 
@@ -51,24 +53,26 @@ class OutlinkFilter {
   	$this->data['textFilter'] = $textFilter;
   }
 
-  public function getParseBlockFilter() {
-  	return $this->data['parseBlockFilter'];
+  public function getBlockFilter() {
+  	return $this->data['blockFilter'];
   }
 
-  public function setParseBlockFilter($parseBlockFilter) {
-  	$this->data['parseBlockFilter'] = $parseBlockFilter;
+  public function setBlockFilter($blockFilter) {
+  	$this->data['blockFilter'] = $blockFilter;
   }
 
   public function data() {
   	return $this->data;
   }
 
-  public function __toString() {
-  	if (empty($this->data['args'])) {
-  		$this->data['args'] = new stdClass();
-  	}
-
-  	// return json_encode($this->data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
-  	return json_encode($this->data);
-  }
+	public function __toString() {
+		$data = $this->data;
+	
+		if (empty($data['args'])) {
+			$data['args'] = new \stdClass();
+		}
+	
+		// return json_encode($this->data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+		return json_encode($data);
+	}
 }

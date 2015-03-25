@@ -46,6 +46,7 @@ foreach ($scaffoldFields as $_field) {
 ?>
 	</dl>
 </div>
+
 <div class="actions">
 	<h3><?php __('Actions'); ?></h3>
 	<ul>
@@ -68,6 +69,7 @@ foreach ($scaffoldFields as $_field) {
 ?>
 	</ul>
 </div>
+
 <?php
 if (!empty($associations['hasOne'])) :
 foreach ($associations['hasOne'] as $_alias => $_details): ?>
@@ -150,6 +152,7 @@ $otherSingularVar = Inflector::variable($_alias);
 ?>
 	</table>
 <?php endif; ?>
+
 	<div class="actions">
 		<ul>
 			<li><?php echo $this->Html->link(sprintf(__("New %s", true), Inflector::humanize(Inflector::underscore($_alias))), array('controller' => $_details['controller'], 'action' => 'add'));?> </li>

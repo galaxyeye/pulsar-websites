@@ -1,0 +1,136 @@
+.flowstep .step-no, .flowstep .step-sub-box .step-sub {
+	background:
+		url(/img/common/flowstep.png)
+		no-repeat 50% -102px
+}
+
+.flowstep {
+	width: 990px;
+	margin: 0 auto;
+	padding: 20px 0
+}
+
+.flowstep ul {
+	overflow: hidden;
+	zoom: 1
+}
+
+.flowstep li {
+	float: left;
+	text-align: center
+}
+
+.flowstep .step-name {
+	padding: 3px 0;
+	font-weight: 700;
+	color: #888
+}
+
+.flowstep .step-no {
+	height: 34px;
+	line-height: 34px;
+	font-family: 'arial black';
+	color: #fff;
+	font-size: 18px
+}
+
+.flowstep .step-last .step-no {
+	background-position: 50% -136px
+}
+
+.flowstep .step-time {
+	color: #999;
+	padding: 8px 0
+}
+
+.flowstep .step-time .time-first, .flowstep .step-time .time-last {
+	display: inline-block;
+	*display: inline;
+	*zoom: 1
+}
+
+.flowstep .step-time .time-first {
+	padding-right: 25px
+}
+
+.flowstep .step-time .time-last {
+	padding-left: 25px
+}
+
+.flowstep .step-cur .step-name {
+	color: #009349
+}
+
+.flowstep .step-cur .step-no {
+	background-position: 50% 0
+}
+
+.flowstep .step-first .step-cur .step-no {
+	background-position: 50% -34px
+}
+
+.flowstep .step-last .step-cur .step-no {
+	background-position: 50% -68px
+}
+
+.flowstep .step-done .step-no {
+	background-position: 50% -170px
+}
+
+.flowstep .step-first .step-done .step-no {
+	background-position: 50% -204px
+}
+
+.flowstep .step-sub {
+	position: relative;
+	margin: 0 auto;
+	width: 120px;
+	height: 34px
+}
+
+.flowstep .step-sub-box .step-sub-done {
+	background-position: 50% -238px
+}
+
+.flowstep .step-sub-box .step-sub-none {
+	background-position: 50% -272px
+}
+
+.flowstep .step-sub-box .step-sub-half {
+	background-position: 50% -306px
+}
+
+.flowstep .step-sub .sub-first, .flowstep .step-sub .sub-last {
+	position: absolute;
+	top: 11px;
+	font-weight: 700;
+	color: #888;
+	white-space: nowrap
+}
+
+.flowstep .step-sub .sub-first {
+	right: 120px;
+	text-align: right
+}
+
+.flowstep .step-sub .sub-last {
+	left: 120px
+}
+
+.flowstep-5 {
+	margin-left: -30px;
+	width: 1050px
+}
+
+.flowstep-5 li {
+	width: 210px
+}
+
+.flowstep-4 {
+	margin-left: -63px;
+	width: 1120px
+}
+
+.flowstep-4 li {
+	width: 280px
+}

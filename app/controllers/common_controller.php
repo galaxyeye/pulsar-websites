@@ -21,6 +21,15 @@ class CommonController extends AppController {
 		$this->Auth->allowedActions = array('*');
 	}
 
+	public function regexGenerator() {
+		if (!empty($this->data)) {
+			$urls =  $this->data['Common']['urls'];
+			$regex = generatorSimpleRegex($urls);
+
+			$this->set(compact('regex'));
+		}
+	}
+
 	public function ajax_listCities($provinceId) {
 		$this->loadModel('Area');
 		$cityOption = $this->Area->find('list', array('fields' => array('id', 'name'), 

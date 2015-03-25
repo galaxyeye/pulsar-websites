@@ -18,17 +18,17 @@
 			'description' => '<p class="m hidden">对本次抓取任务的简单说明。</p>',
 			'Seed.url' => '<p class="m hidden">爬虫入口。每行一个链接。</p>',
 
-  		'url_filter' => "<p class='m hidden'>由多行正则表达式来表达的目标url模式，每行一个正则表达式。
+  		'url_filter' => "<p class='m hidden'>由多行正则表达式来表达的目标url模式，每行一个正则表达式。留空或不修改表示不过滤。
   				<br />正则表达式前可以有前缀'+'或者'-'，前缀'+'可以省略。
   				<br />前缀'+'表示符合该模式的链接<strong class='green'>需要</strong>被抓取。
   				<br />前缀'-'表示符合该模式的链接<strong class='red'>不能</strong>被抓取。
   			</p>",
-			'text_filter' => "<p class='m hidden'>由一个json对象定义的页面文本过滤器，请直接修改模板。留空表示不过滤。
+			'text_filter' => "<p class='m hidden'>由一个json对象定义的页面文本过滤器，请直接修改模板。留空或不修改表示不过滤。
   			  <br />仅页面文本满足该对象指定的四个条件时，该页面内的链接才会被加入到下一轮抓取列表。
 					<br />四个条件分别为：包含所有，包含任一，不包含组合，不包含任一。关键词之间用半角逗号(,)全角逗号(，)或者空格分隔。
   		  </p>",
-			'parse_block_filter' => "<p class='m hidden'>目前仅支持CSS Selector，暂不支持CSS Path。
-					<br />由一个json对象定义的页面区域过滤器，请直接修改模板。留空表示不过滤。
+			'block_filter' => "<p class='m hidden'>目前仅支持CSS Selector，暂不支持CSS Path。
+					<br />由一个json对象定义的页面区域过滤器，请直接修改模板。留空或不修改表示不过滤。
   				<br />仅allow指定的区域内的链接将会被加入到下一轮抓取列表，
   			  <br />而disallow指定的区域则不会被加入到下一轮抓取列表。
   		  </p>",
@@ -53,7 +53,7 @@
 	$defaultAccount = "account";
 	$defaultPassword = "password";
 
-	global $jsEvents, $seedTemplate, $urlFilterTemplate, $textFilterTemplate, $parseBlockTemplate;
+	global $jsEvents, $seedTemplate, $urlFilterTemplate, $textFilterTemplate, $blockFilterTemplate;
 
 	/***********************************************************/
 	echo "<fieldset class='crawl'><legend>爬虫信息</legend>";
@@ -75,7 +75,7 @@
 
 		echo $this->Form->input("CrawlFilter.$i.url_filter", array('value' => $urlFilterTemplate, 'after' => $m['url_filter'], 'disabled' => $disabled));
 		echo $this->Form->input("CrawlFilter.$i.text_filter", array('value' => $textFilterTemplate, 'after' => $m['text_filter'], 'disabled' => $disabled));
-		echo $this->Form->input("CrawlFilter.$i.parse_block_filter", array('value' => $parseBlockTemplate, 'after' => $m['parse_block_filter'], 'disabled' => $disabled));
+		echo $this->Form->input("CrawlFilter.$i.block_filter", array('value' => $blockFilterTemplate, 'after' => $m['block_filter'], 'disabled' => $disabled));
 		echo "</div>";
 	}
 // 	echo $this->Form->button('+', array('type' => 'button', 'class' => 'add'));

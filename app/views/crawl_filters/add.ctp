@@ -26,7 +26,7 @@
 				'text_filter' => "<p class='m hidden'>由一个json对象定义的页面文本过滤器，请直接修改模板。留空表示不过滤。
 	  			  <br />仅页面文本满足该对象指定的四个条件时，该页面内的链接才会被加入到下一轮抓取列表。
 	  		  </p>",
-				'parse_block_filter' => "<p class='m hidden'>由一个json对象定义的页面区域过滤器，请直接修改模板。留空表示不过滤。
+				'block_filter' => "<p class='m hidden'>由一个json对象定义的页面区域过滤器，请直接修改模板。留空表示不过滤。
 	  				<br />仅allow指定的区域内的链接将会被加入到下一轮抓取列表，
 	  			  <br />而disallow指定的区域则不会被加入到下一轮抓取列表。
 	  		  </p>",
@@ -36,10 +36,10 @@
 	  		'TextFilter.notContainsAll' => "<p class='m hidden'>如果页面包含所有关键词，则页面被抛弃。</p>",
 	  		'TextFilter.notContainsAny' => "<p class='m hidden'>如果页面包含任一关键词，则页面被抛弃。</p>",
 
-				'ParseBlockFilter.allow' => "<p class='m hidden'>由一个json数组定义的页面区域过滤器，如：[\"#content\"]。留空表示不过滤。
+				'BlockFilter.allow' => "<p class='m hidden'>由一个json数组定义的页面区域过滤器，如：[\"#content\"]。留空表示不过滤。
 	  				<br />这些css path指定的区域内的链接将<strong class='green'>需要</strong>被加入到下一轮抓取列表。
 	  		  </p>",
-				'ParseBlockFilter.disallow' => "<p class='m hidden'>由一个json对象定义的页面区域过滤器，如：[\"#content\"]。留空表示不过滤。
+				'BlockFilter.disallow' => "<p class='m hidden'>由一个json对象定义的页面区域过滤器，如：[\"#content\"]。留空表示不过滤。
 	  				<br />这些css path指定的区域内的链接<strong class='red'>不能</strong>被加入到下一轮抓取列表。
 	  		  </p>"
 	  ];
@@ -66,19 +66,19 @@
 	</fieldset>
 
 	<fieldset class='filter-mode basic'>
-		<legend>ParseBlockFilter</legend>
+		<legend>BlockFilter</legend>
 		<?php 
-		  echo $this->Form->input('ParseBlockFilter.allow', array('value' => '[":root"]', 'after' => $m['ParseBlockFilter.allow']));
-		  echo $this->Form->input('ParseBlockFilter.disallow', array('value' => '["#copyright"]', 'after' => $m['ParseBlockFilter.disallow']));
+		  echo $this->Form->input('BlockFilter.allow', array('value' => '[":root"]', 'after' => $m['BlockFilter.allow']));
+		  echo $this->Form->input('BlockFilter.disallow', array('value' => '["#copyright"]', 'after' => $m['BlockFilter.disallow']));
 		?>
 	</fieldset>
 
 	<div class='filter-mode advanced hidden'>
   <?php 
-	  global $urlFilterTemplate, $textFilterTemplate, $parseBlockTemplate;
+	  global $urlFilterTemplate, $textFilterTemplate, $blockFilterTemplate;
   	echo $this->Form->input('url_filter', array('after' => $m['url_filter'], 'value' => $urlFilterTemplate));
 		echo $this->Form->input('text_filter', array('after' => $m['text_filter'], 'value' => $textFilterTemplate));
-		echo $this->Form->input('parse_block_filter', array('after' => $m['parse_block_filter'], 'value' => $parseBlockTemplate));
+		echo $this->Form->input('block_filter', array('after' => $m['block_filter'], 'value' => $blockFilterTemplate));
 	?>
 	</div>
 	</fieldset>

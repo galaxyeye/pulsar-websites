@@ -1,13 +1,31 @@
 <?php 
 
+namespace Nutch;
+
+function splitUrlFilter($urlFilter) {
+	$urlFilter = str_ireplace("+http", "http", $urlFilter);
+	$urlFilter = str_ireplace("-http", "http", $urlFilter);
+	$urlFilter = str_ireplace("\r\n", "\n", $urlFilter);
+	$urlFilter = trim($urlFilter);
+
+	return explode("\n", $urlFilter);
+}
+
 function normalizeUrlFilter($urlFilter) {
 	if (empty($urlFilter)) {
 		return null;
 	}
 
 	$urlFilter = str_ireplace("\r\n", "\n", $urlFilter);
+	$urlFilter = trim($urlFilter);
 	$normalized = "";
 	foreach(explode("\n", $urlFilter) as $f) {
+		$f = trim($f);
+
+		if (empty($f)) {
+			continue;
+		}
+
 		$ch = substr($f, 0, 1);
 		if ($ch != '+' && $ch != '-') {
 			$normalized .= "+";
@@ -17,7 +35,13 @@ function normalizeUrlFilter($urlFilter) {
 		$normalized .= "\n";
 	}
 
-	return $normalized;
+	return trim($normalized, "\n");
+}
+
+function normalizeUrlFilterRegex($regex) {
+	if ($regex[0] != '^') $regex = '^'.$regex;
+	if ($regex[strlen($regex) - 1] != '$') $regex = $regex.'$';
+	return $regex;
 }
 
 function filterNutchConfig($nutchConfig, $useWhiteList = true) {

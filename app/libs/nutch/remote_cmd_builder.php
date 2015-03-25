@@ -1,8 +1,10 @@
 <?php 
 
-App::import('Lib', array('nutch/job_config', 'nutch/outlink_filter', 'nutch/remote_command'));
+namespace Nutch;
 
-class RemoteCmdBuilder {
+\App::import('Lib', array('nutch/job_config', 'nutch/outlink_filter', 'nutch/remote_command'));
+
+class RemoteCmdBuilder extends \Object {
 	public static $JobType = array (
 			"INJECT" => "INJECT",
 			"GENERATE" => "GENERATE",
@@ -16,24 +18,13 @@ class RemoteCmdBuilder {
 			"CLASS" => "CLASS"
 	);
 
-	public static $State = array (
-			"IDLE",
-			"RUNNING",
-			"FINISHED",
-			"FAILED",
-			"KILLED",
-			"STOPPING",
-			"KILLING",
-			"ANY"
-	);
-
 	private $crawl;
 
 	private $remoteCommands = array();
 
 	public function __construct($crawl) {
-		assert(isset($crawl['Crawl']));
-		assert(isset($crawl['CrawlFilter']));
+		assert(!empty($crawl['Crawl']), "Invalid Crawl");
+		assert(!empty($crawl['CrawlFilter']), "Invalid CrawlFilter");
 
 		$this->crawl = $crawl;
 	}
@@ -60,15 +51,18 @@ class RemoteCmdBuilder {
 
 	public function buildNutchConfig() {
 		$crawl = $this->crawl;
+		$id = $crawl['Crawl']['id'];
+		$configId = $crawl['Crawl']['configId'];
 
 		$allUrlFilters = "";
 		$outlinkFilters = array('outlinkFilters' => array());
 		foreach ($crawl['CrawlFilter'] as $f) {
-			$f['url_filter'] = normalizeUrlFilter($f['url_filter']);
+			$f['url_filter'] = \Nutch\normalizeUrlFilter($f['url_filter']);
 
-			$outlinkFilter = new OutlinkFilter($f['page_type'], $f['url_filter'], $f['text_filter'], $f['parse_block_filter']);
+			$outlinkFilter = new OutlinkFilter($f['page_type'], $f['url_filter'], $f['text_filter'], $f['block_filter']);
 			array_push($outlinkFilters['outlinkFilters'], $outlinkFilter->data());
 			$allUrlFilters .= $f['url_filter'];
+			$allUrlFilters .= "\n";
 		}
 
 //   	$s = json_encode($outlinkFilters, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
@@ -80,10 +74,8 @@ class RemoteCmdBuilder {
 				URLFILTER_REGEX_RULES => $allUrlFilters .'-.',
 				CRAWL_OUTLINK_FILTER_RULES => json_encode($outlinkFilters['outlinkFilters'][0])
 		);
-		$configId = $crawl['Crawl']['user_id'].'-'.$crawl['Crawl']['id'].'-'.date("md-his");
-		$nutchConfig = new NutchConfig($configId, $params);
 
-		return $nutchConfig;
+		return new NutchConfig($configId, $params);
 	}
 
 	/**

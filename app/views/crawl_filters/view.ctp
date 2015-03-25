@@ -23,7 +23,7 @@
     </dd>
     <dt<?php if ($i % 2 == 0) echo $class;?>><?php __('Parse Block Filter'); ?></dt>
     <dd<?php if ($i++ % 2 == 0) echo $class;?>>
-      <pre><?php echo $crawlFilter['CrawlFilter']['parse_block_filter']; ?></pre>
+      <pre><?php echo $crawlFilter['CrawlFilter']['block_filter']; ?></pre>
       &nbsp;
     </dd>
     <dt<?php if ($i % 2 == 0) echo $class;?>><?php __('Crawl'); ?></dt>

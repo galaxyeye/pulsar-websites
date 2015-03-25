@@ -6,122 +6,113 @@ class NutchJobsController extends AppController {
 
 	var $name = 'NutchJobs';
 
-	function admin_index() {
+	function index() {
+		$conditions = ['NutchJob.user_id' => $this->currentUser['id']];
+		if (!empty($this->params['named']['crawl_id'])) {
+			$conditions['crawl_id'] = $this->params['named']['crawl_id'];
+		}
+
+    $this->paginate['NutchJob'] = array('limit'=> 300, 'order' => 'NutchJob.id DESC');
 		$this->NutchJob->recursive = 0;
-		$this->set('nutchJobs', $this->paginate());
+		$this->set('nutchJobs', $this->paginate($conditions));
+	}
+
+	function view($id = null) {
+    if (!$id) {
+      $this->Session->setFlash(__('Invalid id', true));
+      $this->redirect(array('action' => 'index'));
+    }
+
+    if(!$this->checkTenantPrivilege($id)) {
+    	$this->Session->setFlash(__('Privilege denied', true));
+    	$this->redirect(array('action' => 'index'));
+    }
+
+		$this->set('nutchJob', $this->NutchJob->read(null, $id));
+	}
+
+	function activeJobs($state = null) {
+		$nutchClient = new \Nutch\NutchClient();
+		$nutchJobs = $nutchClient->getjobs($state);
+		$nutchJobs = json_decode($nutchJobs, true);
+		$this->set(compact('nutchJobs'));
+	}
+
+	function plainActiveJobs($state = null) {
+		$nutchClient = new \Nutch\NutchClient();
+		$nutchJobs = $nutchClient->getjobs($state);
+		$nutchJobs = json_decode($nutchJobs, true);
+		$this->set(compact('nutchJobs'));
+	}
+
+	function activeJob($jobId) {
+    if (!$jobId) {
+      $this->Session->setFlash(__('Invalid jobId', true));
+      $this->redirect(array('action' => 'index'));
+    }
+
+		$nutchClient = new \Nutch\NutchClient();
+		$nutchJob = $nutchClient->getjobInfo($jobId);
+		$nutchJob = json_decode($nutchJob, true);
+
+		$this->set(compact('nutchJob'));
 	}
 
 	function parseChecker($crawl_id = null) {
-		$jobId = 0;
-
-		if (!$crawl_id && empty($this->data)) {
-			$this->Session->setFlash(__('You must specify a crawl id or submit a form.', true));
-			$this->set(compact('jobId'));
-			return;
+		if (!$this->checkTenantPrivilege($crawl_id)) {
+			$this->Session->setFlash(__('Privilege denied', true));
+			$this->redirect(array('controller' => 'crawls'));
 		}
 
-		if ($crawl_id && !$this->checkTenantPrivilege($crawl_id)) {
-			$this->Session->setFlash(__('Privilege denied.', true));
-			$this->redirect(array('/'));
+		$this->loadModel('Crawl');
+		$this->Crawl->contain(array('CrawlFilter', 'Seed'));
+		$crawl = $this->Crawl->read(null, $crawl_id);
+		$crawl['Crawl']['test_url'] = $crawl['Seed'][0]['url'];
+
+		if (empty($crawl['Crawl']['id'])) {
+			$this->Session->setFlash(__('Crawl does not exists, id #'.$crawl_id, true));
+			$this->redirect(array('controller' => 'crawls'));
 		}
-
-		$checkCrawlSeed = $crawl_id ? true : false;
-
-		$crawl = null;
-		if ($checkCrawlSeed) {
-			$this->loadModel('Crawl');
-			$this->Crawl->contain(array('CrawlFilter', 'Seed'));
-			$crawl = $this->Crawl->read(null, $crawl_id);
-			$crawl['Crawl']['test_url'] = $crawl['Seed'][0]['url'];
-		}
-
-		if (!$checkCrawlSeed && !empty($this->data)) {
-			// handle arbitrary submitted url
-			$crawl_id = 1000000 + rand(1, 10000);
-			if (isset($this->data['NutchJob']['crawl_id'])) {
-				$crawl_id = $this->data['NutchJob']['crawl_id'];
-			}
-
-			$crawl = array(
-					'Crawl' => array(
-							'id' => $crawl_id,
-							'crawlId' => null,
-							'configId' => 'default',
-							'user_id' => $this->currentUser['id'],
-							'test_url' => $this->data['NutchJob']['url']
-					),
-					'CrawlFilter' => array(
-							array(
-									'page_type' => 'NONE',
-									'url_filter' => '',
-									'text_filter' => '',
-									'parse_block_filter' => ''
-							)
-					)
-			);
-		}
-
-		$msg = "";
 
 		// create nutch config
-		$configId = $this->JobManager->createNutchConfig($crawl);
-		if (empty($configId)) {
-			$this->Session->setFlash(__('Can not create config id.', true));
-			$this->set(compact('jobId'));
-			return;
-		}
+		$configId = $crawl_id.'-'.date('md-Hi');
+  	$conf = $this->NutchJobManager->createNutchConfig($crawl, $configId);
+  	if ($conf['state'] != 'OK') {
+			$this->Session->setFlash(__('Failed to create nutch config for #'.$crawl_id, true));
+			$this->redirect(array('controller' => 'crawls'));
+  	}
+  	$configId = $conf['configId'];
+
 		$crawl['Crawl']['configId'] = $configId;
-
-		$msg .= "Config Id : $configId\n";
-
-		$jobId = $this->JobManager->runParseChecker($crawl);
+		$jobId = $this->NutchJobManager->runParseChecker($crawl);
 		if ($jobId === false || stripos($jobId, 'exception') !== false) {
-			$msg = json_decode($jobId);
-
-			$jobId = 0;
-			$this->Session->setFlash(__("任务失败。。。", true));
+			$this->Session->setFlash(__("任务失败。", true));
 		}
 		else {
 			$this->Session->setFlash(__('任务已提交，请稍候等待结果。。。', true));
 		}
 
-		$nutchClient = new NutchClient();
+		$nutchClient = new \Nutch\NutchClient();
 		$nutchConfig = $nutchClient->getNutchConfig($configId);
-		$nutchConfig = filterNutchConfig($nutchConfig);
+		$nutchConfig = \Nutch\filterNutchConfig($nutchConfig);
 
-		$this->data['NutchJob'] = array(
-				'crawl_id' => $crawl['Crawl']['id'],
-				'jobId' => $jobId,
-				'url' => $crawl['Crawl']['test_url'],
-				'nutchConfig' => $nutchConfig,
-				'msg' => $msg
-		);
-	}
+		$this->set(compact('crawl', 'jobId', 'nutchConfig'));
+  }
 
-	function nutchConfig($configId) {
-		$nutchClient = new NutchClient();
+	function nutchConfig($configId, $raw = false) {
+		$nutchClient = new \Nutch\NutchClient();
 		$nutchConfig = $nutchClient->getNutchConfig($configId);
-		$nutchConfig = filterNutchConfig($nutchConfig);
+		$nutchConfig = \Nutch\filterNutchConfig($nutchConfig);
 
-		$this->set(compact('nutchConfig'));
+		$this->set(compact('nutchConfig', 'raw'));
 	}
 
 	function urlFilterChecker() {
 		$jobId = 0;
 
 		if (!empty($this->data)) {
-			// pr($this->data);
 
-			$crawl = array(
-					'Crawl' => array(
-							'crawlId' => null,
-							'configId' => 'default',
-							'test_url' => $this->data['NutchJob']['url']
-					),
-					'CrawlFilter' => array('url_filter' => '.+')
-			);
-
-			// $jobId = $this->JobManager->runParseChecker($crawl);
+			// $jobId = $this->NutchJobManager->runParseChecker($crawl);
 			if ($jobId === false) {
 				$this->Session->setFlash(__('任务失败。。。', true));
 			}
@@ -136,27 +127,36 @@ class NutchJobsController extends AppController {
 	function ajax_getStatus() {
 		$this->autoRender = false;
 
-		$client = new NutchClient();
-		$output = $client->getNutchStatus();
+		$client = new \Nutch\NutchClient();
+		$status = $client->getNutchStatus();
 
-		echo $output;
+		echo $status;
 	}
 
-	function ajax_getJobInfo($jobId, $realTime = false) {
+	function ajax_getJobInfo($jobId = null) {
 		$this->autoRender = false;
 
-		$errno = 0;
 		if (empty($jobId)) {
-			$errno = 404;
+			return getResponseStatusJson(404);
 		}
 
-		if ($errno) {
-			echo "{errno : $errno}";
-			return;
-		}
-
-		$client = new NutchClient();
+		$client = new \Nutch\NutchClient();
 		echo $client->getjobInfo($jobId);
+  }
+
+  function stop($id) {
+  	$nutchJob = $this->NutchJob->read($id);
+
+  	$nutchClient = new \Nutch\NutchClient();
+  	$nutchClient->stopNutchJob($nutchJob['NutchJob']['configId']);
+  }
+
+  function abort($id) {
+    
+  }
+
+  function resume($id) {
+  	
   }
 
 	function admin_view($id = null) {
@@ -177,6 +177,7 @@ class NutchJobsController extends AppController {
 				$this->Session->setFlash(__('The nutch job could not be saved. Please, try again.', true));
 			}
 		}
+
 		$crawls = $this->NutchJob->Crawl->find('list');
 		$users = $this->NutchJob->User->find('list');
 		$this->set(compact('crawls', 'users'));
@@ -216,47 +217,25 @@ class NutchJobsController extends AppController {
 		$this->redirect(array('action' => 'index'));
 	}
 
-	private function _inject($crawlId) {
-		$this->_executeRemoteCrawlCommand($crawlId, 'INJECT');
-	}
+	private function _buildDummyCrawl($crawl_id = null) {
+		$crawl = array(
+				'Crawl' => array(
+						'id' => $crawl_id,
+						'crawlId' => null,
+						'configId' => 'default',
+						'user_id' => $this->currentUser['id'],
+						'test_url' => $this->data['NutchJob']['url']
+				),
+				'CrawlFilter' => array(
+						array(
+								'page_type' => 'NONE',
+								'url_filter' => '',
+								'text_filter' => '',
+								'block_filter' => ''
+						)
+				)
+		);
 	
-	private function _executeRemoteCrawlCommand($crawlId, $jobType) {
-		$this->Crawl->contain(array('Seed' => array('fields' => array('id', 'url'))));
-		$crawl = $this->Crawl->read(null, $crawlId);
-	
-		$lastJobStatus = $crawl['Crawl']['job_status'];
-		$status = $this->_checkJobStatus($lastJobStatus, $jobType);
-	
-		if ($status !== false) {
-			$executor = new RemoteCmdExecutor();
-			$jobId = $executor->executeRemoteCommand($crawl['Crawl'], $jobType);
-	
-			$this->log("job id : $jobId", 'info');
-	
-			if ($jobId !== false) {
-				$this->_updateCrawlStatus($crawlId, $jobId, $jobType, $status[0], $status[1]);
-			}
-	
-			return $jobId;
-		}
-	
-		return false;
-	}
-	
-	private function _checkJobStatus($lastStatus, $jobType) {
-		global $crawlStatusChangeMap;
-		global $jobType2Status;
-	
-		$expectedNextStatus = $crawlStatusChangeMap[$lastStatus];
-		$desiredNewStatus = $jobType2Status[$jobType];
-	
-		if ($expectedNextStatus === $desiredNewStatus) {
-			return array($lastStatus, $desiredNewStatus);
-		}
-	
-		$this->log("Bad status: $expectedNextStatus exprected
-				while $desiredNewStatus desired", "debug");
-	
-		return false;
+		return $crawl;
 	}
 }

@@ -1,6 +1,8 @@
 <?php 
 
-App::import('Lib', array(
+namespace Nutch;
+
+\App::import('Lib', array(
 	'http_client',
 	'nutch/job_config',
 	'nutch/nutch_config',
@@ -38,7 +40,7 @@ class NutchClient {
 	private $httpClient;
 
 	function __construct() {
-		$this->httpClient = new HttpClient();
+		$this->httpClient = new \HttpClient();
 	}
 
 	public function getNutchStatus() {
@@ -50,6 +52,10 @@ class NutchClient {
 	 * */
 	public function executeJob($jobConfig) {
 		return $this->httpClient->postJson($this->nutchUrl."/job/create", $jobConfig->__toString());
+	}
+
+	public function getjobs($state) {
+		return $this->httpClient->get_content($this->nutchUrl."/job/");
 	}
 
 	public function getjobInfo($jobId) {

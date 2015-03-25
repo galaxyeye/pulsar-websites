@@ -1,6 +1,7 @@
-<?php 
+<?php
 class NutchJob extends AppModel {
 	var $name = 'NutchJob';
+	var $displayField = 'jobId';
 	var $validate = array(
 		'type' => array(
 			'notempty' => array(

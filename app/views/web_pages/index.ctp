@@ -18,7 +18,7 @@
 		<td><?php echo $webPage['WebPage']['url']; ?>&nbsp;</td>
 		<td><?php echo $webPage['WebPage']['title']; ?>&nbsp;</td>
 		<td class="actions">
-			<?php echo $this->Html->link(__('View', true), array('action' => 'view', simple_encode($webPage['WebPage']['url']))); ?>
+			<?php echo $this->Html->link(__('View', true), array('action' => 'view', symmetric_encode($webPage['WebPage']['url']))); ?>
 		</td>
 	</tr>
 	<?php endforeach; ?>

@@ -91,7 +91,7 @@ class HttpClient {
 		$output = curl_exec($ch);
 		curl_close($ch);
 
-		$this->_debugMsg($data);
+	  $this->_debugMsg("HttpClient::putJson ".$data);
 
 		return $output;
 	}
@@ -111,8 +111,8 @@ class HttpClient {
 		$output = curl_exec($ch);
 		curl_close($ch);
 	
-		$this->_debugMsg($data);
-	
+		$this->_debugMsg("HttpClient::put ".$data);
+
 		return $output;
 	}
 
@@ -130,13 +130,12 @@ class HttpClient {
 		$output = curl_exec($ch);
 		curl_close($ch);
 
-		$this->_debugMsg($data);
+	  $this->_debugMsg("HttpClient::postJson ".$data);
 
 		return $output;
 	}
 
 	private function _debugMsg($message) {
-		CakeLog::write('debug', $message);
-		// error_log("nutch client:\t".$message);
+		// CakeLog::write('debug', $message);
 	}
 }

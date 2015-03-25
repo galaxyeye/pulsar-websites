@@ -10,6 +10,7 @@ class SoapComponent extends Component {
 			'timeout' => 0,
 			'response_timeout' => 20 
 	);
+
 	var $defaultCallOptions = array (
 			'serviceUrl' => '',
 			'operation' => '',
@@ -23,8 +24,7 @@ class SoapComponent extends Component {
 			'headers' => false,
 			'use' => 'encoded',
 			'autoCheckWSDL' => true 
-	) // if serviceUrl end with "?WSDL" then set the client options['wsdl'] to be true
-;
+	); // if serviceUrl end with "?WSDL" then set the client options['wsdl'] to be true
 
 	function initialize(&$controller) {
 		App::import ( 'Vendor', 'nusoap/lib/nusoap' );
@@ -47,11 +47,12 @@ class SoapComponent extends Component {
 					'endpoint' => $options 
 			);
 		}
+
 		$options = am ( $this->defaultClientOptions, $options );
-		
+
 		return new nusoap_client ( $options ['endpoint'], $options ['wsdl'], $options ['proxyhost'], $options ['proxyport'], $options ['proxyusername'], $options ['proxypassword'], $options ['timeout'], $options ['response_timeout'] );
 	}
-	
+
 	/**
 	 *
 	 * @author RainChen @ Wed Mar 12 17:55:16 CST 2008
@@ -68,7 +69,7 @@ class SoapComponent extends Component {
 		if ($options ['soapAction'] == '') {
 			$options ['soapAction'] = $options ['namespace'] . '/' . $options ['operation'];
 		}
-		
+
 		$clientOptions = $this->defaultClientOptions;
 		$clientOptions ['endpoint'] = $options ['serviceUrl'];
 		if ($options ['autoCheckWSDL']) {
@@ -76,12 +77,12 @@ class SoapComponent extends Component {
 				$clientOptions ['wsdl'] = true;
 			}
 		}
-		
+
 		$client = $this->client ( $clientOptions );
 		$client->soap_defencoding = $options ['encoding'];
 		$client->decode_utf8 = false;
 		$result = $client->call ( $options ['operation'], $options ['params'], $options ['namespace'], $options ['soapAction'], $options ['headers'], $options ['rpcParams'], $options ['style'], $options ['use'] );
-		
+
 		$return = array (
 				'fault' => null,
 				'error' => null,
@@ -97,7 +98,7 @@ class SoapComponent extends Component {
 				$return ['result'] = $result;
 			}
 		}
-		
+
 		if ($options ['debug']) {
 			$return ['request'] = $client->request;
 			$return ['response'] = $client->response;
@@ -105,7 +106,7 @@ class SoapComponent extends Component {
 		}
 		return $return;
 	}
-	
+
 	/**
 	 *
 	 * @author RainChen @ Wed Mar 12 17:57:29 CST 2008

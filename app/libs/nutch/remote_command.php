@@ -1,10 +1,12 @@
 <?php 
+namespace Nutch;
+
 class RemoteCommand {
 	private $jobConfig;
 	private $jobInfo;
 	private $timeout;
 
-	public function RemoteCommand($jobConfig) {
+	public function __construct($jobConfig) {
 		$this->jobConfig = $jobConfig;
 	}
 

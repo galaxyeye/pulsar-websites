@@ -1,18 +1,23 @@
+<div class="actions">
+  <ul>
+    <li><?=$this->Html->link(__('List Active Jobs', true), array('action' => 'activeJobs')); ?> </li>
+    <li><?=$this->Html->link(__('List Active Jobs（Plain View）', true), array('action' => 'plainActiveJobs')); ?> </li>
+  </ul>
+</div>
+
 <div class="nutchJobs index">
 	<h2><?php __('Nutch Jobs');?></h2>
 	<table cellpadding="0" cellspacing="0">
 	<tr>
 			<th><?php echo $this->Paginator->sort('id');?></th>
+			<th><?php echo $this->Paginator->sort('round');?></th>
+			<th><?php echo $this->Paginator->sort('confId');?></th>
+			<th><?php echo $this->Paginator->sort('batchId');?></th>
 			<th><?php echo $this->Paginator->sort('jobId');?></th>
 			<th><?php echo $this->Paginator->sort('type');?></th>
-			<th><?php echo $this->Paginator->sort('confId');?></th>
-			<th><?php echo $this->Paginator->sort('args');?></th>
 			<th><?php echo $this->Paginator->sort('state');?></th>
-			<th><?php echo $this->Paginator->sort('msg');?></th>
-			<th><?php echo $this->Paginator->sort('crawlId');?></th>
-			<th><?php echo $this->Paginator->sort('result');?></th>
+			<th><?php echo $this->Paginator->sort('created');?></th>
 			<th><?php echo $this->Paginator->sort('crawl_id');?></th>
-			<th><?php echo $this->Paginator->sort('user_id');?></th>
 			<th class="actions"><?php __('Actions');?></th>
 	</tr>
 	<?php
@@ -24,25 +29,19 @@
 		}
 	?>
 	<tr<?php echo $class;?>>
-		<td><?php echo $nutchJob['NutchJob']['id']; ?>&nbsp;</td>
-		<td><?php echo $nutchJob['NutchJob']['jobId']; ?>&nbsp;</td>
-		<td><?php echo $nutchJob['NutchJob']['type']; ?>&nbsp;</td>
-		<td><?php echo $nutchJob['NutchJob']['confId']; ?>&nbsp;</td>
-		<td><?php echo $nutchJob['NutchJob']['args']; ?>&nbsp;</td>
-		<td><?php echo $nutchJob['NutchJob']['state']; ?>&nbsp;</td>
-		<td><?php echo $nutchJob['NutchJob']['msg']; ?>&nbsp;</td>
-		<td><?php echo $nutchJob['NutchJob']['crawlId']; ?>&nbsp;</td>
-		<td><?php echo $nutchJob['NutchJob']['result']; ?>&nbsp;</td>
-		<td>
-			<?php echo $this->Html->link($nutchJob['Crawl']['name'], array('controller' => 'crawls', 'action' => 'view', $nutchJob['Crawl']['id'])); ?>
-		</td>
-		<td>
-			<?php echo $this->Html->link($nutchJob['User']['name'], array('controller' => 'users', 'action' => 'view', $nutchJob['User']['id'])); ?>
-		</td>
+		<td><?=$nutchJob['NutchJob']['id']; ?>&nbsp;</td>
+		<td><?=$nutchJob['NutchJob']['round']; ?>&nbsp;</td>
+		<td><?=$nutchJob['NutchJob']['confId']; ?>&nbsp;</td>
+		<td><?=$nutchJob['NutchJob']['batchId']; ?>&nbsp;</td>
+		<td><?=$nutchJob['NutchJob']['jobId']; ?>&nbsp;</td>
+		<td><?=$nutchJob['NutchJob']['type']; ?>&nbsp;</td>
+		<td><?=$nutchJob['NutchJob']['state']; ?>&nbsp;</td>
+		<td><?=$nutchJob['NutchJob']['created']; ?>&nbsp;</td>
+		<td><?=$this->Html->link($nutchJob['NutchJob']['crawl_id'], 
+					['controller' => 'crawls', 'action' => 'view', $nutchJob['NutchJob']['crawl_id']], ['target' => '_blank']); ?>
 		<td class="actions">
-			<?php echo $this->Html->link(__('View', true), array('action' => 'view', $nutchJob['NutchJob']['id'])); ?>
-			<?php echo $this->Html->link(__('Edit', true), array('action' => 'edit', $nutchJob['NutchJob']['id'])); ?>
-			<?php echo $this->Html->link(__('Delete', true), array('action' => 'delete', $nutchJob['NutchJob']['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $nutchJob['NutchJob']['id'])); ?>
+			<?php echo $this->Html->link(__('View', true), 
+					['action' => 'view', $nutchJob['NutchJob']['id']], ['target' => 'layer']); ?>
 		</td>
 	</tr>
 <?php endforeach; ?>
@@ -61,13 +60,11 @@
 		<?php echo $this->Paginator->next(__('next', true) . ' >>', array(), null, array('class' => 'disabled'));?>
 	</div>
 </div>
+
 <div class="actions">
-	<h3><?php __('Actions'); ?></h3>
-	<ul>
-		<li><?php echo $this->Html->link(__('New Nutch Job', true), array('action' => 'add')); ?></li>
-		<li><?php echo $this->Html->link(__('List Crawls', true), array('controller' => 'crawls', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Crawl', true), array('controller' => 'crawls', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Users', true), array('controller' => 'users', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New User', true), array('controller' => 'users', 'action' => 'add')); ?> </li>
-	</ul>
+  <ul>
+    <li><?=$this->Html->link(__('List Nutch Jobs', true), array('action' => 'index')); ?> </li>
+    <li><?=$this->Html->link(__('List Active Jobs', true), array('action' => 'activeJobs')); ?> </li>
+    <li><?=$this->Html->link(__('List Active Jobs（Plain View）', true), array('action' => 'plainActiveJobs')); ?> </li>
+  </ul>
 </div>

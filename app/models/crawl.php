@@ -76,22 +76,7 @@ class Crawl extends AppModel {
 		)
 	);
 
-	var $hasOne = array('Extraction');
-
 	var $hasMany = array(
-		'CrawlFilter' => array(
-			'className' => 'CrawlFilter',
-			'foreignKey' => 'crawl_id',
-			'dependent' => false,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => ''
-		),
 		'Seed' => array(
 			'className' => 'Seed',
 			'foreignKey' => 'crawl_id',
@@ -105,19 +90,45 @@ class Crawl extends AppModel {
 			'finderQuery' => '',
 			'counterQuery' => ''
 		),
-// 		'NutchJob' => array(
-// 			'className' => 'NutchJob',
-// 			'foreignKey' => 'crawl_id',
-// 			'dependent' => false,
-// 			'conditions' => '',
-// 			'fields' => '',
-// 			'order' => '',
-// 			'limit' => '',
-// 			'offset' => '',
-// 			'exclusive' => '',
-// 			'finderQuery' => '',
-// 			'counterQuery' => ''
-// 		),
+		'CrawlFilter' => array(
+			'className' => 'CrawlFilter',
+			'foreignKey' => 'crawl_id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		),
+		'PageEntity' => array(
+			'className' => 'PageEntity',
+			'foreignKey' => 'crawl_id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		),
+		'NutchJob' => array(
+			'className' => 'NutchJob',
+			'foreignKey' => 'crawl_id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		),
 		'HumanAction' => array(
 			'className' => 'HumanAction',
 			'foreignKey' => 'crawl_id',
@@ -133,6 +144,19 @@ class Crawl extends AppModel {
 		),
 		'WebAuthorization' => array(
 			'className' => 'WebAuthorization',
+			'foreignKey' => 'crawl_id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		),
+		'StopUrl' => array(
+			'className' => 'StopUrl',
 			'foreignKey' => 'crawl_id',
 			'dependent' => false,
 			'conditions' => '',

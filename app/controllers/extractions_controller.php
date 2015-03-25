@@ -1,4 +1,4 @@
-<?php
+<?php 
 class ExtractionsController extends AppController {
 
 	var $name = 'Extractions';
@@ -25,6 +25,16 @@ class ExtractionsController extends AppController {
 	}
 
 	function add() {
+		if (isset($this->params['named']['crawl_id'])) {
+			$crawlId = $this->params['named']['crawl_id'];
+			$this->_addForCrawl($crawlId);
+		}
+		else {
+			$this->_addArbitrary();
+		}
+	}
+
+	function _addArbitrary() {
 		if (!empty($this->data)) {
 			$this->data['Extraction']['user_id'] = $this->currentUser['id'];
 
@@ -36,23 +46,12 @@ class ExtractionsController extends AppController {
 				$this->Session->setFlash(__('The extraction could not be saved. Please, try again.', true));
 			}
 		}
-
+		
 		$crawls = $this->Extraction->Crawl->find('list');
 		$this->set(compact('crawls'));
 	}
 
-	function addForCrawl() {
-		$crawlId = 0;
-
-		if (empty($this->data)) {
-			if (!isset($this->params['named']['crawl_id'])) {
-				$this->Session->setFlash(__('You must specify a crawl id for the extraction', true));
-				$this->redirect(array('controller' => 'crawls', 'action' => 'index'));
-			}
-	
-			$crawlId = $this->params['named']['crawl_id'];
-		}
-
+	function _addForCrawl($crawlId) {
 		if (!empty($this->data)) {
 			$crawlId = $this->data['Extraction']['crawl_id'];
 
@@ -69,6 +68,83 @@ class ExtractionsController extends AppController {
 		$this->Extraction->Crawl->recursive = -1;
 		$crawl = $this->Extraction->Crawl->read(null, $crawlId);
 		$this->set(compact('crawl'));
+	}
+
+	function ajax_saveRules() {
+		$this->autoRender = false;
+
+		$data = $this->params['form'];
+		$result = array('errno' => 0, 'message' => '');
+
+		$this->loadModel('Crawl');
+		$this->Crawl->contain('Extraction');
+		$crawl = $this->Crawl->read(null, $data['crawlId']);
+
+		/**
+		 * 1. save Extraction
+		 * */
+		$extraction = array(
+				'Extraction' => array(
+						'name' => $crawl['Crawl']['name'],
+						'user_id' => $this->currentUser['id'],
+						'crawl_id' => $crawl['Crawl']['id']
+				)
+		);
+
+		$this->Extraction->create();
+		if (!$this->Extraction->save($extraction)) {
+			$result['errno'] = 1;
+			$result['message'] .= "Can not save Extraction. Please, try again.";
+			die(json_encode($result));
+		}
+		$result['extractionId'] = $this->Extraction->id;
+
+		/**
+		 * 1. save PageEntity
+		 * */
+		$pageEntity = array(
+			'PageEntity' => array(
+				'name' => $data['name'],
+				'url_pattern' => '',
+				'text_pattern' => '',
+				'block_filter' => '',
+				'extraction_id' => $this->Extraction->id,
+				'user_id' => $this->currentUser['id']
+			)
+		);
+
+		$this->Extraction->PageEntity->create();
+		if (!$this->Extraction->PageEntity->save($pageEntity)) {
+			$result['errno'] = 2;
+			$result['message'] .= "Can not save PageEntity. Please, try again.";
+			die(json_encode($result));
+		}
+		$result['pageEntityId'] = $this->Extraction->PageEntity->id;
+
+		/**
+		 * 1. save PageEntityField
+		 * */
+		$pageEntityFields = array('PageEntityField');
+		foreach ($data['rules'] as $k => $v) {
+			$pageEntityField = array(
+					'name' => $k,
+					'css_path' => $v,
+					'extractor_class' => 'TextExtractor',
+					'sql_data_type' => 'varchar(255)',
+					'page_entity_id' => $this->Extraction->PageEntity->id,
+					'user_id' => $this->currentUser['id']
+			);
+
+			array_push($pageEntityFields['PageEntityField'], $pageEntityField);
+		}
+
+		$this->loadModel('PageEntityField');
+		$this->PageEntityField->create();
+		if (!$this->PageEntityField->saveAll($pageEntityFields)) {
+			$result['errno'] = 3;
+			$result['message'] .= "Can not save PageEntityField. Please, try again.";
+			die(json_encode($result));
+		}
 	}
 
 	function edit($id = null) {
@@ -144,6 +220,7 @@ class ExtractionsController extends AppController {
 			}
 
 			$id = $this->data['Extraction']['id'];
+			$this->loadModel('Crawl');
 			$crawl = $this->Crawl->read(null, $id);
 			$status = $crawl['Crawl']['status'];
 			if ($status != 'NOT-START') {

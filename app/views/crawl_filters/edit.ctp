@@ -22,7 +22,7 @@
 	  				<br />留空表示不过滤。
 	  			  <br />爬虫在解析页面时，仅页面文本满足该对象指定的四个条件时，该页面内的链接才会被加入到下一轮抓取列表。
 	  		  </p>",
-				'parse_block_filter' => "<p class='m hidden'>由一个json对象定义的页面区域过滤器，请直接修改模板。
+				'block_filter' => "<p class='m hidden'>由一个json对象定义的页面区域过滤器，请直接修改模板。
 	  				<br />留空表示不过滤。
 	  				<br />爬虫在解析页面时，仅allow指定的区域内的链接将会被加入到下一轮抓取列表，
 	  			  <br />而disallow指定的区域则不会被加入到下一轮抓取列表。
@@ -31,7 +31,7 @@
 
 	  echo $this->Form->input('url_filter', array('after' => $m['url_filter']));
 	  echo $this->Form->input('text_filter', array('after' => $m['text_filter']));
-	  echo $this->Form->input('parse_block_filter', array('after' => $m['parse_block_filter']));
+	  echo $this->Form->input('block_filter', array('after' => $m['block_filter']));
 	  echo $this->Form->hidden('crawl_id', array('value' => $this->data['Crawl']['id']));
   ?>
 	</fieldset>

@@ -1,4 +1,6 @@
 <?php 
+namespace Nutch;
+
 class NutchConfig {
 	
 	private $data = array(
@@ -52,13 +54,15 @@ class NutchConfig {
 	public function data() {
 		return $this->data;
 	}
-	
-	public function __toString() {
-		if (empty($this->data['params'])) {
-			$this->data['params'] = new stdClass();
-		}
 
-  	// return json_encode($this->data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
-  	return json_encode($this->data);
+	public function __toString() {
+		$data = $this->data;
+	
+		if (empty($data['params'])) {
+			$data['params'] = new \stdClass();
+		}
+	
+		// return json_encode($this->data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+		return json_encode($data);
 	}
 }

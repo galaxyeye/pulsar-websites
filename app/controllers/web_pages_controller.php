@@ -4,223 +4,405 @@ App::import('Lib', array('qp'));
 
 class WebPagesController extends AppController {
 
-	var $name = 'WebPages';
+  var $name = 'WebPages';
 
-	function search() {
-		if (empty($this->data)) {
-			$this->loadModel('Crawl');
-			// $this->Crawl->find('list', array('fields' => array('batchId')));
+  function search() {
+    if (empty($this->data)) {
+      $this->loadModel('Crawl');
+      // $this->Crawl->find('list', array('fields' => array('batchId')));
+    }
+
+    if (!empty($this->data)) {
+      $nutchClient = new NutchClient();
+
+      $startKey = $this->data['WebPage']['startKey'];
+      $endKey = $this->data['WebPage']['endKey'];
+      if (empty($startKey)) $startKey = null;
+      if (empty($endKey)) $endKey = null;
+
+      $dbFilter = new DbFilter($startKey, $endKey);
+
+      pr($dbFilter->__toString());
+
+      $result = $nutchClient->query($dbFilter);
+      $this->set('webPages', json_decode($result, true, 10));
+    }
+  }
+
+  function searchByUrl($url = null) {
+    if (!$url && empty($this->data)) {
+      return;
+    }
+
+    if ($url) {
+      $startKey = symmetric_decode($url);
+      $endKey = null;
+    }
+
+    if (!empty($this->data)) {
+      $startKey = $this->data['WebPage']['startKey'];
+      $endKey = $this->data['WebPage']['endKey'];
+    }
+
+    if (empty($startKey)) $startKey = null;
+    if (empty($endKey)) $endKey = null;
+
+    $nutchClient = new NutchClient();
+    $dbFilter = new DbFilter($startKey, $endKey);
+    $webPages = $nutchClient->query($dbFilter);
+    $webPages = json_decode($webPages, true, 10);
+
+    $this->set(compact('webPages', 'dbFilter'));
+  }
+
+  function indexByPageEntity($page_entity_id) {
+    $this->loadModel('PageEntity');
+    $pageEntity = $this->PageEntity->read(null, $page_entity_id);
+
+    $pageEntity['CrawlFilter'] = array(
+      array(
+        'url_filter' => $pageEntity['PageEntity']['url_filter'], 
+        'text_filter' => $pageEntity['PageEntity']['text_filter']
+      )
+    );
+
+    $webPages = $this->_getWebPagesByCrawlFilter($pageEntity['CrawlFilter']);
+
+    $this->set(compact('pageEntity', 'webPages'));
+  }
+
+  function indexByCrawl($crawl_id) {
+    $this->loadModel('Crawl');
+    $this->Crawl->contain(array('CrawlFilter'));
+    $crawl = $this->Crawl->read(null, $crawl_id);
+
+    $webPages = $this->_getWebPagesByCrawlFilter($crawl['CrawlFilter']);
+
+    $this->set(compact('crawl', 'webPages'));
+  }
+
+  /**
+   * TODO : add a nutch server side service to report fetched count
+   * */
+  function ajax_getFetchedDetailPageCount($crawl_id) {
+  	$this->autoRender = false;
+
+  	$this->loadModel('Crawl');
+  	$this->Crawl->contain(array('CrawlFilter' => array('conditions' => array('page_type' => 'DETAIL'))));
+  	$crawl = $this->Crawl->read(null, $crawl_id);
+
+  	$webPages = $this->_getWebPagesByCrawlFilter($crawl['CrawlFilter'], null, array('baseUrl'));
+  	return count($webPages);
+  }
+
+  function ajax_getDetailPageLinks($crawl_id, $options = "", $limit = 100) {
+    $this->autoRender = false;
+
+    $options = explode("+", $options);
+
+    $this->loadModel('Crawl');
+    $this->Crawl->contain(array('CrawlFilter' => array('conditions' => array('page_type' => 'DETAIL'))));
+    $crawl = $this->Crawl->read(null, $crawl_id);
+
+    $webPages = $this->_getWebPagesByCrawlFilter($crawl['CrawlFilter'], $limit, array('baseUrl'));
+
+    $outlinks = array();
+
+    if (in_array('random', $options)) {
+    	$i = rand(0, count($webPages));
+    	array_push($outlinks, $webPages[$i]['baseUrl']);
+    }
+    else {
+    	foreach ($webPages as $webPage) {
+    		array_push($outlinks, $webPage['baseUrl']);
+    	}
+    }
+
+    echo json_encode($outlinks);
+  }
+
+  /**
+   * Get a random detail page from nutch server for the given crawl
+   * */
+  function ajax_getRandomDetailPage($crawl_id, $contentOnly = true) {
+  	$this->autoRender = false;
+
+  	$webPage = $this->_getRandomDetailPage();
+
+  	if ($contentOnly) {
+	  	echo empty($webPage) ? "" : $webPage['WebPage']['content'];
+  	}
+  	else {
+  		echo json_encode($webPage);
+  	}
+  }
+
+  function index() {
+    $webPages = array(
+        array('WebPage' => array(
+            'url' => "http://www.hahaertong.com/huodong-shanghai/",
+            'title' => '东方童画3月萌宝生日会，邀您一起来参与！ '
+          )
+        ),
+        array('WebPage' => array(
+            'url' => "http://www.hahaertong.com/huodong-beijing/",
+            'title' => 'Duang!宝贝闹元宵，欢乐送大礼！ '
+          )
+        )
+    );
+
+    $this->set(compact('webPages'));
+  }
+
+  /**
+   * Download a web page from nutch server if exists.
+   * By default, some of it's own tags is stripped to show it nested in our view correctly.
+   * */
+  function view($url) {
+    $this->layout = 'empty';
+
+    $options = array();
+    if (isset($this->params['named']['options'])) {
+      $options = explode("+", $this->params['named']['options']);
+    }
+    array_push($options, 'strip');
+
+    $view = 'view';
+    if (isset($this->params['named']['page_entity_id'])) {
+      $this->_viewByPageEntity($this->params['named']['page_entity_id']);
+      $view = 'view_by_page_entity';
+    }
+
+    $url = symmetric_decode($url);
+    $webPage = $this->_getWebPage($url, $options);
+
+    $this->set(compact('webPage', 'options'));
+
+    $this->render($view);
+  }
+
+  function viewRandomDetailPage() {
+    $this->layout = 'empty';
+
+    $options = array();
+    if (isset($this->params['named']['options'])) {
+      $options = explode("+", $this->params['named']['options']);
+    }
+    array_push($options, 'strip');
+
+    $view = 'view';
+    $page_entity_id = null;
+    $crawlFilters = array(array('url_filter' => '.+'));
+
+    if (isset($this->params['named']['page_entity_id'])) {
+    	$page_entity_id = $this->params['named']['page_entity_id'];
+      $view = 'view_by_page_entity';
+
+      $this->loadModel('PageEntity');
+      $this->PageEntity->contain('PageEntityField');
+      $pageEntity = $this->PageEntity->read(null, $page_entity_id);
+
+      $crawlFilters = array(array('url_filter' => $pageEntity['PageEntity']['url_filter']));
+
+      $this->set(compact('pageEntity'));
+    }
+
+    $webPage = $this->_getRandomDetailPage($crawlFilters, $options);
+
+    $this->set(compact('webPage', 'options'));
+
+    $this->render($view);
+  }
+
+  function _viewByPageEntity($pageEntityId) {
+    $this->loadModel('PageEntity');
+    $pageEntity = $this->PageEntity->read(null, $pageEntityId);
+
+    $this->set(compact('pageEntity'));
+  }
+
+  /**
+   * Download the url from the original site
+   * */
+  function download($url) {
+    $this->layout = 'empty';
+
+    $url = symmetric_decode($url);
+    $content = file_get_contents($url);
+
+    $this->set(compact('content'));
+  }
+
+  function _getWebPage($url, $options = array()) {
+    $startKey = $endKey = $url;
+
+    $nutchClient = new \Nutch\NutchClient();
+    $dbFilter = new \Nutch\DbFilter($startKey, $endKey);
+    $webPages = $nutchClient->query($dbFilter);
+
+    $webPages = json_decode($webPages, true, 10);
+
+    if (empty($webPages['values'])) {
+      return array('WebPage' => array('url' => $startKey, 'title' => '', 'content' => ''));
+    }
+
+    $webPage['WebPage'] = $webPages['values'][0];
+
+    if (in_array('strip', $options)) {
+      return $this->_stripHTML($webPage, $options);
+    }
+
+    return $webPage;
+  }
+
+  private function _getRandomDetailPage($crawlFilters, $options = null) {
+  	// TODO : We can do this on the server side
+  	$limit = 100;
+  	$links = $this->_getWebPagesByCrawlFilter($crawlFilters, $limit, array('baseUrl'));
+		if (count($links) == 0) {
+			return null;
 		}
 
-		if (!empty($this->data)) {
-			$nutchClient = new NutchClient();
+  	$i = rand(0, count($links));
+  	$url = $links[$i]['baseUrl'];
+  	$webPage = $this->_getWebPage($url, $options);
 
-			$startKey = $this->data['WebPage']['startKey'];
-			$endKey = $this->data['WebPage']['endKey'];
-			if (empty($startKey)) $startKey = null;
-			if (empty($endKey)) $endKey = null;
+  	return $webPage;
+  }
 
-			// $dbFilter = new DbFilter(null,$startKey, $endKey, array('parseStatus', 'content'));
-			$dbFilter = new DbFilter(null,$startKey, $endKey);
+  function _getWebPagesByCrawlFilter($crawlFilters, $limit = null, $fields = null) {
+  	if (!is_array($crawlFilters)) return null;
 
-			pr($dbFilter->__toString());
+    if ($fields == null) {
+      $fields = array("title", "baseUrl", "outlinks");
+    }
 
-			$result = $nutchClient->query($dbFilter);
-			$this->set('webPages', json_decode($result, true, 10));
-		}
-	}
+    $urlFilter = null;
+    foreach ($crawlFilters as $f) {
+      $urlFilter .= \Nutch\normalizeUrlFilter($f['url_filter']);
+    }
 
-	function searchByUrl($url = null) {
-		if (!$url && empty($this->data)) {
-			return;
-		}
+    $nutchClient = new \Nutch\NutchClient();
+    $dbFilter = new \Nutch\DbFilter();
+    $dbFilter->setUrlFilter($urlFilter);
+    $dbFilter->setFields($fields);
+    if ($limit) {
+      $dbFilter->setLimit($limit);
+    }
 
-		if ($url) {
-			$startKey = simple_decode($url);
-			$endKey = null;
-		}
+    $webPages = $nutchClient->query($dbFilter);
+    $webPages = json_decode($webPages, true, 10);
 
-		if (!empty($this->data)) {
-			$startKey = $this->data['WebPage']['startKey'];
-			$endKey = $this->data['WebPage']['endKey'];
-		}
+    return $webPages['values'];
+  }
 
-		if (empty($startKey)) $startKey = null;
-		if (empty($endKey)) $endKey = null;
+  private function _stripHTML($webPage, $options) {
+    if (empty($webPage['WebPage']['content'])) {
+      return null;
+    }
 
-		$nutchClient = new NutchClient();
-		$dbFilter = new DbFilter(null, $startKey, $endKey);
-		$webPages = $nutchClient->query($dbFilter);
-		$webPages = json_decode($webPages, true, 10);
+    $MIN_CONTENT_LENGTH = 100;
+    $content = $webPage['WebPage']['content'];
+    if (strlen($content) < $MIN_CONTENT_LENGTH) {
+      return null;
+    }
 
-		$this->set(compact('webPages', 'dbFilter'));
-	}
+    $dom = htmlqp($content, null, array('convert_to_encoding' => 'utf-8'));
 
-	function index() {
-		$webPages = array(
-				array('WebPage' => array(
-						'url' => "http://www.hahaertong.com/huodong-shanghai/",
-						'title' => '东方童画3月萌宝生日会，邀您一起来参与！ '
-					)
-				),
-				array('WebPage' => array(
-						'url' => "http://www.hahaertong.com/huodong-beijing/",
-						'title' => 'Duang!宝贝闹元宵，欢乐送大礼！ '
-					)
-				)
-		);
+    foreach (array('title', 'base', 'script', 'meta', 'iframe', 'link[rel=icon]') as $removal) {
+      $dom->find($removal)->remove();
+    }
 
-		$this->set(compact('webPages'));
-	}
+    if (in_array('simpleCss', $options)) {
+      foreach (array('style', 'link', 'head') as $removal) {
+        $dom->find($removal)->remove();
+      }
+    }
 
-	function view($url) {
-		$this->layout = 'empty';
+    // TODO : change all links to be absolute links
+    // $dom->find('a')->eachLambda(function($ele) {
+    //   $ele.href = getAbsoluteUrl($baseUrl, $ele.href);
+    // });
 
-		$options = array();
-		if (isset($this->params['named']['options'])) {
-			$options = explode("+", $this->params['named']['options']);
-		}
+    // Add qiwur specified information
+    $dom->find('html')->attr('id', 'qiwurHtml');
+    $dom->find('body')->attr('id', 'qiwurBody');
+    $dom->find('img')->html("")->removeAttr("src");
 
-		$startKey = simple_decode($url);
-		$endKey = null;
+    $content = $dom->html();
 
-		$nutchClient = new NutchClient();
-		$dbFilter = new DbFilter(null, $startKey, $endKey);
-		$webPages = $nutchClient->query($dbFilter);
-		$webPages = json_decode($webPages, true, 10);
+    // Strip to show the page inside our own layout
+    // TODO : Can we do these replace using $dom ?
+    $content = preg_replace("/html|body/", "div", $content);
+    $content = preg_replace("/<!DOCTYPE/", "<!--", $content);
+    $content = preg_replace("/.dtd\">/", "-->", $content);
 
-		$webPage = array(
-				'WebPage' => array(
-						'url' => $startKey,
-						'content' => ''
-				)
-		);
+    $webPage['WebPage']['content'] = $content;
 
-		if (!empty($webPages['values'])) {
-			App::import('Vendor', 'PHPHtmlParser/Dom');
-			$webPage['WebPage'] = $webPages['values'][0];
+    return $webPage;
+  }
 
-			$content = $webPage['WebPage']['content'];
+  private function __analysis($dom) {
+    //     pr($dom);
+    //     die();
+  
+    $this->__walk($dom);
+  }
+  
+  private function __walk($dom) {
+    $node = $dom->top();
 
-			$dom = htmlqp($content, null, array('convert_to_encoding' => 'utf-8'));
-			$dom->find('title')->remove();
-			$dom->find('base')->remove();
-			$dom->find('script')->remove();
-			$dom->find('style')->remove();
-			$dom->find('meta')->remove();
-			$dom->find('img')->html("")->removeAttr("src");
+    $this->__analysisNode($node);
 
-			if (in_array('simpleCss', $options)) {
-				$dom->find('link')->remove();
-			}
+    $this->__walkChildren($node);
+  }
 
-// 			foreach ($dom->find('a') as &$l) {
-// 				$l->src();
-// 			}
+  private function __walkChildren($dom) {
+    foreach($dom->children() as $child) {
+      $this->__analysisNode($child);
 
-			$content = $dom->html();
-			$content = str_replace("html", "div", $content);
-			$content = str_replace("body", "div", $content);
-			$content = str_replace("<!DOCTYPE", "<!--", $content);
-			$content = str_replace(".dtd\">", "-->", $content);
-			$webPage['WebPage']['content'] = $content;
-		}
+      $this->__walkChildren($child);
+    }
+  }
 
-		$this->set(compact('webPage', 'options'));
-	}
+  private function __analysisNode($node) {
+    if (in_array($node->tag(), $this->keyTags)) {
+      // do something
+      pr($node->tag().$node->text());
+    }
+  }
 
-	function download($url) {
-		$this->layout = 'empty';
+  private function __trimAllTags($page) {
+  }
 
-		$url = simple_decode($url);
-		$content = file_get_contents($url);
+  private function __segmentWords($page) {
+  }
 
-		App::import('Vendor', 'PHPHtmlParser/Dom');
-		$dom = htmlqp($content, null, array('convert_to_encoding' => 'utf-8'));
-		$title = $dom->find('title')->text();
+  private function __parseMeta($dom) {
+    $meta = array('title', '');
+  
+    $title = $dom->find('title');
+    $metaKeywords = $dom->find('meta');
+    $metaDescription = $dom->find('meta');
+  }
 
-		$dom->find('title')->remove();
-		$dom->find('script')->remove();
-		$dom->find('style')->remove();
-		$dom->find('meta')->remove();
-		$dom->find('img')->html("")->removeAttr("src");
+  function __analysisHeaders($dom) {
+    $headerTags = array('h1', 'h2', 'h3', 'h4', 'h5', 'h6');
 
-		$content = $dom->html();
-		$content = str_replace("html", "div", $content);
-		$content = str_replace("body", "div", $content);
+    foreach ($headerTags as $headerTag) {
+      foreach ($dom->find($headerTag) as $h) {
+        $headerTags[$headerTag] = $h->html();
+      }
+    }
 
-		$webPage = array(
-				'WebPage' => array(
-						'url' => $url,
-						'title' => $title,
-						'content' => $content
-				)
-		);
+    return $headerTags;
+  }
 
-		$this->set(compact('webPage'));
-	}
+  function __analysisSummary($dom) {
+  
+  }
 
-	private function __analysis($dom) {
-		// 		pr($dom);
-		// 		die();
-	
-		$this->__walk($dom);
-	}
-	
-	private function __walk($dom) {
-		$node = $dom->top();
+  function __analysisTags($dom) {
 
-		$this->__analysisNode($node);
-
-		$this->__walkChildren($node);
-	}
-
-	private function __walkChildren($dom) {
-		foreach($dom->children() as $child) {
-			$this->__analysisNode($child);
-
-			$this->__walkChildren($child);
-		}
-	}
-
-	private function __analysisNode($node) {
-		if (in_array($node->tag(), $this->keyTags)) {
-			// do something
-			pr($node->tag().$node->text());
-		}
-	}
-
-	private function __trimAllTags($page) {
-	}
-
-	private function __segmentWords($page) {
-	}
-
-	private function __parseMeta($dom) {
-		$meta = array('title', '');
-	
-		$title = $dom->find('title');
-		$metaKeywords = $dom->find('meta');
-		$metaDescription = $dom->find('meta');
-	}
-
-	function __analysisHeaders($dom) {
-		$headerTags = array('h1', 'h2', 'h3', 'h4', 'h5', 'h6');
-
-		foreach ($headerTags as $headerTag) {
-			foreach ($dom->find($headerTag) as $h) {
-				$headerTags[$headerTag] = $h->html();
-			}
-		}
-
-		return $headerTags;
-	}
-
-	function __analysisSummary($dom) {
-	
-	}
-
-	function __analysisTags($dom) {
-
-	}
+  }
 }

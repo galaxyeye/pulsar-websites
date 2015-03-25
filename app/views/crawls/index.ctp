@@ -5,8 +5,10 @@
 			<th><?php echo $this->Paginator->sort('id');?></th>
 			<th><?php echo $this->Paginator->sort('name');?></th>
 			<th><?php echo $this->Paginator->sort('rounds');?></th>
-			<th><?php echo $this->Paginator->sort('job_type');?></th>
-			<th><?php echo $this->Paginator->sort('job_state');?></th>
+			<th><?php echo $this->Paginator->sort('finished_rounds');?></th>
+			<th><?php echo $this->Paginator->sort('limit');?></th>
+			<th><?php echo $this->Paginator->sort('state');?></th>
+			<th><?php echo $this->Paginator->sort('configId');?></th>
 			<th><?php echo $this->Paginator->sort('created');?></th>
 			<th class="actions"><?php __('Actions');?></th>
 	</tr>
@@ -22,8 +24,10 @@
 		<td><?php echo $crawl['Crawl']['id']; ?>&nbsp;</td>
 		<td><?php echo $crawl['Crawl']['name']; ?>&nbsp;</td>
 		<td><?php echo $crawl['Crawl']['rounds']; ?>&nbsp;</td>
-		<td><?php echo $crawl['Crawl']['job_type']; ?>&nbsp;</td>
-		<td><?php echo $crawl['Crawl']['job_state']; ?>&nbsp;</td>
+		<td><?php echo $crawl['Crawl']['finished_rounds']; ?>&nbsp;</td>
+		<td><?php echo $crawl['Crawl']['limit']; ?>&nbsp;</td>
+		<td><?php echo $crawl['Crawl']['state']; ?>&nbsp;</td>
+		<td><?php echo $crawl['Crawl']['configId']; ?>&nbsp;</td>
 		<td><?php echo $crawl['Crawl']['created']; ?>&nbsp;</td>
 		<td class="actions">
 			<?php echo $this->Html->link(__('View', true), array('action' => 'view', $crawl['Crawl']['id'])); ?>
@@ -49,7 +53,7 @@
 <div class="actions">
 	<h3><?php __('Actions'); ?></h3>
 	<ul>
-		<li><?php echo $this->Html->link(__('New Wes', true), array('action' => 'add_wes'), array('target' => '_blank')); ?> </li>
+		<li><?php echo $this->Html->link(__('New Wes', true), array('action' => 'addWes'), array('target' => '_blank')); ?> </li>
 		<li><?php echo $this->Html->link(__('New Crawl', true), array('action' => 'add')); ?></li>
 	</ul>
 </div>

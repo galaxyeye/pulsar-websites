@@ -108,11 +108,16 @@
 	define('URLFILTER_REGEX_RULES', "urlfilter.regex.rules");
 	define('CRAWL_OUTLINK_FILTER_RULES', "crawl.outlink.filter.rules");
 
+	// SCENT specified constants
+	define('SCENT_SERVER', "http://localhost:8181");
+	define('CONTENTFILTER_CONTENT_RULES', "contentfilter.content.rules");
+
 	require('global.php');
 
 	Inflector::rules('plural', array('irregular' => array(
 		'system' => 'system',
 		'common' => 'common',
 		'stat' => 'stat',
-		'nutch' => 'nutch'
+		'nutch' => 'nutch',
+		'analysis' => 'analysis'
   )));

@@ -17,13 +17,20 @@ class PageEntityFieldsController extends AppController {
 		$crawl_id = 0;
 
 		if (empty($this->data)) {
-			if (!isset($this->params['named']['page_entity_id']) || !isset($this->params['named']['crawl_id'])) {
-				$this->Session->setFlash(__('You must specify page entity id and crawl id for the field', true));
+// 			if (!isset($this->params['named']['page_entity_id']) || !isset($this->params['named']['crawl_id'])) {
+// 				$this->Session->setFlash(__('You must specify page entity id and crawl id for the field', true));
+// 				$this->redirect(array('controller' => 'page_entities', 'action' => 'index'));
+// 			}
+			if (!isset($this->params['named']['page_entity_id'])) {
+				$this->Session->setFlash(__('You must specify page entity id for the field', true));
 				$this->redirect(array('controller' => 'page_entities', 'action' => 'index'));
 			}
 
 			$page_entity_id = $this->params['named']['page_entity_id'];
-			$crawl_id = $this->params['named']['crawl_id'];
+
+			if (isset($this->params['named']['crawl_id'])) {
+				$crawl_id = $this->params['named']['crawl_id'];
+			}
 		}
 
 		if (!empty($this->data)) {

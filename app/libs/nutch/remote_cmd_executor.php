@@ -1,8 +1,10 @@
 <?php 
 
-App::import('Lib', array('nutch/nutch_client', 'nutch/remote_cmd_builder'));
+namespace Nutch;
 
-class RemoteCmdExecutor extends Object {
+\App::import('Lib', array('nutch/nutch_client', 'nutch/remote_cmd_builder'));
+
+class RemoteCmdExecutor extends \Object {
 
 	private $client;
 

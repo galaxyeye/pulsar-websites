@@ -4,10 +4,6 @@
 	<tr>
 			<th><?php echo $this->Paginator->sort('id');?></th>
 			<th><?php echo $this->Paginator->sort('name');?></th>
-			<th><?php echo $this->Paginator->sort('url_pattern');?></th>
-			<th><?php echo $this->Paginator->sort('text_pattern');?></th>
-			<th><?php echo $this->Paginator->sort('css_path');?></th>
-			<th><?php echo $this->Paginator->sort('extraction_id');?></th>
 			<th class="actions"><?php __('Actions');?></th>
 	</tr>
 	<?php
@@ -21,15 +17,6 @@
 	<tr<?php echo $class;?>>
 		<td><?php echo $pageEntity['PageEntity']['id']; ?>&nbsp;</td>
 		<td><?php echo $pageEntity['PageEntity']['name']; ?>&nbsp;</td>
-		<td><?php echo $pageEntity['PageEntity']['url_pattern']; ?>&nbsp;</td>
-		<td><?php echo $pageEntity['PageEntity']['text_pattern']; ?>&nbsp;</td>
-		<td><?php echo $pageEntity['PageEntity']['css_path']; ?>&nbsp;</td>
-		<td>
-			<?php 
-				$name = $pageEntity['Extraction']['name'].'-'.$pageEntity['Extraction']['id'];
-				echo $this->Html->link($name, array('controller' => 'extractions', 'action' => 'view', $pageEntity['Extraction']['id']));
-		  ?>
-		</td>
 		<td class="actions">
 			<?php echo $this->Html->link(__('View', true), array('action' => 'view', $pageEntity['PageEntity']['id'])); ?>
 			<?php echo $this->Html->link(__('Edit', true), array('action' => 'edit', $pageEntity['PageEntity']['id'])); ?>
@@ -52,10 +39,4 @@
  |
 		<?php echo $this->Paginator->next(__('next', true) . ' >>', array(), null, array('class' => 'disabled'));?>
 	</div>
-</div>
-<div class="actions">
-	<h3><?php __('Actions'); ?></h3>
-	<ul>
-		<li><?php echo $this->Html->link(__('List Page Entities', true), array('controller' => 'page_entities', 'action' => 'index')); ?> </li>
-	</ul>
 </div>

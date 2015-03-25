@@ -1,4 +1,6 @@
 <?php 
+namespace Nutch;
+
 class JobConfig {
 
   private $data = array(
@@ -63,13 +65,15 @@ class JobConfig {
   public function data() {
   	return $this->data;
   }
-  
+
   public function __toString() {
-  	if (empty($this->data['args'])) {
-  		$this->data['args'] = new stdClass();
+  	$data = $this->data;
+
+  	if (empty($data['args'])) {
+  		$data['args'] = new \stdClass();
   	}
 
   	// return json_encode($this->data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
-  	return json_encode($this->data);
+  	return json_encode($data);
   }
 }

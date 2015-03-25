@@ -1,5 +1,5 @@
 <?php 
-App::import('Lib', array('function_core', 'ip', 'job_manager'));
+App::import('Lib', array('function_core', 'ip', 'nutch_job_manager'));
 
 // App::import('Lib', 'QueryPath', array('file' => 'QueryPath/QueryPath.php'));
 
@@ -13,7 +13,7 @@ class AppController extends Controller {
 		'Cookie' => array('name' => COOKIE_NAME, 'key' => COOKIE_KEY, 'time' => 3600, 'path' => '/', 'secure' => false),
 		'Email',
 		'UserTracker',
-		'JobManager'
+		'NutchJobManager'
 	);
 
   // Default current user is anonymous user
@@ -112,7 +112,7 @@ class AppController extends Controller {
     		// $db->query($sql);
 		}
 
-		$this->JobManager->scheduleCrawlJobs();
+		$this->NutchJobManager->scheduleNutchJobs();
 
 		if ($this->_isAjax() || $this->RequestHandler->isAjax()) {
 			$this->autoRender = false;
@@ -262,9 +262,45 @@ class AppController extends Controller {
   	$this->redirect(array('action' => 'view', $id));
   }
 
-	protected function checkTenantPrivilege($id, $modelClass = null) {
-		return true;
+  /**
+   * @deprecated, use @see getResponseStatus instead
+   * */
+  protected function getStatus($errno = 200, $message = 'OK', $data = null) {
+  	global $httpCodes;
 
+  	$result = array(
+		  'errno' => $errno,
+  		'error' => $httpCodes[$errno],
+			'message' => $message,
+			'data' => $data
+		);
+
+  	return json_encode($result);
+  }
+
+  protected function _validateId($id, $redirect = array('action' => 'index')) {
+  	$modelClass = $this->modelClass;
+  	if (is_array($id)) {
+			if (!isset($id[$modelClass]['id'])) {
+				$id = false;
+			}
+			else {
+				$id = $id[$modelClass]['id'];				
+			}
+  	}
+
+  	if (!$id) {
+  		$this->Session->setFlash("Invalid ".$model);
+  		$this->redirect($redirect);
+  	}
+
+  	if(!$this->checkTenantPrivilege($id)) {
+  		$this->Session->setFlash(__('Privilege denied', true));
+  		$this->redirect($redirect);
+  	}
+  }
+
+	protected function checkTenantPrivilege($id, $modelClass = null) {
 		if ($modelClass == null) {
 			$modelClass = $this->modelClass;
 		}
@@ -298,4 +334,19 @@ class AppController extends Controller {
 		return true;
 	}
 
+	// TODO : move to a component?
+	protected function _tidyCrawlFilter($crawlFilters) {
+		$tidiedCrawlFilters = array();
+
+		foreach ($crawlFilters as $crawlFilter) {
+			$this->loadModel('CrawlFilter');
+			$crawlFilter = $this->CrawlFilter->tidyCrawlFilter($crawlFilter);
+
+			if (!empty($crawlFilter)) {
+				array_push($tidiedCrawlFilters, $crawlFilter);
+			}
+		}
+	
+		return $tidiedCrawlFilters;
+	}
 }

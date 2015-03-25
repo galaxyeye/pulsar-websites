@@ -54,5 +54,23 @@ class CrawlFilter extends AppModel {
 			'order' => ''
 		)
 	);
+
+	function tidyCrawlFilter($crawlFilter) {
+
+		foreach (array('url_filter', 'text_filter', 'block_filter') as $field) {
+			$isset = isset($crawlFilter[$field]);
+			if ($isset && false !== stripos($crawlFilter[$field], "QiwurInputTemplate")) {
+				unset($crawlFilter[$field]);
+			}
+		}
+
+// 		global $urlFilterTemplate, $textFilterTemplate, $blockFilterTemplate;
+// 		foreach (array('url_filter', 'text_filter', 'block_filter') as $field) {
+// 			if (0 == compareIgnoreSpace($crawlFilter['url_filter'], $urlFilterTemplate)) {
+// 				unset($crawlFilter[$field]);
+// 			}
+// 		}
+
+		return $crawlFilter;
+	}
 }
-?>

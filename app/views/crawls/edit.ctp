@@ -20,7 +20,7 @@
 	<h3><?php __('Actions'); ?></h3>
 	<ul>
 		<li><?php echo $this->Html->link(__('View Crawl Status', true), array('action' => 'status', $this->data['Crawl']['id'])); ?> </li>
-		<li><?php echo $this->Html->link(__('New Wes', true), array('action' => 'add_wes'), array('target' => '_blank')); ?> </li>
+		<li><?php echo $this->Html->link(__('New Wes', true), array('action' => 'addWes'), array('target' => '_blank')); ?> </li>
 		<li><?php echo $this->Html->link(__('View Crawl', true), array('action' => 'view', $this->data['Crawl']['id'])); ?> </li>
 	</ul>
 </div>

@@ -7,11 +7,12 @@
   <?php echo $this->element('css', array('css' => array('jquery/jquery-ui-1.11.3/jquery-ui'))); ?>
 
   <script type="text/javascript">
-  	var globalPageData = {
-  	  "webroot" : "<?php echo $this->Html->webroot?>",
-  		"controller" : "<?php echo $this->params['controller']?>",
-  		"action" : "<?php echo $this->params['action']?>"
-  	};
+    var globalPageData = {
+      "webroot" : "<?php echo $this->Html->webroot?>",
+      "controller" : "<?php echo $this->params['controller']?>",
+      "action" : "<?php echo $this->params['action']?>",
+      "here" : "<?php echo $this->here ?>"
+    };
   </script>
 </head>
 
@@ -31,22 +32,14 @@
         <a href="<?php echo Router::url('/crawls') ?>">crawls</a>
       </li>
       <li class="item2">
-        <a href="<?php echo Router::url('/extractions') ?>">extractions</a>
-      </li>
-      <li class="item5">
         <a href="<?php echo Router::url('/page_entities') ?>">page entities</a>
       </li>
-      <!-- 
-      <li class="item4">
-        <a href="<?php echo Router::url('/settings') ?>">settings</a>
+      <li class="item2">
+        <a href="<?php echo Router::url('/nutch_jobs') ?>">nutch jobs</a>
       </li>
-      <li class="item6">
-        <a href="<?php echo Router::url('/schedulings') ?>">scheduling</a>
+      <li class="item2">
+        <a href="<?php echo Router::url('/scent_jobs') ?>">scent jobs</a>
       </li>
-      <li class="item7">
-        <a href="<?php echo Router::url('/searches') ?>">search</a>
-      </li>
-       -->
       <li class="lgo">
         <a href="<?php echo Router::url('/users/logout') ?>" class="lbOn" title="Logout!">退出</a>
       </li>

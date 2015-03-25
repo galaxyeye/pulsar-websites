@@ -20,10 +20,10 @@ class CrawlFiltersController extends AppController {
 
 			if ($this->data['CrawlFilter']['filter_mode'] == 'BASIC') {
 				$textFilter = json_encode($this->data['TextFilter'], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
-				$parseBlockFilter = json_encode($this->data['ParseBlockFilter'], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+				$blockFilter = json_encode($this->data['BlockFilter'], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 
 				$this->data['CrawlFilter']['text_filter'] = $textFilter;
-				$this->data['CrawlFilter']['parse_block_filter'] = $parseBlockFilter;
+				$this->data['CrawlFilter']['block_filter'] = $blockFilter;
 			}
 
 			pr($this->data);

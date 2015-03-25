@@ -66,4 +66,3 @@ class PageEntityField extends AppModel {
 		)
 	);
 }
-?>
