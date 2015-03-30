@@ -5,49 +5,49 @@ namespace Scent;
 
 class RemoteCmdExecutor extends \Object {
 
-	private $client;
+  private $client;
 
-	public function __construct() {
-		$this->client = new ScentClient();
-	}
+  public function __construct() {
+    $this->client = new ScentClient();
+  }
 
-	function createScentConfig($pageEntity) {
-		$cmdBuilder = new RemoteCmdBuilder($pageEntity);
-		$scentConfig = $cmdBuilder->buildScentConfig();
+  function createScentConfig($pageEntity) {
+    $cmdBuilder = new RemoteCmdBuilder($pageEntity);
+    $scentConfig = $cmdBuilder->buildScentConfig();
 
-		return $this->client->createScentConfig($scentConfig);
-	}
+    return $this->client->createScentConfig($scentConfig);
+  }
 
-	function executeRemoteJob($pageEntity, $jobType) {
-		$cmdBuilder = new RemoteCmdBuilder($pageEntity);
+  function executeRemoteJob($pageEntity, $jobType) {
+    $cmdBuilder = new RemoteCmdBuilder($pageEntity);
 
-		if ($jobType == RemoteCmdBuilder::$JobType['SEGMENT']) {
-			$command = $cmdBuilder->createSegmentCommand();
-		}
-		else if ($jobType == RemoteCmdBuilder::$JobType['AUTOEXTRACT']) {
-			$command = $cmdBuilder->createAutoExtractCommand();
-		}
-		else if ($jobType == RemoteCmdBuilder::$JobType['RULEDEXTRACT']) {
-			$command = $cmdBuilder->createRuledExtractCommand();
-		}
-		else if ($jobType == RemoteCmdBuilder::$JobType['BUILD']) {
-			$command = $cmdBuilder->createBuildCommand();
-		}
-		else {
-			$this->log("Unkown job type $jobType");
-			return false;
-		}
+    if ($jobType == RemoteCmdBuilder::$JobType['SEGMENT']) {
+      $command = $cmdBuilder->createSegmentCommand();
+    }
+    else if ($jobType == RemoteCmdBuilder::$JobType['AUTOEXTRACT']) {
+      $command = $cmdBuilder->createAutoExtractCommand();
+    }
+    else if ($jobType == RemoteCmdBuilder::$JobType['RULEDEXTRACT']) {
+      $command = $cmdBuilder->createRuledExtractCommand();
+    }
+    else if ($jobType == RemoteCmdBuilder::$JobType['BUILD']) {
+      $command = $cmdBuilder->createBuildCommand();
+    }
+    else {
+      $this->log("Unkown job type $jobType");
+      return false;
+    }
 
-		return $this->submitJob($command);
-	}
+    return $this->submitJob($command);
+  }
 
-	private function submitJob($remoteCommand) {
-		$jobId = false;
+  private function submitJob($remoteCommand) {
+    $jobId = false;
 
-		if ($remoteCommand !== false) {
-			$jobId = $this->client->executeJob($remoteCommand->getJobConfig());
-		}
+    if ($remoteCommand !== false) {
+      $jobId = $this->client->executeJob($remoteCommand->getJobConfig());
+    }
 
-		return $jobId;
-	}
+    return $jobId;
+  }
 }

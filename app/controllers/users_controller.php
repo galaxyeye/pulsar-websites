@@ -630,7 +630,8 @@ class UsersController extends AppController {
 	public function login2() {
 	}
 
-	public function logout(){
+	public function logout() {
+		$this->currentUser = self::$DEFAULT_USER;
 		$this->redirect($this->Auth->logout());
 	}
 

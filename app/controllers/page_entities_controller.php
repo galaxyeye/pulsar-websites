@@ -137,6 +137,9 @@ class PageEntitiesController extends AppController {
   	$id = $this->params['url']['id'];
   	$this->_validateId($id);
   	$limit = intval($this->params['url']['limit']);
+  	if ($limit > 500) {
+  		$limit = 500;
+  	}
 
   	$pageEntity = $this->PageEntity->read(null, $id);
 

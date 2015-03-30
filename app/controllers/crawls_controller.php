@@ -143,16 +143,11 @@ class CrawlsController extends AppController {
   }
 
   function view($id = null) {
-    if (!$id) {
-      $this->Session->setFlash(__('Invalid crawl', true));
+    if(!$this->checkTenantPrivilege($id)) {
+      $this->Session->setFlash(__('Privilege denied', true));
       $this->redirect(array('action' => 'index'));
     }
 
-//     if(!$this->checkTenantPrivilege($id)) {
-//       $this->Session->setFlash(__('Privilege denied', true));
-//       $this->redirect(array('action' => 'index'));
-//     }
-    
     $this->Crawl->contain(array(
         'Seed' => array('limit' => 10),
         'CrawlFilter',

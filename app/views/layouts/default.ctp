@@ -43,6 +43,9 @@
       <li class="item2">
         <a href="<?php echo Router::url('/jobs') ?>">Jobs</a>
       </li>
+      <li class="lgo">
+        <a href="<?php echo Router::url('/users/logout') ?>">Logout</a>
+      </li>
     </ul>
   </div><!-- nav -->
 

@@ -16,19 +16,40 @@ class AppController extends Controller {
     'NutchJobManager'
   );
 
+
+  // Default current user is anonymous user
+  public static $DEFAULT_USER = array(
+  		'id' => 0,
+  		'email' => USER_ANONYMOUS_EMAIL,
+  		'name' => USER_ANONYMOUS_NAME,
+  		'password' => '',
+  		'avatar' => AVATAR_DEFAULT,
+  		'avatar_big' => AVATAR_DEFAULT,
+  		'group_id' => USER_GROUP_ID,
+  		'point' => 0, 'level' => 0, 'exp' => 0,
+  		'created' => '1970-01-01 00:00:00', 'modified' => '1970-01-01 00:00:00',
+  		'status' => 'ACTIVATED', 'gender' => '', 'birth' => '', 'referrer' => 0,
+  		'salary' => '', 'ip' => '');
+
+  public static $DEFAULT_ENTERPRISE = array('id' => 0,
+  		'email' => USER_ANONYMOUS_EMAIL,
+  		'name' => USER_ANONYMOUS_NAME,
+  		'group_id' => ENTERPRISE_GROUP_ID
+  );
+  
   // Default current user is anonymous user
   public $currentUser = array(
-    'id' => 0,
-    'email' => USER_ANONYMOUS_EMAIL,
-    'name' => USER_ANONYMOUS_NAME,
-    'password' => '',
-    'avatar' => AVATAR_DEFAULT,
-    'avatar_big' => AVATAR_DEFAULT,
-    'group_id' => USER_GROUP_ID,
-    'point' => 0, 'level' => 0, 'exp' => 0, 
-    'created' => '1970-01-01 00:00:00', 'modified' => '1970-01-01 00:00:00',
-    'status' => 'ACTIVATED', 'gender' => '', 'birth' => '', 'referrer' => 0, 
-    'salary' => '', 'ip' => '');
+  		'id' => 0,
+  		'email' => USER_ANONYMOUS_EMAIL,
+  		'name' => USER_ANONYMOUS_NAME,
+  		'password' => '',
+  		'avatar' => AVATAR_DEFAULT,
+  		'avatar_big' => AVATAR_DEFAULT,
+  		'group_id' => USER_GROUP_ID,
+  		'point' => 0, 'level' => 0, 'exp' => 0,
+  		'created' => '1970-01-01 00:00:00', 'modified' => '1970-01-01 00:00:00',
+  		'status' => 'ACTIVATED', 'gender' => '', 'birth' => '', 'referrer' => 0,
+  		'salary' => '', 'ip' => '');
 
   public $currentEnterprise = array('id' => 0,
     'email' => USER_ANONYMOUS_EMAIL,
@@ -211,7 +232,7 @@ class AppController extends Controller {
     $this->Auth->userScope = array('User.status' => 'ACTIVATED');
     $this->Auth->loginAction = array('controller' => 'users', 'action' => 'login');
     // $this->Auth->autoRedirect = false;
-    $this->Auth->logoutRedirect = '/';
+    $this->Auth->logoutRedirect = array('controller' => 'users', 'action' => 'login');
 
     // Specified Authorization
     if ($this->isAdmin()) {
