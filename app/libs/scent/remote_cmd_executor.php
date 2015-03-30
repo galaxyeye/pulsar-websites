@@ -18,14 +18,14 @@ class RemoteCmdExecutor extends \Object {
 		return $this->client->createScentConfig($scentConfig);
 	}
 
-	function executeRemoteJob($crawl, $jobType) {
-		$cmdBuilder = new RemoteCmdBuilder($crawl);
+	function executeRemoteJob($pageEntity, $jobType) {
+		$cmdBuilder = new RemoteCmdBuilder($pageEntity);
 
 		if ($jobType == RemoteCmdBuilder::$JobType['SEGMENT']) {
 			$command = $cmdBuilder->createSegmentCommand();
 		}
-		else if ($jobType == RemoteCmdBuilder::$JobType['EXTRACT']) {
-			$command = $cmdBuilder->createExtractCommand();
+		else if ($jobType == RemoteCmdBuilder::$JobType['AUTOEXTRACT']) {
+			$command = $cmdBuilder->createAutoExtractCommand();
 		}
 		else if ($jobType == RemoteCmdBuilder::$JobType['RULEDEXTRACT']) {
 			$command = $cmdBuilder->createRuledExtractCommand();

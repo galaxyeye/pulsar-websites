@@ -385,9 +385,12 @@ div.actions ul li a:hover { text-decoration: underline; }
   padding-right:0px;
 }
 
-.xubox_page div.view {
+.xubox_page div.view, .xubox_page div.related {
   text-align: left;
-  width: 750px;
+  width: 749px;
+  border-left: 1px solid #B7D58B;
+  border-right: 1px solid #B7D58B;
+  border-bottom: 1px solid #B7D58B;
 }
 
 .xubox_title {

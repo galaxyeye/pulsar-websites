@@ -90,13 +90,13 @@
 
   <div class="actions">
     <ul>
-      <li><?php echo $this->Html->link(__('新字段（智能分析）', true),
+      <li><?php echo $this->Html->link(__('增加字段（智能分析）', true),
       		array('action' => 'learnFields', $pageEntity['PageEntity']['id']),
       		array('target' => '_blank'));?></li>
-      <li><?php echo $this->Html->link(__('新字段（图形化收集）', true),
-      		array('controller' => 'web_pages', 'action' => 'indexByPageEntity', $pageEntity['PageEntity']['id']), 
+      <li><?php echo $this->Html->link(__('增加字段（图形化收集）', true),
+      		array('controller' => 'web_pages', 'action' => 'indexByPageEntity', $pageEntity['PageEntity']['id']),
       		array('target' => '_blank'));?></li>
-      <li><?php echo $this->Html->link(__('新字段（手动填写）', true),
+      <li><?php echo $this->Html->link(__('增加字段（手动填写）', true),
       		array('controller' => 'page_entity_fields', 'action' => 'add',
       				"page_entity_id" => $pageEntity['PageEntity']['id']));?></li>
     </ul>
@@ -104,10 +104,32 @@
 </div>
 
 <div class="pageEntities form">
-<?php echo $this->Form->create('PageEntity', array('action' => 'startExtraction', 'type' => 'get'));?>
+<?php echo $this->Form->create('PageEntity', array('action' => 'startRuledExtract', 'type' => 'get'));?>
   <fieldset>
-     <legend><?php __('Start This Extraction'); ?></legend>
+     <legend><?php __('Start Ruled Extract'); ?></legend>
   <?php echo $this->Form->input('id', array('value' => $pageEntity['PageEntity']['id'])); ?>
-  <?php echo $this->Form->end(__('Start Extraction', true));?>
+  <?php echo $this->Form->hidden('limit', array('value' => 500)); ?>
+  <?php echo $this->Form->end(__('Start Ruled Extract', true));?>
+  </fieldset>
+</div>
+
+<div class="pageEntities form">
+<?php echo $this->Form->create('PageEntity', array('action' => 'startSegmentAnalysis', 'type' => 'get'));?>
+  <fieldset>
+     <legend><?php __('Start Segment Analysis'); ?></legend>
+  <?php echo $this->Form->input('id', array('value' => $pageEntity['PageEntity']['id'])); ?>
+  <?php echo $this->Form->hidden('limit', array('value' => 500)); ?>
+  <?php echo $this->Form->hidden('diagnose', array('value' => true)); ?>
+  <?php echo $this->Form->end(__('Start Segment Analysis', true));?>
+  </fieldset>
+</div>
+
+<div class="pageEntities form">
+<?php echo $this->Form->create('PageEntity', array('action' => 'startAutoExtract', 'type' => 'get'));?>
+  <fieldset>
+     <legend><?php __('Start Auto Extract'); ?></legend>
+  <?php echo $this->Form->input('id', array('value' => $pageEntity['PageEntity']['id'])); ?>
+  <?php echo $this->Form->hidden('limit', array('value' => 500)); ?>
+  <?php echo $this->Form->end(__('Start Auto Extract', true));?>
   </fieldset>
 </div>

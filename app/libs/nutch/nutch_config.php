@@ -3,16 +3,20 @@ namespace Nutch;
 
 class NutchConfig {
 	
+	public static $PRIORITY = ['major' => 'major', 'minor' => 'minor'];
+	
 	private $data = array(
 			'configId' => 'default',
 			'force' => 'false',
+			'priority' => 'major',
 			'params' => array()
 	);
 
-	public function __construct($configId = "default", $params = array(), $force = false) {
+	public function __construct($configId = "default", $priority = "major", $params = array(), $force = false) {
 		$this->data['configId'] = $configId;
-		$this->data['params'] = $params;
 		$this->data['force'] = $force;
+		$this->data['priority'] = $priority;
+		$this->data['params'] = $params;
 	}
 
 	public function setParam($key, $value) {
@@ -29,6 +33,14 @@ class NutchConfig {
 
 	public function getForce() {
 		return $this->data['force'];
+	}
+
+	public function setPriority($priority) {
+		$this->data['priority'] = $priority;
+	}
+
+	public function getPriority() {
+		return $this->data['priority'];
 	}
 
 	public function setForce($force) {

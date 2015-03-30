@@ -2,17 +2,35 @@
 
 class SimpleCrawler extends Object {
 
+	public static $CRAWL_REGIONS = [
+		'ANY' => 'ANY',
+		'TLD' => 'TLD',
+		'DOMAIN' => 'DOMAIN',
+ 		'DIRECTORY' => 'DIRECTORY',
+	];
+
 	var $localDir = "/tmp/simple_crawler";
 	var $limit = 50;
-	var $maxUrlLength = 100;
-	var $tld = "";
+	var $maxUrlLength = 1000;
+
 	var $seed = null;
+	var $crawlRegion = 'DIRECTORY';
+	var $tld = "";
+	var $domain = "";
+	var $baseDir = "";
+
 	var $seen = array();
 	var $outlinks = array();
 
+	// special words in url
 	var $p1words = array('item', 'detail', 'product', 'shop', 'activity', 'goods');
 	var $p2words = array('index', 'list');
-	var $badWords = array('comment', 'help', 'ajax', 'javascript');
+	var $badWords = array(
+			'comment', 'help',
+			'ajax', 'javascript',
+			'cdn', 'cache',
+			'video',
+			'jpg', 'png', 'gif', 'swf', 'flv');
 
 	public function __construct() {
 	}
@@ -24,10 +42,12 @@ class SimpleCrawler extends Object {
 	/**
 	 * $depth does not implemented yet
 	 * */
-	public function crawl($url, $depth) {
+	public function crawl($url, $depth, $region = 'DIRECTORY') {
 		if (empty($this->seed)) {
 			$this->seed = $url;
-			$this->tld = get_tld($url);
+			if ($this->crawlRegion == self::$CRAWL_REGIONS['TLD']) {
+				$this->tld = get_tld($url);
+			}
 		}
 
 		if (!file_exists($this->localDir)) {
@@ -83,7 +103,7 @@ class SimpleCrawler extends Object {
 	  $this->seen[$url] = true;
 
 	  $dom = new DOMDocument('1.0');
-	  $cacheFile = $this->localDir.DS.md5($url)."html";
+	  $cacheFile = $this->localDir.DS.md5($url).".html";
 	  if (file_exists($cacheFile)) {
 	  	@$dom->loadHTMLFile($cacheFile);
 	  }
@@ -103,32 +123,32 @@ class SimpleCrawler extends Object {
 	  foreach($anchors as $element ) {
 	    $href = $element->getAttribute('href');
 	    $href = removeTail($href, "#");
-	    $href = removeTail($href, "?");
+	    // $href = removeTail($href, "?");
 
-	    // $this->log("$href ".$this->tld, 'info');
+	    $this->log("$href ".$this->tld, 'info');
 
 	    if (!startsWith($href, 'http')) {
 	      $path = '/' . ltrim($href, '/');
 	      $href = http_build_url($url, array ('path' => $path));
-
-				if (strContains($href, $this->tld)) {
-					if (strContainsAny($href, $this->badWords)) {
-						continue;
-					}
-					
-					$this->outlinks[$href] = true;
-
-					if (strContainsAny($href, $this->p1words)) {
-						array_push($fetchList['p1'], $href);
-					}
-					else if (strContainsAny($href, $this->p2words)) {
-						array_push($fetchList['p2'], $href);
-					}
-					else {
-						array_push($fetchList['p3'], $href);
-					}
-				}
 	    } // if
+
+	    if (strContains($href, $this->tld)) {
+	    	if (strContainsAny($href, $this->badWords)) {
+	    		continue;
+	    	}
+
+	    	$this->outlinks[$href] = true;
+
+	    	if (strContainsAny($href, $this->p1words)) {
+	    		array_push($fetchList['p1'], $href);
+	    	}
+	    	else if (strContainsAny($href, $this->p2words)) {
+	    		array_push($fetchList['p2'], $href);
+	    	}
+	    	else {
+	    		array_push($fetchList['p3'], $href);
+	    	}
+	    }
 	  } // foreach
 
 	  --$this->limit;

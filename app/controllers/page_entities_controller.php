@@ -64,15 +64,15 @@ class PageEntitiesController extends AppController {
     $this->autoRender = false;
 
     if (empty($id)) {
-      return $this->getStatus(400, 'Invalid id.');
+      return getResponseStatusJson(400, "Invalid id");
     }
 
     if (empty($this->params['data'])) {
-      return $this->getStatus(400, 'Invalid request body.', $this->params);
+      return getResponseStatusJson(400, "Invalid request body", $this->params);
     }
 
     if(!$this->checkTenantPrivilege($id)) {
-      return $this->getStatus(401, 'Privilege denied.');
+      return getResponseStatusJson(401);
     }
 
     $data = $this->params['data'];
@@ -84,14 +84,14 @@ class PageEntitiesController extends AppController {
 
     $conditions = array('page_entity_id' => $id);
     if (!$this->PageEntity->PageEntityField->deleteAll(array('page_entity_id' => $id))) {
-      return $this->getStatus(500, 'Failed to save PageEntityField. Please try again.');
+      return getResponseStatusJson(500, "Failed to save PageEntityField");
     }
 
     if(!$this->PageEntity->PageEntityField->saveAll($fields)) {
-      return $this->getStatus(500, 'Failed to save PageEntityField. Please try again.', $fields);
+      return getResponseStatusJson(500, "Failed to save PageEntityField", $fields);
     }
 
-    return $this->getStatus(200, 'OK', $fields);
+    return getResponseStatusJson(200, null, $fields);
   }
 
   function edit($id = null) {
@@ -133,29 +133,77 @@ class PageEntitiesController extends AppController {
     $this->redirect(array('action' => 'index'));
   }
 
-  function startExtraction() {
-    $id = $this->params['url']['id'];
-    $this->_validateId($id);
+  function startRuledExtract() {
+  	$id = $this->params['url']['id'];
+  	$this->_validateId($id);
+  	$limit = intval($this->params['url']['limit']);
 
-    $pageEntity = $this->PageEntity->read(null, $id);
-    $pageEntity['PageEntity']['extract_rules'] = $this->_asXml($pageEntity);
+  	$pageEntity = $this->PageEntity->read(null, $id);
 
-    $message = 'RuledExtract job submitted.';
-    $jobId = $this->ScentJobManager->ruledExtract($pageEntity);
-    if (!$jobId) {
-      $message = 'Failed to execute job RuledExtract';
-	    $this->redirect2View($id, $message);
-    }
+  	$pageEntity['PageEntity']['extract_rules'] = $this->_asXml($pageEntity);
+  	$jobId = $this->ScentJobManager->ruledExtract($pageEntity, $limit);
+  	$message = 'RuledExtract job submitted';
+  	if (!$jobId) {
+  		$message = 'Failed to execute job RuledExtract';
+  		$this->redirect2View($id, $message);
+  	}
 
-    $this->loadModel('ScentJob');
-    $this->ScentJob->recursive = -1;
-    $scentJob = $this->ScentJob->find('first', array('conditions' => array('jobId' => $jobId)));
+  	$this->loadModel('ScentJob');
+  	$this->ScentJob->recursive = -1;
+  	$scentJob = $this->ScentJob->find('first', array('conditions' => array('jobId' => $jobId)));
 
-    $this->Session->setFlash($message);
-    $this->redirect(array('controller' => 'scent_jobs', 'action' => 'view', $scentJob['ScentJob']['id']));
+  	$this->Session->setFlash($message);
+  	$this->redirect(array('controller' => 'scent_jobs', 'action' => 'view', $scentJob['ScentJob']['id']));
   }
 
-  function ajax_startExtraction($id) {
+  function startAutoExtract() {
+  	$id = $this->params['url']['id'];
+  	$this->_validateId($id);
+
+  	$limit = $this->params['url']['limit'];
+
+  	$pageEntity = $this->PageEntity->read(null, $id);
+
+  	$pageEntity['PageEntity']['extract_rules'] = $this->_asXml($pageEntity);
+  	$jobId = $this->ScentJobManager->ruledExtract($pageEntity, $limit);
+  	$message = 'RuledExtract job submitted';
+  	if (!$jobId) {
+  		$message = 'Failed to execute job RuledExtract';
+  		$this->redirect2View($id, $message);
+  	}
+
+  	$this->loadModel('ScentJob');
+  	$this->ScentJob->recursive = -1;
+  	$scentJob = $this->ScentJob->find('first', array('conditions' => array('jobId' => $jobId)));
+
+  	$this->Session->setFlash($message);
+  	$this->redirect(array('controller' => 'scent_jobs', 'action' => 'view', $scentJob['ScentJob']['id']));
+  }
+
+  function startSegment() {
+  	$id = $this->params['url']['id'];
+  	$this->_validateId($id);
+
+  	$limit = $this->params['url']['limit'];
+
+  	$pageEntity = $this->PageEntity->read(null, $id);
+
+  	$jobId = $this->ScentJobManager->segment($pageEntity, $limit);
+  	$message = 'Segment job submitted';
+  	if (!$jobId) {
+  		$message = 'Failed to execute job RuledExtract';
+  		$this->redirect2View($id, $message);
+  	}
+
+  	$this->loadModel('ScentJob');
+  	$this->ScentJob->recursive = -1;
+  	$scentJob = $this->ScentJob->find('first', array('conditions' => array('jobId' => $jobId)));
+
+  	$this->Session->setFlash($message);
+  	$this->redirect(array('controller' => 'scent_jobs', 'action' => 'view', $scentJob['ScentJob']['id']));
+  }
+
+  function ajax_startRuledExtract($id = null, $limit = 1000) {
   	$this->autoRender = false;
 
   	// Make it consistent with startExtraction
@@ -164,20 +212,44 @@ class PageEntitiesController extends AppController {
   	}
 
   	if (empty($id) || !is_numeric($id)) {
-  		echo getResponseStatusJson(400);
-  		return;
+  		return getResponseStatusJson(400);
   	}
 
   	$pageEntity = $this->PageEntity->read(null, $id);
   	$pageEntity['PageEntity']['extract_rules'] = $this->_asXml($pageEntity);
 
-  	$jobId = $this->ScentJobManager->ruledExtract($pageEntity);
+  	$jobId = $this->ScentJobManager->ruledExtract($pageEntity, $limit);
 
   	if (!empty($jobId)) {
-  		echo getResponseStatusJson(200, '', $jobId);
+  		return getResponseStatusJson(200, '', $jobId);
   	}
   	else {
-  		echo getResponseStatusJson(500, $jobId);
+  		return getResponseStatusJson(500, $jobId);
+  	}
+  }
+
+  function ajax_startAutoExtract($id = null, $limit = 1000) {
+  	$this->autoRender = false;
+
+  	// Make it consistent with startExtraction
+  	if (empty($id)) {
+  		$id = $this->params['url']['id'];
+  	}
+
+  	if (empty($id) || !is_numeric($id)) {
+  		return getResponseStatusJson(400);
+  	}
+
+  	$pageEntity = $this->PageEntity->read(null, $id);
+  	$pageEntity['PageEntity']['extract_rules'] = $this->_asXml($pageEntity);
+
+  	$jobId = $this->ScentJobManager->ruledExtract($pageEntity, $limit);
+
+  	if (!empty($jobId)) {
+  		return getResponseStatusJson(200, '', $jobId);
+  	}
+  	else {
+  		return getResponseStatusJson(500, $jobId);
   	}
   }
 

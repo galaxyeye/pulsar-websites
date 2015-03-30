@@ -1,3 +1,17 @@
+<div class="actions">
+  <ul>
+      <li>
+        <a href="<?php echo Router::url('/nutch_jobs') ?>">nutch jobs</a>
+      </li>
+      <li>
+        <a href="<?php echo Router::url('/scent_jobs') ?>">scent jobs</a>
+      </li>
+      <li>
+        <a href="<?php echo Router::url('/spark_jobs') ?>">spark jobs</a>
+      </li>
+  </ul>
+</div>
+
 <div class="scentJobs index">
 	<h2><?php __('Scent Jobs');?></h2>
 	<table cellpadding="0" cellspacing="0">

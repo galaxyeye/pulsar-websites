@@ -54,7 +54,15 @@ class NutchClient {
 		return $this->httpClient->postJson($this->nutchUrl."/job/create", $jobConfig->__toString());
 	}
 
-	public function getjobs($state) {
+	public function stopJob($jobId) {
+		return $this->httpClient->postJson($this->nutchUrl."/job/$jobId/stop");
+	}
+
+	public function abortJob($jobId) {
+		return $this->httpClient->postJson($this->nutchUrl."/job/$jobId/abort");
+	}
+
+	public function getjobs() {
 		return $this->httpClient->get_content($this->nutchUrl."/job/");
 	}
 

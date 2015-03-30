@@ -6,7 +6,7 @@ namespace Scent;
 class RemoteCmdBuilder {
   public static $JobType = array (
       "SEGMENT" => "SEGMENT",
-      "EXTRACT" => "EXTRACT",
+      "AUTOEXTRACT" => "AUTOEXTRACT",
       "RULEDEXTRACT" => "RULEDEXTRACT",
       "BUILD" => "BUILD",
       "CLASS" => "CLASS"
@@ -79,11 +79,13 @@ class RemoteCmdBuilder {
   public function createSegmentCommand() {
     $p = $this->pageEntity['PageEntity'];
 
+    // set arguments
+
     return $this->createCommand(
         $p['crawlId'], self::$JobType['SEGMENT'], $p['batchId'], $p['configId']);
   }
 
-  public function createExtractCommand() {
+  public function createAutoExtractCommand() {
     $p = $this->pageEntity['PageEntity'];
 
     return $this->createCommand(
@@ -92,11 +94,14 @@ class RemoteCmdBuilder {
 
   public function createRuledExtractCommand() {
     $p = $this->pageEntity['PageEntity'];
+    $urlFilter = \Nutch\splitUrlFilter($p['url_filter']);
+
+    $limit = 10000;
+    if (!empty($p['limit'])) $limit = $p['limit'];
 
     $jobConfig = new JobConfig($p['crawlId'], self::$JobType['RULEDEXTRACT'], $p['configId']);
-
-    $urlFilter = \Nutch\splitUrlFilter($p['url_filter']);
     $jobConfig->setArgument("-regex", $urlFilter[0]);
+    $jobConfig->setArgument("-limit", $limit);
     $jobConfig->setArgument("-rules", '[base64]'.base64_encode($p['extract_rules']));
     $jobConfig->setArgument("-mode", "mr");
 

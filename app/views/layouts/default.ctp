@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>Nutch UI</title>
+  <title>齐物数据引擎 - 格物，齐物，用物</title>
   <?php echo $this->element('css', array('css' => array('default'))); ?>
   <?php echo $this->element('css', array('css' => array('jquery/jquery-ui-1.11.3/jquery-ui'))); ?>
 
@@ -26,25 +26,25 @@
     <div class="user"><?php echo $currentUser['name'] ?></div>
     <ul id="menu" class="clearfix">
       <li class="item">
-        <a href="<?php echo Router::url('/') ?>">dashboard</a>
+        <a href="<?php echo Router::url('/') ?>">Dashboard</a>
       </li>
       <li class="item3">
-        <a href="<?php echo Router::url('/crawls') ?>">crawls</a>
+        <a href="<?php echo Router::url('/crawls') ?>">Crawls</a>
       </li>
       <li class="item2">
-        <a href="<?php echo Router::url('/page_entities') ?>">page entities</a>
+        <a href="<?php echo Router::url('/page_entities') ?>">Page Entities</a>
       </li>
       <li class="item2">
-        <a href="<?php echo Router::url('/nutch_jobs') ?>">nutch jobs</a>
+        <a href="<?php echo Router::url('/ontologies') ?>">Ontologies</a>
       </li>
       <li class="item2">
-        <a href="<?php echo Router::url('/scent_jobs') ?>">scent jobs</a>
+        <a href="<?php echo Router::url('/products') ?>">Products</a>
       </li>
-      <li class="lgo">
-        <a href="<?php echo Router::url('/users/logout') ?>" class="lbOn" title="Logout!">退出</a>
+      <li class="item2">
+        <a href="<?php echo Router::url('/jobs') ?>">Jobs</a>
       </li>
     </ul>
-  </div><!--nav-->
+  </div><!-- nav -->
 
   <div id="stage">
     <?php echo $this->Session->flash(); ?>

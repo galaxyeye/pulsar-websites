@@ -12,9 +12,9 @@ class RemoteCmdExecutor extends \Object {
 		$this->client = new NutchClient();
 	}
 
-	function createNutchConfig($crawl) {
+	function createNutchConfig($crawl, $priority = 'minor') {
 		$cmdBuilder = new RemoteCmdBuilder($crawl);
-		$nutchConfig = $cmdBuilder->buildNutchConfig();
+		$nutchConfig = $cmdBuilder->buildNutchConfig($priority);
 
 		return $this->client->createNutchConfig($nutchConfig);
 	}
@@ -59,6 +59,14 @@ class RemoteCmdExecutor extends \Object {
 		}
 
 		return $this->submitJob($command);
+	}
+
+	public function queryByCrawlFilter($crawl, $fields = null, $limit = null) {
+		$cmdBuilder = new RemoteCmdBuilder($crawl);
+
+		$dbFilter = $cmdBuilder->buildDbFilter(null, null, $fields, $limit);
+
+    return $this->client->query($dbFilter);
 	}
 
 	private function submitJob($remoteCommand) {

@@ -5,8 +5,9 @@
 			<th><?php echo $this->Paginator->sort('id');?></th>
 			<th><?php echo $this->Paginator->sort('name');?></th>
 			<th><?php echo $this->Paginator->sort('rounds');?></th>
-			<th><?php echo $this->Paginator->sort('finished_rounds');?></th>
+			<th><?php echo $this->Paginator->sort('R/Finish', 'finished_rounds');?></th>
 			<th><?php echo $this->Paginator->sort('limit');?></th>
+			<th><?php echo $this->Paginator->sort('P/Finish', 'fetched_pages');?></th>
 			<th><?php echo $this->Paginator->sort('state');?></th>
 			<th><?php echo $this->Paginator->sort('configId');?></th>
 			<th><?php echo $this->Paginator->sort('created');?></th>
@@ -26,6 +27,7 @@
 		<td><?php echo $crawl['Crawl']['rounds']; ?>&nbsp;</td>
 		<td><?php echo $crawl['Crawl']['finished_rounds']; ?>&nbsp;</td>
 		<td><?php echo $crawl['Crawl']['limit']; ?>&nbsp;</td>
+		<td><?php echo $crawl['Crawl']['fetched_pages']; ?>&nbsp;</td>
 		<td><?php echo $crawl['Crawl']['state']; ?>&nbsp;</td>
 		<td><?php echo $crawl['Crawl']['configId']; ?>&nbsp;</td>
 		<td><?php echo $crawl['Crawl']['created']; ?>&nbsp;</td>

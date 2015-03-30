@@ -68,7 +68,6 @@
       <ul>
         <li><?php echo $this->Html->link(__('查看（原始样式）', true), array('action' => 'view', $encodedUrl)); ?> </li>
         <li><?php echo $this->Html->link(__('查看（简洁样式）', true), array('action' => 'view', $encodedUrl, 'options' => 'simpleCss')); ?> </li>
-        <li><a class='intelligent' href="javascript:;">智能分析</a></li>
       </ul>
     </div><!-- actions -->
   </div><!-- systemPanel -->
@@ -78,23 +77,24 @@
       echo $webPage['WebPage']['content'];
     ?>
   </div>
+
+	<script type="text/javascript">
+	<!--
+		var globalPageData = {
+		  "webroot" : "<?php echo $this->Html->webroot?>",
+		  "controller" : "<?php echo $this->params['controller']?>",
+		  "action" : "<?php echo $this->params['action']?>",
+		  "here" : "<?php echo $this->here ?>"
+		};
+	//-->
+	</script>
+	<script type="text/javascript" src="/js/jquery/jquery-1.11.2.js"></script>
+	<script type="text/javascript" src="/js/jquery/jquery-ui-1.11.3/jquery-ui.js"></script>
+	<script type="text/javascript" src="/js/jquery/jsrender.js"></script>
+	<script type="text/javascript" src="/js/common.js"></script>
+	<script type="text/javascript" src="/js/dump.js"></script>
+	<script type="text/javascript" src="/js/layer-v1.8.5/layer/layer.min.js"></script>
+	<script type="text/javascript" src="/js/web_pages/view.js"></script>
+
 </body>
 </html>
-
-<script type="text/javascript">
-<!--
-	var globalPageData = {
-	  "webroot" : "<?php echo $this->Html->webroot?>",
-	  "controller" : "<?php echo $this->params['controller']?>",
-	  "action" : "<?php echo $this->params['action']?>",
-	  "here" : "<?php echo $this->here ?>"
-	};
-//-->
-</script>
-<script type="text/javascript" src="/js/jquery/jquery-1.11.2.js"></script>
-<script type="text/javascript" src="/js/jquery/jquery-ui-1.11.3/jquery-ui.js"></script>
-<script type="text/javascript" src="/js/jquery/jsrender.js"></script>
-<script type="text/javascript" src="/js/common.js"></script>
-<script type="text/javascript" src="/js/dump.js"></script>
-<script type="text/javascript" src="/js/layer-v1.8.5/layer/layer.min.js"></script>
-<script type="text/javascript" src="/js/web_pages/view.js"></script>

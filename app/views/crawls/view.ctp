@@ -1,3 +1,8 @@
+<script type="text/javascript">
+<!--
+	var crawl = <?php echo json_encode($crawl) ?>;
+//-->
+</script>
 <div class='message crawls-view-tip hidden'>
 说明：
 <br />I.   本页面提供基本爬虫控制，主要目标是采集、抽取和分析单个站点内的详细页，如电子商务、酒店、房产、旅游线路、票务等等
@@ -73,24 +78,32 @@
 
 <div class="actions">
   <ul>
-    <li><?=$this->Html->link(__('View Status', true), array('action' => 'viewStatus', $crawl['Crawl']['id']), array('target' => '_blank')); ?> </li>
-    <li><?=$this->Html->link(__('Edit Crawl', true), array('action' => 'edit', $crawl['Crawl']['id'])); ?> </li>
-    <li><?=$this->Html->link(__('New Wes', true), array('action' => 'addWes'), array('target' => '_blank')); ?> </li>
-    <li><?=$this->Html->link(__('New Crawl', true), array('action' => 'add'), array('target' => '_blank')); ?> </li>
+    <li><?=$this->Html->link(__('Edit Crawl', true), ['action' => 'edit', $crawl['Crawl']['id']]); ?> </li>
+    <li><?=$this->Html->link(__('New Wes', true), ['action' => 'addWes'], ['target' => '_blank']); ?> </li>
+    <li><?=$this->Html->link(__('New Crawl', true), ['action' => 'add'], ['target' => '_blank']); ?> </li>
   </ul>
   <hr />
   <ul>
-    <li><?=$this->Html->link(__('暂停抓取', true), array('action' => 'pause', $crawl['Crawl']['id'])); ?> </li>
-    <li><?=$this->Html->link(__('重置爬虫', true), array('action' => 'reset', $crawl['Crawl']['id'])); ?> </li>
+  	<?php $state = $crawl['Crawl']['state'] ?>
+  	<?php if ($state == 'RUNNING') : ?>
+    <li><?=$this->Html->link(__('暂停抓取', true), ['action' => 'pause', $crawl['Crawl']['id']]); ?></li>
+    <?php elseif ($state == 'PAUSED') : ?>
+    <li><?=$this->Html->link(__('重启抓取', true), ['action' => 'resume', $crawl['Crawl']['id']]); ?></li>
+    <?php endif; ?>
+
+  	<?php if ($state != 'CREATED') : ?>
+    <li><?=$this->Html->link(__('重置爬虫', true), ['action' => 'reset', $crawl['Crawl']['id']]); ?></li>
+    <?php endif; ?>
+
     <li><?=$this->Html->link(__('测试解析器', true),
-    		array('controller' => 'nutch_jobs', 'action' => 'parseChecker', $crawl['Crawl']['id']),
-    		array('target' => '_blank', 'title' => '解析种子链接')); ?></li>
+    		['controller' => 'nutch_jobs', 'action' => 'parseChecker', $crawl['Crawl']['id']],
+    		['target' => '_blank', 'title' => '解析种子链接']); ?></li>
   </ul>
   <!-- Once crawl has started -->
 	<?php if (!empty($crawl['Crawl']['configId'])) : ?>
   <hr />
   <ul>
-    <li><?=$this->Html->link(__('Nutch配置项', true),
+    <li><?=$this->Html->link(__('查看Nutch配置', true),
     		array('controller' => 'nutch_jobs', 'action' => 'nutchConfig', $crawl['Crawl']['configId']),
     		array('target' => '_blank')); ?></li>
     <li><?=$this->Html->link(__('查看链接地图', true),
@@ -534,13 +547,12 @@
       </li>
     </ul>
   </div>
-
 </div>
 <!-- **************************************************************
   End Page Entities
  **************************************************************-->
 
-<?php if (empty($crawl['Crawl']['configId'])) : ?>
+<?php if ($crawl['Crawl']['state'] == 'CREATED') : ?>
 <div class="crawls form">
 <?=$this->Form->create('Crawl', array('action' => 'startCrawl'));?>
   <fieldset>
@@ -550,39 +562,3 @@
   </fieldset>
 </div>
 <?php endif; ?>
-
-<!-- Deprecated -->
-<script type="text/x-jsrender" id="jobInfoTemplate">
-  <h4>任务配置</h4>
-  <dl>
-    {{props}}
-    <dt>{{>key}}</dt>
-    <dd>
-      {{>prop}}      &nbsp;
-    </dd>
-    {{/props}}
-  </dl>
-  <hr/>
-
-  <h4>任务参数</h4>
-  <dl>
-    {{props args}}
-    <dt>{{>key}}</dt>
-    <dd>
-      {{>prop}}      &nbsp;
-    </dd>
-    {{/props}}
-  </dl>
-  <hr/>
-
-  <h4>任务结果</h4>
-  <dl>
-    {{props result}}
-    <dt>{{>key}}</dt>
-    <dd>
-      {{>prop}}      &nbsp;
-    </dd>
-    {{/props}}
-
-  </dl>
-</script>

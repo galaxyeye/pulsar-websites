@@ -1,5 +1,19 @@
 <div class="actions">
   <ul>
+      <li>
+        <a href="<?php echo Router::url('/nutch_jobs') ?>">nutch jobs</a>
+      </li>
+      <li>
+        <a href="<?php echo Router::url('/scent_jobs') ?>">scent jobs</a>
+      </li>
+      <li>
+        <a href="<?php echo Router::url('/spark_jobs') ?>">spark jobs</a>
+      </li>
+  </ul>
+</div>
+
+<div class="actions">
+  <ul>
     <li><?=$this->Html->link(__('List Active Jobs', true), array('action' => 'activeJobs')); ?> </li>
     <li><?=$this->Html->link(__('List Active Jobs（Plain View）', true), array('action' => 'plainActiveJobs')); ?> </li>
   </ul>
@@ -16,6 +30,7 @@
 			<th><?php echo $this->Paginator->sort('jobId');?></th>
 			<th><?php echo $this->Paginator->sort('type');?></th>
 			<th><?php echo $this->Paginator->sort('state');?></th>
+			<th><?php echo $this->Paginator->sort('fetch_count');?></th>
 			<th><?php echo $this->Paginator->sort('created');?></th>
 			<th><?php echo $this->Paginator->sort('crawl_id');?></th>
 			<th class="actions"><?php __('Actions');?></th>
@@ -36,6 +51,7 @@
 		<td><?=$nutchJob['NutchJob']['jobId']; ?>&nbsp;</td>
 		<td><?=$nutchJob['NutchJob']['type']; ?>&nbsp;</td>
 		<td><?=$nutchJob['NutchJob']['state']; ?>&nbsp;</td>
+		<td><?=$nutchJob['NutchJob']['fetch_count']; ?>&nbsp;</td>
 		<td><?=$nutchJob['NutchJob']['created']; ?>&nbsp;</td>
 		<td><?=$this->Html->link($nutchJob['NutchJob']['crawl_id'], 
 					['controller' => 'crawls', 'action' => 'view', $nutchJob['NutchJob']['crawl_id']], ['target' => '_blank']); ?>

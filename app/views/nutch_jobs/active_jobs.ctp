@@ -1,5 +1,5 @@
 <div class="nutchJobs index">
-  <h2><?php __('Nutch Jobs');?></h2>
+  <h2><?php __('Active Nutch Jobs');?></h2>
   <table cellpadding="0" cellspacing="0">
   <tr>
       <th>Id</th>

@@ -60,6 +60,7 @@ $(document).ready(function() {
     var open = $('#confirmExtraction').data('open');
     if (!open) openConfirmExtractionLayer(0);
 
+    var timerCounter = 0;
     var interval = setInterval(function() {
       if (!$('body').hasClass('visible')) {
         return;
@@ -67,8 +68,13 @@ $(document).ready(function() {
 
       refreshNutchJobInfo();
       refreshCrawlView();
-      refreshFetchedCount();
-    }, 5 * 1000);
+
+      if (timerCounter % 3 == 0) {
+        refreshFetchedCount(); 
+      }
+
+      ++timerCounter;
+    }, 10 * 1000);
   } // processStep4
 
   function processStep5() {
@@ -99,37 +105,30 @@ $(document).ready(function() {
   } // processStep5
 
   function refreshNutchJobInfo() {
-      var id = $('.crawls.view .model-id').text();
-      var url = getCakePHPUrl('crawls', 'ajax_getJobInfo', id);
-
-      // request 1
-      $.getJSON(url, function(data) {
-        if (data['state'] != undefined) {
-          $("#jobInfo").html($("#jobInfoTemplate").render(data));
-        }
-
-        if (data['state'] == undefined || data['state'] == 'FAILED') {
-          $("#jobInfo").html("Something wrong in Nutch Server");
-          $("#jobInfo").append("<pre>" + JSON.stringify(data, null, 4) + "</pre>");
-        }
-      });
+    var id = $('.crawls.view .model-id').text();
+    var url = getCakePHPUrl('crawls', 'ajax_getJobInfo', id);
+    $.getJSON(url, function(data) {
+      $("#jobInfo").html("<pre>" + JSON.stringify(data, null, 4) + "</pre>");
+    });
   }
 
   function refreshCrawlView() {
-      var id = $('.crawls.view .model-id').text();
-      var url = getCakePHPUrl('crawls', 'ajax_get', id);
+    var id = $('.crawls.view .model-id').text();
+    var url = getCakePHPUrl('crawls', 'ajax_get', id);
 
-      $.getJSON(url, function(crawl) {
-        $('#finishedRounds').text(crawl['Crawl']['finished_rounds']);
-      });
+    $.getJSON(url, function(crawl) {
+      $('.finishedRounds').text(crawl['Crawl']['finished_rounds']);
+    });
   }
 
   function refreshFetchedCount() {
     var id = $('.crawls.view .model-id').text();
+    // var url = getCakePHPUrl('crawls', 'ajax_getFetchCount', id);
+    // TODO : A VERY heary query, must be optimized!!!
     var url = getCakePHPUrl('web_pages', 'ajax_getFetchedDetailPageCount', id);
 
-    $.get(url, function(count) {
-      $('.fetched.count').html(count);
+    $.getJSON(url, function(count) {
+      $('.fetched.count').text(count);
     });
   }
 
@@ -159,17 +158,24 @@ $(document).ready(function() {
       window.open(url);
     });
 
-    $('.start-extraction').click(function() {
+    $('.start-ruled-extract').click(function() {
       $(this).hide();
       layer.load('抽取任务提交中，请稍候......', 30);
 
-      startExtraction();
+      startRuledExtraction();
+    });
+
+    $('.start-auto-extract').click(function() {
+      $(this).hide();
+      layer.load('抽取任务提交中，请稍候......', 30);
+
+      startAutoExtraction();
     });
   } // openConfirmExtractionLayer
 
-  function startExtraction() {
+  function startRuledExtraction() {
     var id = $('.pageEntities.view .model-id').text();
-    var url = getCakePHPUrl('page_entities', 'ajax_startExtraction', id);
+    var url = getCakePHPUrl('page_entities', 'ajax_startRuledExtract', id);
     $.getJSON(url, function(status) {
       if (status.code == 200) {
         url = getCakePHPUrl('crawls', 'analysis', {stepNo : 5, page_entity_id : id});
@@ -181,15 +187,29 @@ $(document).ready(function() {
     });
   } // startExtraction
 
+  function startAutoExtraction() {
+    var id = $('.pageEntities.view .model-id').text();
+    var url = getCakePHPUrl('page_entities', 'ajax_startAutoExtraction', id);
+    $.getJSON(url, function(status) {
+      if (status.code == 200) {
+        url = getCakePHPUrl('crawls', 'analysis', {stepNo : 5, page_entity_id : id});
+        window.location = url;
+      }
+      else {
+        layer.confirm("Failed to start extraction\n" + status.customMessage);
+      }
+    });
+  } // startAutoExtraction
+
   function showExtractResultAsSQL() {
     var id = $('.scentJobs.view .model-id').text();
     var url = getCakePHPUrl('scent_jobs', 'ajax_getExtractResultAsSQL', id);
     $.getJSON(url, function(sqls) {
+      layer.closeAll();
       $("#sqlList").html($("#sqlListTemplate").render(sqls));
       if (sqls.length > 2) {
         $('.download').show();
       }
-      // showExtractResultInLayer();
     });
   }
 

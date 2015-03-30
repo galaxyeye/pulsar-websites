@@ -37,7 +37,8 @@ class RemoteCmdBuilder extends \Object {
 		for ($i = 0; $i < count($crawl['Seed']); ++$i) {
 			$seed = $crawl['Seed'][$i];
 			// seed url should add "isSeed=true" metadata
-			array_push($nutchSeeds, array('id' => $seed['id'], 'url' => $seed['url'].'\tisSeed=true'));
+			// note : must use double quote "\"" for strings who has escaped characters
+			array_push($nutchSeeds, array('id' => $seed['id'], 'url' => $seed['url']."\tisSeed=true"));
 		}
 
 		$nutchSeedList = array(
@@ -49,9 +50,9 @@ class RemoteCmdBuilder extends \Object {
 		return $nutchSeedList;
 	}
 
-	public function buildNutchConfig() {
+	public function buildNutchConfig($priority = "minor") {
 		$crawl = $this->crawl;
-		$id = $crawl['Crawl']['id'];
+		$crawl_id = $crawl['Crawl']['id'];
 		$configId = $crawl['Crawl']['configId'];
 
 		$allUrlFilters = "";
@@ -71,11 +72,30 @@ class RemoteCmdBuilder extends \Object {
 
 		// TODO : support multiple outlink filters
 		$params = array(
+				QIWU_UI_CRAWL_ID => $crawl_id,
 				URLFILTER_REGEX_RULES => $allUrlFilters .'-.',
 				CRAWL_OUTLINK_FILTER_RULES => json_encode($outlinkFilters['outlinkFilters'][0])
 		);
 
-		return new NutchConfig($configId, $params);
+		return new NutchConfig($configId, $priority, $params);
+	}
+
+	public function buildDbFilter($startKey = null, $endKey = null, $fields = null, $limit = null) {
+		$crawl = $this->crawl;
+
+		if ($limit == null) {
+			$limit = 1000;
+		}
+
+		$urlFilter = null;
+		foreach ($crawl['CrawlFilter'] as $f) {
+			$urlFilter .= normalizeUrlFilter($f['url_filter']);
+			$urlFilter .= "\n";
+		}
+
+		$dbFilter = new DbFilter($startKey, $endKey, $urlFilter, $fields, $limit);
+
+		return $dbFilter;
 	}
 
 	/**

@@ -5,10 +5,11 @@ class CrawlsController extends AppController {
   public $name = 'Crawls';
 
   public static $state = [
-  		'CREATED' => 'CREATED',
-  		'RUNNING' => 'RUNNING',
-  		'PAUSED' => 'PAUSED',
-  		'COMPLETED' => 'COMPLETED'
+      'CREATED' => 'CREATED',
+      'RUNNING' => 'RUNNING',
+      'PAUSED' => 'PAUSED',
+      'STOPPED' => 'STOPPED',
+      'COMPLETED' => 'COMPLETED'
   ];
 
   function index() {
@@ -60,10 +61,12 @@ class CrawlsController extends AppController {
     }
 
     $seed = $this->data['Crawl']['url'];
+    // $forceTld = $this->data['Crawl']['forceTld'];
+    $forceTld = false;
 
     App::import('Lib', array('simple_crawler'));
     $crawler = new SimpleCrawler();
-    $crawler->crawl($seed, 2);
+    $crawler->crawl($seed, 2, $forceTld);
 
     $outlinks = $crawler->getOutlinks();
     // $outlinks = json_encode($outlinks);
@@ -137,72 +140,6 @@ class CrawlsController extends AppController {
 
     $stepNo = 5;
     $this->set(compact('stepNo', 'pageEntity'));
-  }
-
-  /**
-   * To slow to start using Nutch to analysis
-   * @deprecated
-   * */
-  function analysis2() {
-    if (empty($this->data)) {
-      return;
-    }
-
-    $url = $this->data['Crawl']['url'];
-    $tld = get_tld($url);
-
-    $nameBase = substr($tld, 0, strpos($tld, "."));
-    $crawlName = "WES-ANALYSIS-$nameBase-".date('Ymd-His');
-    $crawlName = preg_replace("/\s+/", "-", $crawlName);
-
-    $data = array(
-        'Crawl' => [
-            'name' => $crawlName,
-            'status' => 'CREATED',
-            'rounds' => 3,
-            'limit' => 100,
-            'user_id' => $this->currentUser['id']
-        ],
-        'Seed' => [['url' => $url]],
-        'PageEntity' => [['name' => $crawlName]],
-        'CrawlFilter' => [['url_filter' => "^http://(.+)$tld/(.+)"]]
-    );
-
-    $this->data = $data;
-
-    $success = true;
-    $message = "";
-
-    $crawl_id = 0;
-    $this->Crawl->create();
-    if ($success && !$this->Crawl->save($this->data['Crawl'])) {
-      $success = false;
-      $message .= 'The Crawl could not be saved.';
-    }
-    else {
-      $crawl_id = $this->Crawl->id;
-
-      $message .= "The Crawl has been saved as #$crawl_id.<br />";
-    }
-
-    // Save relative models
-    $this->Crawl->recursive = -1;
-    $crawl = $this->Crawl->read(null, $crawl_id);
-
-    // add a custom metadata
-    //       foreach ($this->data['Seed'] as &$seed) {
-    //         $seed['url'] .= "\tisSeed=true";
-    //       }
-
-    // Save related models
-    foreach (array('Seed', 'CrawlFilter') as $relatedModel) {
-      if (!$success) break;
-      $message .= $this->_saveRelated($relatedModel, $crawl, $success);
-    }
-
-    $this->data = array('Crawl' => array('id' => $crawl_id));
-    // pr($this->data);
-    $this->startCrawl();
   }
 
   function view($id = null) {
@@ -372,14 +309,14 @@ class CrawlsController extends AppController {
     $this->autoRender = false;
 
     $this->Crawl->recursive = -1;
-    echo $this->jsonify($id);
+    return $this->jsonify($id);
   }
 
   function ajax_analysis() {
     $this->autoRender = false;
 
     if (!isset($this->params['url']['u'])) {
-        return $this->getStatus(400, 'Invalid request body.', $this->params);
+      return getResponseStatusJson(400);
     }
 
     $url = $this->params['url']['u'];
@@ -391,158 +328,209 @@ class CrawlsController extends AppController {
     $outlinks = $crawler->getOutlinks();
     $outlinks = json_encode($outlinks);
 
-    echo $outlinks;
-
-    // $this->set(compact('outlinks'));
+    return $outlinks;
   }
 
-  function ajax_getStatus() {
+  function ajax_getFetchCount($id = null) {
     $this->autoRender = false;
 
-    $client = new NutchClient();
-    $output = $client->getNutchStatus();
-
-    echo $output;
-  }
-
-  function ajax_getJobInfo($crawl_id) {
-    $this->autoRender = false;
-
-    if (empty($crawl_id)) {
-      echo getResponseStatusJson(400);
-      return;
+    if(!$this->checkTenantPrivilege($id)) {
+      return getResponseStatusJson(401);
     }
 
-    if(!$this->checkTenantPrivilege($crawl_id)) {
-      echo getResponseStatusJson(401);
-      return;
+    $sql = "SELECT SUM(`fetch_count`) AS fetch_count FROM `nutch_jobs`"
+    		." WHERE `crawl_id`=$id "
+    		." AND `type`='FETCH'";
+    $count = $this->Crawl->query($sql);
+
+    $count = $count[0][0]['fetch_count'];
+
+    return $count;
+  }
+
+  function ajax_getNutchConfig($id = null) {
+    $this->autoRender = false;
+
+    if(!$this->checkTenantPrivilege($id)) {
+      return getResponseStatusJson(401);
     }
 
     $this->Crawl->recursive = -1;
+    $crawl = $this->Crawl->read('configId', $id);
+    if (empty($crawl['Crawl']['configId'])) {
+      return 0;
+    }
+
+    $configId = $crawl['Crawl']['configId'];
+    $client = new \Nutch\NutchClient();
+    $config = $client->getNutchConfig($configId);
+
+    return $config;
+  }
+
+  function ajax_getJobInfo($id = null) {
+    $this->autoRender = false;
+
+    if(!$this->checkTenantPrivilege($id)) {
+      return getResponseStatusJson(401);
+    }
+
     $this->Crawl->NutchJob->recursive = -1;
     $nutchJob = $this->Crawl->NutchJob->find('first',
-        ['fields' => ['jobId'],
+        ['fields' => ['jobId', 'type'],
          'conditions' => [
-         		"NutchJob.state != 'COMPLETED' AND NutchJob.state != 'FAILED_COMPLETED'",
-         		'crawl_id' => $crawl_id,
+             "NutchJob.state != 'COMPLETED' AND NutchJob.state != 'FAILED_COMPLETED'",
+             'crawl_id' => $id,
          ],
          'order' => 'id DESC'
     ]);
 
     if (empty($nutchJob)) {
-    	return null;
+      return getResponseStatusJson(404);
     }
 
     $client = new \Nutch\NutchClient();
+
+    $jobType = $nutchJob['NutchJob']['type'];
+    $configId = $nutchJob['NutchJob']['jobId'];
+
     $rawMsg = $client->getJobInfo($nutchJob['NutchJob']['jobId']);
+
+    if ($jobType == 'FETCH') {
+      $status = $client->getNutchConfigPropert($configId, REPORT_FETCH_STATUS);
+      if (!empty($status)) {
+      	$rawMsg = "{'FetchStatus' : $status, 'jobInfo' : $rawMsg }";
+      }
+    }
 
     return $rawMsg;
   }
 
+  /**
+   * Start this crawl. This will issue job requests to Nutch Server step by step, 
+   * until all required pages are fetched or meet other specified limitation
+   * 
+   * 1. Create nutch config
+   * 2. Create seeds
+   * 3. Inject
+   * 4. Start crawl cycle
+   * */
   function startCrawl() {
-  	if (empty($this->data)) {
-  		$this->redirect2Index(__("You must specify a crawl id.", true));
-  	}
+    if (empty($this->data)) {
+      $this->redirect2Index(__("You must specify a crawl id.", true));
+    }
 
-  	if (!empty($this->data)) {
-  		if(!$this->checkTenantPrivilege($this->data)) {
-  			$this->redirect2Index(__("Privilege denied.", true));
-  		}
+    if (!empty($this->data)) {
+      if(!$this->checkTenantPrivilege($this->data)) {
+        $this->redirect2Index(__("Privilege denied.", true));
+      }
 
-  		$id = $this->data['Crawl']['id'];
-  		$this->Crawl->contain(array('Seed', 'CrawlFilter', 'HumanAction', 'WebAuthorization'));
-  		$crawl = $this->Crawl->read(null, $id);
+      $id = $this->data['Crawl']['id'];
+      $this->Crawl->contain(array('Seed', 'CrawlFilter', 'HumanAction', 'WebAuthorization'));
+      $crawl = $this->Crawl->read(null, $id);
 
-  		if (empty($crawl['Crawl']) || empty($crawl['CrawlFilter'])) {
-  			$this->redirect2View($id, "Incomplete Crawl or CrawlFilter.");
-  		}
+      if (empty($crawl['Crawl']) || empty($crawl['CrawlFilter'])) {
+        $this->redirect2View($id, "Incomplete Crawl or CrawlFilter.");
+      }
 
-  		if (!empty($crawl['Crawl']['batchId'])) {
-  			$this->redirect2View($id, "Crawl #$id is already in progress!");
-  		}
+      if (!empty($crawl['Crawl']['batchId'])) {
+        $this->redirect2View($id, "Crawl #$id is already in progress!");
+      }
 
-  		// create nutch config
-  		$configId = $this->NutchJobManager->createNutchConfig($crawl);
-  		if ($configId['state'] != 'OK') {
-  			$this->redirect2View($id, "Failed to create nutch config for #$id, message : ".$configId['state']);
-  		}
-  		$crawl['Crawl']['configId'] = $configId['configId'];
+      // Create the major nutch config, every UI Crawl instance should be only one
+      // major Nutch Config instance, unless it's reseted
+      $configId = $this->NutchJobManager->createNutchConfig($crawl, null, "major");
+      if ($configId['state'] != 'OK') {
+        $this->redirect2View($id, "Failed to create nutch config for #$id, message : ".$configId['state']);
+      }
+      $crawl['Crawl']['configId'] = $configId['configId'];
 
-  		// Create seed
-  		$seedDirectory = $this->NutchJobManager->createSeed($crawl);
-  		if (empty($seedDirectory)) {
-  			$this->redirect2View($id, "Failed to create seed for $id");
-  		}
-  		$crawl['Crawl']['seedDirectory'] = $seedDirectory;
+      // Create seed
+      $seedDirectory = $this->NutchJobManager->createSeed($crawl);
+      if (empty($seedDirectory)) {
+        $this->redirect2View($id, "Failed to create seed for $id");
+      }
+      $crawl['Crawl']['seedDirectory'] = $seedDirectory;
 
-  		// Inject
-  		$jobId = $this->NutchJobManager->inject($crawl);
-  		if (empty($jobId)) {
-  			$this->redirect2View($id, "Failed to inject for crawl #$id", 'error');
-  		}
+      // Inject
+      $jobId = $this->NutchJobManager->inject($crawl);
+      if (empty($jobId)) {
+        $this->redirect2View($id, "Failed to inject for crawl #$id", 'error');
+      }
 
-  		// Update state
-  		$this->_updateState($id, self::$state['RUNNING']);
+      // Update state
+      $this->_updateState($id, self::$state['RUNNING']);
 
-  		if (isset($this->data['Ui']['analysis'])) {
-  			$this->redirect(array('action' => 'analysis', 'stepNo' => '4', 'crawl_id' => $id));
-  		}
-  		else {
-  			$this->redirect2View($id, __('Start crawl successfully', true));
-  		}
-  	}
+      if (isset($this->data['Ui']['analysis'])) {
+        $this->redirect(array('action' => 'analysis', 'stepNo' => '4', 'crawl_id' => $id));
+      }
+      else {
+        $this->redirect2View($id, __('Start crawl successfully', true));
+      }
+    }
 
-  	$this->redirect(array('action' => 'view', $id));
+    $this->redirect(array('action' => 'view', $id));
   }
 
   function start($id = null) {
-  	return $this->startCrawl();
+    return $this->startCrawl();
   }
 
   function pause($id = null) {
-  	if (!$id) {
-  		$this->Session->setFlash(__('Invalid id for crawl', true));
-  		$this->redirect(array('action'=>'index'));
-  	}
+    if(!$this->checkTenantPrivilege($id)) {
+      $this->redirect2Index(__('Privilege denied', true));
+    }
 
-  	if(!$this->checkTenantPrivilege($id)) {
-  		$this->Session->setFlash(__('Privilege denied', true));
-  		$this->redirect(array('action' => 'index'));
-  	}
+    $this->_pauseNutchJobs($id);
+    $this->_updateState($id, self::$state['PAUSED']);
 
-  	$this->_pauseNutchJobs($id);
-  	$this->_updateState($id, self::$state['PAUSED']);
-
-  	$this->redirect2View($id, __("Paused crawl #$id", true));
+    $this->redirect2View($id, __("Paused crawl #$id", true));
   }
 
-  function reset($id = null) {
-  	if (!$id) {
-  		$this->Session->setFlash(__('Invalid id for crawl', true));
-  		$this->redirect(array('action'=>'index'));
-  	}
-
+  function resume($id = null) {
   	if(!$this->checkTenantPrivilege($id)) {
-  		$this->Session->setFlash(__('Privilege denied', true));
-  		$this->redirect(array('action' => 'index'));
+  		$this->redirect2Index(__('Privilege denied', true));
   	}
 
-  	$crawl = array('Crawl' => array(
-  			'finished_rounds' => 0,
-  			'batchId' => null,
-  			'configId' => null,
-  			'jobId' => null,
-  			'seedDirectory' => ''
-  	));
+    $this->_resumeNutchJobs($id);
+  	$this->_updateState($id, self::$state['RUNNING']);
 
-  	$this->Crawl->id = $id;
-  	$this->Crawl->save($crawl);
+  	$this->redirect2View($id, __("Resumed crawl #$id", true));
+  }
 
-  	$this->_pauseNutchJobs($id);
+  function stop($id = null) {
+    if(!$this->checkTenantPrivilege($id)) {
+      $this->redirect2Index(__('Privilege denied', true));
+    }
 
-  	$this->_updateState($id, self::$state['CREATED']);
+    $this->_stopNutchJobs($id);
+    $this->_updateState($id, self::$state['STOPPED']);
 
-  	$this->redirect2View($id, __("Reset crawl #$id", true));
+    $this->redirect2View($id, __("Stopped crawl #".$id, true));
+  }
+  
+  function reset($id = null) {
+    if(!$this->checkTenantPrivilege($id)) {
+      $this->redirect2Index(__('Privilege denied', true));
+    }
+
+    $crawl = array('Crawl' => array(
+        'id' => $id,
+        'finished_rounds' => 0,
+        'fetched_pages' => 0,
+        'batchId' => null,
+        'configId' => null,
+        'jobId' => null,
+        'seedDirectory' => '',
+        'state' => self::$state['CREATED']
+    ));
+
+    $this->Crawl->id = $id;
+    $this->Crawl->save($crawl);
+
+    $this->_pauseNutchJobs($id);
+
+    $this->redirect2View($id, __("Reset crawl #".$id, true));
   }
 
   function delete($id = null) {
@@ -565,14 +553,54 @@ class CrawlsController extends AppController {
     $this->redirect(array('action' => 'index'));
   }
 
-  function _load($id) {
-    return $this->Crawl->read(null, $id);
+  function admin_testCreateNutchConfig($id = null) {
+    $this->autoRender = false;
+    $this->autoLayout = false;
+
+    $crawl = $this->Crawl->read(null, $id);
+
+    $crawl['Crawl']['configId'] = "";
+    $configId = $this->NutchJobManager->createNutchConfig($crawl, null, 'minor');
+
+    echo json_encode($configId);
+
+    exit();
+  }
+
+  function admin_testInject($id = null, $configId) {
+    $this->autoRender = false;
+
+    $crawl = $this->Crawl->read(null, $id);
+    $crawl['Crawl']['configId'] = $configId;
+
+    // Create seed
+    $seedDirectory = $this->NutchJobManager->createSeed($crawl, false);
+    echo symmetric_encode($seedDirectory);
+  }
+
+  function admin_testGenerate($id = null, $configId, $seedDirectory) {
+    $crawl = $this->Crawl->read(null, $id);
+    $crawl['Crawl']['configId'] = $configId;
+    $crawl['Crawl']['seedDirectory'] = $seedDirectory;
+
+    $seedDirectory = symmetric_decode($seedDirectory);
+
+    $cmdBuilder = new \Nutch\RemoteCmdBuilder($crawl);
+    $result = $cmdBuilder->createGenerateCommand();
+
+    echo json_encode($result);
+  }
+
+  function admin_testFetch($id = null) {
+    $crawl = $this->Crawl->read(null, $id);
+    
   }
 
   function admin_testNutchMessage($id = null) {
     $this->autoRender = false;
 
     $crawl = $this->Crawl->read(null, $id);
+    $crawl['Crawl']['batchId'] = 'a.test.batch.id';
 
     $cmdBuilder = new \Nutch\RemoteCmdBuilder($crawl);
 
@@ -651,6 +679,10 @@ class CrawlsController extends AppController {
 
     $this->Session->setFlash(__('Crawl was not deleted', true));
     $this->redirect(array('action' => 'index'));
+  }
+
+  protected function _load($id) {
+  	return $this->Crawl->read(null, $id);
   }
 
   private function _validateAdd($data) {
@@ -735,22 +767,72 @@ class CrawlsController extends AppController {
   }
 
   private function _updateState($id, $state) {
-  	$this->Crawl->id = $id;
-  	if(!$this->Crawl->saveField('state', $state)) {
-  		$this->log("Failed to update state for crawl #$id");
-  	}
+    $this->Crawl->id = $id;
+    if(!$this->Crawl->saveField('state', $state)) {
+      $this->log("Failed to update state for crawl #$id");
+    }
+  }
+
+  /**
+   * Pause nutch jobs on both UI side and server side.
+   * 1. Mark all UI side NutchJob instance as COMPLETED
+   * 2. Issue stop command to the Nutch Server, only FETCH job should be stopped
+   * TODO : This may running into a race condition with job scheduling module
+   * */
+  private function _stopNutchJobs($crawl_id) {
+  	// Mark all UI side NutchJob instance as COMPLETED
+    $db =& ConnectionManager::getDataSource('default');
+  	$sql = "UPDATE `nutch_jobs` SET `state`='COMPLETED'"
+        ." WHERE `crawl_id`=$crawl_id"
+        ." AND `type` IN ('INJECT', 'GENERATE', 'FETCH', 'PARSE', 'UPDATEDB')"
+        ." AND `state` IN ('CREATED', 'RUNNING', 'NOT_FOUND', 'FINISHED');";
+    $db->execute($sql);
+
+    // Issue stop command to the Nutch Server, only FETCH job should be stopped
+    $this->Crawl->NutchJob->recursive = -1;
+    $nutchJob = $this->Crawl->NutchJob->find('first',
+    		['fields' => ['jobId'],
+    				'conditions' => [
+    						"NutchJob.state != 'COMPLETED' AND NutchJob.state != 'FAILED_COMPLETED'",
+    						'type' => 'FETCH',
+    						'crawl_id' => $crawl_id,
+    				],
+    				'order' => 'id DESC'
+    		]);
+
+    if (!empty($nutchJob)) {
+    	$this->_stopNutchServerJob($nutchJob['NutchJob']['jobId']);
+    }
   }
 
   private function _pauseNutchJobs($crawl_id) {
-  	// TODO : issue pause command to nutch server?
-
-  	// Once we can not find the job in Nutch Server, it's completed
+  	// Mark all UI side NutchJob instance as COMPLETED
   	$db =& ConnectionManager::getDataSource('default');
-  	$sql = "UPDATE `nutch_jobs` SET `state`='COMPLETED'"
+  	$sql = "UPDATE `nutch_jobs` SET `state`='PAUSED'"
   			." WHERE `crawl_id`=$crawl_id"
   			." AND `type` IN ('INJECT', 'GENERATE', 'FETCH', 'PARSE', 'UPDATEDB')"
-  			." AND `state` IN ('CREATED', 'RUNNING', 'NOT_FOUND', 'FINISHED');";
-    					// $this->log($sql, 'info');
-  	$db->execute($sql);
+        ." AND `state` IN ('RUNNING')"
+        ." ORDER BY `id` DESC LIMIT 1"
+        .";";
+
+    $db->execute($sql);
+  }
+
+  private function _resumeNutchJobs($crawl_id) {
+  	// Mark all UI side NutchJob instance as COMPLETED
+  	$db =& ConnectionManager::getDataSource('default');
+  	$sql = "UPDATE `nutch_jobs` SET `state`='RUNNING'"
+  			." WHERE `crawl_id`=$crawl_id"
+  			." AND `type` IN ('INJECT', 'GENERATE', 'FETCH', 'PARSE', 'UPDATEDB')"
+        ." AND `state` IN ('PAUSED')"
+        ." ORDER BY `id` DESC LIMIT 1"
+        .";";
+
+    $db->execute($sql);
+  }
+
+  private function _stopNutchServerJob($jobId) {
+    $client = new \Nutch\NutchClient();
+    $client->stopJob($jobId);
   }
 }

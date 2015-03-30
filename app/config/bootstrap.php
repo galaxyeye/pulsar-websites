@@ -103,10 +103,16 @@
   // if false, just try login and do not send the message
 	define('OPEN_SMS', false);
 
-	// NUTCH specified constants
+	// NUTCH config
 	define('NUTCH_SERVER', "http://localhost:8081");
+	define('QIWU_UI_CRAWL_ID', "qiwu.ui.crawl.id");
 	define('URLFILTER_REGEX_RULES', "urlfilter.regex.rules");
 	define('CRAWL_OUTLINK_FILTER_RULES', "crawl.outlink.filter.rules");
+
+	// NUTCH report
+	define('REPORT_FETCHED_PAGES', "fetcher.report.fetched.pages");
+	define('REPORT_FETCHED_BYTES', "fetcher.report.fetched.bytes");
+	define('REPORT_FETCH_STATUS', "fetcher.report.fetch.status");
 
 	// SCENT specified constants
 	define('SCENT_SERVER', "http://localhost:8181");

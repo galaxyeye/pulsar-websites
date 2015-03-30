@@ -1,4 +1,6 @@
-.hidden { display: none; }
+#webPagesView .qiwur-hidden { display: none !important; visibility: visible; }
+
+#qiwurHtmlWrapper .hidden { display: none; }
 
 .xubox_page {
 	width: 100%;
@@ -106,11 +108,6 @@
 	color: #e32;
 	font-size: 140%;
 	font-weight: bold;
-}
-
-#systemPanel input {
-	padding: 2px;
-	width: 80%;
 }
 
 #systemPanel div.text {

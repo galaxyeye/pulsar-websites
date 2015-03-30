@@ -28,8 +28,12 @@
       </dd>
 		<dt <?php if ($i % 2 == 0) echo $class;?>><?php __('Finished Rounds'); ?></dt>
 		<dd <?php if ($i++ % 2 == 0) echo $class;?>>
-			<span class='#finishedRounds'><?php echo $crawl['Crawl']['finished_rounds']; ?></span>
+			<span class='finishedRounds'><?php echo $crawl['Crawl']['finished_rounds']; ?></span>
 			&nbsp;
+		</dd>
+		<dt <?php if ($i % 2 == 0) echo $class;?>><?php __('Limit'); ?></dt>
+		<dd <?php if ($i++ % 2 == 0) echo $class;?>>
+			<?php echo $crawl['Crawl']['limit']; ?>&nbsp;
 		</dd>
 		<dt <?php if ($i % 2 == 0) echo $class;?>><?php __('Fetched Count'); ?></dt>
 		<dd <?php if ($i++ % 2 == 0) echo $class;?>>
@@ -44,7 +48,7 @@
 	<div id="jobInfo"></div>
 </div>
 
-<?php
+<?php 
 if (! empty ( $crawl ['PageEntity'] [0] )) :
 	$pageEntity = $crawl ['PageEntity'] [0];
 	$pageEntityFieldCount = count ( $pageEntity ['PageEntityField'] );
@@ -52,7 +56,7 @@ if (! empty ( $crawl ['PageEntity'] [0] )) :
 <div class="pageEntities view">
 	<h2><?php  __('Page Entity');?></h2>
 	<dl><?php $i = 0; $class = ' class="altrow"';?>
-      <dt <?php if ($i % 2 == 0) echo $class;?>><?php __('Id'); ?></dt>
+    <dt <?php if ($i % 2 == 0) echo $class;?>><?php __('Id'); ?></dt>
 		<dd <?php if ($i++ % 2 == 0) echo $class;?>>
 			<span class='model-id'><?php echo $pageEntity['id']; ?></span> &nbsp;
 		</dd>
@@ -101,17 +105,19 @@ if (! empty ( $crawl ['PageEntity'] [0] )) :
 
 		<div class='message larger'>
 			<ol>
-				<li>已抓取<span class='fetched count red'>0</span>张网页（更新中）
+				<li>网络爬虫正在工作中，已完成<span class='finishedRounds red larger'>0</span>轮抓取，
+					<span class='fetched count red larger'>0</span>张详细页网页
 				</li>
-				<li>基于几个简单规则，系统可以精确挖掘所需数据，但您需要告知系统几条简单规则</li>
-				<li>自动挖掘算法基于机器学习，目前在不断完善中</li>
+				<li>获取<span class='red larger'>2</span>张详细页网页后，可以制定挖掘规则并启动挖掘引擎</li>
+				<li>基于几个简单规则，系统可以精确挖掘所需数据</li>
+				<li>或者获取到<span class='red larger'>100</span>张详细页网页后，可以尝试自动挖掘算法，自动挖掘算法在不断完善中</li>
 			</ol>
 		</div>
 		<div class='actions'>
 			<ul>
 				<li><button class="create-rule">制定简单挖掘规则</button></li>
-				<li><button class="start-extraction">启动基于规则的挖掘引擎</button></li>
-				<li><button class="start-extraction">启动自动挖掘引擎</button></li>
+				<li><button class="start-ruled-extract">启动基于规则的挖掘引擎</button></li>
+				<li><button class="start-auto-extract">启动自动挖掘引擎</button></li>
 			</ul>
 		</div>
 
@@ -119,37 +125,3 @@ if (! empty ( $crawl ['PageEntity'] [0] )) :
 
   <?php endif; ?>
 
-<script type="text/x-jsrender" id="jobInfoTemplate">
-  <h4>任务配置</h4>
-  <dl>
-    {{props}}
-    <dt>{{>key}}</dt>
-    <dd>
-      {{>prop}}      &nbsp;
-    </dd>
-    {{/props}}
-  </dl>
-  <hr/>
-
-  <h4>任务参数</h4>
-  <dl>
-    {{props args}}
-    <dt>{{>key}}</dt>
-    <dd>
-      {{>prop}}      &nbsp;
-    </dd>
-    {{/props}}
-  </dl>
-  <hr/>
-
-  <h4>任务结果</h4>
-  <dl>
-    {{props result}}
-    <dt>{{>key}}</dt>
-    <dd>
-      {{>prop}}      &nbsp;
-    </dd>
-    {{/props}}
-
-  </dl>
-</script>

@@ -48,7 +48,7 @@
   </ul>
 </div>
 
-<div class='related message larger green'>点击任一链接，给出挖掘提示。</div>
+<div class='related start-tip larger green'>点击任一链接，制定挖掘规则。</div>
 
 <div class="webPages index">
 	<h2>
@@ -67,13 +67,16 @@
 		if ($i++ % 2 == 0) {
 			$class = ' class="altrow"';
 		}
+		$page_entity_id = $pageEntity['PageEntity']['id'];
+		$encodedUrl = symmetric_encode($webPage['baseUrl']);
 	?>
 	<tr<?php echo $class;?>>
 		<td><?php echo $i ?></td>
 		<td class='pageInfo'>
-		  <div><?php echo $this->Html->link($webPage['baseUrl'],
-					array('action' => 'view', symmetric_encode($webPage['baseUrl']),
-							'page_entity_id' => $pageEntity['PageEntity']['id'])); ?>&nbsp;</div>
+		  <div><?=$this->Html->link($webPage['baseUrl'],
+					['action' => 'view', $encodedUrl, 'page_entity_id' => $page_entity_id],
+		  		['target' => '_blank']); ?>&nbsp;</div>
+
 		</td>
 	</tr>
 	<?php endforeach; ?>

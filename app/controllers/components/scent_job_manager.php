@@ -47,11 +47,12 @@ class ScentJobManagerComponent extends Object {
     return $configId;
   }
 
-  public function ruledExtract($pageEntity) {
+  public function ruledExtract($pageEntity, $limit = 1000) {
     $this->_validate($pageEntity);
 
     $jobType = \Scent\RemoteCmdBuilder::$JobType['RULEDEXTRACT'];
 
+    $pageEntity['PageEntity']['limit'] = $limit;
     $jobId = $this->remoteCmdExecutor->executeRemoteJob($pageEntity, $jobType);
     if ($jobId === false) {
     	$this->log("Failed to execute job : $jobType");
@@ -73,6 +74,35 @@ class ScentJobManagerComponent extends Object {
     }
 
     return $jobId;
+  }
+
+  public function segment($pageEntity, $limit = 1000) {
+  	$this->_validate($pageEntity);
+
+  	$jobType = \Scent\RemoteCmdBuilder::$JobType['SEGMENT'];
+
+  	$pageEntity['PageEntity']['limit'] = $limit;
+  	$jobId = $this->remoteCmdExecutor->executeRemoteJob($pageEntity, $jobType);
+  	if ($jobId === false) {
+  		$this->log("Failed to execute job : $jobType");
+  		return false;
+  	}
+
+  	$p = $pageEntity['PageEntity'];
+  	$data = array('ScentJob' => array(
+  			'crawlId' => $p['crawlId'],
+  			'configId' => $p['configId'] ? $p['configId'] : 'default',
+  			'jobId' => $jobId,
+  			'type' => $jobType,
+  			'page_entity_id' => $p['id'],
+  			'user_id' => $this->currentUser['id']
+  	));
+
+  	if (!$this->controller->ScentJob->save($data)) {
+  		$this->log("Failed to save ScentJob : $jobId");
+  	}
+
+  	return $jobId;
   }
 
   private function _validate($pageEntity) {

@@ -1,6 +1,5 @@
 <div class="dashboards index">
-	<h2><?php __('齐物'); ?></h2>
-	<p>齐物，格物，用物。</p>
+	<h2><?php __('格物，齐物，用物'); ?></h2>
 </div>
 
 <br />

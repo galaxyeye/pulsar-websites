@@ -125,7 +125,7 @@ class ScentJobsController extends AppController {
         'id' => 'part-r-00000',
         'name' => 'extract'.$scentJob['ScentJob']['jobId'],
         'download' => true,
-        'extension' => 'txt',  // must be lower case
+        'extension' => 'sql.txt',  // must be lower case
         'path' => $path   // don't forget terminal 'DS'
     );
 

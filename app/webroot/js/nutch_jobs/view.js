@@ -2,7 +2,7 @@ $(document).ready(function() {
 
   var interval = setInterval(function() {
     if (!$('body').hasClass('visible')) {
-        return;
+        // return;
       }
 
       var id = $('.crawls.view .model-id').text();

@@ -77,6 +77,11 @@ class HttpClient {
 	}
 
 	public function putJson($url, $data) {
+		if (empty($data)) {
+			CakeLog::write('error', "Empty data to put at line ".__LINE__);
+			return;
+		}
+
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
@@ -97,6 +102,11 @@ class HttpClient {
 	}
 
 	public function put($url, $data) {
+		if (empty($data)) {
+			CakeLog::write('error', "Empty data to put at line ".__LINE__);
+			return;
+		}
+
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
@@ -117,6 +127,11 @@ class HttpClient {
 	}
 
 	public function postJson($url, $data) {
+		if (empty($data)) {
+			CakeLog::write('error', "Empty data to post at line ".__LINE__);
+			return;
+		}
+
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");

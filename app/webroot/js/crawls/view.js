@@ -5,6 +5,11 @@ $(document).ready(function() {
       return;
     }
 
+    var state = crawl['state'];
+    if (state == 'CREATED') {
+      return;
+    }
+
     var id = $('.crawls.view .model-id').text();
     var url = getCakePHPUrl('crawls', 'ajax_getJobInfo', id);
     $.getJSON(url, function(data) {

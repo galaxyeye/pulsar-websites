@@ -63,11 +63,12 @@
 <div class="actions">
 	<h3><?php __('Actions'); ?></h3>
 	<ul>
-		<li class="view-extract-result hidden"><?php echo $this->Html->link(__('View Extract Result', true), 
-				array('action' => 'viewExtractResult', $scentJob['ScentJob']['id'])); ?> </li>
+		<li><?php echo $this->Html->link(__('Download Sql File', true),
+				['controller' => 'scent_jobs', 'action' => 'downloadExtractResult', $scentJob['ScentJob']['id']],
+				['class' => 'download hidden']); ?> </li>
 		<li><?php echo $this->Html->link(__('List Scent Jobs', true), array('action' => 'index')); ?> </li>
 		<li><?php echo $this->Html->link(__('View Page Entity', true),
-					array('controller' => 'page_entities', 'action' => 'view', $scentJob['PageEntity']['id'])); ?>
+					array('controller' => 'page_entities', 'action' => 'view', $scentJob['ScentJob']['page_entity_id'])); ?>
     </li>
 	</ul>
 </div>

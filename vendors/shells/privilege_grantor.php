@@ -77,6 +77,7 @@ class PrivilegeGrantorShell extends Shell {
 
 	public function grantUser(){
 		$this->out('Grant privilege to users');
+		$this->Acl->allow($this->user, 'controllers');
 	}
 
 	public function grantEnterprise(){

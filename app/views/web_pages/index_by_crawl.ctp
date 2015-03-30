@@ -82,7 +82,7 @@
 	</h2>
 	<?php 
 	$i = 0;
-	foreach ($webPages as $webPage):
+	foreach ($webPages as $webPage) : 
 		$class = null;
 		if ($i++ % 2 == 0) {
 			$class = ' class="altrow"';
@@ -97,10 +97,10 @@
 	<tr<?php echo $class;?>>
 		<td><?php echo $i ?></td>
 		<td class='pageInfo'>
-		  <div><?php echo $this->Html->link($webPage['baseUrl'],
-					array('action' => 'view', symmetric_encode($webPage['baseUrl']),
-							'crawl_id' => $crawl['Crawl']['id'])); ?>&nbsp;</div>
-		  <div><?php echo $webPage['title'] ?>&nbsp;</div>
+		  <div><?=$this->Html->link($webPage['baseUrl'],
+					['action' => 'view', symmetric_encode($webPage['baseUrl']), 'crawl_id' => $crawl['Crawl']['id']],
+		  		['target' => '_blank']); ?>&nbsp;</div>
+		  <div><?= !empty($webPage['title']) ? $webPage['title'] : "" ?>&nbsp;</div>
 		</td>
 
 		<td class='outlinks'>
@@ -110,8 +110,8 @@
 
 					echo "<div>";
 				  echo $this->Html->link($link, 
-							array('action' => 'view', symmetric_encode($link), 'crawl_id' => $crawl['Crawl']['id']),
-							array('title' => $anchor));
+							['action' => 'view', symmetric_encode($link), 'crawl_id' => $crawl['Crawl']['id']],
+							['title' => $anchor, 'target' => '_blank']);
 				  echo "</div>";
         }
         ?>

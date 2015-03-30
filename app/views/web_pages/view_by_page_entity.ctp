@@ -4,7 +4,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <title>Nutch UI</title>
   <link rel="stylesheet" type="text/css" href="/css/jquery/jquery-ui-1.11.3/jquery-ui.css" />
-  <link rel="stylesheet" type="text/css" href="/css/jquery/jquery.dropper.css" />
+  <link rel="stylesheet" type="text/css" href="/css/dropper.css" />
   <link rel="stylesheet" type="text/css" href="/css/web_pages/web_pages.css" />
   <style type="text/css">
     <?php if (in_array('simpleCss', $options)) : ?>
@@ -64,22 +64,20 @@
 			<button type='button' class='start-extract-rule'>开始制定挖掘规则</button>
     </div><!-- info-box -->
 
-    <div class='webPages view css-path-collector hidden'>
+    <div class='webPages view css-path-collector qiwur-hidden'>
       <form action="#" class='extract-field-name'>
-          <div class="dropped dropper" title="字段名：将需要抽取的字段名拖拽到这里">
-            <div class="dropper-dropzone">字段名：将需要抽取的字段名拖拽到这里</div>
-            <input class="dropper-input" multiple="" type="text">
-          </div>
+        <div class="dropped dropper" title="字段名：将需要抽取的字段名拖拽到这里">
+          <input class="dropper-dropzone" multiple="" type="text" value="字段名：将需要抽取的字段名拖拽到这里" />
+        </div>
       </form>
 			<br />
       <form action="#" class='extract-field-value'>
-          <div class="dropped dropper" title="字段值：将需要抽取的字段值拖拽到这里">
-            <div class="dropper-dropzone">字段值：将需要抽取的字段值拖拽到这里</div>
-            <input class="dropper-input" type="text">
-          </div>
+        <div class="dropped dropper" title="字段值：将需要抽取的字段值拖拽到这里">
+          <input class="dropper-dropzone" multiple="" type="text" value="字段值：将需要抽取的字段值拖拽到这里" />
+        </div>
       </form>
 			<br />
-			<div class="text input required hidden">
+			<div class="text input required qiwur-hidden">
 				<label for="entityName">实体名称</label>
 	      <input id="entityName" class="entity" value="<?php echo $pageEntity['PageEntity']['name']?>">
       </div>
@@ -88,6 +86,7 @@
 
 			<div id="pageEntityFields" class="webPages view"></div>
 			<br />
+			<button type='button' class='analysis-extract-rule'>智能分析规则</button>
 			<button type='button' class='save-extract-rule'>保存挖掘规则</button>
 			<button type='button' class='clear-extract-rule'>清除挖掘规则</button>
     </div> <!-- css-path-collector -->
@@ -110,35 +109,35 @@
         <li><?php echo $this->Html->link(__('查看（简洁样式）', true), 
         		array('action' => 'view', $encodedUrl, 'page_entity_id' => $pageEntityId, 
         				'options' => 'simpleCss')); ?> </li>
-        <li><a class='intelligent' href="javascript:;">智能分析</a></li>
       </ul>
     </div><!-- actions -->
   </div><!-- systemPanel -->
 
-  <div id='qiwurHtmlWrapper' class='scrapping wrap hidden'>
+  <div id='qiwurHtmlWrapper' class='scrapping wrap qiwur-hidden'>
     <?php 
       echo $webPage['WebPage']['content'];
     ?>
   </div>
+
+	<script type="text/javascript">
+	<!--
+		var globalPageData = {
+		  "webroot" : "<?php echo $this->Html->webroot?>",
+		  "controller" : "<?php echo $this->params['controller']?>",
+		  "action" : "<?php echo $this->params['action']?>",
+		  "here" : "<?php echo $this->here ?>"
+		};
+
+		var pageEntity = <?php echo json_encode($pageEntity) ?>;
+	//-->
+	</script>
+	<script type="text/javascript" src="/js/jquery/jquery-1.11.2.js"></script>
+	<script type="text/javascript" src="/js/jquery/jquery-ui-1.11.3/jquery-ui.js"></script>
+	<script type="text/javascript" src="/js/jquery/jsrender.js"></script>
+	<script type="text/javascript" src="/js/common.js"></script>
+	<script type="text/javascript" src="/js/dump.js"></script>
+	<script type="text/javascript" src="/js/layer-v1.8.5/layer/layer.min.js"></script>
+	<script type="text/javascript" src="/js/web_pages/viewByPageEntity.js"></script>
+
 </body>
 </html>
-
-<script type="text/javascript">
-<!--
-	var globalPageData = {
-	  "webroot" : "<?php echo $this->Html->webroot?>",
-	  "controller" : "<?php echo $this->params['controller']?>",
-	  "action" : "<?php echo $this->params['action']?>",
-	  "here" : "<?php echo $this->here ?>"
-	};
-
-	var pageEntity = <?php echo json_encode($pageEntity) ?>;
-//-->
-</script>
-<script type="text/javascript" src="/js/jquery/jquery-1.11.2.js"></script>
-<script type="text/javascript" src="/js/jquery/jquery-ui-1.11.3/jquery-ui.js"></script>
-<script type="text/javascript" src="/js/jquery/jsrender.js"></script>
-<script type="text/javascript" src="/js/common.js"></script>
-<script type="text/javascript" src="/js/dump.js"></script>
-<script type="text/javascript" src="/js/layer-v1.8.5/layer/layer.min.js"></script>
-<script type="text/javascript" src="/js/web_pages/view_by_page_entity.js"></script>

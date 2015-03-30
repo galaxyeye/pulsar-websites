@@ -59,14 +59,18 @@ class WebPagesController extends AppController {
     $this->loadModel('PageEntity');
     $pageEntity = $this->PageEntity->read(null, $page_entity_id);
 
-    $pageEntity['CrawlFilter'] = array(
-      array(
-        'url_filter' => $pageEntity['PageEntity']['url_filter'], 
-        'text_filter' => $pageEntity['PageEntity']['text_filter']
-      )
-    );
+    $crawl = [
+    		'Crawl' => ['id' => $pageEntity['PageEntity']['crawl_id']], 
+    		'CrawlFilter' => [
+    				[
+    						'url_filter' => $pageEntity['PageEntity']['url_filter'], 
+    						'text_filter' => $pageEntity['PageEntity']['text_filter']				
+    				]
+    		]
+    ];
 
-    $webPages = $this->_getWebPagesByCrawlFilter($pageEntity['CrawlFilter']);
+    $fields = array("title", "baseUrl", "outlinks");
+    $webPages = $this->_getWebPagesByCrawlFilter($crawl, $fields, 500);
 
     $this->set(compact('pageEntity', 'webPages'));
   }
@@ -76,7 +80,8 @@ class WebPagesController extends AppController {
     $this->Crawl->contain(array('CrawlFilter'));
     $crawl = $this->Crawl->read(null, $crawl_id);
 
-    $webPages = $this->_getWebPagesByCrawlFilter($crawl['CrawlFilter']);
+    $fields = array("title", "baseUrl", "outlinks");
+    $webPages = $this->_getWebPagesByCrawlFilter($crawl, $fields, 500);
 
     $this->set(compact('crawl', 'webPages'));
   }
@@ -91,8 +96,27 @@ class WebPagesController extends AppController {
   	$this->Crawl->contain(array('CrawlFilter' => array('conditions' => array('page_type' => 'DETAIL'))));
   	$crawl = $this->Crawl->read(null, $crawl_id);
 
-  	$webPages = $this->_getWebPagesByCrawlFilter($crawl['CrawlFilter'], null, array('baseUrl'));
-  	return count($webPages);
+  	if ($fields == null) {
+  		$fields = array("title", "baseUrl", "outlinks");
+  	}
+
+  	$urlFilter = null;
+  	foreach ($crawlFilters as $f) {
+  		$urlFilter .= \Nutch\normalizeUrlFilter($f['url_filter']);
+  	}
+
+  	$nutchClient = new \Nutch\NutchClient();
+  	$dbFilter = new \Nutch\DbFilter();
+  	$dbFilter->setUrlFilter($urlFilter);
+  	$dbFilter->setFields($fields);
+  	if ($limit) {
+  		$dbFilter->setLimit($limit);
+  	}
+
+  	$webPages = $nutchClient->query($dbFilter);
+  	$webPages = json_decode($webPages, true, 10);
+
+  	return $webPages['values'];
   }
 
   function ajax_getDetailPageLinks($crawl_id, $options = "", $limit = 100) {
@@ -104,7 +128,7 @@ class WebPagesController extends AppController {
     $this->Crawl->contain(array('CrawlFilter' => array('conditions' => array('page_type' => 'DETAIL'))));
     $crawl = $this->Crawl->read(null, $crawl_id);
 
-    $webPages = $this->_getWebPagesByCrawlFilter($crawl['CrawlFilter'], $limit, array('baseUrl'));
+    $webPages = $this->_getWebPagesByCrawlFilter($crawl, array('baseUrl'), $limit);
 
     $outlinks = array();
 
@@ -181,6 +205,26 @@ class WebPagesController extends AppController {
     $this->render($view);
   }
 
+  /**
+   * TODO : use ant test this action instead of view with named params
+   * */
+  function viewByPageEntity($page_entity_id) {
+  	$this->layout = 'empty';
+
+  	$options = array();
+  	if (isset($this->params['named']['options'])) {
+  		$options = explode("+", $this->params['named']['options']);
+  	}
+  	array_push($options, 'strip');
+
+  	$this->_viewByPageEntity($this->params['named']['page_entity_id']);
+
+  	$url = symmetric_decode($url);
+  	$webPage = $this->_getWebPage($url, $options);
+
+  	$this->set(compact('webPage', 'options'));
+  }
+
   function viewRandomDetailPage() {
     $this->layout = 'empty';
 
@@ -247,7 +291,7 @@ class WebPagesController extends AppController {
     }
 
     $webPage['WebPage'] = $webPages['values'][0];
-
+    
     if (in_array('strip', $options)) {
       return $this->_stripHTML($webPage, $options);
     }
@@ -255,10 +299,10 @@ class WebPagesController extends AppController {
     return $webPage;
   }
 
-  private function _getRandomDetailPage($crawlFilters, $options = null) {
+  private function _getRandomDetailPage($crawl, $options = null) {
   	// TODO : We can do this on the server side
   	$limit = 100;
-  	$links = $this->_getWebPagesByCrawlFilter($crawlFilters, $limit, array('baseUrl'));
+  	$links = $this->_getWebPagesByCrawlFilter($crawl, array('baseUrl'), $limit);
 		if (count($links) == 0) {
 			return null;
 		}
@@ -270,27 +314,11 @@ class WebPagesController extends AppController {
   	return $webPage;
   }
 
-  function _getWebPagesByCrawlFilter($crawlFilters, $limit = null, $fields = null) {
-  	if (!is_array($crawlFilters)) return null;
+  function _getWebPagesByCrawlFilter($crawl, $fields = null, $limit = null) {
+  	if ($limit == null) $limit = 500;
 
-    if ($fields == null) {
-      $fields = array("title", "baseUrl", "outlinks");
-    }
-
-    $urlFilter = null;
-    foreach ($crawlFilters as $f) {
-      $urlFilter .= \Nutch\normalizeUrlFilter($f['url_filter']);
-    }
-
-    $nutchClient = new \Nutch\NutchClient();
-    $dbFilter = new \Nutch\DbFilter();
-    $dbFilter->setUrlFilter($urlFilter);
-    $dbFilter->setFields($fields);
-    if ($limit) {
-      $dbFilter->setLimit($limit);
-    }
-
-    $webPages = $nutchClient->query($dbFilter);
+  	$executor = new \Nutch\RemoteCmdExecutor();
+  	$webPages = $executor->queryByCrawlFilter($crawl, $fields, $limit);
     $webPages = json_decode($webPages, true, 10);
 
     return $webPages['values'];
@@ -307,22 +335,27 @@ class WebPagesController extends AppController {
       return null;
     }
 
-    $dom = htmlqp($content, null, array('convert_to_encoding' => 'utf-8'));
+    $dom = htmlqp($content, null, ['convert_to_encoding' => 'utf-8']);
 
-    foreach (array('title', 'base', 'script', 'meta', 'iframe', 'link[rel=icon]') as $removal) {
+    App::import('Lib', array('html_utils'));
+    HtmlUtils::qpMakeLinksAbsolute($dom, $webPage['WebPage']['baseUrl']);
+
+    // TODO : sniff encoding
+    $title = $dom->find('title')->text();
+
+    $removeTags = [
+    		'title', 'base', 'script', 'meta', 'iframe',
+    		'link[rel=icon]', 'link[rel="shortcut icon"]'
+    ];
+    foreach ($removeTags as $removal) {
       $dom->find($removal)->remove();
     }
 
     if (in_array('simpleCss', $options)) {
-      foreach (array('style', 'link', 'head') as $removal) {
+      foreach (['style', 'link', 'head'] as $removal) {
         $dom->find($removal)->remove();
       }
     }
-
-    // TODO : change all links to be absolute links
-    // $dom->find('a')->eachLambda(function($ele) {
-    //   $ele.href = getAbsoluteUrl($baseUrl, $ele.href);
-    // });
 
     // Add qiwur specified information
     $dom->find('html')->attr('id', 'qiwurHtml');
@@ -333,10 +366,10 @@ class WebPagesController extends AppController {
 
     // Strip to show the page inside our own layout
     // TODO : Can we do these replace using $dom ?
-    $content = preg_replace("/html|body/", "div", $content);
-    $content = preg_replace("/<!DOCTYPE/", "<!--", $content);
-    $content = preg_replace("/.dtd\">/", "-->", $content);
+    $content = preg_replace("/html|body|head/", "div", $content);
+    $content = preg_replace("/DOCTYPE|dtd|xml/i", "", $content);
 
+    $webPage['WebPage']['title'] = $title;
     $webPage['WebPage']['content'] = $content;
 
     return $webPage;

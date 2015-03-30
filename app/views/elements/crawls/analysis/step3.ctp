@@ -44,7 +44,7 @@
 	</dl>
 </div>
 
-<?php if ($crawl['Crawl']['job_type'] == 'NONE') : ?>
+<?php if (empty($crawl['Crawl']['configId'])) : ?>
 <div class="crawls form">
     <?php echo $this->Form->create('Crawl', array('action' => 'startCrawl'));?>
       <fieldset>

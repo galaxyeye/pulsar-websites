@@ -623,7 +623,7 @@
     return $result;
   }
 
-  function getResponseStatusJson($code = 200, $customMessage = '', $data = null) {
+  function getResponseStatusJson($code = 200, $customMessage = "", $data = null) {
     $result = getResponseStatus($code, $customMessage, $data);
     return json_encode($result);
   }

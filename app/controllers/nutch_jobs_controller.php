@@ -54,7 +54,6 @@ class NutchJobsController extends AppController {
 		$nutchClient = new \Nutch\NutchClient();
 		$nutchJob = $nutchClient->getjobInfo($jobId);
 		$nutchJob = json_decode($nutchJob, true);
-
 		$this->set(compact('nutchJob'));
 	}
 
@@ -76,7 +75,7 @@ class NutchJobsController extends AppController {
 
 		// create nutch config
 		$configId = $crawl_id.'-'.date('md-Hi');
-  	$conf = $this->NutchJobManager->createNutchConfig($crawl, $configId);
+  	$conf = $this->NutchJobManager->createNutchConfig($crawl, $configId, "minor");
   	if ($conf['state'] != 'OK') {
 			$this->Session->setFlash(__('Failed to create nutch config for #'.$crawl_id, true));
 			$this->redirect(array('controller' => 'crawls'));
@@ -133,6 +132,33 @@ class NutchJobsController extends AppController {
 		echo $status;
 	}
 
+	function ajax_getNutchConfig($configId = null) {
+		$this->autoRender = false;
+	
+		$client = new \Nutch\NutchClient();
+		$count = $client->getNutchConfig($configId);
+
+		echo $count;
+	}
+
+	function ajax_getFetchCount($configId = null) {
+		$this->autoRender = false;
+	
+		$client = new \Nutch\NutchClient();
+		$count = $client->getNutchConfigPropert($configId, REPORT_FETCHED_PAGES);
+	
+		echo $count;
+	}
+
+	function ajax_getFetchStatus($configId = null) {
+		$this->autoRender = false;
+
+		$client = new \Nutch\NutchClient();
+		$status = $client->getNutchConfigPropert($configId, REPORT_FETCH_STATUS);
+
+		echo $status;
+	}
+
 	function ajax_getJobInfo($jobId = null) {
 		$this->autoRender = false;
 
@@ -142,6 +168,44 @@ class NutchJobsController extends AppController {
 
 		$client = new \Nutch\NutchClient();
 		echo $client->getjobInfo($jobId);
+  }
+
+  function test_getFetchCount($jobId) {
+  	// update job status
+  	$client = new \Nutch\NutchClient();
+  	$rawMsg = $client->getJobInfo($jobId);
+
+  	$jobInfo = json_decode($rawMsg, true);
+
+  	pr($jobInfo);
+
+  	$data = [
+  			'id' => $jobInfo['id'],
+  			'state' => $jobInfo['state'],
+  			'args' => json_encode($jobInfo['args'], JSON_PRETTY_PRINT),
+  			'msg' => $jobInfo['msg'],
+  			'raw_msg' => $rawMsg,
+  			'fetch_count' => $this->_getFetchCount($jobInfo)
+  	];
+
+  	pr($data);
+  }
+
+  /**
+   * @param $count Base count to accumulate
+   * @param $jobInfo
+   * */
+  private function _getFetchCount($jobInfo) {
+  	if ($jobInfo['type'] != 'FETCH' || empty($jobInfo['result']['jobs'])) {
+  		return 0;
+  	}
+
+  	$count = 0;
+  	foreach ($jobInfo['result']['jobs'] as $k => $job) {
+  		$count += $job['counters']['FetcherStatus']['FetchedPages'];
+  	}
+  
+  	return $count;
   }
 
   function stop($id) {
