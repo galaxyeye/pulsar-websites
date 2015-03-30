@@ -15,8 +15,10 @@
 
 <div class="actions">
 	<ul>
-		<li><?php echo $this->Html->link(__('创建网络实体集', true), array('controller' => 'crawls', 'action' => 'addWes'), array('target' => '_blank')); ?></li>
-		<li><?php echo $this->Html->link(__('创建通用爬虫任务', true), array('controller' => 'crawls', 'action' => 'add'), array('target' => '_blank')); ?></li>
+		<li><?php echo $this->Html->link(__('创建网络实体集', true), 
+				array('controller' => 'crawls', 'action' => 'addWes'), array('target' => '_blank')); ?></li>
+		<li><?php echo $this->Html->link(__('创建通用爬虫任务', true), 
+				array('controller' => 'crawls', 'action' => 'add'), array('target' => '_blank')); ?></li>
 	</ul>
 </div>
 
@@ -91,9 +93,12 @@
 		<td><?php echo $pageEntity['PageEntity']['block_path']; ?>&nbsp;</td>
 		<td><?php echo $pageEntity['PageEntity']['status']; ?>&nbsp;</td>
 		<td class="actions">
-			<?php echo $this->Html->link(__('View', true), array('action' => 'view', $pageEntity['PageEntity']['id'])); ?>
-			<?php echo $this->Html->link(__('Edit', true), array('action' => 'edit', $pageEntity['PageEntity']['id'])); ?>
-			<?php echo $this->Html->link(__('Delete', true), array('action' => 'delete', $pageEntity['PageEntity']['id']),
+			<?php echo $this->Html->link(__('View', true), 
+					['controller' => 'page_entities', 'action' => 'view', $pageEntity['PageEntity']['id']]); ?>
+			<?php echo $this->Html->link(__('Edit', true), 
+					['controller' => 'page_entities', 'action' => 'edit', $pageEntity['PageEntity']['id']]); ?>
+			<?php echo $this->Html->link(__('Delete', true), 
+					['controller' => 'page_entities', 'action' => 'delete', $pageEntity['PageEntity']['id']],
 						null, sprintf(__('Are you sure you want to delete # %s?', true), $pageEntity['PageEntity']['id'])); ?>
 		</td>
 	</tr>

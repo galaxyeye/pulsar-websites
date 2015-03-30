@@ -1,4 +1,4 @@
-<?php
+<?php 
 class DashboardsController extends AppController {
 
 	var $name = 'Dashboards';
