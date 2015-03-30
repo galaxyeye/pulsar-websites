@@ -68,10 +68,7 @@ $(document).ready(function() {
 
       refreshNutchJobInfo();
       refreshCrawlView();
-
-      if (timerCounter % 3 == 0) {
-        refreshFetchedCount(); 
-      }
+      refreshFetchedCount();
 
       ++timerCounter;
     }, 10 * 1000);
@@ -123,9 +120,7 @@ $(document).ready(function() {
 
   function refreshFetchedCount() {
     var id = $('.crawls.view .model-id').text();
-    // var url = getCakePHPUrl('crawls', 'ajax_getFetchCount', id);
-    // TODO : A VERY heary query, must be optimized!!!
-    var url = getCakePHPUrl('web_pages', 'ajax_getFetchedDetailPageCount', id);
+    var url = getCakePHPUrl('crawls', 'ajax_getFetchCount', id);
 
     $.getJSON(url, function(count) {
       $('.fetched.count').text(count);
