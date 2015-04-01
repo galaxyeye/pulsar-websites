@@ -76,54 +76,58 @@
 <hr />
 
 <div class="webPages index">
-	<h2>
+  <h2>
     <span><?php __('Web Page Link Map');?></span>
     <p class="m hidden">TODO：链接地图可视化</p>
-	</h2>
-	<?php 
-	$i = 0;
-	foreach ($webPages as $webPage) : 
-		$class = null;
-		if ($i++ % 2 == 0) {
-			$class = ' class="altrow"';
-		}
-	?>
-	<table cellpadding="0" cellspacing="0">
-	<tr>
-			<th></th>
-			<th>Base Url</th>
-			<th>Outlinks</th>
-	</tr>
-	<tr<?php echo $class;?>>
-		<td><?php echo $i ?></td>
-		<td class='pageInfo'>
-		  <div><?=$this->Html->link($webPage['baseUrl'],
-					['action' => 'view', symmetric_encode($webPage['baseUrl']), 'crawl_id' => $crawl['Crawl']['id']],
-		  		['target' => '_blank']); ?>&nbsp;</div>
-		  <div><?= !empty($webPage['title']) ? $webPage['title'] : "" ?>&nbsp;</div>
-		</td>
+  </h2>
+  <?php 
+  if (empty($webPages)) {
+    echo "<div>没有链接</div>";
+  }
 
-		<td class='outlinks'>
-				<?php 
-				foreach ($webPage['outlinks'] as $link => $anchor) {
-					if (empty($anchor)) $anchor = $link;
+  $i = 0;
+  foreach ($webPages as $webPage) : 
+    $class = null;
+    if ($i++ % 2 == 0) {
+      $class = ' class="altrow"';
+    }
+  ?>
+  <table cellpadding="0" cellspacing="0">
+  <tr>
+      <th></th>
+      <th>Base Url</th>
+      <th>Outlinks</th>
+  </tr>
+  <tr<?php echo $class;?>>
+    <td><?php echo $i ?></td>
+    <td class='pageInfo'>
+      <div><?=$this->Html->link($webPage['baseUrl'],
+          ['action' => 'view', symmetric_encode($webPage['baseUrl']), 'crawl_id' => $crawl['Crawl']['id']],
+          ['target' => '_blank']); ?>&nbsp;</div>
+      <div><?= !empty($webPage['title']) ? $webPage['title'] : "" ?>&nbsp;</div>
+    </td>
 
-					echo "<div>";
-				  echo $this->Html->link($link, 
-							['action' => 'view', symmetric_encode($link), 'crawl_id' => $crawl['Crawl']['id']],
-							['title' => $anchor, 'target' => '_blank']);
-				  echo "</div>";
+    <td class='outlinks'>
+        <?php 
+        foreach ($webPage['outlinks'] as $link => $anchor) {
+          if (empty($anchor)) $anchor = $link;
+
+          echo "<div>";
+          echo $this->Html->link($link, 
+              ['action' => 'view', symmetric_encode($link), 'crawl_id' => $crawl['Crawl']['id']],
+              ['title' => $anchor, 'target' => '_blank']);
+          echo "</div>";
         }
         ?>
-		</td>
-	</tr>
-	</table>
-	<?php endforeach; ?>
+    </td>
+  </tr>
+  </table>
+  <?php endforeach; ?>
 </div>
 
 <div class="actions">
-	<h3><?php __('Actions'); ?></h3>
-	<ul>
-		<li><?php echo $this->Html->link(__('Search Web', true), array('action' => 'search')); ?></li>
-	</ul>
+  <h3><?php __('Actions'); ?></h3>
+  <ul>
+    <li><?php echo $this->Html->link(__('Search Web', true), array('action' => 'search')); ?></li>
+  </ul>
 </div>

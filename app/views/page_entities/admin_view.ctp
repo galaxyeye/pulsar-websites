@@ -102,38 +102,3 @@
     </ul>
   </div>
 </div>
-
-<div class="pageEntities form">
-<?php echo $this->Form->create('PageEntity', array('action' => 'startRuledExtract', 'type' => 'get'));?>
-  <fieldset>
-     <legend><?php __('Start Ruled Extract'); ?></legend>
-  <?php echo $this->Form->input('id', array('value' => $pageEntity['PageEntity']['id'])); ?>
-  <?php echo $this->Form->hidden('limit', array('value' => 500)); ?>
-  <?php echo $this->Form->end(__('Start Ruled Extract', true));?>
-  </fieldset>
-</div>
-
-<div class='message view'>
-	下面两项正在建设中。。。
-</div>
-
-<div class="pageEntities form">
-<?php echo $this->Form->create('PageEntity', array('action' => 'startSegmentAnalysis', 'type' => 'get'));?>
-  <fieldset>
-     <legend><?php __('Start Segment Analysis'); ?></legend>
-  <?php echo $this->Form->input('id', array('value' => $pageEntity['PageEntity']['id'])); ?>
-  <?php echo $this->Form->hidden('limit', array('value' => 500)); ?>
-  <?php echo $this->Form->hidden('diagnose', array('value' => true)); ?>
-  <?php echo $this->Form->end(__('Start Segment Analysis', true));?>
-  </fieldset>
-</div>
-
-<div class="pageEntities form">
-<?php echo $this->Form->create('PageEntity', array('action' => 'startAutoExtract', 'type' => 'get'));?>
-  <fieldset>
-     <legend><?php __('Start Auto Extract'); ?></legend>
-  <?php echo $this->Form->input('id', array('value' => $pageEntity['PageEntity']['id'])); ?>
-  <?php echo $this->Form->hidden('limit', array('value' => 500)); ?>
-  <?php echo $this->Form->end(__('Start Auto Extract', true));?>
-  </fieldset>
-</div>

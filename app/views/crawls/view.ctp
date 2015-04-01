@@ -1,6 +1,6 @@
 <script type="text/javascript">
 <!--
-	var crawl = <?php echo json_encode($crawl) ?>;
+  var crawl = <?php echo json_encode($crawl) ?>;
 //-->
 </script>
 <div class='message crawls-view-tip hidden'>
@@ -84,33 +84,33 @@
   </ul>
   <hr />
   <ul>
-  	<?php $state = $crawl['Crawl']['state'] ?>
-  	<?php if ($state == 'RUNNING') : ?>
+    <?php $state = $crawl['Crawl']['state'] ?>
+    <?php if ($state == 'RUNNING') : ?>
     <li><?=$this->Html->link(__('暂停抓取', true), ['action' => 'pause', $crawl['Crawl']['id']]); ?></li>
     <?php elseif ($state == 'PAUSED') : ?>
     <li><?=$this->Html->link(__('重启抓取', true), ['action' => 'resume', $crawl['Crawl']['id']]); ?></li>
     <?php endif; ?>
 
-  	<?php if ($state != 'CREATED') : ?>
+    <?php if ($state != 'CREATED') : ?>
     <li><?=$this->Html->link(__('重置爬虫', true), ['action' => 'reset', $crawl['Crawl']['id']]); ?></li>
     <?php endif; ?>
 
     <li><?=$this->Html->link(__('测试解析器', true),
-    		['controller' => 'nutch_jobs', 'action' => 'parseChecker', $crawl['Crawl']['id']],
-    		['target' => '_blank', 'title' => '解析种子链接']); ?></li>
+        ['controller' => 'nutch_jobs', 'action' => 'parseChecker', $crawl['Crawl']['id']],
+        ['target' => '_blank', 'title' => '解析种子链接']); ?></li>
   </ul>
   <!-- Once crawl has started -->
-	<?php if (!empty($crawl['Crawl']['configId'])) : ?>
   <hr />
   <ul>
+    <?php if (!$crawl['Crawl']['configId']) : ?>
     <li><?=$this->Html->link(__('查看Nutch配置', true),
-    		array('controller' => 'nutch_jobs', 'action' => 'nutchConfig', $crawl['Crawl']['configId']),
-    		array('target' => '_blank')); ?></li>
+        array('controller' => 'nutch_jobs', 'action' => 'nutchConfig', $crawl['Crawl']['configId']),
+        array('target' => '_blank')); ?></li>
+    <?php endif; ?>
     <li><?=$this->Html->link(__('查看链接地图', true),
-    		array('controller' => 'web_pages', 'action' => 'indexByCrawl', $crawl['Crawl']['id']),
-    		array('target' => '_blank', 'title' => '查看实体地图')); ?></li>
+        array('controller' => 'web_pages', 'action' => 'indexByCrawl', $crawl['Crawl']['id']),
+        array('target' => '_blank', 'title' => '查看实体地图')); ?></li>
   </ul>
-  <?php endif ?>
 </div>
 
 <div class="nutch server view">
@@ -132,10 +132,10 @@
     <tr>
       <th><?php __('Id'); ?></th>
       <th><?php __('Round'); ?></th>
-			<th><?php __('JobId');?></th>
-			<th><?php __('Type');?></th>
-			<th><?php __('ConfId');?></th>
-			<th><?php __('State');?></th>
+      <th><?php __('JobId');?></th>
+      <th><?php __('Type');?></th>
+      <th><?php __('ConfId');?></th>
+      <th><?php __('State');?></th>
       <th class="actions"><?php __('Actions');?></th>
     </tr>
   <?php 
@@ -148,16 +148,16 @@
       ?>
     <tr <?=$class;?>>
       <td class='model-id'><?=$nutchJob['id'];?></td>
-			<td><?=$nutchJob['round']; ?>&nbsp;</td>
+      <td><?=$nutchJob['round']; ?>&nbsp;</td>
       <td><?=$nutchJob['jobId']; ?>&nbsp;</td>
-			<td><?=$nutchJob['type']; ?>&nbsp;</td>
-			<td><?=$nutchJob['confId']; ?>&nbsp;</td>
-			<td><?=$nutchJob['state']; ?>&nbsp;</td>
+      <td><?=$nutchJob['type']; ?>&nbsp;</td>
+      <td><?=$nutchJob['confId']; ?>&nbsp;</td>
+      <td><?=$nutchJob['state']; ?>&nbsp;</td>
       <td class="actions">
         <?php 
           echo $this->Html->link (__('View', true), 
-          		['controller' => 'nutch_jobs','action' => 'view', $nutchJob['id']],
-          		['target' => 'layer']
+              ['controller' => 'nutch_jobs','action' => 'view', $nutchJob['id']],
+              ['target' => 'layer']
           );
 //       ?>
       </td>
@@ -170,7 +170,7 @@
     <ul>
       <li><?=$this->Html->link(__('List Nutch Jobs', true),
           ['controller' => 'nutch_jobs', 'action' => 'index', 'crawl_id' => $crawl['Crawl']['id']],
-      		['target' => '_blank']); ?> </li>
+          ['target' => '_blank']); ?> </li>
   </div>
 </div>
 <!-- **************************************************************
@@ -266,11 +266,11 @@
       <td><pre><?=$crawlFilter['block_filter'];?></pre></td>
       <td class="actions">
         <?=$this->Html->link(__('View', true), 
-        		['controller' => 'crawl_filters', 'action' => 'view', $crawlFilter ['id']],
-        		['target' => 'layer']);
+            ['controller' => 'crawl_filters', 'action' => 'view', $crawlFilter ['id']],
+            ['target' => 'layer']);
         ?>
         <?=$this->Html->link(__('Edit', true), 
-        		['controller' => 'crawl_filters', 'action' => 'edit', $crawlFilter ['id']]); 
+            ['controller' => 'crawl_filters', 'action' => 'edit', $crawlFilter ['id']]); 
         ?>
         <?php 
         echo $this->Html->link (__('Delete', true), array (
@@ -338,8 +338,8 @@
       <td><?=$webAuthorization['password_text']; ?>&nbsp;</td>
       <td class="actions">
         <?=$this->Html->link(__('View', true), 
-        		['controller' => 'web_authorizations', 'action' => 'view', $webAuthorization ['id']],
-        		['target' => 'layer']);
+            ['controller' => 'web_authorizations', 'action' => 'view', $webAuthorization ['id']],
+            ['target' => 'layer']);
         ?>
         <?php 
           echo $this->Html->link (__('Delete', true), array (
@@ -402,8 +402,8 @@
       <td><?=$humanAction['action'];?></td>
       <td class="actions">
         <?=$this->Html->link(__('View', true), 
-        		['controller' => 'human_actions', 'action' => 'view', $humanAction ['id']],
-        		['target' => 'layer']);
+            ['controller' => 'human_actions', 'action' => 'view', $humanAction ['id']],
+            ['target' => 'layer']);
         ?>
         <?php 
         echo $this->Html->link (__('Delete', true), array (
@@ -441,41 +441,41 @@
   Begin Stop Urls
  **************************************************************-->
 <div class="related stopUrls index">
-	<h3>
+  <h3>
     <span><?php __('Stop Urls');?></span>
     <p class="m hidden">停止链接会在某个访问点被中止访问。</p>
-	</h3>
+  </h3>
   <?php if (!empty($crawl['StopUrl'])):?>
-	<table cellpadding="0" cellspacing="0">
-	<tr>
-			<th>Id</th>
-			<th>Url</th>
-			<th>Forbidden Point</th>
-			<th class="actions"><?php __('Actions');?></th>
-	</tr>
-	<?php 
-	$i = 0;
-	foreach ($crawl['StopUrl'] as $stopUrl):
-		$class = null;
-		if ($i++ % 2 == 0) {
-			$class = ' class="altrow"';
-		}
-	?>
-	<tr<?=$class;?>>
-		<td><?=$stopUrl['StopUrl']['id']; ?>&nbsp;</td>
-		<td><?=$stopUrl['StopUrl']['url']; ?>&nbsp;</td>
-		<td><?=$stopUrl['StopUrl']['forbidden_point']; ?>&nbsp;</td>
-		<td class="actions">
+  <table cellpadding="0" cellspacing="0">
+  <tr>
+      <th>Id</th>
+      <th>Url</th>
+      <th>Forbidden Point</th>
+      <th class="actions"><?php __('Actions');?></th>
+  </tr>
+  <?php 
+  $i = 0;
+  foreach ($crawl['StopUrl'] as $stopUrl):
+    $class = null;
+    if ($i++ % 2 == 0) {
+      $class = ' class="altrow"';
+    }
+  ?>
+  <tr<?=$class;?>>
+    <td><?=$stopUrl['StopUrl']['id']; ?>&nbsp;</td>
+    <td><?=$stopUrl['StopUrl']['url']; ?>&nbsp;</td>
+    <td><?=$stopUrl['StopUrl']['forbidden_point']; ?>&nbsp;</td>
+    <td class="actions">
       <?=$this->Html->link(__('View', true), 
-      		['controller' => 'stop_urls', 'action' => 'view', $stopUrl['id']],
-       		['target' => 'layer']);
+          ['controller' => 'stop_urls', 'action' => 'view', $stopUrl['id']],
+           ['target' => 'layer']);
       ?>
-			<?=$this->Html->link(__('Edit', true), ['controller' => 'stop_urls', 'action' => 'edit', $stopUrl['StopUrl']['id']]); ?>
-			<?=$this->Html->link(__('Delete', true), array('controller' => 'stop_urls', 'action' => 'delete', $stopUrl['StopUrl']['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $stopUrl['StopUrl']['id'])); ?>
-		</td>
-	</tr>
+      <?=$this->Html->link(__('Edit', true), ['controller' => 'stop_urls', 'action' => 'edit', $stopUrl['StopUrl']['id']]); ?>
+      <?=$this->Html->link(__('Delete', true), array('controller' => 'stop_urls', 'action' => 'delete', $stopUrl['StopUrl']['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $stopUrl['StopUrl']['id'])); ?>
+    </td>
+  </tr>
 <?php endforeach; ?>
-	</table>
+  </table>
 <?php endif; ?>
 
   <div class="actions">
@@ -501,37 +501,37 @@
   Begin Page Entities
  **************************************************************-->
  <div class="related pageEntities index">
-	<h3><?php __('Page Entities');?></h3>
+  <h3><?php __('Page Entities');?></h3>
   <?php if (!empty($crawl['StopUrl'])):?>
-	<table cellpadding="0" cellspacing="0">
-	<tr>
-			<th>Id</th>
-			<th>Name</th>
-			<th class="actions"><?php __('Actions');?></th>
-	</tr>
-	<?php 
-	$i = 0;
-	foreach ($crawl['PageEntity'] as $pageEntity):
-		$class = null;
-		if ($i++ % 2 == 0) {
-			$class = ' class="altrow"';
-		}
-	?>
-	<tr<?=$class;?>>
-		<td><?=$pageEntity['id']; ?>&nbsp;</td>
-		<td><?=$pageEntity['name']; ?>&nbsp;</td>
-		<td class="actions">
-      <?=$this->Html->link(__('View', true), 
-      		['controller' => 'page_entities', 'action' => 'view', $pageEntity['id']],
-       		['target' => 'layer']);
+  <table cellpadding="0" cellspacing="0">
+  <tr>
+      <th>Id</th>
+      <th>Name</th>
+      <th class="actions"><?php __('Actions');?></th>
+  </tr>
+  <?php 
+  $i = 0;
+  foreach ($crawl['PageEntity'] as $pageEntity):
+    $class = null;
+    if ($i++ % 2 == 0) {
+      $class = ' class="altrow"';
+    }
+  ?>
+  <tr<?=$class;?>>
+    <td><?=$pageEntity['id']; ?>&nbsp;</td>
+    <td><?=$pageEntity['name']; ?>&nbsp;</td>
+    <td class="actions">
+      <?=$this->Html->link(__('View', true),
+          ['controller' => 'page_entities', 'action' => 'view', $pageEntity['id']],
+          ['target' => 'layer']);
       ?>
-			<?=$this->Html->link(__('Edit', true), array('controller' => 'page_entities', 'action' => 'edit', $pageEntity['id'])); ?>
-			<?=$this->Html->link(__('Delete', true), array('controller' => 'page_entities', 'action' => 'delete', $pageEntity['id']),
-						null, sprintf(__('Are you sure you want to delete # %s?', true), $pageEntity['id'])); ?>
-		</td>
-	</tr>
+      <?=$this->Html->link(__('Edit', true), array('controller' => 'page_entities', 'action' => 'edit', $pageEntity['id'])); ?>
+      <?=$this->Html->link(__('Delete', true), array('controller' => 'page_entities', 'action' => 'delete', $pageEntity['id']),
+            null, sprintf(__('Are you sure you want to delete # %s?', true), $pageEntity['id'])); ?>
+    </td>
+  </tr>
 <?php endforeach; ?>
-	</table>
+  </table>
 <?php endif; ?>
 
   <div class="actions">

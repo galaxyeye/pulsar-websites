@@ -57,9 +57,17 @@ class DashboardsController extends AppController {
 		$this->Session->setFlash(__('Dashboard was not deleted', true));
 		$this->redirect(array('action' => 'index'));
 	}
+
 	function admin_index() {
-		$this->Dashboard->recursive = 0;
-		$this->set('dashboards', $this->paginate());
+    $this->loadModel("Crawl");
+    $this->Crawl->recursive = -1;
+    $crawls = $this->Crawl->find('all', ['limit' => 15, 'order' => 'Crawl.id DESC']);
+
+    $this->loadModel("PageEntity");
+    $this->PageEntity->recursive = -1;
+    $pageEntities = $this->PageEntity->find('all', ['limit' => 15, 'order' => 'PageEntity.id DESC']);
+
+    $this->set(compact('crawls', 'pageEntities'));
 	}
 
 	function admin_view($id = null) {

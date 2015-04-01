@@ -2,8 +2,18 @@
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>Nutch UI</title>
+  <title>齐物数据引擎 - 格物，齐物，用物</title>
   <?php echo $this->element('css', array('css' => array('default'))); ?>
+  <?php echo $this->element('css', array('css' => array('jquery/jquery-ui-1.11.3/jquery-ui'))); ?>
+
+  <script type="text/javascript">
+    var globalPageData = {
+      "webroot" : "<?php echo $this->Html->webroot?>",
+      "controller" : "<?php echo $this->params['controller']?>",
+      "action" : "<?php echo $this->params['action']?>",
+      "here" : "<?php echo $this->here ?>"
+    };
+  </script>
 </head>
 
 <body id="<?php echo Inflector::variable($this->params['controller']).Inflector::classify($this->params['action']) ?>">
@@ -11,39 +21,33 @@
 
   <div id="nav">
     <h1 class="logo">
-      <a href="<?php echo Router::url('/') ?>" title="Nutch UI">Nutch UI</a>
+      <a href="<?php echo Router::url('/admin') ?>" title="Nutch UI">Nutch UI</a>
     </h1>
     <div class="user"><?php echo $currentUser['name'] ?></div>
     <ul id="menu" class="clearfix">
       <li class="item">
-        <a href="<?php echo Router::url('/dashboards') ?>">dashboard</a>
-      </li>
-      <li class="item2">
-        <a href="<?php echo Router::url('/statistics') ?>">statistics</a>
+        <a href="<?php echo Router::url('/admin') ?>">Dashboard</a>
       </li>
       <li class="item3">
-        <a href="<?php echo Router::url('/instances') ?>">instances</a>
+        <a href="<?php echo Router::url('/admin/crawls') ?>">Crawls</a>
       </li>
-      <li class="item4">
-        <a href="<?php echo Router::url('/settings') ?>">settings</a>
+      <li class="item2">
+        <a href="<?php echo Router::url('/admin/page_entities') ?>">Page Entities</a>
       </li>
-      <li class="item5">
-        <a href="<?php echo Router::url('/crawls') ?>">crawls</a>
+      <li class="item2">
+        <a href="<?php echo Router::url('/admin/ontologies') ?>">Ontologies</a>
       </li>
-      <li class="item6">
-        <a href="<?php echo Router::url('/schedulings') ?>">scheduling</a>
+      <li class="item2">
+        <a href="<?php echo Router::url('/admin/products') ?>">Products</a>
       </li>
-      <li class="item7">
-        <a href="<?php echo Router::url('/searches') ?>">search</a>
-      </li>
-      <li class="item8">
-        <a href="<?php echo Router::url('/seedLists') ?>">seedLists</a>
+      <li class="item2">
+        <a href="<?php echo Router::url('/admin/jobs') ?>">Jobs</a>
       </li>
       <li class="lgo">
-        <a href="<?php echo Router::url('/users/logout') ?>" class="lbOn" title="Logout!">退出</a>
+        <a href="<?php echo Router::url('/admin/users/logout') ?>">Logout</a>
       </li>
     </ul>
-  </div><!--nav-->
+  </div><!-- nav -->
 
   <div id="stage">
     <?php echo $this->Session->flash(); ?>

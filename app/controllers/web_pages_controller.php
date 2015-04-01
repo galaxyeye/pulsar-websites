@@ -320,6 +320,9 @@ class WebPagesController extends AppController {
   	$executor = new \Nutch\RemoteCmdExecutor();
   	$webPages = $executor->queryByCrawlFilter($crawl, $fields, $limit);
     $webPages = json_decode($webPages, true, 10);
+    if (!is_array($webPages['values'])) {
+    	$webPages['values'] = [];
+    }
 
     return $webPages['values'];
   }

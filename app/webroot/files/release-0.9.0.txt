@@ -8,7 +8,7 @@
 本次发布给出了整个产品线主要架构，以此作为团队沟通和协作的基础。高级别功能将会在此基础上逐步加入。
 
 网站：qiwur.com
-用户名：http://qiwur.com/files/accounts 任选
+用户名：从http://qiwur.com/files/accounts中任选
 密码：abc123
 
 --------------
