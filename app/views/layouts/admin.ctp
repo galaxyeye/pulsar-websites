@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>齐物数据引擎 - 格物，齐物，用物</title>
+  <title>齐物数据引擎 - 格物，齐物，用物 - 管理员视图</title>
   <?php echo $this->element('css', array('css' => array('default'))); ?>
   <?php echo $this->element('css', array('css' => array('jquery/jquery-ui-1.11.3/jquery-ui'))); ?>
 
