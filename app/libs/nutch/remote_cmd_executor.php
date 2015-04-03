@@ -29,28 +29,28 @@ class RemoteCmdExecutor extends \Object {
 	function executeRemoteJob($crawl, $jobType) {
 		$cmdBuilder = new RemoteCmdBuilder($crawl);
 
-		if ($jobType == RemoteCmdBuilder::$JobType['INJECT']) {
+		if ($jobType == JobType::INJECT) {
 			$command = $cmdBuilder->createInjectCommand();
 		}
-		else if ($jobType == RemoteCmdBuilder::$JobType['GENERATE']) {
+		else if ($jobType == JobType::GENERATE) {
 			$command = $cmdBuilder->createGenerateCommand();
 		}
-		else if ($jobType == RemoteCmdBuilder::$JobType['FETCH']) {
+		else if ($jobType == JobType::FETCH) {
 			$command = $cmdBuilder->createFetchCommand();
 		}
-		else if ($jobType == RemoteCmdBuilder::$JobType['PARSE']) {
+		else if ($jobType == JobType::PARSE) {
 			$command = $cmdBuilder->createParseCommand();
 		}
-		else if ($jobType == RemoteCmdBuilder::$JobType['UPDATEDB']) {
+		else if ($jobType == JobType::UPDATEDB) {
 			$command = $cmdBuilder->createUpdateDbCommand();
 		}
-		else if ($jobType == RemoteCmdBuilder::$JobType['INDEX']) {
+		else if ($jobType == JobType::INDEX) {
 			$command = $cmdBuilder->createIndexCommand();
 		}
-		else if ($jobType == RemoteCmdBuilder::$JobType['PARSECHECKER']) {
+		else if ($jobType == JobType::PARSECHECKER) {
 			$command = $cmdBuilder->createParseCheckerCommand();
 		}
-		else if ($jobType == RemoteCmdBuilder::$JobType['EXTRACT']) {
+		else if ($jobType == JobType::EXTRACT) {
 			$command = $cmdBuilder->createExtractCommand();
 		}
 		else {

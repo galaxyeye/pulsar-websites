@@ -8,6 +8,9 @@ App::import('Lib', [
   'nutch/remote_cmd_executor']
 );
 
+use \Nutch\JobState;
+use \Nutch\JobType;
+
 class NutchJobManagerComponent extends Object {
 
   public static $JOB_INTERVAL = 15; // 15s
@@ -15,18 +18,12 @@ class NutchJobManagerComponent extends Object {
   private $controller;
   private $remoteCmdExecutor;
 
-  private static $JobType;
-  private static $JobState;
-
   public function startup(&$controller) {
     $this->controller = &$controller;
 
     $this->_loadNutchJob();
 
     $this->remoteCmdExecutor = new \Nutch\RemoteCmdExecutor();
-
-    self::$JobType = \Nutch\RemoteCmdBuilder::$JobType;
-    self::$JobState = \Nutch\JobInfo::$State;
   }
 
   public function createNutchConfig($crawl, $configId = null, $priority = "minor") {
@@ -37,6 +34,7 @@ class NutchJobManagerComponent extends Object {
     // use specified config id
     if (!empty($configId)) {
     	$crawl['Crawl']['configId'] = $configId;
+    	$this->log('User defined configId '.$configId, 'info');
     }
 
     $configId = $crawl['Crawl']['configId'];
@@ -109,7 +107,7 @@ class NutchJobManagerComponent extends Object {
       return;
     }
 
-    return $this->createNutchJob($crawl, self::$JobType['INJECT']);
+    return $this->createNutchJob($crawl, JobType::INJECT);
   }
 
   public function runParseChecker($crawl) {
@@ -122,7 +120,7 @@ class NutchJobManagerComponent extends Object {
       return;
     }
 
-    $jobType = \Nutch\RemoteCmdBuilder::$JobType['PARSECHECKER'];
+    $jobType = JobType::PARSECHECKER;
     $jobId = $this->createNutchJob($crawl, $jobType);
 
     $this->log("Run parse checker, job id : $jobId", 'info');
@@ -152,7 +150,7 @@ class NutchJobManagerComponent extends Object {
   	// Record the submission result
   	$data = [
   			'round' => $round,
-  			'configId' => $configId,
+  			'confId' => $configId,
   			'batchId' => $batchId,
   			'jobId' => $jobId,
   			'type' => $jobType,
@@ -251,27 +249,40 @@ class NutchJobManagerComponent extends Object {
   	$type = $nutchJob['NutchJob']['type'];
   	$state = $nutchJob['NutchJob']['state'];
   	$round = $nutchJob['NutchJob']['round'];
+
+  	$fetchedPages = $nutchJob['Crawl']['fetched_pages'];
+  	$crawlState = $nutchJob['Crawl']['state'];
   	$maxRound = $nutchJob['Crawl']['rounds'];
+  	$maxPages = $nutchJob['Crawl']['limit'];
 
   	// Adjust data structure for consistency
   	$nutchJob['CrawlFilter'] = $nutchJob['Crawl']['CrawlFilter'];
 
   	global $jobChangeMap;
   	$circular = in_array($type, array_values($jobChangeMap));
-  	$schedulable = $state == self::$JobState['FINISHED'] || $state == self::$JobState['NOT_FOUND'];
-  	$schedulable = $schedulable && $nutchJob['Crawl']['state'] == 'RUNNING';
+  	// TODO : use enum
+  	$schedulable = $state == JobState::FINISHED || $state == JobState::NOT_FOUND;
+  	$schedulable = $schedulable && ($crawlState == 'RUNNING');
   	if ($circular) {
   		// Must not update job info while the job is under scheduling
   		if ($schedulable) {
   			$this->_scheduleNextJob($nutchJob);
   		}
-  		else {
+
+  		// When the current job is finished, no need to query it's information
+  		if (!$schedulable && $crawlState != 'FINISHED') {
   			$this->_updateJobInfo($nutchJob);
   		}
 
   		// Complete all jobs belongs to this crawl
   		if ($round > $maxRound) {
   			$this->_completeAllJobs($id, $crawl_id);
+  			$this->log("All rounds done. Crawl #$crawl_id", 'info');
+  		}
+
+  		if ($fetchedPages > $maxPages) {
+  			$this->_completeAllJobs($id, $crawl_id);
+  			$this->log("All pages done. Crawl #$crawl_id", 'info');
   		}
   	}
 
@@ -281,7 +292,7 @@ class NutchJobManagerComponent extends Object {
   	}
 
   	// handle failed jobs
-  	if ($state == self::$JobState['FAILED']) {
+  	if ($state == JobState::FAILED) {
   		$this->_handleFailedJob($nutchJob);
   	}
   }
@@ -308,6 +319,7 @@ class NutchJobManagerComponent extends Object {
   	}
 
   	global $jobChangeMap;
+
   	// execute the next job inside a crawl round
   	if (key_exists($currentJobType, $jobChangeMap)) {
   		$nextJobType = $jobChangeMap[$currentJobType];
@@ -322,7 +334,7 @@ class NutchJobManagerComponent extends Object {
 
   		// The next round
   		// Generate batchId for the next job
-  		if ($nextJobType == self::$JobType['GENERATE']) {
+  		if ($nextJobType == \Nutch\JobType::GENERATE) {
   			$batchId = '-'.$round.'-'.$user_id.'-'.$crawl_id.'-'.date('Ymd-His');
   		  $round += 1;
   		}
@@ -340,7 +352,7 @@ class NutchJobManagerComponent extends Object {
   private function _handleFailedJob($nutchJob) {
   	$this->NutchJob->id = $nutchJob['NutchJob']['id'];
 
-  	if (!$this->NutchJob->saveField('state', self::$JobState['FAILED_COMPLETED'])) {
+  	if (!$this->NutchJob->saveField('state', JobState::FAILED_COMPLETED)) {
   		$this->log("Failed to update nutch job  #$id");
   	}
   }
@@ -397,10 +409,10 @@ class NutchJobManagerComponent extends Object {
 
     // $this->log('-----------update job info------------', 'debug');
 
-    // TODO : use status array?
+    // TODO : use status enum?
     if (!$force) {
-    	$COMPLETED = self::$JobState['COMPLETED'];
-    	$FAILED_COMPLETED = self::$JobState['FAILED_COMPLETED'];
+    	$COMPLETED = JobState::COMPLETED;
+    	$FAILED_COMPLETED = JobState::FAILED_COMPLETED;
 
 	    if ($state == $COMPLETED || $state == $FAILED_COMPLETED) {
 	    	$this->log("Ignore state COMPLETED and FAILED_COMPLETED");
@@ -439,7 +451,7 @@ class NutchJobManagerComponent extends Object {
    * @param $jobInfo 
    * */
   private function _getFetchCount($jobInfo) {
-  	if ($jobInfo['type'] != self::$JobType['FETCH']) {
+  	if ($jobInfo['type'] != JobType::FETCH) {
   		return 0;
   	}
 

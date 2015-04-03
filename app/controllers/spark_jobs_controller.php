@@ -64,5 +64,19 @@ class SparkJobsController extends AppController {
 		$this->Session->setFlash(__('Spark job was not deleted', true));
 		$this->redirect(array('action' => 'index'));
 	}
+
+	function admin_index() {
+		$this->SparkJob->recursive = 0;
+		$this->set('sparkJobs', $this->paginate());
+	}
+	
+	function admin_view($id = null) {
+		if (!$id) {
+			$this->Session->setFlash(__('Invalid spark job', true));
+			$this->redirect(array('action' => 'index'));
+		}
+		$this->set('sparkJob', $this->SparkJob->read(null, $id));
+	}
+	
 }
 ?>

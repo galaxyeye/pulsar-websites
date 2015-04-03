@@ -6,6 +6,8 @@ App::import('Lib', array(
   'scent/remote_cmd_executor')
 );
 
+use \Scent\JobType;
+
 class ScentJobManagerComponent extends Object {
 
   private $controller;
@@ -50,7 +52,7 @@ class ScentJobManagerComponent extends Object {
   public function ruledExtract($pageEntity, $limit = 1000) {
     $this->_validate($pageEntity);
 
-    $jobType = \Scent\RemoteCmdBuilder::$JobType['RULEDEXTRACT'];
+    $jobType = JobType::RULEDEXTRACT;
 
     $pageEntity['PageEntity']['limit'] = $limit;
     $jobId = $this->remoteCmdExecutor->executeRemoteJob($pageEntity, $jobType);
@@ -79,7 +81,7 @@ class ScentJobManagerComponent extends Object {
   public function segment($pageEntity, $limit = 1000) {
   	$this->_validate($pageEntity);
 
-  	$jobType = \Scent\RemoteCmdBuilder::$JobType['SEGMENT'];
+  	$jobType = JobType::SEGMENT;
 
   	$pageEntity['PageEntity']['limit'] = $limit;
   	$jobId = $this->remoteCmdExecutor->executeRemoteJob($pageEntity, $jobType);

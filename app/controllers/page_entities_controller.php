@@ -5,6 +5,8 @@ class PageEntitiesController extends AppController {
 
   public $components = array('ScentJobManager');
 
+  var $paginate = ['PageEntity' => ['limit'=> 500, 'order' => 'PageEntity.id DESC']];
+
   function index() {
     $this->paginate['PageEntity'] = array('limit'=> 500, 'order' => 'PageEntity.id DESC');
 
@@ -331,23 +333,30 @@ class PageEntitiesController extends AppController {
   }
 
   function admin_edit($id = null) {
-    if (!$id && empty($this->data)) {
-      $this->Session->setFlash(__('Invalid page entity', true));
-      $this->redirect(array('action' => 'index'));
-    }
-    if (!empty($this->data)) {
-      if ($this->PageEntity->save($this->data)) {
-        $this->Session->setFlash(__('The page entity has been saved', true));
-        $this->redirect(array('action' => 'index'));
-      } else {
-        $this->Session->setFlash(__('The page entity could not be saved. Please, try again.', true));
-      }
-    }
-    if (empty($this->data)) {
-      $this->data = $this->PageEntity->read(null, $id);
-    }
-    $pageEntities = $this->PageEntity->PageEntity->find('list');
-    $this->set(compact('pageEntities'));
+  	if (!$id && empty($this->data)) {
+  		$this->Session->setFlash(__('Invalid page entity', true));
+  		$this->redirect(array('action' => 'index'));
+  	}
+
+  	if (!empty($this->data)) {
+  		$this->_validateId($id);
+
+  		$this->data = $this->_tidyFilters($this->data);
+  		if ($this->PageEntity->save($this->data)) {
+  			$this->Session->setFlash(__('The page entity has been saved', true));
+  			$this->redirect(array('action' => 'view', $this->PageEntity->id));
+  		} else {
+  			$this->Session->setFlash(__('The page entity could not be saved. Please, try again.', true));
+  		}
+  	}
+  
+  	if (empty($this->data)) {
+  		$this->_validateId($id);
+  		$this->data = $this->PageEntity->read(null, $id);
+  
+  		// TODO : we'd really need bind page_entity to a crawl
+  		$this->_setCrawlFilterInfo();
+  	}
   }
 
   function admin_delete($id = null) {

@@ -9,7 +9,7 @@ class SimpleCrawler extends Object {
  		'DIRECTORY' => 'DIRECTORY',
 	];
 
-	var $localDir = "/tmp/simple_crawler";
+	var $cacheDir = "/tmp/simple_crawler";
 	var $limit = 50;
 	var $maxUrlLength = 1000;
 
@@ -50,8 +50,8 @@ class SimpleCrawler extends Object {
 			}
 		}
 
-		if (!file_exists($this->localDir)) {
-			@mkdir($this->localDir);
+		if (!file_exists($this->cacheDir)) {
+			@mkdir($this->cacheDir);
 		}
 
 		$fetchList = $this->_doCrawl($url, $depth);
@@ -103,14 +103,14 @@ class SimpleCrawler extends Object {
 	  $this->seen[$url] = true;
 
 	  $dom = new DOMDocument('1.0');
-	  $cacheFile = $this->localDir.DS.md5($url).".html";
+	  $cacheFile = $this->cacheDir.DS.md5($url).".html";
 	  if (file_exists($cacheFile)) {
 	  	@$dom->loadHTMLFile($cacheFile);
 	  }
 	  else {
 	  	@$dom->loadHTMLFile($url);
 
-	  	if (file_exists($this->localDir)) {
+	  	if (file_exists($this->cacheDir)) {
 	  		$dom->save($cacheFile);
 	  	}
 	  }

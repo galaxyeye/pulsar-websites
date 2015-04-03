@@ -3,25 +3,28 @@ namespace Scent;
 
 \App::import('Lib', array('scent/job_config', 'scent/scent_config', 'scent/remote_command'));
 
-class RemoteCmdBuilder {
-  public static $JobType = array (
-      "SEGMENT" => "SEGMENT",
-      "AUTOEXTRACT" => "AUTOEXTRACT",
-      "RULEDEXTRACT" => "RULEDEXTRACT",
-      "BUILD" => "BUILD",
-      "CLASS" => "CLASS"
-  );
+class JobType {
+  const __default = self::CLASS;
+  const SEGMENT = 'SEGMENT';
+  const AUTOEXTRACT = 'AUTOEXTRACT';
+  const RULEDEXTRACT = 'RULEDEXTRACT';
+  const BUILD = 'BUILD';
+  const CLAZZ = 'CLASS';
+}
 
-  public static $State = array (
-      "IDLE",
-      "RUNNING",
-      "FINISHED",
-      "FAILED",
-      "KILLED",
-      "STOPPING",
-      "KILLING",
-      "ANY"
-  );
+class JobState {
+  const __default = self::IDLE;
+  const IDLE = 'IDLE';
+  const RUNNING = 'RUNNING';
+  const FINISHED = 'FINISHED';
+  const FAILED = 'FAILED';
+  const KILLED = 'KILLED';
+  const STOPPING = 'STOPPING';
+  const KILLING = 'KILLING';
+  const ANY = 'ANY';
+}
+
+class RemoteCmdBuilder {
 
   private $p;
 
@@ -53,8 +56,8 @@ class RemoteCmdBuilder {
     $textFilter = $p['text_filter'];
 
     $params = array(
-    		URLFILTER_REGEX_RULES => $urlFilter,
-    		CONTENTFILTER_CONTENT_RULES => $textFilter
+        URLFILTER_REGEX_RULES => $urlFilter,
+        CONTENTFILTER_CONTENT_RULES => $textFilter
     );
     $configId = $p['user_id'].'-'.$p['id'].'-'.date("md-his");
     $scentConfig = new ScentConfig($configId, $params);
@@ -82,14 +85,14 @@ class RemoteCmdBuilder {
     // set arguments
 
     return $this->createCommand(
-        $p['crawlId'], self::$JobType['SEGMENT'], $p['batchId'], $p['configId']);
+        $p['crawlId'], JobType::SEGMENT, $p['batchId'], $p['configId']);
   }
 
   public function createAutoExtractCommand() {
     $p = $this->pageEntity['PageEntity'];
 
     return $this->createCommand(
-        $p['crawlId'], self::$JobType['EXTRACT'], $p['batchId'], $p['configId']);
+        $p['crawlId'], JobType::EXTRACT, $p['batchId'], $p['configId']);
   }
 
   public function createRuledExtractCommand() {
@@ -99,7 +102,7 @@ class RemoteCmdBuilder {
     $limit = 10000;
     if (!empty($p['limit'])) $limit = $p['limit'];
 
-    $jobConfig = new JobConfig($p['crawlId'], self::$JobType['RULEDEXTRACT'], $p['configId']);
+    $jobConfig = new JobConfig($p['crawlId'], JobType::RULEDEXTRACT, $p['configId']);
     $jobConfig->setArgument("-regex", $urlFilter[0]);
     $jobConfig->setArgument("-limit", $limit);
     $jobConfig->setArgument("-rules", '[base64]'.base64_encode($p['extract_rules']));
@@ -115,7 +118,7 @@ class RemoteCmdBuilder {
     $p = $this->pageEntity['PageEntity'];
 
     return $this->createCommand(
-        $p['crawlId'], self::$JobType['BUILD'], $p['batchId'], $p['configId']);
+        $p['crawlId'], JobType::BUILD, $p['batchId'], $p['configId']);
   }
 
   private function createCommand($pId, $jobType, $batchId, $configId) {

@@ -1,20 +1,22 @@
 <?php 
 
+class CrawlState {
+	const __default = self::IDLE;
+	const IDLE = 'IDLE';
+	const CREATED = 'CREATED';
+	const RUNNING = 'RUNNING';
+	const PAUSED = 'PAUSED';
+	const STOPPED = 'STOPPED';
+	const COMPLETED = 'COMPLETED';
+}
+
 class CrawlsController extends AppController {
 
   public $name = 'Crawls';
 
-  public static $state = [
-      'CREATED' => 'CREATED',
-      'RUNNING' => 'RUNNING',
-      'PAUSED' => 'PAUSED',
-      'STOPPED' => 'STOPPED',
-      'COMPLETED' => 'COMPLETED'
-  ];
+  var $paginate = ['Crawl' => ['limit'=> 500, 'order' => 'Crawl.id DESC']];
 
   function index() {
-    $this->paginate['Crawl'] = ['limit'=> 500, 'order' => 'Crawl.id DESC'];
-
     $this->Crawl->recursive = 0;
     $this->set('crawls', $this->paginate(['Crawl.user_id' => $this->currentUser['id']]));
   }
@@ -454,7 +456,7 @@ class CrawlsController extends AppController {
       }
 
       // Update state
-      $this->_updateState($id, self::$state['RUNNING']);
+      $this->_updateState($id, CrawlState::RUNNING);
 
       if (isset($this->data['Ui']['analysis'])) {
         $this->redirect(array('action' => 'analysis', 'stepNo' => '4', 'crawl_id' => $id));
@@ -477,7 +479,7 @@ class CrawlsController extends AppController {
     }
 
     $this->_pauseNutchJobs($id);
-    $this->_updateState($id, self::$state['PAUSED']);
+    $this->_updateState($id, CrawlState::PAUSED);
 
     $this->redirect2View($id, __("Paused crawl #$id", true));
   }
@@ -488,7 +490,7 @@ class CrawlsController extends AppController {
   	}
 
     $this->_resumeNutchJobs($id);
-  	$this->_updateState($id, self::$state['RUNNING']);
+  	$this->_updateState($id, CrawlState::RUNNING);
 
   	$this->redirect2View($id, __("Resumed crawl #$id", true));
   }
@@ -499,7 +501,7 @@ class CrawlsController extends AppController {
     }
 
     $this->_stopNutchJobs($id);
-    $this->_updateState($id, self::$state['STOPPED']);
+    $this->_updateState($id, CrawlState::STOPPED);
 
     $this->redirect2View($id, __("Stopped crawl #".$id, true));
   }
@@ -517,7 +519,7 @@ class CrawlsController extends AppController {
         'configId' => null,
         'jobId' => null,
         'seedDirectory' => '',
-        'state' => self::$state['CREATED']
+        'state' => CrawlState::CREATED
     ));
 
     $this->Crawl->id = $id;
@@ -775,14 +777,6 @@ class CrawlsController extends AppController {
    * TODO : This may running into a race condition with job scheduling module
    * */
   private function _stopNutchJobs($crawl_id) {
-  	// Mark all UI side NutchJob instance as COMPLETED
-    $db =& ConnectionManager::getDataSource('default');
-  	$sql = "UPDATE `nutch_jobs` SET `state`='COMPLETED'"
-        ." WHERE `crawl_id`=$crawl_id"
-        ." AND `type` IN ('INJECT', 'GENERATE', 'FETCH', 'PARSE', 'UPDATEDB')"
-        ." AND `state` IN ('CREATED', 'RUNNING', 'NOT_FOUND', 'FINISHED');";
-    $db->execute($sql);
-
     // Issue stop command to the Nutch Server, only FETCH job should be stopped
     $this->Crawl->NutchJob->recursive = -1;
     $nutchJob = $this->Crawl->NutchJob->find('first',
@@ -798,6 +792,14 @@ class CrawlsController extends AppController {
     if (!empty($nutchJob)) {
     	$this->_stopNutchServerJob($nutchJob['NutchJob']['jobId']);
     }
+
+    // Mark all UI side NutchJob instance as COMPLETED
+    $db =& ConnectionManager::getDataSource('default');
+    $sql = "UPDATE `nutch_jobs` SET `state`='COMPLETED'"
+    		." WHERE `crawl_id`=$crawl_id"
+    		." AND `type` IN ('INJECT', 'GENERATE', 'FETCH', 'PARSE', 'UPDATEDB')"
+        ." AND `state` IN ('CREATED', 'RUNNING', 'NOT_FOUND', 'FINISHED');";
+    $db->execute($sql);
   }
 
   private function _pauseNutchJobs($crawl_id) {

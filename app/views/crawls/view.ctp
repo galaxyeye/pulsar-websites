@@ -46,6 +46,11 @@
       <?=$crawl['Crawl']['limit']; ?>
       &nbsp;
     </dd>
+    <dt <?php if ($i % 2 == 0) echo $class;?>><?php __('Max Url Length'); ?></dt>
+    <dd <?php if ($i++ % 2 == 0) echo $class;?>>
+      <?=$crawl['Crawl']['max_url_length']; ?>
+      &nbsp;
+    </dd>
     <dt <?php if ($i % 2 == 0) echo $class;?>><?php __('State'); ?></dt>
     <dd <?php if ($i++ % 2 == 0) echo $class;?>>
       <?=$crawl['Crawl']['state']; ?>

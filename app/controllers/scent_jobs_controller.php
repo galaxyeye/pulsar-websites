@@ -5,6 +5,8 @@ class ScentJobsController extends AppController {
 
   var $name = 'ScentJobs';
 
+  var $paginate = ['ScentJob' => ['limit'=> 500, 'order' => 'ScentJob.id DESC']];
+
   function index() {
     $this->paginate['ScentJob'] = array('limit'=> 500, 'order' => 'ScentJob.id DESC');
     $this->ScentJob->recursive = 0;
@@ -149,5 +151,21 @@ class ScentJobsController extends AppController {
     $content = file_get_contents($file);
 
     return $content;
+  }
+  
+
+  function admin_index() {
+  	$this->paginate['ScentJob'] = array('limit'=> 500, 'order' => 'ScentJob.id DESC');
+  	$this->ScentJob->recursive = 0;
+  	$this->set('scentJobs', $this->paginate());
+  }
+
+  function admin_view($id = null) {
+  	if (!$id) {
+  		$this->Session->setFlash(__('Invalid id', true));
+  		$this->redirect(array('action' => 'index'));
+  	}
+
+  	$this->set('scentJob', $this->ScentJob->read(null, $id));
   }
 }

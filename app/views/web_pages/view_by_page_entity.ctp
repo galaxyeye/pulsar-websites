@@ -61,7 +61,7 @@
           &nbsp;
         </dd>
       </dl>
-			<button type='button' class='start-extract-rule'>开始制定挖掘规则</button>
+      <button type='button' class='start-extract-rule'>开始制定挖掘规则</button>
     </div><!-- info-box -->
 
     <div class='webPages view css-path-collector qiwur-hidden'>
@@ -70,30 +70,35 @@
           <input class="dropper-dropzone" multiple="" type="text" value="字段名：将需要抽取的字段名拖拽到这里" />
         </div>
       </form>
-			<br />
+      <br />
       <form action="#" class='extract-field-value'>
         <div class="dropped dropper" title="字段值：将需要抽取的字段值拖拽到这里">
           <input class="dropper-dropzone" multiple="" type="text" value="字段值：将需要抽取的字段值拖拽到这里" />
         </div>
       </form>
-			<br />
-			<div class="text input required qiwur-hidden">
-				<label for="entityName">实体名称</label>
-	      <input id="entityName" class="entity" value="<?php echo $pageEntity['PageEntity']['name']?>">
+      <br />
+      <div class="text input required qiwur-hidden">
+        <label for="entityName">实体名称</label>
+        <input id="entityName" class="entity" value="<?php echo $pageEntity['PageEntity']['name']?>">
       </div>
-			<br />
-			<p class='dropper-message'></p>
+      <br />
+      <p class='dropper-message'></p>
 
-			<div id="pageEntityFields" class="webPages view"></div>
-			<br />
-			<button type='button' class='analysis-extract-rule'>智能分析规则</button>
-			<button type='button' class='save-extract-rule'>保存挖掘规则</button>
-			<button type='button' class='clear-extract-rule'>清除挖掘规则</button>
+      <div class="webPages view">
+        <span>当前元素：</span><span class="current-selector">（点击页面选择）</span>
+      </div>
+      <div id="pageEntityFields" class="webPages view"></div>
+      <br />
+      <button type='button' class='analysis-extract-rule'>智能分析规则</button>
+      <button type='button' class='save-extract-rule'>保存挖掘规则</button>
+      <button type='button' class='clear-extract-rule'>清除挖掘规则</button>
+      <button type='button' class='hide-selected-ele'>隐藏当前元素</button>
+      <button type='button' class='start-ruled-extract'>开始挖掘</button>
     </div> <!-- css-path-collector -->
 
     <?php 
-    	$pageEntityId = $pageEntity['PageEntity']['id'];
-    	$encodedUrl = symmetric_encode($webPage['WebPage']['url']);
+      $pageEntityId = $pageEntity['PageEntity']['id'];
+      $encodedUrl = symmetric_encode($webPage['WebPage']['url']);
     ?>
 
     <div class="actions">
@@ -105,10 +110,10 @@
       </ul>
       <ul>
         <li><?php echo $this->Html->link(__('查看（原始样式）', true), 
-        		array('action' => 'view', $encodedUrl, 'page_entity_id' => $pageEntityId)); ?> </li>
+            array('action' => 'view', $encodedUrl, 'page_entity_id' => $pageEntityId)); ?> </li>
         <li><?php echo $this->Html->link(__('查看（简洁样式）', true), 
-        		array('action' => 'view', $encodedUrl, 'page_entity_id' => $pageEntityId, 
-        				'options' => 'simpleCss')); ?> </li>
+            array('action' => 'view', $encodedUrl, 'page_entity_id' => $pageEntityId, 
+                'options' => 'simpleCss')); ?> </li>
       </ul>
     </div><!-- actions -->
   </div><!-- systemPanel -->
@@ -119,25 +124,26 @@
     ?>
   </div>
 
-	<script type="text/javascript">
-	<!--
-		var globalPageData = {
-		  "webroot" : "<?php echo $this->Html->webroot?>",
-		  "controller" : "<?php echo $this->params['controller']?>",
-		  "action" : "<?php echo $this->params['action']?>",
-		  "here" : "<?php echo $this->here ?>"
-		};
+  <script type="text/javascript">
+  <!--
+    var globalPageData = {
+      "webroot" : "<?php echo $this->Html->webroot?>",
+      "controller" : "<?php echo $this->params['controller']?>",
+      "action" : "<?php echo $this->params['action']?>",
+      "here" : "<?php echo $this->here ?>"
+    };
 
-		var pageEntity = <?php echo json_encode($pageEntity) ?>;
-	//-->
-	</script>
-	<script type="text/javascript" src="/js/jquery/jquery-1.11.2.js"></script>
-	<script type="text/javascript" src="/js/jquery/jquery-ui-1.11.3/jquery-ui.js"></script>
-	<script type="text/javascript" src="/js/jquery/jsrender.js"></script>
-	<script type="text/javascript" src="/js/common.js"></script>
-	<script type="text/javascript" src="/js/dump.js"></script>
-	<script type="text/javascript" src="/js/layer-v1.8.5/layer/layer.min.js"></script>
-	<script type="text/javascript" src="/js/web_pages/viewByPageEntity.js"></script>
+    var pageEntity = <?php echo json_encode($pageEntity) ?>;
+  //-->
+  </script>
+  <script type="text/javascript" src="/js/jquery/jquery-1.11.2.js"></script>
+  <script type="text/javascript" src="/js/jquery/jquery-ui-1.11.3/jquery-ui.js"></script>
+  <script type="text/javascript" src="/js/jquery/jsrender.js"></script>
+  <script type="text/javascript" src="/js/jquery/selectorator.min.js"></script>
+  <script type="text/javascript" src="/js/common.js"></script>
+  <script type="text/javascript" src="/js/dump.js"></script>
+  <script type="text/javascript" src="/js/layer-v1.8.5/layer/layer.min.js"></script>
+  <script type="text/javascript" src="/js/web_pages/viewByPageEntity.js"></script>
 
 </body>
 </html>

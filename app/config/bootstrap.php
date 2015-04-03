@@ -104,6 +104,7 @@
 	define('OPEN_SMS', false);
 
 	// NUTCH config
+//	define('NUTCH_SERVER', "http://master:8081");
 	define('NUTCH_SERVER', "http://localhost:8081");
 	define('QIWU_UI_CRAWL_ID', "qiwu.ui.crawl.id");
 	define('URLFILTER_REGEX_RULES', "urlfilter.regex.rules");
@@ -117,6 +118,8 @@
 	// SCENT specified constants
 	define('SCENT_SERVER', "http://localhost:8181");
 	define('CONTENTFILTER_CONTENT_RULES', "contentfilter.content.rules");
+
+	define('DEBUG_HTTP_CLIENT', false);
 
 	require('global.php');
 

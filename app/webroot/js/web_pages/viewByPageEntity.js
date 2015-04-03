@@ -69,6 +69,12 @@ $(document).ready(function() {
     _installDraggingDropping();
   });
 
+  $('.hide-selected-ele').click(function() {
+    var selector = $(".current-selector").text();
+    selector = selector.replace("body", "#qiwurBody");
+    $(selector).hide();
+  });
+
   $('.save-extract-rule').click(function() {
    if ($.isEmptyObject(pageEntityFields)) {
      layer.alert('请至少指定一个字段！', 9);
@@ -87,22 +93,28 @@ $(document).ready(function() {
     _renderPageEntityFields();
   });
 
+  $('.start-ruled-extract').click(function() {
+    var id = pageEntity['PageEntity']['id'];
+    var url = getCakePHPUrl('page_entities', 'view', id);
+    window.open(url);
+  });
+
   function _installDraggingDropping() {
     $('#qiwurHtmlWrapper *')
-    .on('mouseover', function(event) {
+    .on('mousedown', function(event) {
       event.stopPropagation();
-      var path = $(this).getPath().replace(/>/g, ' &gt ');
-      path = path.replace("#qiwurBody", "body");
+      var selector = _getSelector(this);
 
-      layer.tips(path, this, {
+      layer.tips(selector, this, {
         maxWidth : 10000,
-        guide : 2,
+        guide : 0,
         time : 30,
         closeBtn:[0, true],
         style: ['background-color:#613D08; color:#FFDA68; text-align:left; font-size:120%', '#613D08']
       });
 
-      // $('#currentCssPath').html(path);
+  	  $(this).attr('cssSelector', selector);
+      $('.current-selector').html(selector);
       // alert(path);
     })
     .draggable({
@@ -152,19 +164,43 @@ $(document).ready(function() {
         }
 
         var name = $('.extract-field-name input').val().trim();
-        var cssPath = ui.draggable.getPath().trim();
-        cssPath = cssPath.replace("#qiwurBody", "body");
+        var selector = ui.draggable.attr('cssSelector');
+        // selector = selector.replace(/>/g, ' &gt ');
 
-        $(this).find('.dropper-dropzone').val(cssPath);
+        $(this).find('.dropper-dropzone').val(selector);
         $(this).find('.dropper-dropzone').attr('title', "当前字段值：" + ui.draggable.text().trim());
 
-        _updatePageEntityFields(name, cssPath);
+        _updatePageEntityFields(name, selector);
         _renderPageEntityFields();
       }
     });
 
     _renderPageEntityFields();
   } // _installDraggingDropping
+
+  function _getSelector(ele) {
+    var selectors = $(ele).getSelector();
+    if (selectors.length == 0) {
+      return null;
+    }
+
+    var selector = null;
+    for (var i = 0; i < selectors.length; ++i) {
+      if (selectors[i].indexOf("ui-") == -1) {
+        selector = selectors[i];
+      }
+    }
+    if (selector == null) {
+      selector = selectors[0];
+    }
+
+    // selector = selector.replace(/>/g, ' &gt ');
+    selector = selector.replace("#qiwurBody", "body");
+    selector = selector.replace(/.ui-draggable|.ui-draggable-handle|.ui-draggable-disabled/g, "");
+    selector = selector.replace(/>\s+>/g, "");
+
+    return selector;
+  }
 
   function _delPageEntityFieldByName(name) {
     var tmp = [];
@@ -177,18 +213,18 @@ $(document).ready(function() {
     pageEntityFields = tmp;
   }
 
-  function _updatePageEntityFields(name, cssPath) {
+  function _updatePageEntityFields(name, selector) {
     var found = false;
     $.each(pageEntityFields, function(i, field) {
       if (name == field['name']) {
-        field['css_path'] = cssPath;
+        field['css_path'] = selector;
         found = true;
       }
       return field;
     });
 
     if (!found) {
-      var field = {name:name, css_path:cssPath};
+      var field = {name:name, css_path:selector};
       pageEntityFields.push(field);
     }
   }
@@ -208,16 +244,12 @@ $(document).ready(function() {
   } // _renderPageEntityFields
 
   function _enableDraggable() {
-      $('*')
-        .not('.xubox_layer')
-        .not('.xubox_layer *')
+      $('#qiwurHtmlWrapper *')
         .draggable('enable');
   } // _enableDraggable
 
   function _disableDraggable() {
-      $('*')
-        .not('.xubox_layer')
-        .not('.xubox_layer *')
+      $('#qiwurHtmlWrapper *')
         .draggable('disable');
   } // _disableDraggable
 });

@@ -1,7 +1,7 @@
 $(document).ready(function() {
   $('.hidden').hide();
 
-  layer.msg('正在查询任务信息，请稍候......', 5, {type : 1});
+  layer.msg('正在查询任务信息，请稍候......', 300, {type : 1});
 
   var interval = setInterval(function() {
       if (!$('body').hasClass('visible')) {
@@ -12,6 +12,7 @@ $(document).ready(function() {
       var url = getCakePHPUrl('scent_jobs', 'ajax_getJobInfo', id, 'true');
       $.getJSON(url, function(results) {
         if (results['state'] == undefined || results['state'] == 'FAILED') {
+          layer.closeAll();
           clearInterval(interval);
         }
 
@@ -20,7 +21,7 @@ $(document).ready(function() {
         if (results['state'] == 'FINISHED' && results['msg'] == 'OK') {
           clearInterval(interval);
 
-          layer.msg('挖掘成功，正在分析挖掘......', 30, {type : 1});
+          layer.msg('挖掘成功，正在分析挖掘结果......', 300, {type : 1});
           showExtractResultAsSQL();
         }
         else if (results['state'] == 'FAILED') {

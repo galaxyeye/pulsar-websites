@@ -35,12 +35,6 @@
         <a href="<?php echo Router::url('/admin/page_entities') ?>">Page Entities</a>
       </li>
       <li class="item2">
-        <a href="<?php echo Router::url('/admin/ontologies') ?>">Ontologies</a>
-      </li>
-      <li class="item2">
-        <a href="<?php echo Router::url('/admin/products') ?>">Products</a>
-      </li>
-      <li class="item2">
         <a href="<?php echo Router::url('/admin/jobs') ?>">Jobs</a>
       </li>
       <li class="lgo">

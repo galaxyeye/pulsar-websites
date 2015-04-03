@@ -15,9 +15,9 @@ class JobsController extends AppController {
     $this->loadModel("ScentJob");
     $this->ScentJob->recursive = -1;
     $scentJobs = $this->ScentJob->find('all', [
-    		'ScentJob.user_id' => $this->currentUser['id'],
+        'ScentJob.user_id' => $this->currentUser['id'],
         'limit' => 5,
-    		'order' => 'ScentJob.id DESC']
+        'order' => 'ScentJob.id DESC']
     );
 
     $this->set(compact('nutchJobs', 'scentJobs'));
@@ -26,8 +26,35 @@ class JobsController extends AppController {
     $this->SparkJob->recursive = -1;
     $sparkJobs = $this->SparkJob->find('all', [
         'SparkJob.user_id' => $this->currentUser['id'],
-    		'limit' => 5,
-    		'order' => 'SparkJob.id DESC']
+        'limit' => 5,
+        'order' => 'SparkJob.id DESC']
+    );
+
+    $this->set(compact('nutchJobs', 'scentJobs', 'sparkJobs'));
+  }
+
+  function admin_index() {
+    $this->loadModel("NutchJob");
+    $this->NutchJob->recursive = -1;
+    $nutchJobs = $this->NutchJob->find('all', [
+        'limit' => 15,
+        'order' => 'NutchJob.id DESC']
+    );
+
+    $this->loadModel("ScentJob");
+    $this->ScentJob->recursive = -1;
+    $scentJobs = $this->ScentJob->find('all', [
+        'limit' => 15,
+        'order' => 'ScentJob.id DESC']
+    );
+
+    $this->set(compact('nutchJobs', 'scentJobs'));
+
+    $this->loadModel("SparkJob");
+    $this->SparkJob->recursive = -1;
+    $sparkJobs = $this->SparkJob->find('all', [
+        'limit' => 15,
+        'order' => 'SparkJob.id DESC']
     );
 
     $this->set(compact('nutchJobs', 'scentJobs', 'sparkJobs'));

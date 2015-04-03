@@ -4,19 +4,21 @@ namespace Nutch;
 
 \App::import('Lib', array('nutch/job_config', 'nutch/outlink_filter', 'nutch/remote_command'));
 
+class JobType {
+	const __default = self::NONE;
+	const INJECT = 'INJECT';
+	const GENERATE = 'GENERATE';
+	const FETCH = 'FETCH';
+	const PARSE = 'PARSE';
+	const UPDATEDB = 'UPDATEDB';
+	const INDEX = 'INDEX';
+	const READDB = 'READDB';
+	const PARSECHECKER = 'PARSECHECKER';
+	const EXTRACT = 'EXTRACT';
+	const CLAZZ = 'CLASS';
+}
+
 class RemoteCmdBuilder extends \Object {
-	public static $JobType = array (
-			"INJECT" => "INJECT",
-			"GENERATE" => "GENERATE",
-			"FETCH" => "FETCH",
-			"PARSE" => "PARSE",
-			"UPDATEDB" => "UPDATEDB",
-			"INDEX" => "INDEX",
-			"READDB" => "READDB",
-			"PARSECHECKER" => "PARSECHECKER",
-			"EXTRACT" => "EXTRACT",
-			"CLASS" => "CLASS"
-	);
 
 	private $crawl;
 
@@ -129,7 +131,7 @@ class RemoteCmdBuilder extends \Object {
 	public function createInjectCommand() {
 		$crawl = $this->crawl['Crawl'];
 
-		$jobConfig = new JobConfig($crawl['crawlId'], self::$JobType['INJECT'], $crawl['configId']);
+		$jobConfig = new JobConfig($crawl['crawlId'], JobType::INJECT, $crawl['configId']);
 		$jobConfig->setArgument("seedDir", $crawl['seedDirectory']);
 
 		return new RemoteCommand($jobConfig);
@@ -139,48 +141,48 @@ class RemoteCmdBuilder extends \Object {
 		$crawl = $this->crawl['Crawl'];
 
 		return $this->createCommand(
-				$crawl['crawlId'], self::$JobType['GENERATE'], $crawl['batchId'], $crawl['configId']);
+				$crawl['crawlId'], JobType::GENERATE, $crawl['batchId'], $crawl['configId']);
 	}
 
 	public function createFetchCommand() {
 		$crawl = $this->crawl['Crawl'];
 
 		return $this->createCommand(
-				$crawl['crawlId'], self::$JobType['FETCH'], $crawl['batchId'], $crawl['configId']);
+				$crawl['crawlId'], JobType::FETCH, $crawl['batchId'], $crawl['configId']);
 	}
 
 	public function createParseCommand() {
 		$crawl = $this->crawl['Crawl'];
 		
 		return $this->createCommand(
-				$crawl['crawlId'], self::$JobType['PARSE'], $crawl['batchId'], $crawl['configId']);
+				$crawl['crawlId'], JobType::PARSE, $crawl['batchId'], $crawl['configId']);
 	}
 
 	public function createUpdateDbCommand() {
 		$crawl = $this->crawl['Crawl'];
 		
 		return $this->createCommand(
-				$crawl['crawlId'], self::$JobType['UPDATEDB'],  $crawl['batchId'], $crawl['configId']);
+				$crawl['crawlId'], JobType::UPDATEDB,  $crawl['batchId'], $crawl['configId']);
 	}
 
 	public function createIndexCommand() {
 		$crawl = $this->crawl['Crawl'];
 
 		return $this->createCommand(
-				$crawl['crawlId'], self::$JobType['INDEX'], $crawl['batchId'], $crawl['configId']);
+				$crawl['crawlId'], JobType::INDEX, $crawl['batchId'], $crawl['configId']);
 	}
 
 	public function createExtractCommand() {
 		$crawl = $this->crawl['Crawl'];
 
 		return $this->createCommand(
-				$crawl['crawlId'], self::$JobType['EXTRACT'], $crawl['batchId'], $crawl['configId']);
+				$crawl['crawlId'], JobType::EXTRACT, $crawl['batchId'], $crawl['configId']);
 	}
 
 	public function createParseCheckerCommand() {
 		$crawl = $this->crawl['Crawl'];
 
-		$jobConfig = new JobConfig($crawl['crawlId'], self::$JobType['PARSECHECKER'], $crawl['configId']);
+		$jobConfig = new JobConfig($crawl['crawlId'], JobType::PARSECHECKER, $crawl['configId']);
 		$jobConfig->setArgument("url", $crawl['test_url']);
 		$jobConfig->setArgument("dumpText", true);
 

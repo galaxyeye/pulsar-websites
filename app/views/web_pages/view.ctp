@@ -91,6 +91,7 @@
 	<script type="text/javascript" src="/js/jquery/jquery-1.11.2.js"></script>
 	<script type="text/javascript" src="/js/jquery/jquery-ui-1.11.3/jquery-ui.js"></script>
 	<script type="text/javascript" src="/js/jquery/jsrender.js"></script>
+  <script type="text/javascript" src="/js/jquery/selectorator.min.js"></script>
 	<script type="text/javascript" src="/js/common.js"></script>
 	<script type="text/javascript" src="/js/dump.js"></script>
 	<script type="text/javascript" src="/js/layer-v1.8.5/layer/layer.min.js"></script>

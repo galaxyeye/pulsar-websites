@@ -5,6 +5,7 @@ App::import('Lib', array('qp'));
 class WebPagesController extends AppController {
 
   var $name = 'WebPages';
+  var $cacheDir = "/tmp/web_pages";
 
   function search() {
     if (empty($this->data)) {
@@ -200,6 +201,11 @@ class WebPagesController extends AppController {
     $url = symmetric_decode($url);
     $webPage = $this->_getWebPage($url, $options);
 
+    if (in_array('raw', $options)) {
+    	echo $webPage['WebPage']['content'];
+    	die();
+    }
+
     $this->set(compact('webPage', 'options'));
 
     $this->render($view);
@@ -278,11 +284,24 @@ class WebPagesController extends AppController {
   }
 
   function _getWebPage($url, $options = array()) {
-    $startKey = $endKey = $url;
+    // cache 
+  	if (!file_exists($this->cacheDir)) {
+  		@mkdir($this->cacheDir);
+  	}
 
-    $nutchClient = new \Nutch\NutchClient();
-    $dbFilter = new \Nutch\DbFilter($startKey, $endKey);
-    $webPages = $nutchClient->query($dbFilter);
+    $cacheFile = $this->cacheDir.DS.md5($url).".html";
+    if (file_exists($cacheFile)) {
+    	$webPages = file_get_contents($cacheFile);
+    }
+    else {
+    	$startKey = $endKey = $url;
+
+    	$nutchClient = new \Nutch\NutchClient();
+    	$dbFilter = new \Nutch\DbFilter($startKey, $endKey);
+    	$webPages = $nutchClient->query($dbFilter);
+
+    	file_put_contents($cacheFile, $webPages);
+    }
 
     $webPages = json_decode($webPages, true, 10);
 
@@ -291,7 +310,11 @@ class WebPagesController extends AppController {
     }
 
     $webPage['WebPage'] = $webPages['values'][0];
-    
+
+    if (in_array('raw', $options)) {
+    	return $webPage;
+    }
+
     if (in_array('strip', $options)) {
       return $this->_stripHTML($webPage, $options);
     }
@@ -342,6 +365,11 @@ class WebPagesController extends AppController {
 
     App::import('Lib', array('html_utils'));
     HtmlUtils::qpMakeLinksAbsolute($dom, $webPage['WebPage']['baseUrl']);
+    // HtmlUtils::qpRemoveAllInlineStyle($dom);
+
+    $dom->find('*')->each(function($index, $item) {
+    	$item->removeAttribute('style');
+    });
 
     // TODO : sniff encoding
     $title = $dom->find('title')->text();
@@ -364,6 +392,12 @@ class WebPagesController extends AppController {
     $dom->find('html')->attr('id', 'qiwurHtml');
     $dom->find('body')->attr('id', 'qiwurBody');
     $dom->find('img')->html("")->removeAttr("src");
+
+    // A fix for older QiwurScrapingMetaInformation holder protocol
+    // we can not make this information at the first div, instead of which
+    // we move the information to a created input element at to bottom of 
+    // body element
+    $dom->find('#QiwurScrapingMetaInformation')->removeAttr('id');
 
     $content = $dom->html();
 

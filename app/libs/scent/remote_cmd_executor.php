@@ -21,16 +21,16 @@ class RemoteCmdExecutor extends \Object {
   function executeRemoteJob($pageEntity, $jobType) {
     $cmdBuilder = new RemoteCmdBuilder($pageEntity);
 
-    if ($jobType == RemoteCmdBuilder::$JobType['SEGMENT']) {
+    if ($jobType == JobType::SEGMENT) {
       $command = $cmdBuilder->createSegmentCommand();
     }
-    else if ($jobType == RemoteCmdBuilder::$JobType['AUTOEXTRACT']) {
+    else if ($jobType == JobType::AUTOEXTRACT) {
       $command = $cmdBuilder->createAutoExtractCommand();
     }
-    else if ($jobType == RemoteCmdBuilder::$JobType['RULEDEXTRACT']) {
+    else if ($jobType == JobType::RULEDEXTRACT) {
       $command = $cmdBuilder->createRuledExtractCommand();
     }
-    else if ($jobType == RemoteCmdBuilder::$JobType['BUILD']) {
+    else if ($jobType == JobType::BUILD) {
       $command = $cmdBuilder->createBuildCommand();
     }
     else {

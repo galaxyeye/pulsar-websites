@@ -1,22 +1,23 @@
 <?php 
 namespace Nutch;
 
-class JobInfo {
+class JobState {
+	const __default = self::ANY;
+	const IDLE = 'IDLE';
+	const RUNNING = 'RUNNING';
+	const FINISHED = 'FINISHED';
+	const FAILED = 'FAILED';
+	const KILLED = 'KILLED';
+	const STOPPING = 'STOPPING';
+	const KILLING = 'KILLING';
+	const ANY = 'ANY';
+	const CAN_NOT_CREATE = 'CAN_NOT_CREATE';
+	const NOT_FOUND = 'NOT_FOUND';
+	const COMPLETED = 'COMPLETED';
+	const FAILED_COMPLETED = 'FAILED_COMPLETED';
+}
 
-	public static $State = array(
-			"IDLE" => "IDLE",
-			"RUNNING" => "RUNNING",
-			"FINISHED" => "FINISHED",
-			"FAILED" => "FAILED",
-			"KILLED" => "KILLED",
-			"STOPPING" => "STOPPING",
-			"KILLING" => "KILLING",
-			"ANY" => "ANY",
-			"CAN_NOT_CREATE" => "CAN_NOT_CREATE",
-			"NOT_FOUND" => "NOT_FOUND",
-			"COMPLETED" => "COMPLETED",
-			"FAILED_COMPLETED" => "FAILED_COMPLETED"
-	);
+class JobInfo {
 
 	private $info = array(
 			'crawlId' => 'crawlId',

@@ -30,6 +30,7 @@ function normalizeUrlFilter($urlFilter) {
 		if ($ch != '+' && $ch != '-') {
 			$normalized .= "+";
 		}
+		$f = rtrim($f, "/");
 
 		$normalized .= $f;
 		$normalized .= "\n";
@@ -40,7 +41,11 @@ function normalizeUrlFilter($urlFilter) {
 
 function normalizeUrlFilterRegex($regex) {
 	if ($regex[0] != '^') $regex = '^'.$regex;
-	if ($regex[strlen($regex) - 1] != '$') $regex = $regex.'$';
+	$regex = rtrim($regex, "$");
+	// $regex = rtrim($regex, "/");
+	// $regex = $regex."\/{0,1}";
+
+	$regex = $regex.'$';
 	return $regex;
 }
 
