@@ -38,12 +38,17 @@
     </dd>
     <dt <?php if ($i % 2 == 0) echo $class;?>><?php __('Finished Rounds'); ?></dt>
     <dd <?php if ($i++ % 2 == 0) echo $class;?>>
-      <span class='finishedRounds'><?=$crawl['Crawl']['finished_rounds']; ?></span>
+      <span class='finished-rounds'><?=$crawl['Crawl']['finished_rounds']; ?></span>
       &nbsp;
     </dd>
     <dt <?php if ($i % 2 == 0) echo $class;?>><?php __('Limit'); ?></dt>
     <dd <?php if ($i++ % 2 == 0) echo $class;?>>
       <?=$crawl['Crawl']['limit']; ?>
+      &nbsp;
+    </dd>
+    <dt <?php if ($i % 2 == 0) echo $class;?>><?php __('Fetched Pages'); ?></dt>
+    <dd <?php if ($i++ % 2 == 0) echo $class;?>>
+      <span class='fetched-pages'><?=$crawl['Crawl']['fetched_pages']; ?></span>
       &nbsp;
     </dd>
     <dt <?php if ($i % 2 == 0) echo $class;?>><?php __('Max Url Length'); ?></dt>
@@ -121,7 +126,9 @@
 <div class="nutch server view">
   <h3><?php  __('爬虫服务器消息');?></h3>
 
-  <div id="jobInfo"></div>
+  <div>
+    <pre id="jobInfo"></pre>
+  </div>
 </div>
 
 <!-- **************************************************************
@@ -471,9 +478,9 @@
     <td><?=$stopUrl['StopUrl']['url']; ?>&nbsp;</td>
     <td><?=$stopUrl['StopUrl']['forbidden_point']; ?>&nbsp;</td>
     <td class="actions">
-      <?=$this->Html->link(__('View', true), 
+      <?=$this->Html->link(__('View', true),
           ['controller' => 'stop_urls', 'action' => 'view', $stopUrl['id']],
-           ['target' => 'layer']);
+          ['target' => 'layer']);
       ?>
       <?=$this->Html->link(__('Edit', true), ['controller' => 'stop_urls', 'action' => 'edit', $stopUrl['StopUrl']['id']]); ?>
       <?=$this->Html->link(__('Delete', true), array('controller' => 'stop_urls', 'action' => 'delete', $stopUrl['StopUrl']['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $stopUrl['StopUrl']['id'])); ?>

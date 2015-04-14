@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>Nutch UI</title>
+  <title>齐物数据引擎 - 格物，齐物，用物</title>
   <link rel="stylesheet" type="text/css" href="/css/jquery/jquery-ui-1.11.3/jquery-ui.css" />
   <link rel="stylesheet" type="text/css" href="/css/jquery/jquery.dropper.css" />
   <link rel="stylesheet" type="text/css" href="/css/web_pages/web_pages.css" />
@@ -30,6 +30,11 @@
     #qiwurHtmlWrapper h5,
     #qiwurHtmlWrapper h6 { border : 1px ridge !important; }
     <?php endif; ?>
+
+		#systemPanel #pageEntityFields {
+      max-height: 500px !important;
+      overflow-y: scroll;
+    }
   </style>
   <script type="text/x-jsrender" id="extractionRulesTemplate">
   <dl>

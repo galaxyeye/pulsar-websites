@@ -1,3 +1,5 @@
+<?php echo $this->element('jobs/subnav') ?>
+
 <div class="nutchJobs view">
 <h2><?php  __('Nutch Job');?></h2>
   <dl><?php $i = 0; $class = ' class="altrow"';?>

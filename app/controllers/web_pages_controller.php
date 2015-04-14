@@ -1,59 +1,27 @@
 <?php 
 
-App::import('Lib', array('qp'));
+App::import('Lib', array('qp', 'nutch/nutch_utils'));
 
+/**
+ * @deprecated, use storage_web_pages instead
+ * */
 class WebPagesController extends AppController {
 
   var $name = 'WebPages';
-  var $cacheDir = "/tmp/web_pages";
 
-  function search() {
-    if (empty($this->data)) {
-      $this->loadModel('Crawl');
-      // $this->Crawl->find('list', array('fields' => array('batchId')));
-    }
-
-    if (!empty($this->data)) {
-      $nutchClient = new NutchClient();
-
-      $startKey = $this->data['WebPage']['startKey'];
-      $endKey = $this->data['WebPage']['endKey'];
-      if (empty($startKey)) $startKey = null;
-      if (empty($endKey)) $endKey = null;
-
-      $dbFilter = new DbFilter($startKey, $endKey);
-
-      pr($dbFilter->__toString());
-
-      $result = $nutchClient->query($dbFilter);
-      $this->set('webPages', json_decode($result, true, 10));
-    }
+  function beforeFilter() {
+  	// die("Deprecated");
   }
 
-  function searchByUrl($url = null) {
-    if (!$url && empty($this->data)) {
-      return;
-    }
+  function viewScentFileServer($path = DS) {
+  	$path = trim($path, DS);
 
-    if ($url) {
-      $startKey = symmetric_decode($url);
-      $endKey = null;
-    }
+  	$this->redirect(SCENT_FILE_SERVER . "/" . $path);
+  }
 
-    if (!empty($this->data)) {
-      $startKey = $this->data['WebPage']['startKey'];
-      $endKey = $this->data['WebPage']['endKey'];
-    }
-
-    if (empty($startKey)) $startKey = null;
-    if (empty($endKey)) $endKey = null;
-
-    $nutchClient = new NutchClient();
-    $dbFilter = new DbFilter($startKey, $endKey);
-    $webPages = $nutchClient->query($dbFilter);
-    $webPages = json_decode($webPages, true, 10);
-
-    $this->set(compact('webPages', 'dbFilter'));
+  function showExtractResultAsWebsite($outFolder) {
+  	$folder = SCENT_OUT_DIR_AUTO_EXTRACT . "/" . $outFolder;
+  	$this->viewScentFileServer($folder);
   }
 
   function indexByPageEntity($page_entity_id) {
@@ -61,7 +29,7 @@ class WebPagesController extends AppController {
     $pageEntity = $this->PageEntity->read(null, $page_entity_id);
 
     $crawl = [
-    		'Crawl' => ['id' => $pageEntity['PageEntity']['crawl_id']], 
+    		'Crawl' => ['id' => $pageEntity['PageEntity']['crawl_id']],
     		'CrawlFilter' => [
     				[
     						'url_filter' => $pageEntity['PageEntity']['url_filter'], 
@@ -72,7 +40,6 @@ class WebPagesController extends AppController {
 
     $fields = array("title", "baseUrl", "outlinks");
     $webPages = $this->_getWebPagesByCrawlFilter($crawl, $fields, 500);
-
     $this->set(compact('pageEntity', 'webPages'));
   }
 
@@ -85,39 +52,6 @@ class WebPagesController extends AppController {
     $webPages = $this->_getWebPagesByCrawlFilter($crawl, $fields, 500);
 
     $this->set(compact('crawl', 'webPages'));
-  }
-
-  /**
-   * TODO : add a nutch server side service to report fetched count
-   * */
-  function ajax_getFetchedDetailPageCount($crawl_id) {
-  	$this->autoRender = false;
-
-  	$this->loadModel('Crawl');
-  	$this->Crawl->contain(array('CrawlFilter' => array('conditions' => array('page_type' => 'DETAIL'))));
-  	$crawl = $this->Crawl->read(null, $crawl_id);
-
-  	if ($fields == null) {
-  		$fields = array("title", "baseUrl", "outlinks");
-  	}
-
-  	$urlFilter = null;
-  	foreach ($crawlFilters as $f) {
-  		$urlFilter .= \Nutch\normalizeUrlFilter($f['url_filter']);
-  	}
-
-  	$nutchClient = new \Nutch\NutchClient();
-  	$dbFilter = new \Nutch\DbFilter();
-  	$dbFilter->setUrlFilter($urlFilter);
-  	$dbFilter->setFields($fields);
-  	if ($limit) {
-  		$dbFilter->setLimit($limit);
-  	}
-
-  	$webPages = $nutchClient->query($dbFilter);
-  	$webPages = json_decode($webPages, true, 10);
-
-  	return $webPages['values'];
   }
 
   function ajax_getDetailPageLinks($crawl_id, $options = "", $limit = 100) {
@@ -147,44 +81,12 @@ class WebPagesController extends AppController {
   }
 
   /**
-   * Get a random detail page from nutch server for the given crawl
-   * */
-  function ajax_getRandomDetailPage($crawl_id, $contentOnly = true) {
-  	$this->autoRender = false;
-
-  	$webPage = $this->_getRandomDetailPage();
-
-  	if ($contentOnly) {
-	  	echo empty($webPage) ? "" : $webPage['WebPage']['content'];
-  	}
-  	else {
-  		echo json_encode($webPage);
-  	}
-  }
-
-  function index() {
-    $webPages = array(
-        array('WebPage' => array(
-            'url' => "http://www.hahaertong.com/huodong-shanghai/",
-            'title' => '东方童画3月萌宝生日会，邀您一起来参与！ '
-          )
-        ),
-        array('WebPage' => array(
-            'url' => "http://www.hahaertong.com/huodong-beijing/",
-            'title' => 'Duang!宝贝闹元宵，欢乐送大礼！ '
-          )
-        )
-    );
-
-    $this->set(compact('webPages'));
-  }
-
-  /**
    * Download a web page from nutch server if exists.
    * By default, some of it's own tags is stripped to show it nested in our view correctly.
    * */
   function view($url) {
     $this->layout = 'empty';
+die("Deprecated");
 
     $options = array();
     if (isset($this->params['named']['options'])) {
@@ -211,10 +113,7 @@ class WebPagesController extends AppController {
     $this->render($view);
   }
 
-  /**
-   * TODO : use ant test this action instead of view with named params
-   * */
-  function viewByPageEntity($page_entity_id) {
+  function viewByPageEntity($url) {
   	$this->layout = 'empty';
 
   	$options = array();
@@ -231,44 +130,35 @@ class WebPagesController extends AppController {
   	$this->set(compact('webPage', 'options'));
   }
 
-  function viewRandomDetailPage() {
-    $this->layout = 'empty';
+  function viewAnalysisResult($url) {
+  	$this->layout = 'empty';
 
-    $options = array();
-    if (isset($this->params['named']['options'])) {
-      $options = explode("+", $this->params['named']['options']);
-    }
-    array_push($options, 'strip');
+  	$this->_viewByPageEntity($this->params['named']['page_entity_id']);
 
-    $view = 'view';
-    $page_entity_id = null;
-    $crawlFilters = array(array('url_filter' => '.+'));
+  	$url = symmetric_decode($url);
+  	$webPage = $this->_getWebPage($url, ['raw']);
 
-    if (isset($this->params['named']['page_entity_id'])) {
-    	$page_entity_id = $this->params['named']['page_entity_id'];
-      $view = 'view_by_page_entity';
+  	$results = Cache::read("viewAnalysisResult-".$url, 'minute');
+  	if ($results == null) {
+  		\App::import('Lib', array('scent/scent_client'));
 
-      $this->loadModel('PageEntity');
-      $this->PageEntity->contain('PageEntityField');
-      $pageEntity = $this->PageEntity->read(null, $page_entity_id);
+  		$scentClient = new \Scent\ScentClient();
+  		$results = $scentClient->extract(['-html' => $webPage['WebPage']['content'], '-format' => 'all']);
 
-      $crawlFilters = array(array('url_filter' => $pageEntity['PageEntity']['url_filter']));
+  		Cache::write("viewAnalysisResult-".$url, $results, 'minute');
+  	}
 
-      $this->set(compact('pageEntity'));
-    }
+  	$webPage['WebPage']['content'] = "";
+  	$results = json_decode($results, true, 10);
+  	// Fix satellite version 0.1 bug
+  	if (!empty($results['result'])) {
+	  	$content = $results['result'];
 
-    $webPage = $this->_getRandomDetailPage($crawlFilters, $options);
+	  	$webPage['WebPage']['content'] = $content;
+	  	$webPage = $this->_stripHTML($webPage, ['simpleCss']);
+  	}
 
-    $this->set(compact('webPage', 'options'));
-
-    $this->render($view);
-  }
-
-  function _viewByPageEntity($pageEntityId) {
-    $this->loadModel('PageEntity');
-    $pageEntity = $this->PageEntity->read(null, $pageEntityId);
-
-    $this->set(compact('pageEntity'));
+  	$this->set(compact('webPage'));
   }
 
   /**
@@ -283,30 +173,27 @@ class WebPagesController extends AppController {
     $this->set(compact('content'));
   }
 
-  function _getWebPage($url, $options = array()) {
-    // cache 
-  	if (!file_exists($this->cacheDir)) {
-  		@mkdir($this->cacheDir);
-  	}
+  private function _viewByPageEntity($pageEntityId) {
+  	$this->loadModel('PageEntity');
+  	$pageEntity = $this->PageEntity->read(null, $pageEntityId);
+  
+  	$this->set(compact('pageEntity'));
+  }
 
-    $cacheFile = $this->cacheDir.DS.md5($url).".html";
-    if (file_exists($cacheFile)) {
-    	$webPages = file_get_contents($cacheFile);
-    }
-    else {
-    	$startKey = $endKey = $url;
-
+  private function _getWebPage($url, $options = []) {
+  	$webPages = Cache::read("_getWebPage-".$url, 'minute');
+  	if ($webPages == null) {
     	$nutchClient = new \Nutch\NutchClient();
-    	$dbFilter = new \Nutch\DbFilter($startKey, $endKey);
+    	$dbFilter = new \Nutch\DbFilter($url, $url);
     	$webPages = $nutchClient->query($dbFilter);
 
-    	file_put_contents($cacheFile, $webPages);
-    }
+  		Cache::write("_getWebPage-".$url, $webPages, 'minute');
+  	}
 
     $webPages = json_decode($webPages, true, 10);
 
     if (empty($webPages['values'])) {
-      return array('WebPage' => array('url' => $startKey, 'title' => '', 'content' => ''));
+      return array('WebPage' => array('url' => $url, 'title' => '', 'content' => ''));
     }
 
     $webPage['WebPage'] = $webPages['values'][0];
@@ -322,24 +209,7 @@ class WebPagesController extends AppController {
     return $webPage;
   }
 
-  private function _getRandomDetailPage($crawl, $options = null) {
-  	// TODO : We can do this on the server side
-  	$limit = 100;
-  	$links = $this->_getWebPagesByCrawlFilter($crawl, array('baseUrl'), $limit);
-		if (count($links) == 0) {
-			return null;
-		}
-
-  	$i = rand(0, count($links));
-  	$url = $links[$i]['baseUrl'];
-  	$webPage = $this->_getWebPage($url, $options);
-
-  	return $webPage;
-  }
-
-  function _getWebPagesByCrawlFilter($crawl, $fields = null, $limit = null) {
-  	if ($limit == null) $limit = 500;
-
+  function _getWebPagesByCrawlFilter($crawl, $fields = null, $limit = 100) {
   	$executor = new \Nutch\RemoteCmdExecutor();
   	$webPages = $executor->queryByCrawlFilter($crawl, $fields, $limit);
     $webPages = json_decode($webPages, true, 10);
@@ -403,76 +273,15 @@ class WebPagesController extends AppController {
 
     // Strip to show the page inside our own layout
     // TODO : Can we do these replace using $dom ?
-    $content = preg_replace("/html|body|head/", "div", $content);
+    $content = preg_replace("/<html|<body|<head/", "<div", $content);
     $content = preg_replace("/DOCTYPE|dtd|xml/i", "", $content);
+
+    $content = preg_replace("/#QiwurScrapingMetaInformation &gt;/", "body &gt;", $content);
+    $content = preg_replace("/#qiwurBody &gt;/", "body &gt;", $content);
 
     $webPage['WebPage']['title'] = $title;
     $webPage['WebPage']['content'] = $content;
 
     return $webPage;
-  }
-
-  private function __analysis($dom) {
-    //     pr($dom);
-    //     die();
-  
-    $this->__walk($dom);
-  }
-  
-  private function __walk($dom) {
-    $node = $dom->top();
-
-    $this->__analysisNode($node);
-
-    $this->__walkChildren($node);
-  }
-
-  private function __walkChildren($dom) {
-    foreach($dom->children() as $child) {
-      $this->__analysisNode($child);
-
-      $this->__walkChildren($child);
-    }
-  }
-
-  private function __analysisNode($node) {
-    if (in_array($node->tag(), $this->keyTags)) {
-      // do something
-      pr($node->tag().$node->text());
-    }
-  }
-
-  private function __trimAllTags($page) {
-  }
-
-  private function __segmentWords($page) {
-  }
-
-  private function __parseMeta($dom) {
-    $meta = array('title', '');
-  
-    $title = $dom->find('title');
-    $metaKeywords = $dom->find('meta');
-    $metaDescription = $dom->find('meta');
-  }
-
-  function __analysisHeaders($dom) {
-    $headerTags = array('h1', 'h2', 'h3', 'h4', 'h5', 'h6');
-
-    foreach ($headerTags as $headerTag) {
-      foreach ($dom->find($headerTag) as $h) {
-        $headerTags[$headerTag] = $h->html();
-      }
-    }
-
-    return $headerTags;
-  }
-
-  function __analysisSummary($dom) {
-  
-  }
-
-  function __analysisTags($dom) {
-
   }
 }

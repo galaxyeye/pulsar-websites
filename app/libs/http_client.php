@@ -18,6 +18,8 @@ class HttpClient {
         CURLOPT_DNS_CACHE_TIMEOUT => 2
   ); // stop after 3 redirects
 
+  private $url = false;
+
   function __construct($options = null) {
     if ($options != null) {
       array_merge($this->options, $options);
@@ -26,6 +28,7 @@ class HttpClient {
 
   function url_exists($url) {
     if($url == NULL) return false;
+    $this->url = $url;
 
     $options = $this->options;
     $options[CURLOPT_TIMEOUT] = 15;
@@ -47,12 +50,16 @@ class HttpClient {
   }
 
   public function get_content($url) {
+  	$this->url = $url;
+
     $options = array(CURLOPT_HEADER => true);
     $result = $this->get($url, $options);
     return $result['content'];
   }
 
   public function get($url, $options = null) {
+  	$this->url = $url;
+
     if ($options != null) {
       array_merge($this->options, $options);
     }
@@ -77,6 +84,8 @@ class HttpClient {
   }
 
   public function putJson($url, $data) {
+  	$this->url = $url;
+
     if (empty($data)) {
       CakeLog::write('error', "Empty data to put at line ".__LINE__);
       return;
@@ -102,6 +111,8 @@ class HttpClient {
   }
 
   public function put($url, $data) {
+  	$this->url = $url;
+
     if (empty($data)) {
       CakeLog::write('error', "Empty data to put at line ".__LINE__);
       return;
@@ -112,21 +123,23 @@ class HttpClient {
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
     curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-  
+
     curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-    'Content-Type: text/html',
-    'Content-Length: ' . strlen($data))
+      'Content-Type: text/html',
+      'Content-Length: ' . strlen($data))
     );
-  
+
     $output = curl_exec($ch);
     curl_close($ch);
-  
+
     $this->_debugMsg("HttpClient::put ".$data);
 
     return $output;
   }
 
   public function postJson($url, $data) {
+  	$this->url = $url;
+
     if (empty($data)) {
       CakeLog::write('error', "Empty data to post at line ".__LINE__);
       return;
@@ -138,8 +151,8 @@ class HttpClient {
     curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-    'Content-Type: application/json',
-    'Content-Length: ' . strlen($data))
+      'Content-Type: application/json',
+      'Content-Length: ' . strlen($data))
     );
 
     $output = curl_exec($ch);
@@ -152,7 +165,7 @@ class HttpClient {
 
   private function _debugMsg($message) {
   	if (DEBUG_HTTP_CLIENT) {
-      CakeLog::write('debug', $message);
+      CakeLog::write('debug', $this->url . ' '. $message);
   	}
   }
 }

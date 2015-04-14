@@ -1,4 +1,4 @@
-#webPagesView .qiwur-hidden { display: none !important; visibility: visible; }
+.qiwur-hidden { display: none !important; visibility: visible; }
 
 #qiwurHtmlWrapper .hidden { display: none; }
 
@@ -31,6 +31,7 @@
 #systemPanel dl {
 	line-height: 2em;
 	width: 100%;
+  margin : 0;
 }
 
 #systemPanel dl.altrow {
@@ -114,12 +115,12 @@
 	border: none;
 }
 
-#systemPanel #extractionRules {
-	max-height: 200px;
+#systemPanel #pageEntityFields {
+	max-height: 300px;
 	overflow-y: scroll;
 }
 
-#systemPanel #extractionRules .del {
+#systemPanel #pageEntityFields .del {
 	display: inline-block;
 	padding: 2px;
 	color: red;

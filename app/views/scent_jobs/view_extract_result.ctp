@@ -1,3 +1,5 @@
+<?php echo $this->element('jobs/subnav') ?>
+
 <div class="scentJobs view">
 <h2><?php  __('Scent Job');?></h2>
 	<dl><?php $i = 0; $class = ' class="altrow"';?>

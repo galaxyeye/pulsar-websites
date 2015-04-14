@@ -26,7 +26,10 @@ class JobState {
 
 class RemoteCmdBuilder {
 
-  private $p;
+  // TODO : Avoid page entity as a member field,
+  // instead of which, use an independent args array
+  // private $args = ['crawlId' => null, 'batchId' => null, 'configId' => null];
+  private $pageEntity = null;
 
   public function __construct($p) {
     assert(isset($p['PageEntity']));
@@ -90,9 +93,23 @@ class RemoteCmdBuilder {
 
   public function createAutoExtractCommand() {
     $p = $this->pageEntity['PageEntity'];
+    $urlFilter = \Nutch\splitUrlFilter($p['url_filter']);
 
-    return $this->createCommand(
-        $p['crawlId'], JobType::EXTRACT, $p['batchId'], $p['configId']);
+    $limit = 10000;
+    if (!empty($p['limit'])) $limit = $p['limit'];
+    $limit = intval($limit);
+
+    $jobConfig = new JobConfig($p['crawlId'], JobType::AUTOEXTRACT, $p['configId']);
+    $jobConfig->setArgument("-regex", $urlFilter[0]); // TODO : To support multiple filters
+    $jobConfig->setArgument("-limit", $limit);
+    $jobConfig->setArgument("-domain", $p['domain']);
+    $jobConfig->setArgument("-builder", $p['builder']);
+    $jobConfig->setArgument("-mode", "mr");
+
+//     pr($jobConfig->__toString());
+//     die();
+
+    return new RemoteCommand($jobConfig);
   }
 
   public function createRuledExtractCommand() {
@@ -101,6 +118,7 @@ class RemoteCmdBuilder {
 
     $limit = 10000;
     if (!empty($p['limit'])) $limit = $p['limit'];
+    $limit = intval($limit);
 
     $jobConfig = new JobConfig($p['crawlId'], JobType::RULEDEXTRACT, $p['configId']);
     $jobConfig->setArgument("-regex", $urlFilter[0]);

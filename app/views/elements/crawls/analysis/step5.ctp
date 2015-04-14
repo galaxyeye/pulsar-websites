@@ -1,4 +1,3 @@
-
 <!---------------------------------------------------------->
 <!-- 第五步： 查看结果 -->
 <!---------------------------------------------------------->
@@ -28,53 +27,63 @@
 <?php 
     if(!empty($pageEntity['ScentJob'])) : 
       $scentJob = $pageEntity['ScentJob'][0];
-  ?>
-<div class="scentJobs related">
-	<h3>挖掘结果</h3>
-	<ol id="sqlList" class='decimal'>
-	</ol>
-</div>
+?>
+	<div class="scentJobs related">
+		<h3>挖掘结果</h3>
+		<ol id="sqlList" class='decimal'>
+		</ol>
+	</div>
 
-<div class="actions">
-	<ul>
-		<li><?php echo $this->Html->link(__('Download Sql File', true),
-				['controller' => 'scent_jobs', 'action' => 'downloadExtractResult', $scentJob['id']],
-				['class' => 'download hidden']); ?> </li>
-	</ul>
-</div>
+	<?php if ($scentJob['ScentJob']['type'] == 'RULEDEXTRACT') : ?>
+	<div class="actions">
+		<ul>
+			<li><?php echo $this->Html->link(__('Download Sql File', true),
+					['controller' => 'scent_jobs', 'action' => 'downloadExtractResult', $scentJob['id']],
+					['class' => 'download hidden']); ?> </li>
+		</ul>
+	</div>
+	<?php endif; ?>
 
-<div class="scentJobs view">
-	<h2><?php  __('Scent Job');?></h2>
-	<dl><?php $i = 0; $class = ' class="altrow"';?>
-      <dt <?php if ($i % 2 == 0) echo $class;?>><?php __('Id'); ?></dt>
-		<dd <?php if ($i++ % 2 == 0) echo $class;?>>
-			<span class='model-id'><?php echo $scentJob['id']; ?></span> &nbsp;
-		</dd>
-		<dt <?php if ($i % 2 == 0) echo $class;?>><?php __('JobId'); ?></dt>
-		<dd <?php if ($i++ % 2 == 0) echo $class;?>>
-        <?php echo $scentJob['jobId']; ?>
-        &nbsp;
-      </dd>
-		<dt <?php if ($i % 2 == 0) echo $class;?>><?php __('Type'); ?></dt>
-		<dd <?php if ($i++ % 2 == 0) echo $class;?>>
-        <?php echo $scentJob['type']; ?>
-        &nbsp;
-      </dd>
-		<dt <?php if ($i % 2 == 0) echo $class;?>><?php __('ConfigId'); ?></dt>
-		<dd <?php if ($i++ % 2 == 0) echo $class;?>>
-        <?php echo $scentJob['configId']; ?>
-        &nbsp;
-      </dd>
-	</dl>
-</div>
+	<?php if ($scentJob['ScentJob']['type'] == 'AUTOEXTRACT') : ?>
+	<div  id="autoExtractResult" class="scentJobs auto-extract related">
+	  <h3>自动挖掘结果</h3>
+	  <div>已处理<span class='extract-count'>0</span>个网页，<a target='_blank'>点击查看</a></div>
+	</div>
+	<?php endif; ?>
+
+	<div class="scentJobs view">
+		<h2><?php  __('Scent Job');?></h2>
+		<dl><?php $i = 0; $class = ' class="altrow"';?>
+	      <dt <?php if ($i % 2 == 0) echo $class;?>><?php __('Id'); ?></dt>
+			<dd <?php if ($i++ % 2 == 0) echo $class;?>>
+				<span class='model-id'><?php echo $scentJob['id']; ?></span> &nbsp;
+			</dd>
+			<dt <?php if ($i % 2 == 0) echo $class;?>><?php __('JobId'); ?></dt>
+			<dd <?php if ($i++ % 2 == 0) echo $class;?>>
+	        <?php echo $scentJob['jobId']; ?>
+	        &nbsp;
+	      </dd>
+			<dt <?php if ($i % 2 == 0) echo $class;?>><?php __('Type'); ?></dt>
+			<dd <?php if ($i++ % 2 == 0) echo $class;?>>
+	        <?php echo $scentJob['type']; ?>
+	        &nbsp;
+	      </dd>
+			<dt <?php if ($i % 2 == 0) echo $class;?>><?php __('ConfigId'); ?></dt>
+			<dd <?php if ($i++ % 2 == 0) echo $class;?>>
+	        <?php echo $scentJob['configId']; ?>
+	        &nbsp;
+	      </dd>
+		</dl>
+	</div>
+
 <?php endif; ?>
 <!-- End not empty ScentJob -->
 
 <div class="scentJobs view">
 	<h3><?php  __('数据挖掘服务器消息');?></h3>
 
-	<div id="scentJobInfoRaw">
-		<pre></pre>
+	<div>
+		<pre id="jobInfoRaw"></pre>
 	</div>
 </div>
 

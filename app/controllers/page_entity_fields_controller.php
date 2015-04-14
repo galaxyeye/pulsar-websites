@@ -3,6 +3,13 @@ class PageEntityFieldsController extends AppController {
 
 	var $name = 'PageEntityFields';
 
+	var $paginate = ['PageEntityField' => ['limit'=> 500, 'order' => 'PageEntityField.id DESC']];
+
+	function index() {
+		$this->PageEntityField->recursive = 0;
+		$this->set('pageEntityFields', $this->paginate(array('PageEntityField.user_id' => $this->currentUser['id'])));
+	}
+
 	function view($id = null) {
 		if (!$id) {
 			$this->Session->setFlash(__('Invalid page entity field', true));

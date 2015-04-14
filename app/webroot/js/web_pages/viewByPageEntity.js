@@ -57,6 +57,14 @@ $(document).ready(function() {
     $('.hide-info-box').removeClass('qiwur-hidden').show();
   });
 
+  $('.analysis-extract-rule').click(function() {
+    var target = getCakePHPUrl('scent_jobs', 'ajax_extract');
+    var data = {url : webPage['WebPage']['url'], html : webPage['WebPage']['content'], format : 'all'}
+    $.post(target, data, function(results) {
+      $("#qiwurHtmlWrapper").html(results['result']);
+    }, 'json');
+  });
+
   $('.start-extract-rule').click(function() {
     $('.info-box').addClass('qiwur-hidden').hide();
     $('.css-path-collector').removeClass('qiwur-hidden').show();
@@ -76,16 +84,16 @@ $(document).ready(function() {
   });
 
   $('.save-extract-rule').click(function() {
-   if ($.isEmptyObject(pageEntityFields)) {
-     layer.alert('请至少指定一个字段！', 9);
-     return;
-   }
-   var pageEntityId = pageEntity['PageEntity']['id'];
+    if ($.isEmptyObject(pageEntityFields)) {
+      layer.alert('请至少指定一个字段！', 9);
+      return;
+    }
+    var pageEntityId = pageEntity['PageEntity']['id'];
 
-   var target = getCakePHPUrl('page_entities', 'ajax_addFields', pageEntityId);
-   $.post(target, {data : JSON.stringify(pageEntityFields)}, function(data) {
-       layer.msg("<p>挖掘规则已保存！</p><pre>" + dump(data) + "</pre>", 5, {type : 1})
-     }, 'json');
+    var target = getCakePHPUrl('page_entities', 'ajax_addFields', pageEntityId);
+    $.post(target, {data : JSON.stringify(pageEntityFields)}, function(data) {
+      layer.msg("<p>挖掘规则已保存！</p><pre>" + dump(data) + "</pre>", 5, {type : 1})
+    }, 'json');
   });
 
   $('.clear-extract-rule').click(function() {

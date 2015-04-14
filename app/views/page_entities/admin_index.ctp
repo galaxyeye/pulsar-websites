@@ -1,3 +1,5 @@
+<?php echo $this->element('page_entities/subnav') ?>
+
 <div class="pageEntities index">
 	<h2><?php __('Page Entities');?></h2>
 	<table cellpadding="0" cellspacing="0">

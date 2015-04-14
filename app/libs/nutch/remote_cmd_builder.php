@@ -20,6 +20,10 @@ class JobType {
 
 class RemoteCmdBuilder extends \Object {
 
+	// TODO : Avoid page entity as a member field,
+	// instead of which, use an independent args array
+	// private $args = ['crawlId' => null, 'batchId' => null, 'configId' => null];
+
 	private $crawl;
 
 	private $remoteCommands = array();
@@ -35,7 +39,7 @@ class RemoteCmdBuilder extends \Object {
 		$crawl = $this->crawl;
 
 		// nutch seedList message
-		$nutchSeeds = array();
+		$nutchSeeds = [];
 		for ($i = 0; $i < count($crawl['Seed']); ++$i) {
 			$seed = $crawl['Seed'][$i];
 			// seed url should add "isSeed=true" metadata
@@ -87,6 +91,11 @@ class RemoteCmdBuilder extends \Object {
 
 		if ($limit == null) {
 			$limit = 1000;
+		}
+
+		if (count($crawl['CrawlFilter']) == 1) {
+			$regex = normalizeUrlFilter($crawl['CrawlFilter'][0]['url_filter']);
+			$startKey = \Nutch\regex2startKey($regex);
 		}
 
 		$urlFilter = null;

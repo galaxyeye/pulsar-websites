@@ -26,7 +26,6 @@ $(document).ready(function() {
   function processStep2() {
       $.layer({
           type: 1,
-          title: false,
           border : false,
           shade: false,
           closeBtn: [0, true],
@@ -85,18 +84,36 @@ $(document).ready(function() {
       var id = $('.scentJobs.view .model-id').text();
       var url = getCakePHPUrl('scent_jobs', 'ajax_getJobInfo', id, 'true');
       $.getJSON(url, function(results) {
-        if (results['state'] == undefined || results['state'] == 'FAILED') {
-          clearInterval(interval);
-        }
+          layer.closeAll();
 
-        $("#scentJobInfoRaw pre").html(JSON.stringify(results, null, 4));
+          if (results['state'] == undefined || results['state'] == 'FAILED') {
+            clearInterval(interval);
+            layer.msg('挖掘失败', 5, {type : 5});
+            return;
+          }
 
-        if (results['state'] == 'FINISHED' && results['msg'] == 'OK') {
-          clearInterval(interval);
+          $("#jobInfoRaw").html(JSON.stringify(results, null, 4));
 
-          layer.msg('挖掘成功', 2, {type : 1});
-          showExtractResultAsSQL();
-        }
+          var jobId = results['id'];
+          var processedCount = results['status']['jobs'][jobId]['counters']['AutoExtract']['processed.count'];
+          $('.extract-count').text(processedCount);
+
+          if (results['state'] == 'RUNNING' && results['msg'] == 'OK') {
+            layer.load('任务正在执行中，请稍候......', 2);
+          }
+
+          if (results['state'] == 'FINISHED' && results['msg'] == 'OK') {
+            clearInterval(interval);
+
+            layer.msg('挖掘成功，正在分析挖掘结果......', 300, {type : 1});
+            if (scentJob['ScentJob']['type'] == 'RULEDEXTRACT') {
+              showExtractResultAsSQL();
+            }
+            else if (scentJob['ScentJob']['type'] == 'AUTOEXTRACT') {
+              var outFolder = results['result']['OutFolder'];
+              showExtractResultAsWebsite(outFolder);
+            }
+          }
       });
     }, 2000);
   } // processStep5
@@ -196,17 +213,33 @@ $(document).ready(function() {
     });
   } // startAutoExtraction
 
-  function showExtractResultAsSQL() {
-    var id = $('.scentJobs.view .model-id').text();
-    var url = getCakePHPUrl('scent_jobs', 'ajax_getExtractResultAsSQL', id);
-    $.getJSON(url, function(sqls) {
-      layer.closeAll();
-      $("#sqlList").html($("#sqlListTemplate").render(sqls));
-      if (sqls.length > 2) {
-        $('.download').show();
-      }
+  function showExtractResultAsWebsite(outFolder) {
+    url = getCakePHPUrl('web_pages', 'showExtractResultAsWebsite', outFolder);
+    $('#autoExtractResult').show();
+    $('#autoExtractResult a').attr('href', url);
+
+    layer.closeAll();
+    $.layer({
+        type: 1,
+        title: false,
+        border : true,
+        shade: [0.5, '#000'],
+        area: ['751px', 'auto'],
+        page: {dom : '#autoExtractResult'}
     });
-  }
+  } // showExtractResultAsWebsite
+
+  function showExtractResultAsSQL() {
+      var id = $('.scentJobs.view .model-id').text();
+      var url = getCakePHPUrl('scent_jobs', 'ajax_getExtractResultAsSQL', id);
+      $.getJSON(url, function(sqls) {
+        layer.closeAll();
+        $("#sqlList").html($("#sqlListTemplate").render(sqls));
+        if (sqls.length > 2) {
+          $('.download').show();
+        }
+      });
+  } // showExtractResultAsSQL
 
   function showExtractResultInLayer() {
     layer.closeAll();

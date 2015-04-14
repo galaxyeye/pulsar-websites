@@ -17,8 +17,22 @@ class StopUrlsController extends AppController {
 	}
 
 	function add() {
+		$crawl_id = 0;
+
+		if (empty($this->data)) {
+			if (!isset($this->params['named']['crawl_id'])) {
+				$this->Session->setFlash(__('You must specify a crawl id for the human action', true));
+				$this->redirect(array('controller' => 'crawls', 'action' => 'index'));
+			}
+
+			$crawl_id = $this->params['named']['crawl_id'];
+		}
+
 		if (!empty($this->data)) {
+			$crawl_id = $this->data['StopUrl']['crawl_id'];
+
 			$this->StopUrl->create();
+			$this->data['StopUrl']['user_id'] = $this->currentUser['id'];
 			if ($this->StopUrl->save($this->data)) {
 				$this->Session->setFlash(__('The stop url has been saved', true));
 				$this->redirect(array('action' => 'index'));
@@ -26,9 +40,10 @@ class StopUrlsController extends AppController {
 				$this->Session->setFlash(__('The stop url could not be saved. Please, try again.', true));
 			}
 		}
-		$crawls = $this->StopUrl->Crawl->find('list');
-		$users = $this->StopUrl->User->find('list');
-		$this->set(compact('crawls', 'users'));
+
+		$this->StopUrl->Crawl->recursive = -1;
+		$crawl = $this->StopUrl->Crawl->read(null, $crawl_id);
+		$this->set(compact('crawl'));
 	}
 
 	function edit($id = null) {

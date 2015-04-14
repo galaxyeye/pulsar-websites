@@ -5,7 +5,7 @@
 	<?php 
 		echo $this->Form->input('url');
 		echo $this->Form->input('forbidden_point');
-		echo $this->Form->input('crawl_id');
+		echo $this->Form->hidden('crawl_id', array('value' => $crawl['Crawl']['id']));
 	?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit', true));?>

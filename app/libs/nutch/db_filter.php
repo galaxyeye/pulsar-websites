@@ -11,7 +11,7 @@ class DbFilter {
       'fields' => null,
   		'limit' => null,
       'batchId' => null,
-      'keysReversed' => null
+      'keysReversed' => false
   );
 
   public function __construct($startKey = null, $endKey = null, $urlFilter = null, $fields = null,

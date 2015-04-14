@@ -90,8 +90,18 @@ class NutchClient {
 		return $this->httpClient->put($this->nutchUrl."/config/$nutchConfigId/$propertId", $propertyValue);
 	}
 
-	public function query($dbFilter) {
-		return $this->httpClient->postJson($this->nutchUrl."/db", $dbFilter->__toString());
+	/**
+	 * @property $args \Nutch\DbFilter or array
+	 * */
+	public function query($args) {
+		if (is_object($args)) {
+			$args = $args->__toString();
+		}
+		else if (is_array($args)) {
+			$args = json_encode($args);
+		}
+
+		return $this->httpClient->postJson($this->nutchUrl."/db", $args);
 	}
 
 	/*********************************************************

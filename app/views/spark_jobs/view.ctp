@@ -1,3 +1,5 @@
+<?php echo $this->element('jobs/subnav') ?>
+
 <div class="sparkJobs view">
 <h2><?php  __('Spark Job');?></h2>
 	<dl><?php $i = 0; $class = ' class="altrow"';?>

@@ -74,7 +74,7 @@
 		<td><?php echo $i ?></td>
 		<td class='pageInfo'>
 		  <div><?=$this->Html->link($webPage['baseUrl'],
-					['action' => 'view', $encodedUrl, 'page_entity_id' => $page_entity_id],
+					['action' => 'viewByPageEntity', $encodedUrl, 'page_entity_id' => $page_entity_id],
 		  		['target' => '_blank']); ?>&nbsp;</div>
 
 		</td>

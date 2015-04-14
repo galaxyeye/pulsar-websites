@@ -61,6 +61,10 @@ class RemoteCmdExecutor extends \Object {
 		return $this->submitJob($command);
 	}
 
+	/**
+	 * 
+	 * @deprecated Use \Nutch\NutchClient::query instead
+	 * */
 	public function queryByCrawlFilter($crawl, $fields = null, $limit = null) {
 		$cmdBuilder = new RemoteCmdBuilder($crawl);
 

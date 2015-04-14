@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>Nutch UI</title>
+  <title>齐物数据引擎 - 格物，齐物，用物</title>
 	<style type="text/css">
 		#htmlWrapper { position:fixed; top:150px; left:150px; margin:auto; }
 		#rawPageSeperator { bolder:1px; }

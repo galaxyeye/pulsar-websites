@@ -134,7 +134,7 @@ class ScentJobsController extends AppController {
     $this->set($params);
   }
 
-  // TODO : Save extract result in HDFS
+  // TODO : Save extract result in HDFS/HBASE
   function _getExtractResult($scentJob) {
     $raw_msg = $scentJob['ScentJob']['raw_msg'];
     $results = json_decode($raw_msg, true, 10);
@@ -152,7 +152,30 @@ class ScentJobsController extends AppController {
 
     return $content;
   }
-  
+
+  function ajax_extract() {
+  	$this->autoRender = false;
+
+  	$url = $this->params['form']['url'];
+  	$html = $this->params['form']['html'];
+  	$format = $this->params['form']['format'];
+
+  	$this->params['form']['html'] = "";
+
+  	if (empty($html) || empty($format)) {
+  		return getResponseStatusJson(400);
+  	}
+
+    $results = Cache::read("extract-".$url, 'minute');
+    if ($results == null) {
+      $scentClient = new \Scent\ScentClient();
+      $results = $scentClient->extract(['-html' => $html, '-format' => $format]);
+
+      Cache::write("extract-".$url, $results, 'minute');
+    }
+
+    return $results;
+  }
 
   function admin_index() {
   	$this->paginate['ScentJob'] = array('limit'=> 500, 'order' => 'ScentJob.id DESC');

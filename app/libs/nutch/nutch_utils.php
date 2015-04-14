@@ -2,6 +2,10 @@
 
 namespace Nutch;
 
+/**
+ * @property $urlFilter string url filters seperated by "\n" or "\r\n"
+ * @return array 
+ * */
 function splitUrlFilter($urlFilter) {
 	$urlFilter = str_ireplace("+http", "http", $urlFilter);
 	$urlFilter = str_ireplace("-http", "http", $urlFilter);
@@ -11,6 +15,10 @@ function splitUrlFilter($urlFilter) {
 	return explode("\n", $urlFilter);
 }
 
+/**
+ * @property $urlFilter string url filters seperated by "\n" or "\r\n"
+ * @return string
+ * */
 function normalizeUrlFilter($urlFilter) {
 	if (empty($urlFilter)) {
 		return null;
@@ -20,6 +28,8 @@ function normalizeUrlFilter($urlFilter) {
 	$urlFilter = trim($urlFilter);
 	$normalized = "";
 	foreach(explode("\n", $urlFilter) as $f) {
+		$f = normalizeUrlFilterRegex($f);
+
 		$f = trim($f);
 
 		if (empty($f)) {
@@ -36,17 +46,56 @@ function normalizeUrlFilter($urlFilter) {
 		$normalized .= "\n";
 	}
 
-	return trim($normalized, "\n");
+	return rtrim($normalized, "\n");
 }
 
-function normalizeUrlFilterRegex($regex) {
-	if ($regex[0] != '^') $regex = '^'.$regex;
-	$regex = rtrim($regex, "$");
-	// $regex = rtrim($regex, "/");
-	// $regex = $regex."\/{0,1}";
+/**
+ * Regex format : 
+ * ^http://example.com/a/b/c/(.+)/{0,1}$
+ * ^http://example.com/a/b/c/(\d+)/{0,1}$
+ * */
+function normalizeUrlFilterRegex($regex) {	
+	if (empty($regex) || !is_string($regex)) return null;
 
-	$regex = $regex.'$';
+	if (!startsWith($regex, "http") && !startsWith($regex, "^http")) {
+		return $regex;
+	}
+
+	$regex = ltrim($regex, "^");
+	$regex = rtrim($regex, "$");
+	$regex = '^'.$regex.'$';
 	return $regex;
+}
+
+function regex2urlFilter($regex) {
+	if (empty($regex)) return null;
+
+	return normalizeUrlFilterRegex($regex);
+}
+
+/**
+ * Regex format : 
+ * ^http://domain.com/(.+)/{0,1}$
+ * ^http://example.com/a/b/c/(\d+)/{0,1}$
+ * */
+function regex2startKey($regex) {
+	if (empty($regex)) return null;
+
+	$startKey = ltrim($regex, "^");
+	$startKey = rtrim($startKey, "$");
+
+	if (!startsWith($startKey, "http")) {
+		return null;
+	}
+
+	$startKey = str_replace("://", ":\\\\", $startKey);
+
+	$parts = explode("/", $startKey);
+	$parts = array_slice($parts, 0, count($parts) - 2);
+	$startKey = implode("/", $parts);
+
+	$startKey = str_replace(":\\\\", "://", $startKey);
+	return $startKey;
 }
 
 function filterNutchConfig($nutchConfig, $useWhiteList = true) {

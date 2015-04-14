@@ -17,6 +17,9 @@ class JobState {
 	const FAILED_COMPLETED = 'FAILED_COMPLETED';
 }
 
+/**
+ * TODO : it seems no use
+ * */
 class JobInfo {
 
 	private $info = array(
@@ -25,6 +28,8 @@ class JobInfo {
 			'confId' => 'default',
 			'jobClassName' => null,
 			'args' => array(),
+			'status' => array(),
+			'process' => 0.0,
 
 			'state' => 'state',
 			'msg' => 'msg',

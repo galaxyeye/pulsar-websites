@@ -1,16 +1,4 @@
-<div class="actions">
-  <ul>
-      <li>
-        <a href="<?php echo Router::url('/nutch_jobs') ?>">nutch jobs</a>
-      </li>
-      <li>
-        <a href="<?php echo Router::url('/scent_jobs') ?>">scent jobs</a>
-      </li>
-      <li>
-        <a href="<?php echo Router::url('/spark_jobs') ?>">spark jobs</a>
-      </li>
-  </ul>
-</div>
+<?php echo $this->element('jobs/subnav') ?>
 
 <br />
 <hr />
@@ -58,6 +46,7 @@
   </tr>
 <?php endforeach; ?>
   </table>
+  <?php echo $this->Html->link(__('More >> ', true), array('controller' => 'nutch_jobs')); ?>
 </div>
 
 <br />
@@ -101,6 +90,7 @@
   </tr>
 <?php endforeach; ?>
   </table>
+  <?php echo $this->Html->link(__('More >> ', true), array('controller' => 'scent_jobs')); ?>
 </div>
 
 <br />
@@ -137,4 +127,5 @@
 	</tr>
 <?php endforeach; ?>
 	</table>
+  <?php echo $this->Html->link(__('More >> ', true), array('controller' => 'spark_jobs')); ?>
 </div>

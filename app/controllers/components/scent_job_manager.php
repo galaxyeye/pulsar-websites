@@ -28,17 +28,17 @@ class ScentJobManagerComponent extends Object {
 
     $pageEntityId = $pageEntity['PageEntity']['id'];
     if (empty($pageEntityId)) {
-    	$this->log("Invalid PageEntity");
+      $this->log("Invalid PageEntity");
 
-    	return null;
+      return null;
     }
 
     $configId = $this->remoteCmdExecutor->createScentConfig($pageEntity);
 
     if (empty($configId) || stripos($configId, "exception") !== false) {
-    	$this->log("Failed to create scent config, msg : $configId");
+      $this->log("Failed to create scent config, msg : $configId");
 
-    	return $configId;
+      return $configId;
     }
 
     $data = array('id' => $pageEntityId, 'configId' => $configId);
@@ -57,56 +57,80 @@ class ScentJobManagerComponent extends Object {
     $pageEntity['PageEntity']['limit'] = $limit;
     $jobId = $this->remoteCmdExecutor->executeRemoteJob($pageEntity, $jobType);
     if ($jobId === false) {
-    	$this->log("Failed to execute job : $jobType");
-    	return false;
+      $this->log("Failed to execute job : $jobType");
+      return false;
     }
 
     $p = $pageEntity['PageEntity'];
     $data = array('ScentJob' => array(
-    		'crawlId' => $p['crawlId'],
-    		'configId' => $p['configId'] ? $p['configId'] : 'default',
-    		'jobId' => $jobId,
-    		'type' => $jobType,
-    		'page_entity_id' => $p['id'],
-    		'user_id' => $this->currentUser['id']
+        'crawlId' => $p['crawlId'],
+        'configId' => $p['configId'] ? $p['configId'] : 'default',
+        'jobId' => $jobId,
+        'type' => $jobType,
+        'page_entity_id' => $p['id'],
+        'user_id' => $this->currentUser['id']
     ));
 
     if (!$this->controller->ScentJob->save($data)) {
-    	$this->log("Failed to save ScentJob : $jobId");
+      $this->log("Failed to save ScentJob : $jobId");
     }
 
     return $jobId;
   }
 
-  public function segment($pageEntity, $limit = 1000) {
-  	$this->_validate($pageEntity);
+  public function autoExtract($pageEntity, $domain = 'product', $limit = 1000, $builder = 'ProductHTMLBuilder') {
+    $this->_validate($pageEntity);
 
-  	$jobType = JobType::SEGMENT;
+    $jobType = JobType::AUTOEXTRACT;
 
-  	$pageEntity['PageEntity']['limit'] = $limit;
-  	$jobId = $this->remoteCmdExecutor->executeRemoteJob($pageEntity, $jobType);
-  	if ($jobId === false) {
-  		$this->log("Failed to execute job : $jobType");
-  		return false;
-  	}
+    $pageEntity['PageEntity']['domain'] = $domain;
+    $pageEntity['PageEntity']['limit'] = $limit;
+    $pageEntity['PageEntity']['builder'] = $builder;
 
-  	$p = $pageEntity['PageEntity'];
-  	$data = array('ScentJob' => array(
-  			'crawlId' => $p['crawlId'],
-  			'configId' => $p['configId'] ? $p['configId'] : 'default',
-  			'jobId' => $jobId,
-  			'type' => $jobType,
-  			'page_entity_id' => $p['id'],
-  			'user_id' => $this->currentUser['id']
-  	));
+    $jobId = $this->remoteCmdExecutor->executeRemoteJob($pageEntity, $jobType);
+    if ($jobId === false) {
+      $this->log("Failed to execute job : $jobType");
+      return false;
+    }
 
-  	if (!$this->controller->ScentJob->save($data)) {
-  		$this->log("Failed to save ScentJob : $jobId");
-  	}
+    $this->_saveScentJob($jobId, $jobType, $pageEntity);
 
-  	return $jobId;
+    return $jobId;
   }
 
+  public function segment($pageEntity, $limit = 1000) {
+    $this->_validate($pageEntity);
+
+    $jobType = JobType::SEGMENT;
+
+    $pageEntity['PageEntity']['limit'] = $limit;
+    $jobId = $this->remoteCmdExecutor->executeRemoteJob($pageEntity, $jobType);
+    if ($jobId === false) {
+      $this->log("Failed to execute job : $jobType");
+      return false;
+    }
+
+    $this->_saveScentJob($jobId, $jobType, $pageEntity);
+
+    return $jobId;
+  }
+
+  private function _saveScentJob($jobId, $jobType, $pageEntity) {
+    $p = $pageEntity['PageEntity'];
+    $data = array('ScentJob' => array(
+        'crawlId' => $p['crawlId'],
+        'configId' => $p['configId'] ? $p['configId'] : 'default',
+        'jobId' => $jobId,
+        'type' => $jobType,
+        'page_entity_id' => $p['id'],
+        'user_id' => $this->currentUser['id']
+    ));
+
+    if (!$this->controller->ScentJob->save($data)) {
+      $this->log("Failed to save ScentJob : $jobId");
+    }
+  }
+  
   private function _validate($pageEntity) {
     assert(isset($pageEntity['PageEntity']));
     assert(isset($pageEntity['PageEntityField']));

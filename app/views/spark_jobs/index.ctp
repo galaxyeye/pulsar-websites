@@ -1,16 +1,4 @@
-<div class="actions">
-  <ul>
-      <li>
-        <a href="<?php echo Router::url('/nutch_jobs') ?>">nutch jobs</a>
-      </li>
-      <li>
-        <a href="<?php echo Router::url('/scent_jobs') ?>">scent jobs</a>
-      </li>
-      <li>
-        <a href="<?php echo Router::url('/spark_jobs') ?>">spark jobs</a>
-      </li>
-  </ul>
-</div>
+<?php echo $this->element('jobs/subnav') ?>
 
 <div class="sparkJobs index">
 	<h2><?php __('Spark Jobs');?></h2>

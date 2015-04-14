@@ -1,3 +1,5 @@
+<?php echo $this->element('page_entities/subnav') ?>
+
 <div class="pageEntities form">
 <?php echo $this->Form->create('PageEntity');?>
 	<fieldset>

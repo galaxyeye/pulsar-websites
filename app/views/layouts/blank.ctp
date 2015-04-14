@@ -9,7 +9,7 @@
 <title><?php echo $title_for_layout?></title>
 <link rel="shortcut icon" href="<?php echo $html->webroot ?>favicon.ico" />
 <style type="text/css">
-	* {margin:0;padding:0}
+	* { margin:0;padding:0 }
 </style>
 
 <?php

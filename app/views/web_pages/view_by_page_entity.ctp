@@ -2,11 +2,12 @@
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>Nutch UI</title>
+  <title>齐物数据引擎 - 格物，齐物，用物</title>
   <link rel="stylesheet" type="text/css" href="/css/jquery/jquery-ui-1.11.3/jquery-ui.css" />
   <link rel="stylesheet" type="text/css" href="/css/dropper.css" />
   <link rel="stylesheet" type="text/css" href="/css/web_pages/web_pages.css" />
   <style type="text/css">
+
     <?php if (in_array('simpleCss', $options)) : ?>
     #qiwurHtmlWrapper ul,
     #qiwurHtmlWrapper dl,
@@ -30,6 +31,10 @@
     #qiwurHtmlWrapper h5,
     #qiwurHtmlWrapper h6 { border : 1px ridge !important; }
     <?php endif; ?>
+		#systemPanel #pageEntityFields {
+      max-height: 500px !important;
+      overflow-y: scroll;
+    }
   </style>
 
   <script type="text/x-jsrender" id="pageEntityFieldsTemplate">
@@ -89,12 +94,11 @@
       </div>
       <div id="pageEntityFields" class="webPages view"></div>
       <br />
-      <button type='button' class='analysis-extract-rule'>智能分析规则</button>
       <button type='button' class='save-extract-rule'>保存挖掘规则</button>
       <button type='button' class='clear-extract-rule'>清除挖掘规则</button>
       <button type='button' class='hide-selected-ele'>隐藏当前元素</button>
-      <button type='button' class='start-ruled-extract'>开始挖掘</button>
-    </div> <!-- css-path-collector -->
+      <button type='button' class='start-ruled-extract'>保存并挖掘</button>
+    </div><!-- css-path-collector -->
 
     <?php 
       $pageEntityId = $pageEntity['PageEntity']['id'];
@@ -103,25 +107,25 @@
 
     <div class="actions">
       <ul>
+        <li><?php echo $this->Html->link(__('智能分析', true),
+            ['action' => 'viewAnalysisResult', $encodedUrl, 'page_entity_id' => $pageEntityId], ['target' => '_blank']); ?> </li>
+        <li><?php echo $this->Html->link(__('原始样式分析', true),
+            ['action' => 'view', $encodedUrl, 'page_entity_id' => $pageEntityId], ['target' => '_blank']); ?> </li>
+        <li><?php echo $this->Html->link(__('简洁样式分析', true),
+            ['action' => 'view', $encodedUrl, 'page_entity_id' => $pageEntityId, 'options' => 'simpleCss'], ['target' => '_blank']); ?> </li>
+      </ul>
+      <hr />
+      <ul>
         <li><a href='javascript:;' class='active-draggable'>允许拖拽</a></li>
         <li><a href='javascript:;' class='deactive-draggable'>停止拖拽</a></li>
         <li><a href='javascript:;' class='hide-info-box'>隐藏信息框</a></li>
         <li><a href='javascript:;' class='show-info-box'>显示信息框</a></li>
       </ul>
-      <ul>
-        <li><?php echo $this->Html->link(__('查看（原始样式）', true), 
-            array('action' => 'view', $encodedUrl, 'page_entity_id' => $pageEntityId)); ?> </li>
-        <li><?php echo $this->Html->link(__('查看（简洁样式）', true), 
-            array('action' => 'view', $encodedUrl, 'page_entity_id' => $pageEntityId, 
-                'options' => 'simpleCss')); ?> </li>
-      </ul>
     </div><!-- actions -->
   </div><!-- systemPanel -->
 
   <div id='qiwurHtmlWrapper' class='scrapping wrap qiwur-hidden'>
-    <?php 
-      echo $webPage['WebPage']['content'];
-    ?>
+    <?php echo $webPage['WebPage']['content']; ?>
   </div>
 
   <script type="text/javascript">
@@ -133,6 +137,7 @@
       "here" : "<?php echo $this->here ?>"
     };
 
+    var webPage = <?php echo json_encode($webPage) ?>;
     var pageEntity = <?php echo json_encode($pageEntity) ?>;
   //-->
   </script>

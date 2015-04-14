@@ -22,6 +22,21 @@ class ScentClient {
 		return $this->httpClient->get_content($this->scentUrl."/admin");
 	}
 
+	public function query($args) {
+		if (is_object($args)) {
+			$args = $args->__toString();
+		}
+		else if (is_array($args)) {
+			$args = json_encode($args);
+		}
+
+		return $this->httpClient->postJson($this->scentUrl."/db", $args);
+	}
+
+	public function extract($args) {
+		return $this->httpClient->postJson($this->scentUrl."/scent/extract", json_encode($args));
+	}
+
 	/**
 	 * @return jobId as string
 	 * */

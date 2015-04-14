@@ -1,3 +1,6 @@
+<?php echo $this->element('page_entities/subnav') ?>
+<?php $page_entity_id = $pageEntity['PageEntity']['id']; ?>
+
 <div class="pageEntities view">
   <h2><?php  __('Page Entity');?></h2>
   <dl><?php $i = 0; $class = ' class="altrow"';?>
@@ -39,19 +42,55 @@
   </dl>
 </div>
 
+<?php $regex = $pageEntity['PageEntity']['url_filter']; ?>
+
 <div class="actions">
   <ul>
-    <li><?php echo $this->Html->link(__('View XML', true), array('action' => 'viewXml', $pageEntity['PageEntity']['id']), array('target' => '_blank')); ?> </li>
-    <li><?php echo $this->Html->link(__('New Page Entity', true), array('action' => 'add', $pageEntity['PageEntity']['id'])); ?> </li>
-    <li><?php echo $this->Html->link(__('Edit Page Entity', true), array('action' => 'edit', $pageEntity['PageEntity']['id'])); ?> </li>
-    <li><?php echo $this->Html->link(__('Delete Page Entity', true), array('action' => 'delete', $pageEntity['PageEntity']['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $pageEntity['PageEntity']['id'])); ?> </li>
-    <li><?php echo $this->Html->link(__('View Jobs', true), array('controller' => 'scent_jobs'),array('target' => '_blank')); ?> </li>
+
+    <li><?php echo $this->Html->link(__('View Extract Result', true),
+        ['controller' => 'storage_page_entities', '?' => ['regex' => $regex]], ['target' => '_blank']); ?></li>
+
+    <li><?php echo $this->Html->link(__('New Page Entity', true),
+        ['action' => 'add', 'crawl_id' => $pageEntity['PageEntity']['crawl_id']], ['target' => '_blank']); ?></li>
+
+    <li><?php echo $this->Html->link(__('Edit Page Entity', true),
+        ['action' => 'edit', $pageEntity['PageEntity']['id']], ['target' => '_blank']); ?></li>
+
+    <li><?php echo $this->Html->link(__('Delete Page Entity', true),
+        ['action' => 'delete', $pageEntity['PageEntity']['id']], null, sprintf(__('Are you sure you want to delete # %s?', true), $pageEntity['PageEntity']['id'])); ?></li>
+
+    <li><?php echo $this->Html->link(__('View Jobs', true),
+        ['controller' => 'scent_jobs'], ['target' => '_blank']); ?></li>
+
+    <li><?php echo $this->Html->link(__('View XML', true),
+        ['action' => 'viewXml', $pageEntity['PageEntity']['id']], ['target' => '_blank']); ?></li>
   </ul>
+</div>
+
+<div class='related message'>
+	<h3>Minging Help</h3>
+	<ol>
+		<li>Rule based mining engine requires minging rules,
+		the rules can be automatically generated, and you can modifiy, delete, or add new ones manually</li>
+		<li>Auto mining engine does NOT require any additional rules, but it's experimental</li>
+	</ol>
+</div>
+
+<div class="pageEntities form">
+<?php echo $this->Form->create('PageEntity', array('action' => 'startAutoExtract', 'type' => 'get')); ?>
+  <fieldset>
+    <legend><?php __('Start Auto Minging (Experimental)'); ?></legend>
+  <?php echo $this->Form->input('id', array('value' => $pageEntity['PageEntity']['id'])); ?>
+  <?php echo $this->Form->hidden('domain', array('value' => 'product')); ?>
+  <?php echo $this->Form->hidden('limit', array('value' => 500)); ?>
+  <?php echo $this->Form->hidden('builder', array('value' => 'ProductHTMLBuilder')); ?>
+  <?php echo $this->Form->end(__('Start Auto Minging', true)); ?>
+  </fieldset>
 </div>
 
 <div class="related">
   <h3><?php __('Page Entity Fields');?></h3>
-  <?php if (!empty($pageEntity['PageEntityField'])):?>
+  <?php if (!empty($pageEntity['PageEntityField'])): ?>
   <table cellpadding="0" cellspacing="0">
   <tr>
     <th><?php __('Name'); ?></th>
@@ -64,7 +103,7 @@
   </tr>
   <?php 
     $i = 0;
-    foreach ($pageEntity['PageEntityField'] as $pageEntityField): 
+    foreach ($pageEntity['PageEntityField'] as $pageEntityField) : 
       $class = null;
       if ($i++ % 2 == 0) {
         $class = ' class="altrow"';
@@ -78,10 +117,10 @@
       <td><?php echo $pageEntityField['text_validate_regex'];?></td>
       <td><?php echo $pageEntityField['sql_data_type'];?></td>
       <td class="actions">
-        <?php echo $this->Html->link(__('View', true), 
-        		array('controller' => 'page_entity_fields', 'action' => 'view', $pageEntityField['id'])); ?>
-        <?php echo $this->Html->link(__('Delete', true), 
-        		array('controller' => 'page_entity_fields', 'action' => 'delete', $pageEntityField['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $pageEntityField['id'])); ?>
+        <?php echo $this->Html->link(__('View', true),
+            ['controller' => 'page_entity_fields', 'action' => 'view', $pageEntityField['id']]); ?>
+        <?php echo $this->Html->link(__('Delete', true),
+            ['controller' => 'page_entity_fields', 'action' => 'delete', $pageEntityField['id']], null, sprintf(__('Are you sure you want to delete # %s?', true), $pageEntityField['id'])); ?>
       </td>
     </tr>
   <?php endforeach; ?>
@@ -90,15 +129,16 @@
 
   <div class="actions">
     <ul>
-      <li><?php echo $this->Html->link(__('增加字段（智能分析Not Implemented Yet）', true),
-      		array('action' => 'analysisFields', $pageEntity['PageEntity']['id']),
-      		array('target' => '_blank'));?></li>
-      <li><?php echo $this->Html->link(__('增加字段（图形化收集）', true),
-      		array('controller' => 'web_pages', 'action' => 'indexByPageEntity', $pageEntity['PageEntity']['id']),
-      		array('target' => '_blank'));?></li>
-      <li><?php echo $this->Html->link(__('增加字段（手动填写）', true),
-      		array('controller' => 'page_entity_fields', 'action' => 'add',
-      				"page_entity_id" => $pageEntity['PageEntity']['id']));?></li>
+      <li><?php echo $this->Html->link(__('Analysis Minging Rules', true),
+          [
+          		'controller' => 'storage_web_pages',
+          		'action' => 'index',
+          		'?' => ['regex' => $regex, 'page_entity_id' => $page_entity_id]
+          ],
+          ['target' => '_blank']);?></li>
+      <li><?php echo $this->Html->link(__('Manual Add Ming Rules', true),
+          ['controller' => 'page_entity_fields', 'action' => 'add', "page_entity_id" => $page_entity_id],
+      		['target' => '_blank']);?></li>
     </ul>
   </div>
 </div>
@@ -106,34 +146,29 @@
 <div class="pageEntities form">
 <?php echo $this->Form->create('PageEntity', array('action' => 'startRuledExtract', 'type' => 'get'));?>
   <fieldset>
-     <legend><?php __('Start Ruled Extract'); ?></legend>
+    <legend><?php __('Start Ruled Minging'); ?></legend>
   <?php echo $this->Form->input('id', array('value' => $pageEntity['PageEntity']['id'])); ?>
   <?php echo $this->Form->hidden('limit', array('value' => 500)); ?>
-  <?php echo $this->Form->end(__('Start Ruled Extract', true));?>
+
+  <?php 
+    if (!empty($pageEntity['PageEntityField'])) {
+      echo $this->Form->end(__('Start Ruled Minging', true));
+    }
+    else {
+      echo "No Mining Rules Yet";
+    }
+  ?>
   </fieldset>
 </div>
 
-<div class='message view'>
-	下面两项正在建设中。。。
-</div>
-
+<!-- 
 <div class="pageEntities form">
-<?php echo $this->Form->create('PageEntity', array('action' => 'startSegmentAnalysis', 'type' => 'get'));?>
+<?php echo $this->Form->create('PageEntity', array('action' => 'startFeatureAnalysis', 'type' => 'get'));?>
   <fieldset>
-     <legend><?php __('Start Segment Analysis'); ?></legend>
+    <legend><?php __('Feature Analysis'); ?></legend>
   <?php echo $this->Form->input('id', array('value' => $pageEntity['PageEntity']['id'])); ?>
   <?php echo $this->Form->hidden('limit', array('value' => 500)); ?>
   <?php echo $this->Form->hidden('diagnose', array('value' => true)); ?>
-  <?php echo $this->Form->end(__('Start Segment Analysis', true));?>
   </fieldset>
 </div>
-
-<div class="pageEntities form">
-<?php echo $this->Form->create('PageEntity', array('action' => 'startAutoExtract', 'type' => 'get'));?>
-  <fieldset>
-     <legend><?php __('Start Auto Extract'); ?></legend>
-  <?php echo $this->Form->input('id', array('value' => $pageEntity['PageEntity']['id'])); ?>
-  <?php echo $this->Form->hidden('limit', array('value' => 500)); ?>
-  <?php echo $this->Form->end(__('Start Auto Extract', true));?>
-  </fieldset>
-</div>
+ -->

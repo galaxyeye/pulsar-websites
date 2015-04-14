@@ -424,7 +424,7 @@ class NutchJobManagerComponent extends Object {
     $client = new \Nutch\NutchClient();
     $rawMsg = $client->getJobInfo($jobId);
 
-    if (empty($rawMsg) || striContains($rawMsg, '{exception')) {
+    if (empty($rawMsg) || striContains($rawMsg, '{"exception')) {
       $this->log("Failed to get JobInfo".$rawMsg);
       return ['rawMsg' => $rawMsg, 'job' => null];
     }
@@ -440,7 +440,7 @@ class NutchJobManagerComponent extends Object {
     ];
 
     if (!$this->NutchJob->save($data)) {
-      $this->log("Failed to update nutch job  #$id");
+      $this->log("Failed to update nutch job  #$job_id");
     }
 
     return ['rawMsg' => $rawMsg, 'job' => $jobInfo];

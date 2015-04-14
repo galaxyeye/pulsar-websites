@@ -427,55 +427,6 @@ die();
 		die();
 	}
 
-	public function fixDefaultDest() {
-		$this->loadModel('User');
-		$this->loadModel('UserDest');
-
-		$this->User->recursive = -1;
-		$this->UserDest->recursive = -1;
-
-		$sql = "update user_dests set is_default='N'";
-		$dests = $this->User->query($sql);
-
-		for ($i = 0; $i < 10; ++$i) {
-			$userIds = '';
-
-			for ($j = $i * 100; $j < ($i + 1) * 100 && $j < 1100; ++$j) {
-				if ($j != $i * 100) {
-					$userIds .= ',';
-				}
-				
-				$userIds .= $j;
-			}
-
-			$sql = "select id from user_dests as UserDest where is_hidden=0 and is_default='N' and user_id in ($userIds)"
-				." group by user_id order by `created` desc ";
-
-			$dests = $this->User->query($sql);
-
-			$destIds = '';
-			$k = 0;
-			foreach ($dests as $dest) {
-				if ($k++ != 0) {
-					$destIds .= ',';
-				}
-
-				$destIds .= $dest['UserDest']['id'];
-			}
-
-			$sql = "update user_dests set is_default='Y' where id in ($destIds)";
-			$dests = $this->User->query($sql);
-		}
-
-		$sql = "select id, count(id) as c from user_dests as UserDest where is_default='Y' group by user_id";
-		$counts = $this->User->query($sql);
-		foreach ($counts as $count) {
-			if ($count[0]['c'] != 1) {
-				pr($count);
-			}
-		}
-	}
-
 	public function ipv6() {
 		App::import('Vendor', 'lib/ip');
 

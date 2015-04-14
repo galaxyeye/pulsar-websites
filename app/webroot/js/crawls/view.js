@@ -12,17 +12,17 @@ $(document).ready(function() {
 
     var id = $('.crawls.view .model-id').text();
     var url = getCakePHPUrl('crawls', 'ajax_getJobInfo', id);
-    $.getJSON(url, function(data) {
-      $("#jobInfo").html("<pre>" + JSON.stringify(data, null, 4) + "</pre>");
+    $.getJSON(url, function(jobInfo) {
+      $("#jobInfo").html(JSON.stringify(jobInfo, null, 4));
 
-      if (data == '' || data['state'] == undefined || data['state'] == 'FAILED' || data['state'] == 'NOT_FOUND') {
+      if (jobInfo == '' || jobInfo['state'] == undefined || jobInfo['state'] == 'FAILED' || jobInfo['state'] == 'NOT_FOUND') {
         clearInterval(interval);
       }
     });
 
     var url = getCakePHPUrl('crawls', 'ajax_get', id);
     $.getJSON(url, function(crawl) {
-      $('.finishedRounds').text(crawl['Crawl']['finished_rounds']);
+      $('.finished-rounds').text(crawl['Crawl']['finished_rounds']);
     });
   }, 5000);
 });
