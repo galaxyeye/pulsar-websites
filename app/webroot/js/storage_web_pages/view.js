@@ -70,8 +70,8 @@ $(document).ready(function() {
   });
 
   $('.start-ruled-extract').click(function() {
-    var id = pageEntity['PageEntity']['id'];
-    var url = getCakePHPUrl('page_entities', 'view', id);
+    var page_entity_id = pageEntity['PageEntity']['id'];
+    var url = getCakePHPUrl('page_entities', 'view', page_entity_id);
 
     _saveExtractRules(url);
   });

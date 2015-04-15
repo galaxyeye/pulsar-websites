@@ -95,16 +95,20 @@ class RemoteCmdBuilder {
     $p = $this->pageEntity['PageEntity'];
     $urlFilter = \Nutch\splitUrlFilter($p['url_filter']);
 
+    $regex = $urlFilter[0]; // TODO : To support multiple filters
+    $startKey = \Nutch\regex2startKey($regex);
+
     $limit = 10000;
     if (!empty($p['limit'])) $limit = $p['limit'];
     $limit = intval($limit);
 
     $jobConfig = new JobConfig($p['crawlId'], JobType::AUTOEXTRACT, $p['configId']);
-    $jobConfig->setArgument("-regex", $urlFilter[0]); // TODO : To support multiple filters
-    $jobConfig->setArgument("-limit", $limit);
+    $jobConfig->setArgument("-tenantId", intval($p['user_id']));
+    $jobConfig->setArgument("-regex", $regex);
+    $jobConfig->setArgument("-startKey", $startKey);
+    $jobConfig->setArgument("-limit", intval($limit));
     $jobConfig->setArgument("-domain", $p['domain']);
     $jobConfig->setArgument("-builder", $p['builder']);
-    $jobConfig->setArgument("-mode", "mr");
 
 //     pr($jobConfig->__toString());
 //     die();
@@ -116,15 +120,19 @@ class RemoteCmdBuilder {
     $p = $this->pageEntity['PageEntity'];
     $urlFilter = \Nutch\splitUrlFilter($p['url_filter']);
 
+    $regex = $urlFilter[0];
+    $startKey = \Nutch\regex2startKey($regex);
+
     $limit = 10000;
     if (!empty($p['limit'])) $limit = $p['limit'];
     $limit = intval($limit);
 
     $jobConfig = new JobConfig($p['crawlId'], JobType::RULEDEXTRACT, $p['configId']);
-    $jobConfig->setArgument("-regex", $urlFilter[0]);
-    $jobConfig->setArgument("-limit", $limit);
+    $jobConfig->setArgument("-tenantId", intval($p['user_id']));
+    $jobConfig->setArgument("-regex", $regex);
+    $jobConfig->setArgument("-startKey", $startKey);
+    $jobConfig->setArgument("-limit", intval($limit));
     $jobConfig->setArgument("-rules", '[base64]'.base64_encode($p['extract_rules']));
-    $jobConfig->setArgument("-mode", "mr");
 
 //     pr($jobConfig->__toString());
 //     die();

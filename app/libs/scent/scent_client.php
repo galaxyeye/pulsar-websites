@@ -22,6 +22,9 @@ class ScentClient {
 		return $this->httpClient->get_content($this->scentUrl."/admin");
 	}
 
+	/**
+	 * @property $args \Scent\DbFilter, json encoded string or an array
+	 * */
 	public function query($args) {
 		if (is_object($args)) {
 			$args = $args->__toString();

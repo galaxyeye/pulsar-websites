@@ -81,6 +81,11 @@ class HtmlUtils {
 
     $dom = htmlqp($html, null, ['convert_to_encoding' => 'utf-8']);
 
+    $title = $dom->find('title')->text();
+    if (in_array('raw', $options)) {
+    	return array('title' => $title, 'content' => $html);
+    }
+
     HtmlUtils::qpMakeLinksAbsolute($dom, $baseUri);
     // HtmlUtils::qpRemoveAllInlineStyle($dom);
 
@@ -88,13 +93,15 @@ class HtmlUtils {
     	$item->removeAttribute('style');
     });
 
-    // TODO : sniff encoding
-    $title = $dom->find('title')->text();
-
     $removeTags = [
     		'title', 'base', 'script', 'meta', 'iframe',
     		'link[rel=icon]', 'link[rel="shortcut icon"]'
     ];
+
+    if (isset($options['removeTags'])) {
+    	$removeTags = $options['removeTags'];
+    }
+
     foreach ($removeTags as $removal) {
       $dom->find($removal)->remove();
     }
@@ -126,6 +133,6 @@ class HtmlUtils {
     $html = preg_replace("/#QiwurScrapingMetaInformation &gt;/", "body &gt;", $html);
     $html = preg_replace("/#qiwurBody &gt;/", "body &gt;", $html);
 
-    return $html;
+    return array('title' => $title, 'content' => $html);
   }
 }

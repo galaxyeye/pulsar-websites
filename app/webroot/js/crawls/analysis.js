@@ -67,7 +67,6 @@ $(document).ready(function() {
 
       refreshNutchJobInfo();
       refreshCrawlView();
-      refreshFetchedCount();
 
       ++timerCounter;
     }, 10 * 1000);
@@ -121,8 +120,18 @@ $(document).ready(function() {
   function refreshNutchJobInfo() {
     var id = $('.crawls.view .model-id').text();
     var url = getCakePHPUrl('crawls', 'ajax_getJobInfo', id);
-    $.getJSON(url, function(data) {
-      $("#jobInfo").html("<pre>" + JSON.stringify(data, null, 4) + "</pre>");
+    $.getJSON(url, function(jobInfo) {
+      if (jobInfo['state'] == undefined || jobInfo['state'] == 'FAILED') {
+        clearInterval(interval);
+        layer.msg('出现故障', 5, {type : 5});
+        return;
+      }
+
+      $("#jobInfo").html(JSON.stringify(jobInfo, null, 4));
+
+      var jobId = jobInfo['id'];
+      var fetchedCount = jobInfo['status']['jobs'][jobId]['counters']['FetcherStatus']['FetchedPages'];
+      $('.fetched.count').text(fetchedCount);
     });
   }
 

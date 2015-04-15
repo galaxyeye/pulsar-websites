@@ -54,8 +54,27 @@ $(document).ready(function() {
   $('.start-ruled-extract').click(function() {
     var page_entity_id = pageEntity['PageEntity']['id'];
     var url = getCakePHPUrl('page_entities', 'view', page_entity_id);
-    window.open(url);
+
+    _saveExtractRules(url);
   });
+
+  function _saveExtractRules(redirect = false) {
+    if ($.isEmptyObject(pageEntityFields)) {
+      layer.alert('请至少指定一个字段！', 9);
+      return;
+    }
+    var pageEntityId = pageEntity['PageEntity']['id'];
+
+    var target = getCakePHPUrl('page_entities', 'ajax_addFields', pageEntityId);
+    $.post(target, {data : JSON.stringify(pageEntityFields)}, function(data) {
+      delete data.data;
+      layer.msg("<p>挖掘规则已保存！</p><pre>" + dump(data) + "</pre>", 4, {type : 1})
+
+      if (redirect) {
+        location = redirect;
+      }
+    }, 'json');
+  }
 
   function _findPageEntityFieldByName(name) {
     var found = false;

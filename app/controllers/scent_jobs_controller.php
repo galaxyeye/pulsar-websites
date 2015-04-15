@@ -32,26 +32,27 @@ class ScentJobsController extends AppController {
 
     $errno = 0;
     if (empty($id)) {
-      $errno = 404;
+      return getResponseStatusJson(404);
     }
 
     if(!$this->checkTenantPrivilege($id)) {
-      $errno = 401;
-    }
-
-    if ($errno) {
-      echo "{errno : $errno}";
-      return;
+      return getResponseStatusJson(401);
     }
 
     $this->ScentJob->recursive = -1;
     $scentJob = $this->ScentJob->read(null, $id);
-    $raw_msg = $scentJob['ScentJob']['raw_msg'];
+    $rawMsg = $scentJob['ScentJob']['raw_msg'];
 
     if ($realTime && !empty($scentJob['ScentJob']['jobId'])) {
       $client = new \Scent\ScentClient();
-      $raw_msg = $client->getjobInfo($scentJob['ScentJob']['jobId']);
-      $results = json_decode($raw_msg, true, 10);
+      $rawMsg = $client->getjobInfo($scentJob['ScentJob']['jobId']);
+
+      if (empty($rawMsg) || striContains($rawMsg, '{"exception')) {
+      	$this->log("Failed to get JobInfo".$rawMsg);
+      	return getResponseStatusJson(500);
+      }
+
+      $results = json_decode($rawMsg, true, 10);
 
       $this->ScentJob->id = $id;
       $this->ScentJob->save(array(
@@ -59,11 +60,11 @@ class ScentJobsController extends AppController {
           'confId' => $results['confId'],
       		'state' => $results['state'],
       		'msg' => $results['msg'],
-          'raw_msg' => $raw_msg
+          'raw_msg' => $rawMsg
       ));
     }
 
-    echo $raw_msg;
+    echo $rawMsg;
   }
 
   /**
@@ -119,8 +120,8 @@ class ScentJobsController extends AppController {
 
     $this->ScentJob->recursive = -1;
     $scentJob = $this->ScentJob->read(null, $id);
-    $raw_msg = $scentJob['ScentJob']['raw_msg'];
-    $results = json_decode($raw_msg, true, 10);
+    $rawMsg = $scentJob['ScentJob']['raw_msg'];
+    $results = json_decode($rawMsg, true, 10);
 
     $path = '/tmp/scent-extract/'.$results['result']['OutFolder'].DS;
     $params = array(
@@ -136,8 +137,8 @@ class ScentJobsController extends AppController {
 
   // TODO : Save extract result in HDFS/HBASE
   function _getExtractResult($scentJob) {
-    $raw_msg = $scentJob['ScentJob']['raw_msg'];
-    $results = json_decode($raw_msg, true, 10);
+    $rawMsg = $scentJob['ScentJob']['raw_msg'];
+    $results = json_decode($rawMsg, true, 10);
 
     if (!isset($results['result']['OutFolder'])) {
       return null;

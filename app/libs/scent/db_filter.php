@@ -7,6 +7,7 @@ class DbFilter {
 	// TODO : use fields params
   private $data = array(
       '-table' => 'pageentity',
+  		'-tenantId' => 0,
       '-startKey' => null,
   		'-endKey' => null,
   		'-regex' => '.+',

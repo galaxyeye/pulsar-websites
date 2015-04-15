@@ -16,6 +16,6 @@
 <!-- info-box -->
 
 <div class='storagePageEntities view'>
-	<h2>网页挖掘结果</h2>
+	<h2>Mining Result</h2>
   <div><?php echo $pageEntity['PageEntity']['content']; ?></div>
 </div>

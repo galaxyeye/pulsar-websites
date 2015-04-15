@@ -13,6 +13,7 @@ class ScentJobManagerComponent extends Object {
   private $controller;
   private $currentUser;
   private $remoteCmdExecutor;
+  private $scentClient;
 
   public function startup(&$controller) {
     $this->controller = &$controller;
@@ -21,6 +22,7 @@ class ScentJobManagerComponent extends Object {
 
     $this->currentUser = $this->controller->currentUser;
     $this->remoteCmdExecutor = new \Scent\RemoteCmdExecutor();
+    $this->scentClient = new \Scent\ScentClient();
   }
 
   public function createScentConfig($pageEntity) {
@@ -96,6 +98,59 @@ class ScentJobManagerComponent extends Object {
     $this->_saveScentJob($jobId, $jobType, $pageEntity);
 
     return $jobId;
+  }
+
+  public function getStoragePageEntities($tenantId, 
+    $regex = '.+', $startKey = null, $endKey = null, $fields = null, $limit = 100) {
+    $args = [
+        '-table' => 'pageentity',
+        '-tenantId' => intval($tenantId),
+        '-regex' => $regex,
+        '-startKey' => $startKey,
+        '-endKey' => $endKey,
+        '-limit' => intval($limit),
+        '-fields' => $fields
+    ];
+    $args = json_encode($args);
+
+    $pageEntities = Cache::read(json_encode($args), 'minute');
+    if ($pageEntities == null) {
+      $pageEntities = $this->scentClient->query($args);
+      Cache::write($args, $pageEntities, 'minute');
+    }
+    $pageEntities = json_decode($pageEntities, true, 10);
+    foreach ($pageEntities as $k => $v) {
+      if (is_string($v)) {
+        $pageEntities[$k] = json_decode($v, true, 10);
+      }
+    }
+
+    return $pageEntities;
+  }
+
+  public function getStoragePageEntity($tenantId, $url) {
+    $args = [
+        '-table' => 'pageentity',
+        '-tenantId' => intval($tenantId),
+        '-startKey' => $url,
+        '-endKey' => $url,
+        '-regex' => ".+",
+        '-limit' => 2,
+        '-fields' => null
+    ];
+    $args = json_encode($args);
+  
+    $pageEntities = Cache::read(json_encode($args), 'minute');
+    if (true && $pageEntities == null) {
+      $pageEntities = $this->scentClient->query($args);
+      Cache::write($args, $pageEntities, 'minute');
+    }
+    $pageEntities = json_decode($pageEntities, true, 10);
+  
+    if (count($pageEntities) > 0) {
+      $pageEntities = array_values($pageEntities);
+      return $pageEntities[0];
+    }
   }
 
   public function segment($pageEntity, $limit = 1000) {

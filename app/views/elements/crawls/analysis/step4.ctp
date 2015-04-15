@@ -45,7 +45,7 @@
 <div class="crawls view">
 	<h3><?php  __('爬虫服务器消息');?></h3>
 
-	<div id="jobInfo"></div>
+	<div><pre id="jobInfo"></pre></div>
 </div>
 
 <?php 
@@ -106,7 +106,7 @@ if (! empty ( $crawl ['PageEntity'] [0] )) :
 		<div class='message larger'>
 			<ol>
 				<li>网络爬虫正在工作中，已完成<span class='finishedRounds red larger'>0</span>轮抓取，
-					<span class='fetched count red larger'>0</span>张详细页网页
+					本轮已抓取<span class='fetched count red larger'>0</span>张详细页网页
 				</li>
 				<li>获取<span class='red larger'>2</span>张详细页网页后，可以制定挖掘规则并启动挖掘引擎</li>
 				<li>基于几个简单规则，系统可以精确挖掘所需数据</li>

@@ -18,6 +18,8 @@ $(document).ready(function() {
   function processJobStatus(jobInfo) {
     layer.closeAll();
 
+    layer.load('正在查询任务状态...', 2);
+
     if (jobInfo['state'] == undefined || jobInfo['state'] == 'FAILED') {
       clearInterval(interval);
       layer.msg('挖掘失败', 5, {type : 5});
@@ -31,7 +33,7 @@ $(document).ready(function() {
     $('.extract-count').text(processedCount);
 
     if (jobInfo['state'] == 'RUNNING' && jobInfo['msg'] == 'OK') {
-      layer.load('任务正在执行中，已处理 ' + processedCount + ' 个网页，请稍候......', 2);
+      layer.load('任务正在执行中，已处理 ' + processedCount + ' 个网页', 2);
     }
 
     if (jobInfo['state'] == 'FINISHED' && jobInfo['msg'] == 'OK') {

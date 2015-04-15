@@ -16,7 +16,6 @@ class AppController extends Controller {
     'NutchJobManager'
   );
 
-
   // Default current user is anonymous user
   public static $DEFAULT_USER = array(
   		'id' => 0,

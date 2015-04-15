@@ -1,3 +1,12 @@
+<?php echo $this->element('jobs/subnav') ?>
+
+<div class="actions">
+  <ul>
+    <li><?=$this->Html->link(__('List Active Jobs', true), array('action' => 'activeJobs')); ?> </li>
+    <li><?=$this->Html->link(__('List Active Jobs（Plain View）', true), array('action' => 'plainActiveJobs')); ?> </li>
+  </ul>
+</div>
+
 <div class="nutchJobs index">
   <h2><?php __('Active Nutch Jobs');?></h2>
   <table cellpadding="0" cellspacing="0">
