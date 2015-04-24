@@ -9,13 +9,14 @@ class DbFilter {
       'endKey' => null,
   		'urlFilter' => '.+',
       'fields' => null,
-  		'limit' => null,
+  		'start' => 0,
+  		'limit' => 100,
       'batchId' => null,
       'keysReversed' => false
   );
 
   public function __construct($startKey = null, $endKey = null, $urlFilter = null, $fields = null,
-  		$limit = null, $batchId = null) {
+  		$limit = 100, $batchId = null) {
     $this->data['startKey'] = $startKey;
     $this->data['endKey'] = $endKey;
     $this->data['urlFilter'] = $urlFilter;
@@ -24,10 +25,14 @@ class DbFilter {
     $this->data['batchId'] = $batchId;
   }
 
+  public function setStart($start) {
+  	$this->data['start'] = $start;
+  }
+
   public function setStartKey($startKey) {
   	$this->data['startKey'] = $startKey;
   }
-  
+
   public function setEndKey($endKey) {
   	$this->data['endKey'] = $endKey;
   }

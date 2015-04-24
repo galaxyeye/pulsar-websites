@@ -1,8 +1,8 @@
 $(document).ready(function() {
 
-  var jobId = $('#NutchJobJobId').val();
+  var jobId = $('#NutchJobJobId').text();
   if (jobId != '') {
-    layer.load('正在等待抓取服务器，请稍候......', 60);
+    layer.load('正在查询抓取服务器，请稍候......', 60);
   }
 
   var interval = setInterval(function() {
@@ -16,8 +16,8 @@ $(document).ready(function() {
 	  $.getJSON(url, function(data) {
 		  $('#flashMessage').hide();
 
-		  if (data['state'] == 'NOT_FOUND') {
-            layer.closeAll();
+		  if (data['state'] == undefined || data['state'] == 'NOT_FOUND') {
+			layer.msg("任务失败", 3, -1);
             clearInterval(interval);
 		  }
 
@@ -32,7 +32,7 @@ $(document).ready(function() {
 	        $("#outlinks").text(result.Outlinks);
 	        $("#discardOutlinks").text(result.DiscardOutlinks);
 
-		    if (result.ParseText.length > 0) {
+		    if (data['state'] == 'FINISHED') {
 		      clearInterval(interval);
 		    }
 	      } // if result not undefined

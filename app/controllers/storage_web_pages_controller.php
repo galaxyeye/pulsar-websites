@@ -17,23 +17,23 @@ class StorageWebPagesController extends AppController {
    * TODO : SQL-like LIMIT semantic
    * */
   function index() {
-    $regex = '.+';
+  	$regex = ".+";
     $startKey = null;
     $endKey = null;
+    $page = 1;
+    $start = 0;
     $limit = 100;
     $page_entity_id = 0;
 
-    if (!empty($this->params['url']['regex'])) {
-      $regex = trim($this->params['url']['regex']);
-    }
     if (!empty($this->params['url']['startKey'])) {
       $startKey = trim($this->params['url']['startKey']);
     }
     if (!empty($this->params['url']['endKey'])) {
       $endKey = trim($this->params['url']['endKey']);
     }
-    if (!empty($this->params['url']['limit'])) {
-      $limit = intval($this->params['url']['limit']);
+    if (!empty($this->params['url']['page'])) {
+      $page = intval($this->params['url']['page']);
+      $start = ($page - 1) * $limit;
     }
     if (!empty($this->params['url']['page_entity_id'])) {
       $page_entity_id = intval($this->params['url']['page_entity_id']);
@@ -41,11 +41,29 @@ class StorageWebPagesController extends AppController {
 
     if ($startKey == null) {
       $startKey = \Nutch\regex2startKey($regex);
+      if ($endKey == null && $startKey != null) {
+        $endKey = $startKey . "\uFFFF";
+      }
     }
 
-    $storageWebPages = $this->_getStorageWebPages($regex, $startKey, $endKey, ["title", "baseUrl", "outlinks"], $limit);
+    if ($endKey == null) {
+    	$endKey = \Nutch\regex2endKey($regex);
+    }
 
-    $this->set(compact('storageWebPages', 'startKey', 'endKey', 'limit', 'page_entity_id'));
+    $storageWebPages = $this->_getStorageWebPages($regex, $startKey, $endKey, ["title", "baseUrl", "outlinks"], $start, $limit);
+
+    $this->set(compact('storageWebPages', 'startKey', 'page', 'page_entity_id'));
+  }
+
+  function indexByCrawl($crawl_id) {
+  	$this->loadModel('Crawl');
+  	$this->Crawl->contain(array('CrawlFilter'));
+  	$crawl = $this->Crawl->read(null, $crawl_id);
+
+  	$fields = array("title", "baseUrl", "outlinks");
+  	$webPages = $this->_getStorageWebPagesByCrawlFilter($crawl, $fields, 100);
+
+  	$this->set(compact('crawl', 'webPages'));
   }
 
   /**
@@ -136,12 +154,24 @@ class StorageWebPagesController extends AppController {
     return $pageEntity;
   }
 
-  function _getStorageWebPages($regex = '.+', $startKey = null, $endKey = null, $fields = null, $limit = 100) {
+  function _getStorageWebPagesByCrawlFilter($crawl, $fields = null, $limit = 100) {
+  	$executor = new \Nutch\RemoteCmdExecutor();
+  	$webPages = $executor->queryByCrawlFilter($crawl, $fields, $limit);
+  	$webPages = json_decode($webPages, true, 10);
+  	if (!isset($webPages['values'])) {
+  		$webPages['values'] = [];
+  	}
+
+  	return $webPages['values'];
+  }
+
+  function _getStorageWebPages($regex = '.+', $startKey = null, $endKey = null, $fields = null, $start = 0, $limit = 100) {
     $args = [
         'urlFilter' => \Nutch\normalizeUrlFilter($regex),
         'startKey' => $startKey,
         'endKey' => $endKey,
         'fields' => $fields,
+    		'start' => $start,
         'limit' => $limit,
         'batchId' => null,
         'keysReversed' => false
@@ -156,7 +186,7 @@ class StorageWebPagesController extends AppController {
     }
     $storageWebPages = json_decode($storageWebPages, true, 10);
 
-    if (!is_array($storageWebPages['values'])) {
+    if (empty($storageWebPages['values'])) {
       $storageWebPages['values'] = [];
     }
 

@@ -1,24 +1,24 @@
 <?php 
 namespace Nutch;
 
-class OutlinkFilter {
+class NCrawlFilter {
 
   private $data = array(
       'pageType' => 'NONE',
-      'urlFilter' => null,
+      'urlRegexRule' => null,
       'textFilter' => null,
       'blockFilter' => null
   );
 
-  public function __construct($pageType, $urlFilter, $textFilter = null, $blockFilter = null) {
+  public function __construct($pageType, $urlRegexRule, $textFilter = null, $blockFilter = null) {
     $this->data['pageType'] = $pageType;
-    $this->data['urlFilter'] = $urlFilter;
+    $this->data['urlRegexRule'] = $urlRegexRule;
 
     if (is_string($textFilter)) {
     	$this->data['textFilter'] = json_decode($textFilter, true, 4);
     }
-    else if (is_array($textFilter)) {
-    	$this->data['blockFilter'] = $textFilter;
+    else if (is_object($textFilter)) {
+    	$this->data['textFilter'] = $textFilter;
     }
 
     if (is_string($blockFilter)) {
@@ -37,12 +37,12 @@ class OutlinkFilter {
     $this->data['pageType'] = $pageType;
   }
 
-  public function getUrlFilter() {
-  	return $this->data['urlFilter'];
+  public function getUrlRegexRule() {
+  	return $this->data['urlRegexRule'];
   }
 
-  public function setUrlFilter($urlFilter) {
-  	$this->data['urlFilter'] = $urlFilter;
+  public function setUrlRegexRule($urlRegexRule) {
+  	$this->data['urlRegexRule'] = $urlRegexRule;
   }
 
   public function getTextFilter() {
@@ -67,11 +67,11 @@ class OutlinkFilter {
 
 	public function __toString() {
 		$data = $this->data;
-	
+
 		if (empty($data['args'])) {
 			$data['args'] = new \stdClass();
 		}
-	
+
 		// return json_encode($this->data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 		return json_encode($data);
 	}

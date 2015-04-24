@@ -5,7 +5,7 @@
 </style>
 
 <div class="crawls view">
-  <h2><span><?php  __('爬虫配置');?></span></h2>
+  <h2><span><?php  __('Crawl Configuration Brief');?></span></h2>
   <dl><?php $i = 0; $class = ' class="altrow"';?>
     <dt <?php if ($i % 2 == 0) echo $class;?>><?php __('Id'); ?></dt>
     <dd <?php if ($i++ % 2 == 0) echo $class;?>>
@@ -77,7 +77,11 @@
 
 <div class="webPages index">
   <h2>
-    <span><?php __('Web Page Link Map');?></span>
+    <span><?php __('Link Map For Crawl ') ?>
+      <?=$this->Html->link($crawl['Crawl']['name'],
+      		['controller' => 'crawls', 'action' => 'view', $crawl['Crawl']['id']],
+      		['target' => '_blank']); ?>
+    </span>
     <p class="m hidden">TODO：链接地图可视化</p>
   </h2>
   <?php 

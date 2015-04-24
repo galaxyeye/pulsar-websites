@@ -35,7 +35,7 @@
     <td><?=$nutchJob['NutchJob']['jobId']; ?>&nbsp;</td>
     <td><?=$nutchJob['NutchJob']['type']; ?>&nbsp;</td>
     <td><?=$nutchJob['NutchJob']['state']; ?>&nbsp;</td>
-    <td><?=$nutchJob['NutchJob']['fetch_count']; ?>&nbsp;</td>
+    <td><?=$nutchJob['NutchJob']['count']; ?>&nbsp;</td>
     <td><?=$nutchJob['NutchJob']['created']; ?>&nbsp;</td>
     <td><?=$this->Html->link($nutchJob['NutchJob']['crawl_id'], 
           ['controller' => 'crawls', 'action' => 'view', $nutchJob['NutchJob']['crawl_id']], ['target' => '_blank']); ?>

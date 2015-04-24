@@ -1,10 +1,7 @@
 $(document).ready(function() {
 
   $('.start-test-regex').click(function() {
-    var pattern = $('#NutchJobRegex').text();
-
-    // TODO : CrawlFilter compatable format
-
+	var pattern = $('#NutchJobRegex').val();
     var urls = $('#NutchJobTestUrls').val();
     var validUrls = [];
     var invalidUrls = [];

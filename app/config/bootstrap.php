@@ -108,7 +108,7 @@
   define('NUTCH_SERVER', "http://localhost:8081");
   define('QIWU_UI_CRAWL_ID', "qiwu.ui.crawl.id");
   define('URLFILTER_REGEX_RULES', "urlfilter.regex.rules");
-  define('CRAWL_OUTLINK_FILTER_RULES', "crawl.outlink.filter.rules");
+  define('CRAWL_FILTER_RULES', "crawl.filter.rules");
 
   // NUTCH report
   define('REPORT_FETCHED_PAGES', "fetcher.report.fetched.pages");

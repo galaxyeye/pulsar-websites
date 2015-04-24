@@ -1,0 +1,5 @@
+{
+    "require": {
+        "texthtml/php-lock": "~1.1"
+    }
+}

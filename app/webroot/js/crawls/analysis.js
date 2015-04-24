@@ -65,8 +65,12 @@ $(document).ready(function() {
         return;
       }
 
-      refreshNutchJobInfo();
-      refreshCrawlView();
+      var sucess = refreshNutchJobInfo();
+      if (!status) sucess = refreshCrawlView();
+
+      if (!sucess) {
+        clearInterval(interval);
+      }
 
       ++timerCounter;
     }, 10 * 1000);
@@ -94,7 +98,7 @@ $(document).ready(function() {
           $("#jobInfoRaw").html(JSON.stringify(results, null, 4));
 
           var jobId = results['id'];
-          var processedCount = results['status']['jobs'][jobId]['counters']['AutoExtract']['processed.count'];
+          var processedCount = results['status']['jobs'][jobId]['counters']['Extraction']['processed.count'];
           $('.extract-count').text(processedCount);
 
           if (results['state'] == 'RUNNING' && results['msg'] == 'OK') {
@@ -105,13 +109,7 @@ $(document).ready(function() {
             clearInterval(interval);
 
             layer.msg('挖掘成功，正在分析挖掘结果......', 300, {type : 1});
-            if (scentJob['ScentJob']['type'] == 'RULEDEXTRACT') {
-              showExtractResultAsSQL();
-            }
-            else if (scentJob['ScentJob']['type'] == 'AUTOEXTRACT') {
-              var outFolder = results['result']['OutFolder'];
-              showExtractResultAsWebsite(outFolder);
-            }
+            showMingingResult();
           }
       });
     }, 2000);
@@ -122,16 +120,25 @@ $(document).ready(function() {
     var url = getCakePHPUrl('crawls', 'ajax_getJobInfo', id);
     $.getJSON(url, function(jobInfo) {
       if (jobInfo['state'] == undefined || jobInfo['state'] == 'FAILED') {
-        clearInterval(interval);
-        layer.msg('出现故障', 5, {type : 5});
-        return;
+        $("#jobInfo").html("<p class='red'>出现故障</p>");
+        return false;
       }
 
       $("#jobInfo").html(JSON.stringify(jobInfo, null, 4));
 
       var jobId = jobInfo['id'];
-      var fetchedCount = jobInfo['status']['jobs'][jobId]['counters']['FetcherStatus']['FetchedPages'];
-      $('.fetched.count').text(fetchedCount);
+      var counters = jobInfo['status']['jobs'][jobId]['counters'];
+      if (counters != undefined) {
+          var fetchedPages = counters['FetcherStatus']['FetchedPages'];
+          var fetchedIndexPages = counters['FetcherStatus']['FetchedIndexPages'];
+          var fetchedDetailPages = counters['FetcherStatus']['FetchedDetailPages'];
+
+          $('.fetched.count').text(fetchedPages);
+          $('.fetched.index.count').text(fetchedIndexPages);
+          $('.fetched.index.count').text(fetchedDetailPages);    	  
+      }
+
+      return true;
     });
   }
 
@@ -142,15 +149,8 @@ $(document).ready(function() {
     $.getJSON(url, function(crawl) {
       $('.finishedRounds').text(crawl['Crawl']['finished_rounds']);
     });
-  }
 
-  function refreshFetchedCount() {
-    var id = $('.crawls.view .model-id').text();
-    var url = getCakePHPUrl('crawls', 'ajax_getFetchCount', id);
-
-    $.getJSON(url, function(count) {
-      $('.fetched.count').text(count);
-    });
+    return true;
   }
 
   function openConfirmExtractionLayer(count) {
@@ -210,7 +210,7 @@ $(document).ready(function() {
 
   function startAutoExtraction() {
     var id = $('.pageEntities.view .model-id').text();
-    var url = getCakePHPUrl('page_entities', 'ajax_startAutoExtraction', id);
+    var url = getCakePHPUrl('page_entities', 'ajax_startAutoExtract', id);
     $.getJSON(url, function(status) {
       if (status.code == 200) {
         url = getCakePHPUrl('crawls', 'analysis', {stepNo : 5, page_entity_id : id});
@@ -237,6 +237,18 @@ $(document).ready(function() {
         page: {dom : '#autoExtractResult'}
     });
   } // showExtractResultAsWebsite
+
+  function showMingingResult() {
+    layer.closeAll();
+    $.layer({
+        type: 1,
+        title: false,
+        border : true,
+        shade: [0.5, '#000'],
+        area: ['751px', 'auto'],
+        page: {dom : '#mingingResult'}
+    });
+  }
 
   function showExtractResultAsSQL() {
       var id = $('.scentJobs.view .model-id').text();

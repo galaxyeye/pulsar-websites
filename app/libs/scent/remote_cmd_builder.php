@@ -97,6 +97,7 @@ class RemoteCmdBuilder {
 
     $regex = $urlFilter[0]; // TODO : To support multiple filters
     $startKey = \Nutch\regex2startKey($regex);
+    $endKey = \Nutch\regex2endKey($regex);
 
     $limit = 10000;
     if (!empty($p['limit'])) $limit = $p['limit'];
@@ -106,12 +107,10 @@ class RemoteCmdBuilder {
     $jobConfig->setArgument("-tenantId", intval($p['user_id']));
     $jobConfig->setArgument("-regex", $regex);
     $jobConfig->setArgument("-startKey", $startKey);
+    $jobConfig->setArgument("-endKey", $endKey);
     $jobConfig->setArgument("-limit", intval($limit));
     $jobConfig->setArgument("-domain", $p['domain']);
     $jobConfig->setArgument("-builder", $p['builder']);
-
-//     pr($jobConfig->__toString());
-//     die();
 
     return new RemoteCommand($jobConfig);
   }
@@ -122,6 +121,7 @@ class RemoteCmdBuilder {
 
     $regex = $urlFilter[0];
     $startKey = \Nutch\regex2startKey($regex);
+    $endKey = \Nutch\regex2endKey($regex);
 
     $limit = 10000;
     if (!empty($p['limit'])) $limit = $p['limit'];
@@ -131,6 +131,7 @@ class RemoteCmdBuilder {
     $jobConfig->setArgument("-tenantId", intval($p['user_id']));
     $jobConfig->setArgument("-regex", $regex);
     $jobConfig->setArgument("-startKey", $startKey);
+    $jobConfig->setArgument("-endKey", $endKey);
     $jobConfig->setArgument("-limit", intval($limit));
     $jobConfig->setArgument("-rules", '[base64]'.base64_encode($p['extract_rules']));
 

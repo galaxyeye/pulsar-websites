@@ -10,7 +10,7 @@
 	<?php 
 	  $filterMode = array('BASIC', 'ADVANCED');
 	  $filterMode = array_combine($filterMode, $filterMode);
-	  $pageTypes = array('NONE', 'INDEX', 'DETAIL');
+	  $pageTypes = array('ANY', 'INDEX', 'DETAIL');
 	  $pageTypes = array_combine($pageTypes, $pageTypes);
 
 	  $m = [

@@ -47,7 +47,7 @@
 <div class="actions">
   <ul>
 
-    <li><?php echo $this->Html->link(__('View Extract Result', true),
+    <li><?php echo $this->Html->link(__('View Minging Results', true),
         ['controller' => 'storage_page_entities', '?' => ['regex' => $regex]], ['target' => '_blank']); ?></li>
 
     <li><?php echo $this->Html->link(__('New Page Entity', true),
@@ -55,9 +55,6 @@
 
     <li><?php echo $this->Html->link(__('Edit Page Entity', true),
         ['action' => 'edit', $pageEntity['PageEntity']['id']], ['target' => '_blank']); ?></li>
-
-    <li><?php echo $this->Html->link(__('Delete Page Entity', true),
-        ['action' => 'delete', $pageEntity['PageEntity']['id']], null, sprintf(__('Are you sure you want to delete # %s?', true), $pageEntity['PageEntity']['id'])); ?></li>
 
     <li><?php echo $this->Html->link(__('View Jobs', true),
         ['controller' => 'scent_jobs'], ['target' => '_blank']); ?></li>
@@ -88,11 +85,12 @@
   </fieldset>
 </div>
 
-<div class="related">
+<div class="related pageEntityFields index">
   <h3><?php __('Page Entity Fields');?></h3>
   <?php if (!empty($pageEntity['PageEntityField'])): ?>
   <table cellpadding="0" cellspacing="0">
   <tr>
+    <th><?php __('Id'); ?></th>
     <th><?php __('Name'); ?></th>
     <th><?php __('Extractor Class'); ?></th>
     <th><?php __('Block Path'); ?></th>
@@ -110,6 +108,7 @@
       }
     ?>
     <tr<?php echo $class;?>>
+      <td><?php echo $pageEntityField['id'];?></td>
       <td><?php echo $pageEntityField['name'];?></td>
       <td><?php echo $pageEntityField['extractor_class'];?></td>
       <td><?php echo $pageEntityField['css_path'];?></td>
@@ -118,9 +117,11 @@
       <td><?php echo $pageEntityField['sql_data_type'];?></td>
       <td class="actions">
         <?php echo $this->Html->link(__('View', true),
-            ['controller' => 'page_entity_fields', 'action' => 'view', $pageEntityField['id']]); ?>
+            ['controller' => 'page_entity_fields', 'action' => 'view', $pageEntityField['id']],
+        		['target' => 'layer']); ?>
         <?php echo $this->Html->link(__('Delete', true),
-            ['controller' => 'page_entity_fields', 'action' => 'delete', $pageEntityField['id']], null, sprintf(__('Are you sure you want to delete # %s?', true), $pageEntityField['id'])); ?>
+            ['controller' => 'page_entity_fields', 'action' => 'delete', $pageEntityField['id']],
+        		['class' => 'del']); ?>
       </td>
     </tr>
   <?php endforeach; ?>

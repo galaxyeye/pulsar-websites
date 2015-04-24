@@ -63,14 +63,17 @@
 </div>
 
 <div id="mingingResult" class="scentJobs related">
-  <h3>Minging Result</h3>
-  <div>Processed <span class='extract-count'>0</span> Web Pages，
+  <h2>Minging Result</h2>
+  <div>Processed <span class='extract-count'>0</span> Web Pages</div>
+  <ul>
+    <li>
     <?php 
-        echo $this->Html->link(__('View Storage Page Entities', true),
+        echo $this->Html->link(__('View Minging Results', true),
         	['controller' => 'storage_page_entities', '?' => ['regex' => $scentJob['PageEntity']['url_filter']]]
     		);
     ?>
-  </div>
+    </li>
+  </ul>
 </div>
 
 <div class="scentJobs view">

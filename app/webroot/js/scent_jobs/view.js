@@ -13,16 +13,18 @@ $(document).ready(function() {
     $.getJSON(url, function(jobInfo) {
       processJobStatus(jobInfo);
     });
-  }, 2000);
+  }, 3000);
 
   function processJobStatus(jobInfo) {
-    layer.closeAll();
-
-    layer.load('正在查询任务状态...', 2);
-
-    if (jobInfo['state'] == undefined || jobInfo['state'] == 'FAILED') {
+    if (jobInfo['state'] == undefined) {
+      layer.msg('任务已结束。', 5, {type : 1});
       clearInterval(interval);
-      layer.msg('挖掘失败', 5, {type : 5});
+      return;
+    }
+
+    if (jobInfo['state'] == 'FAILED') {
+      clearInterval(interval);
+      layer.msg('挖掘失败。', 5, {type : 5});
       return;
     }
 
@@ -54,20 +56,5 @@ $(document).ready(function() {
         area: ['751px', 'auto'],
         page: {dom : '#mingingResult'}
     });
-  }
-
-  /**
-   * @deprecated
-   * */
-  function showExtractResultAsSQL() {
-      var id = $('.scentJobs.view .model-id').text();
-      var url = getCakePHPUrl('scent_jobs', 'ajax_getExtractResultAsSQL', id);
-      $.getJSON(url, function(sqls) {
-        layer.closeAll();
-        $("#sqlList").html($("#sqlListTemplate").render(sqls));
-        if (sqls.length > 2) {
-          $('.download').show();
-        }
-      });
   }
 });

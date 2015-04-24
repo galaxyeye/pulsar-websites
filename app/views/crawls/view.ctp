@@ -1,3 +1,5 @@
+<?php echo $this->element('crawls/subnav') ?>
+
 <script type="text/javascript">
 <!--
   var crawl = <?php echo json_encode($crawl) ?>;
@@ -11,10 +13,10 @@
 </div>
 
 <div class='view'>
-  <h1>爬虫控制面板</h1>
+  <h1>Crawl Controller</h1>
 </div>
 <div class="crawls view">
-  <h2><span><?php  __('爬虫配置');?></span></h2>
+  <h2><span><?php  __('General Information');?></span></h2>
   <dl><?php $i = 0; $class = ' class="altrow"';?>
     <dt <?php if ($i % 2 == 0) echo $class;?>><?php __('Id'); ?></dt>
     <dd <?php if ($i++ % 2 == 0) echo $class;?>>
@@ -87,44 +89,69 @@
 </div>
 
 <div class="actions">
+  <br />
+  <h3>Crawl Control</h3>
   <ul>
+    <?php $state = $crawl['Crawl']['state'] ?>
+    <?php if ($state == 'RUNNING') : ?>
+    <li><?=$this->Html->link(__('Pause', true),
+    		['action' => 'pause', $crawl['Crawl']['id']],
+    		['title' => 'Pause the crawl, pause the running nutch job, so you can resume it later']
+    		); ?></li>
+    <li><?=$this->Html->link(__('Stop', true),
+    		['action' => 'stop', $crawl['Crawl']['id']],
+    		['title' => 'Stop the crawl, kill the running nutch job']
+    		); ?></li>
+    <?php elseif ($state == 'PAUSED') : ?>
+    <li><?=$this->Html->link(__('Resume', true),
+    		['action' => 'resume', $crawl['Crawl']['id']],
+    		['title' => 'Resume the latest paused job if possible']
+    		); ?></li>
+    <?php endif; ?>
+
+    <?php if ($state != 'CREATED') : ?>
+    <li><?=$this->Html->link(__('Reset', true),
+    		['action' => 'reset', $crawl['Crawl']['id']],
+    		['title' => 'Reset the crawl to the initial status, so you can start it again']
+    		); ?></li>
+    <?php endif; ?>
+  </ul>
+  <hr />
+  <h3>Tools</h3>
+  <ul>
+    <?php if (!empty($crawl['Crawl']['configId'])) : ?>
+    <li><?=$this->Html->link(__('Nutch Configuration', true),
+        array('controller' => 'nutch_jobs', 'action' => 'nutchConfig', $crawl['Crawl']['configId']),
+        array('target' => '_blank')); ?></li>
+    <?php endif; ?>
+    <li><?=$this->Html->link(__('Nutch Parser Checker', true),
+        ['controller' => 'nutch_jobs', 'action' => 'parseChecker', '?' => $crawl['Seed'][0]['url'], 'crawl_id' => $crawl['Crawl']['id']],
+        ['target' => '_blank', 'title' => 'Check Nutch Parser using the seed']); ?></li>
+  </ul>
+  <hr />
+  <h3>Actions</h3>
+  <ul>
+    <li><?=$this->Html->link(__('List Fetched Pages', true),
+        array('controller' => 'storage_web_pages', 'action' => 'indexByCrawl', $crawl['Crawl']['id']),
+        array('target' => '_blank', 'title' => 'Fetched Pages Link Map')); ?></li>
     <li><?=$this->Html->link(__('Edit Crawl', true), ['action' => 'edit', $crawl['Crawl']['id']]); ?> </li>
     <li><?=$this->Html->link(__('New Wes', true), ['action' => 'addWes'], ['target' => '_blank']); ?> </li>
     <li><?=$this->Html->link(__('New Crawl', true), ['action' => 'add'], ['target' => '_blank']); ?> </li>
   </ul>
-  <hr />
-  <ul>
-    <?php $state = $crawl['Crawl']['state'] ?>
-    <?php if ($state == 'RUNNING') : ?>
-    <li><?=$this->Html->link(__('暂停抓取', true), ['action' => 'pause', $crawl['Crawl']['id']]); ?></li>
-    <?php elseif ($state == 'PAUSED') : ?>
-    <li><?=$this->Html->link(__('重启抓取', true), ['action' => 'resume', $crawl['Crawl']['id']]); ?></li>
-    <?php endif; ?>
-
-    <?php if ($state != 'CREATED') : ?>
-    <li><?=$this->Html->link(__('重置爬虫', true), ['action' => 'reset', $crawl['Crawl']['id']]); ?></li>
-    <?php endif; ?>
-
-    <li><?=$this->Html->link(__('测试解析器', true),
-        ['controller' => 'nutch_jobs', 'action' => 'parseChecker', $crawl['Crawl']['id']],
-        ['target' => '_blank', 'title' => '解析种子链接']); ?></li>
-  </ul>
-  <!-- Once crawl has started -->
-  <hr />
-  <ul>
-    <?php if (!$crawl['Crawl']['configId']) : ?>
-    <li><?=$this->Html->link(__('查看Nutch配置', true),
-        array('controller' => 'nutch_jobs', 'action' => 'nutchConfig', $crawl['Crawl']['configId']),
-        array('target' => '_blank')); ?></li>
-    <?php endif; ?>
-    <li><?=$this->Html->link(__('查看链接地图', true),
-        array('controller' => 'web_pages', 'action' => 'indexByCrawl', $crawl['Crawl']['id']),
-        array('target' => '_blank', 'title' => '查看实体地图')); ?></li>
-  </ul>
 </div>
 
+<?php if ($crawl['Crawl']['state'] == 'CREATED') : ?>
+<div class="crawls form">
+<?=$this->Form->create('Crawl', array('action' => 'startCrawl'));?>
+  <fieldset>
+  <?=$this->Form->input('id', array('value' => $crawl['Crawl']['id'])); ?>
+  <?=$this->Form->end(__('Start Crawl', true));?>
+  </fieldset>
+</div>
+<?php endif; ?>
+
 <div class="nutch server view">
-  <h3><?php  __('爬虫服务器消息');?></h3>
+  <h3><?php  __('Nutch Server Message');?></h3>
 
   <div>
     <pre id="jobInfo"></pre>
@@ -147,12 +174,13 @@
       <th><?php __('JobId');?></th>
       <th><?php __('Type');?></th>
       <th><?php __('ConfId');?></th>
+      <th><?php __('Count');?></th>
       <th><?php __('State');?></th>
       <th class="actions"><?php __('Actions');?></th>
     </tr>
   <?php 
     $i = 0;
-    foreach ($crawl['NutchJob'] as $nutchJob) :
+    foreach ($crawl['NutchJob'] as $nutchJob) : 
       $class = null;
       if ($i ++ % 2 == 0) {
         $class = ' class="altrow"';
@@ -164,6 +192,7 @@
       <td><?=$nutchJob['jobId']; ?>&nbsp;</td>
       <td><?=$nutchJob['type']; ?>&nbsp;</td>
       <td><?=$nutchJob['confId']; ?>&nbsp;</td>
+      <td><?=$nutchJob['count']; ?>&nbsp;</td>
       <td><?=$nutchJob['state']; ?>&nbsp;</td>
       <td class="actions">
         <?php 
@@ -206,7 +235,7 @@
     </tr>
   <?php 
     $i = 0;
-    foreach ( $crawl ['Seed'] as $seed ) :
+    foreach ( $crawl['Seed'] as $seed ) :
       $class = null;
       if ($i ++ % 2 == 0) {
         $class = ' class="altrow"';
@@ -514,7 +543,7 @@
  **************************************************************-->
  <div class="related pageEntities index">
   <h3><?php __('Page Entities');?></h3>
-  <?php if (!empty($crawl['StopUrl'])):?>
+  <?php if (!empty($crawl['PageEntity'])):?>
   <table cellpadding="0" cellspacing="0">
   <tr>
       <th>Id</th>
@@ -563,14 +592,3 @@
 <!-- **************************************************************
   End Page Entities
  **************************************************************-->
-
-<?php if ($crawl['Crawl']['state'] == 'CREATED') : ?>
-<div class="crawls form">
-<?=$this->Form->create('Crawl', array('action' => 'startCrawl'));?>
-  <fieldset>
-    <legend><?php __('Start This Crawl'); ?></legend>
-  <?=$this->Form->input('id', array('value' => $crawl['Crawl']['id'])); ?>
-  <?=$this->Form->end(__('Start Crawl', true));?>
-  </fieldset>
-</div>
-<?php endif; ?>

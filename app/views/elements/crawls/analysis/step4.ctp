@@ -82,7 +82,7 @@ if (! empty ( $crawl ['PageEntity'] [0] )) :
 			<th><?php __('Css Path'); ?></th>
 			<th class="actions"><?php __('Actions');?></th>
 		</tr>
-    <?php
+    <?php 
 		$i = 0;
 		foreach ( $pageEntity ['PageEntityField'] as $pageEntityField ) :
 			$class = null;
@@ -106,11 +106,13 @@ if (! empty ( $crawl ['PageEntity'] [0] )) :
 		<div class='message larger'>
 			<ol>
 				<li>网络爬虫正在工作中，已完成<span class='finishedRounds red larger'>0</span>轮抓取，
-					本轮已抓取<span class='fetched count red larger'>0</span>张详细页网页
+					本轮已抓取
+					<span class='fetched index count red larger'>0</span>张详索引网页，
+				  <span class='fetched detail count red larger'>0</span>张详细页网页
 				</li>
 				<li>获取<span class='red larger'>2</span>张详细页网页后，可以制定挖掘规则并启动挖掘引擎</li>
 				<li>基于几个简单规则，系统可以精确挖掘所需数据</li>
-				<li>或者获取到<span class='red larger'>100</span>张详细页网页后，可以尝试自动挖掘算法，自动挖掘算法在不断完善中</li>
+				<li>或者获取到<span class='red larger'>20</span>张详细页网页后，可以尝试自动挖掘算法，自动挖掘算法在不断完善中</li>
 			</ol>
 		</div>
 		<div class='actions'>

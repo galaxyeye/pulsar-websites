@@ -1,3 +1,5 @@
+<?php echo $this->element('crawls/subnav') ?>
+
 <div class='message start-up-tip hidden'>
 说明：
 <br />I.   本页面提供完整的爬虫控制

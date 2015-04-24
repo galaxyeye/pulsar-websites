@@ -3,19 +3,19 @@
 class HttpClient {
 
   private $options = array (
-        CURLOPT_RETURNTRANSFER => true, // return web page
-        CURLOPT_HEADER => false, // return headers
-        CURLOPT_FOLLOWLOCATION => true, // follow redirects
-        CURLOPT_ENCODING => "", // handle compressed
-        CURLOPT_USERAGENT => "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:36.0) Gecko/20100101 Firefox/36.0", // who am i
-        CURLOPT_AUTOREFERER => true, // set referer on redirect
-        CURLOPT_CONNECTTIMEOUT => 30, // timeout on connect
-        CURLOPT_TIMEOUT => 60, // timeout on response
-        CURLOPT_MAXREDIRS => 3,
+    CURLOPT_RETURNTRANSFER => true, // return web page
+    CURLOPT_HEADER => false, // return headers
+    CURLOPT_FOLLOWLOCATION => true, // follow redirects
+    CURLOPT_ENCODING => "", // handle compressed
+    CURLOPT_USERAGENT => "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:36.0) Gecko/20100101 Firefox/36.0", // who am i
+    CURLOPT_AUTOREFERER => true, // set referer on redirect
+    CURLOPT_CONNECTTIMEOUT => 30, // timeout on connect
+    CURLOPT_TIMEOUT => 60, // timeout on response
+    CURLOPT_MAXREDIRS => 3,
 
-        CURLOPT_IPRESOLVE => CURL_IPRESOLVE_V4,
-        CURLOPT_DNS_USE_GLOBAL_CACHE => false,
-        CURLOPT_DNS_CACHE_TIMEOUT => 2
+    CURLOPT_IPRESOLVE => CURL_IPRESOLVE_V4,
+    CURLOPT_DNS_USE_GLOBAL_CACHE => false,
+    CURLOPT_DNS_CACHE_TIMEOUT => 2
   ); // stop after 3 redirects
 
   private $url = false;

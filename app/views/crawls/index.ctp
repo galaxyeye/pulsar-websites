@@ -1,3 +1,5 @@
+<?php echo $this->element('crawls/subnav') ?>
+
 <div class="crawls index">
 	<h2><?php __('Crawls');?></h2>
 	<table cellpadding="0" cellspacing="0">

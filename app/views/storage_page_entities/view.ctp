@@ -1,3 +1,5 @@
+<?php echo $this->element('page_entities/subnav') ?>
+
 <div class="storagePageEntities view">
   <h2><?php  __('Storage Web Entity');?></h2>
   <dl><?php $i = 0; $class = ' class="altrow"';?>

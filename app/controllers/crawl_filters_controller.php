@@ -26,8 +26,6 @@ class CrawlFiltersController extends AppController {
 				$this->data['CrawlFilter']['block_filter'] = $blockFilter;
 			}
 
-			pr($this->data);
-
 			$this->data['CrawlFilter']['user_id'] = $this->currentUser['id'];
 
 			$this->CrawlFilter->create();

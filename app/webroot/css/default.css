@@ -384,6 +384,10 @@ div.actions ul li a:hover { text-decoration: underline; }
   /* width: 750px; */
 }
 
+.xubox_page dl {
+  width: 95%;
+}
+
 .xubox_page .movable {
   padding-left:0px;
   padding-right:0px;

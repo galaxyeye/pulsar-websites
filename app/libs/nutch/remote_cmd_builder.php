@@ -2,7 +2,7 @@
 
 namespace Nutch;
 
-\App::import('Lib', array('nutch/job_config', 'nutch/outlink_filter', 'nutch/remote_command'));
+\App::import('Lib', array('nutch/job_config', 'nutch/ncrawl_filter', 'nutch/remote_command'));
 
 class JobType {
 	const __default = self::NONE;
@@ -17,6 +17,9 @@ class JobType {
 	const EXTRACT = 'EXTRACT';
 	const CLAZZ = 'CLASS';
 }
+
+define('RESUME_KEY', 'fetcher.job.resume');
+define('ARG_BATCH', "batch");
 
 class RemoteCmdBuilder extends \Object {
 
@@ -62,26 +65,26 @@ class RemoteCmdBuilder extends \Object {
 		$configId = $crawl['Crawl']['configId'];
 
 		$allUrlFilters = "";
-		$outlinkFilters = array('outlinkFilters' => array());
+		$NCrawlFilters = array('crawlFilters' => []);
 		foreach ($crawl['CrawlFilter'] as $f) {
 			$f['url_filter'] = \Nutch\normalizeUrlFilter($f['url_filter']);
 
-			$outlinkFilter = new OutlinkFilter($f['page_type'], $f['url_filter'], $f['text_filter'], $f['block_filter']);
-			array_push($outlinkFilters['outlinkFilters'], $outlinkFilter->data());
+			$NCrawlFilter = new NCrawlFilter($f['page_type'], $f['url_filter'], $f['text_filter'], $f['block_filter']);
+			array_push($NCrawlFilters['crawlFilters'], $NCrawlFilter->data());
 			$allUrlFilters .= $f['url_filter'];
 			$allUrlFilters .= "\n";
 		}
+		$allUrlFilters .= "-.\n";
 
-//   	$s = json_encode($outlinkFilters, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+//   	$s = json_encode($NCrawlFilters, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 // 		pr($s);
-// 		pr($allUrlFilters);
+//  		pr($allUrlFilters);
 
-		// TODO : support multiple outlink filters
-		$params = array(
+		$params = [
 				QIWU_UI_CRAWL_ID => $crawl_id,
-				URLFILTER_REGEX_RULES => $allUrlFilters .'-.',
-				CRAWL_OUTLINK_FILTER_RULES => json_encode($outlinkFilters['outlinkFilters'][0])
-		);
+				URLFILTER_REGEX_RULES => $allUrlFilters,
+				CRAWL_FILTER_RULES => json_encode($NCrawlFilters)
+		];
 
 		return new NutchConfig($configId, $priority, $params);
 	}
@@ -90,7 +93,7 @@ class RemoteCmdBuilder extends \Object {
 		$crawl = $this->crawl;
 
 		if ($limit == null) {
-			$limit = 1000;
+			$limit = 100;
 		}
 
 		if (count($crawl['CrawlFilter']) == 1) {
@@ -98,13 +101,15 @@ class RemoteCmdBuilder extends \Object {
 			$startKey = \Nutch\regex2startKey($regex);
 		}
 
-		$urlFilter = null;
+		$allUrlFilters = "";
 		foreach ($crawl['CrawlFilter'] as $f) {
-			$urlFilter .= normalizeUrlFilter($f['url_filter']);
-			$urlFilter .= "\n";
+			$f['url_filter'] = \Nutch\normalizeUrlFilter($f['url_filter']);
+			$allUrlFilters .= $f['url_filter'];
+			$allUrlFilters .= "\n";
 		}
+		$allUrlFilters .= "-.\n";
 
-		$dbFilter = new DbFilter($startKey, $endKey, $urlFilter, $fields, $limit);
+		$dbFilter = new DbFilter($startKey, $endKey, $allUrlFilters, $fields, $limit);
 
 		return $dbFilter;
 	}
@@ -156,13 +161,18 @@ class RemoteCmdBuilder extends \Object {
 	public function createFetchCommand() {
 		$crawl = $this->crawl['Crawl'];
 
-		return $this->createCommand(
+		$command = $this->createCommand(
 				$crawl['crawlId'], JobType::FETCH, $crawl['batchId'], $crawl['configId']);
+
+// 		$command->getJobConfig()->setArgument(RESUME_KEY, true);
+// 		$command->getJobConfig()->setArgument(ARG_BATCH, null);
+
+		return $command;
 	}
 
 	public function createParseCommand() {
 		$crawl = $this->crawl['Crawl'];
-		
+
 		return $this->createCommand(
 				$crawl['crawlId'], JobType::PARSE, $crawl['batchId'], $crawl['configId']);
 	}

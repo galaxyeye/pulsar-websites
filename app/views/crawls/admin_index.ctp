@@ -1,3 +1,5 @@
+<?php echo $this->element('crawls/subnav') ?>
+
 <div class="crawls index">
 	<h2><?php __('Crawls');?></h2>
 	<table cellpadding="0" cellspacing="0">
@@ -17,7 +19,7 @@
 	</tr>
 	<?php 
 	$i = 0;
-	foreach ($crawls as $crawl):
+	foreach ($crawls as $crawl) : 
 		$class = null;
 		if ($i++ % 2 == 0) {
 			$class = ' class="altrow"';

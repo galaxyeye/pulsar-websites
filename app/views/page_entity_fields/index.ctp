@@ -28,7 +28,7 @@
 		<td><?php echo $pageEntityField['PageEntityField']['extractor_class']; ?>&nbsp;</td>
 		<td><?php echo $pageEntityField['PageEntityField']['css_path']; ?>&nbsp;</td>
 		<td class="actions">
-			<?php echo $this->Html->link(__('View', true), array('action' => 'view', $pageEntityField['PageEntityField']['id'])); ?>
+			<?php echo $this->Html->link(__('View', true), ['action' => 'view', $pageEntityField['PageEntityField']['id']], ['target' => 'layer']); ?>
 		</td>
 	</tr>
 <?php endforeach; ?>

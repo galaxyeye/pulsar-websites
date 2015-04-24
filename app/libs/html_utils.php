@@ -1,6 +1,6 @@
 <?php 
 
-App::import('Lib', 'qp');
+App::import('Vendor', 'qp');
 
 class HtmlUtils {
 
@@ -81,13 +81,13 @@ class HtmlUtils {
 
     $dom = htmlqp($html, null, ['convert_to_encoding' => 'utf-8']);
 
+    HtmlUtils::qpMakeLinksAbsolute($dom, $baseUri);
+    // HtmlUtils::qpRemoveAllInlineStyle($dom);
+
     $title = $dom->find('title')->text();
     if (in_array('raw', $options)) {
     	return array('title' => $title, 'content' => $html);
     }
-
-    HtmlUtils::qpMakeLinksAbsolute($dom, $baseUri);
-    // HtmlUtils::qpRemoveAllInlineStyle($dom);
 
     $dom->find('*')->each(function($index, $item) {
     	$item->removeAttribute('style');

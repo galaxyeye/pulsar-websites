@@ -1,0 +1,96 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
+    ],
+    "hash": "b410d439bfb2fea382efa41a5825747a",
+    "packages": [
+        {
+            "name": "psr/log",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/log.git",
+                "reference": "fe0936ee26643249e916849d48e3a51d5f5e278b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/fe0936ee26643249e916849d48e3a51d5f5e278b",
+                "reference": "fe0936ee26643249e916849d48e3a51d5f5e278b",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Psr\\Log\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interface for logging libraries",
+            "keywords": [
+                "log",
+                "psr",
+                "psr-3"
+            ],
+            "time": "2012-12-21 11:40:51"
+        },
+        {
+            "name": "texthtml/php-lock",
+            "version": "v1.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/texthtml/php-lock.git",
+                "reference": "cd8d29caa9fcbd6404a0d15f92f694d6a8f5413f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/texthtml/php-lock/zipball/cd8d29caa9fcbd6404a0d15f92f694d6a8f5413f",
+                "reference": "cd8d29caa9fcbd6404a0d15f92f694d6a8f5413f",
+                "shasum": ""
+            },
+            "require": {
+                "psr/log": "~1.0"
+            },
+            "require-dev": {
+                "php-vfs/php-vfs": "~1.2",
+                "phpspec/phpspec": "~2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "TH\\Lock\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "aGPLv3"
+            ],
+            "authors": [
+                {
+                    "name": "Mathieu Rochette",
+                    "email": "mathieu@rochette.cc"
+                }
+            ],
+            "description": "ressource lock",
+            "time": "2014-12-21 23:15:06"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": []
+}

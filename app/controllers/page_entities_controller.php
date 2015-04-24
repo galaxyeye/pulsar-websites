@@ -188,8 +188,8 @@ class PageEntitiesController extends AppController {
   } // startRuledExtract
 
   function startAutoExtract() {
-    $id = $this->params['url']['id'];
-    $this->_validateId($id);
+  	$id = $this->params['url']['id'];
+  	$this->_validateId($id);
 
     $domain = $this->params['url']['domain'];
     $limit = $this->params['url']['limit'];
@@ -212,12 +212,16 @@ class PageEntitiesController extends AppController {
     $this->redirect(array('controller' => 'scent_jobs', 'action' => 'view', $scentJob['ScentJob']['id']));
   } // startAutoExtract
 
-  function ajax_startRuledExtract($id = null, $limit = 1000) {
+  function ajax_startRuledExtract($id = null, $limit = 500) {
     $this->autoRender = false;
 
     // Make it consistent with startExtraction
     if (empty($id)) {
       $id = $this->params['url']['id'];
+    }
+
+    if ($limit > 500) {
+    	$limit = 500;
     }
 
     if (empty($id) || !is_numeric($id)) {
@@ -230,7 +234,6 @@ class PageEntitiesController extends AppController {
     }
 
     $pageEntity['PageEntity']['extract_rules'] = $this->_asXml($pageEntity);
-
     $jobId = $this->ScentJobManager->ruledExtract($pageEntity, $limit);
 
     if (!empty($jobId)) {
@@ -241,10 +244,10 @@ class PageEntitiesController extends AppController {
     }
   } // ajax_startRuledExtract
 
-  function ajax_startAutoExtract($id = null, $limit = 1000, $domain = 'product', $builder = 'ProductHTMLBuilder') {
+  function ajax_startAutoExtract($id = null, $limit = 500, $domain = 'product', $builder = 'ProductHTMLBuilder') {
     $this->autoRender = false;
 
-    // Make it consistent with startExtraction
+    // Make it consistent with startExtract
     if (empty($id)) {
       $id = $this->params['url']['id'];
     }
@@ -254,7 +257,6 @@ class PageEntitiesController extends AppController {
     }
 
     $pageEntity = $this->PageEntity->read(null, $id);
-
     $jobId = $this->ScentJobManager->autoExtract($pageEntity, $domain, $limit, $builder);
 
     if (!empty($jobId)) {

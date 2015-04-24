@@ -98,6 +98,21 @@ function regex2startKey($regex) {
 	return $startKey;
 }
 
+/**
+ * Regex format :
+ * ^http://domain.com/(.+)/{0,1}$
+ * ^http://example.com/a/b/c/(\d+)/{0,1}$
+ * */
+function regex2endKey($regex) {
+	$startKey = regex2startKey($regex);
+	if ($startKey == null) return null;
+
+//	$endKey = rtrim($startKey, "/") . "/" . chr(65534);
+	$endKey = $startKey . "\uFFFF";
+
+	return $endKey;
+}
+
 function filterNutchConfig($nutchConfig, $useWhiteList = true) {
 	if (is_string($nutchConfig)) {
 		$nutchConfig = json_decode($nutchConfig);

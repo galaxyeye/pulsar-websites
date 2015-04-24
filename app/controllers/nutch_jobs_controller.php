@@ -67,7 +67,13 @@ class NutchJobsController extends AppController {
     $this->set(compact('nutchJob'));
   }
 
-  function parseChecker($crawl_id = null) {
+  function parseChecker() {
+  	$crawl_id = 0;
+  	if (!empty($this->params['named']['crawl_id'])) {
+  	  $crawl_id = $this->params['named']['crawl_id'];
+  	}
+  	$url = $this->params['url']['url'];
+
     if (!$this->checkTenantPrivilege($crawl_id)) {
       $this->Session->setFlash(__('Privilege denied', true));
       $this->redirect(array('controller' => 'crawls'));
@@ -110,10 +116,24 @@ class NutchJobsController extends AppController {
     $this->set(compact('crawl', 'jobId', 'nutchConfig'));
   }
 
-  function nutchConfig($configId, $raw = false) {
+  function listNutchConfigs() {
+  	$nutchClient = new \Nutch\NutchClient();
+  	$nutchConfigs = $nutchClient->listNutchConfig();
+  	$nutchConfigs = json_decode($nutchConfigs);
+
+  	$this->set(compact('nutchConfigs'));
+  }
+
+  function nutchConfig($configId = null, $raw = false) {
     $nutchClient = new \Nutch\NutchClient();
-    $nutchConfig = $nutchClient->getNutchConfig($configId);
-    $nutchConfig = \Nutch\filterNutchConfig($nutchConfig);
+    if ($configId == null) {
+    	$nutchConfig = $nutchClient->listNutchConfig();
+    	$raw = true;
+    }
+    else {
+	    $nutchConfig = $nutchClient->getNutchConfig($configId);
+	    $nutchConfig = \Nutch\filterNutchConfig($nutchConfig);
+    }
 
     $this->set(compact('nutchConfig', 'raw'));
   }
@@ -122,7 +142,6 @@ class NutchJobsController extends AppController {
     $jobId = 0;
 
     if (!empty($this->data)) {
-
       // $jobId = $this->NutchJobManager->runParseChecker($crawl);
       if ($jobId === false) {
         $this->Session->setFlash(__('任务失败。。。', true));

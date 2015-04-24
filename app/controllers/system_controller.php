@@ -15,7 +15,7 @@
 
 class SystemController extends AppController {
 
-	public $components = array('Email', 'Soap');
+	public $components = array('Email');
 
 	public $helpers = array('Fck');
 

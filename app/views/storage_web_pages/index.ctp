@@ -1,11 +1,13 @@
+<?php echo $this->element('crawls/subnav') ?>
+
 <div class="storageWebPages form">
 <?php echo $this->Form->create('StorageWebPage', ['type' => 'get', 'action' => 'index']);?>
   <fieldset>
      <legend><?php __('Query Fetched Web Pages'); ?></legend>
   <?php 
+    $r = range(1, 100);
     echo $this->Form->input('startKey', ['label' => 'Start Url', 'div' => 'input text required long', 'value' => $startKey]);
-    echo $this->Form->input('endKey', ['label' => 'End Url', 'div' => 'input text long', 'value' => $endKey]);
-    echo $this->Form->input('limit', ['value' => $limit]);
+    echo $this->Form->input('page', ['options' => array_combine($r, $r), 'default' => $page]);
   ?>
   </fieldset>
 <?php echo $this->Form->end(__('Submit', true));?>

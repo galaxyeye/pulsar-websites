@@ -1,6 +1,7 @@
 <?php 
 
-App::import('Lib', array('qp', 'nutch/nutch_utils'));
+App::import('Vendor', 'qp');
+App::import('Lib', 'nutch/nutch_utils');
 
 /**
  * @deprecated, use storage_web_pages instead
@@ -10,20 +11,30 @@ class WebPagesController extends AppController {
   var $name = 'WebPages';
 
   function beforeFilter() {
-  	// die("Deprecated");
+  	parent::beforeFilter();
+  	die("Deprecated");
   }
 
+  /**
+   * @deprecated
+   * */
   function viewScentFileServer($path = DS) {
   	$path = trim($path, DS);
 
   	$this->redirect(SCENT_FILE_SERVER . "/" . $path);
   }
 
+  /**
+   * @deprecated
+   * */
   function showExtractResultAsWebsite($outFolder) {
   	$folder = SCENT_OUT_DIR_AUTO_EXTRACT . "/" . $outFolder;
   	$this->viewScentFileServer($folder);
   }
 
+  /**
+   * @deprecated
+   * */
   function indexByPageEntity($page_entity_id) {
     $this->loadModel('PageEntity');
     $pageEntity = $this->PageEntity->read(null, $page_entity_id);
@@ -54,6 +65,9 @@ class WebPagesController extends AppController {
     $this->set(compact('crawl', 'webPages'));
   }
 
+  /**
+   * @deprecated
+   * */
   function ajax_getDetailPageLinks($crawl_id, $options = "", $limit = 100) {
     $this->autoRender = false;
 
@@ -78,7 +92,8 @@ class WebPagesController extends AppController {
     }
 
     echo json_encode($outlinks);
-  }
+  }die("Deprecated");
+  
 
   /**
    * Download a web page from nutch server if exists.
@@ -86,7 +101,6 @@ class WebPagesController extends AppController {
    * */
   function view($url) {
     $this->layout = 'empty';
-die("Deprecated");
 
     $options = array();
     if (isset($this->params['named']['options'])) {

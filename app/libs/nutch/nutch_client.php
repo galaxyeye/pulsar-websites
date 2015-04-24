@@ -55,11 +55,11 @@ class NutchClient {
 	}
 
 	public function stopJob($jobId) {
-		return $this->httpClient->postJson($this->nutchUrl."/job/$jobId/stop");
+		return $this->httpClient->get_content($this->nutchUrl."/job/$jobId/stop");
 	}
 
 	public function abortJob($jobId) {
-		return $this->httpClient->postJson($this->nutchUrl."/job/$jobId/abort");
+		return $this->httpClient->get_content($this->nutchUrl."/job/$jobId/abort");
 	}
 
 	public function getjobs() {
@@ -72,6 +72,10 @@ class NutchClient {
 
 	public function createNutchConfig($nutchConfig) {
 		return $this->httpClient->postJson($this->nutchUrl."/config/create", $nutchConfig->__toString());
+	}
+
+	public function listNutchConfig() {
+		return $this->httpClient->get_content($this->nutchUrl."/config");
 	}
 
 	public function getNutchConfig($nutchConfigId) {

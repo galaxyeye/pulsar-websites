@@ -35,18 +35,18 @@
     <td><?=$nutchJob['NutchJob']['jobId']; ?>&nbsp;</td>
     <td><?=$nutchJob['NutchJob']['type']; ?>&nbsp;</td>
     <td><?=$nutchJob['NutchJob']['state']; ?>&nbsp;</td>
-    <td><?=$nutchJob['NutchJob']['fetch_count']; ?>&nbsp;</td>
+    <td><?=$nutchJob['NutchJob']['count']; ?>&nbsp;</td>
     <td><?=$nutchJob['NutchJob']['created']; ?>&nbsp;</td>
     <td><?=$this->Html->link($nutchJob['NutchJob']['crawl_id'], 
           ['controller' => 'crawls', 'action' => 'view', $nutchJob['NutchJob']['crawl_id']], ['target' => '_blank']); ?>
     <td class="actions">
       <?php echo $this->Html->link(__('View', true), 
-          ['action' => 'view', $nutchJob['NutchJob']['id']], ['target' => 'layer']); ?>
+          ['controller' => 'nutch_jobs', 'action' => 'view', $nutchJob['NutchJob']['id']], ['target' => 'layer']); ?>
     </td>
   </tr>
 <?php endforeach; ?>
   </table>
-  <?php echo $this->Html->link(__('More >> ', true), array('controller' => 'nutch_jobs')); ?>
+  <?php echo $this->Html->link(__('More >> ', true), ['controller' => 'nutch_jobs']); ?>
 </div>
 
 <br />
@@ -85,12 +85,13 @@
       		['controller' => 'page_entities', 'action' => 'view', $scentJob['ScentJob']['page_entity_id']]); ?>
     </td>
     <td class="actions">
-      <?php echo $this->Html->link(__('View', true), array('action' => 'view', $scentJob['ScentJob']['id'])); ?>
+      <?php echo $this->Html->link(__('View', true),
+      		['controller' => 'scent_jobs', 'action' => 'view', $scentJob['ScentJob']['id']]); ?>
     </td>
   </tr>
 <?php endforeach; ?>
   </table>
-  <?php echo $this->Html->link(__('More >> ', true), array('controller' => 'scent_jobs')); ?>
+  <?php echo $this->Html->link(__('More >> ', true), ['controller' => 'scent_jobs']); ?>
 </div>
 
 <br />
@@ -106,7 +107,7 @@
     <th>State</th>
 		<th class="actions"><?php __('Actions');?></th>
 	</tr>
-	<?php
+	<?php 
 	$i = 0;
 	foreach ($sparkJobs as $sparkJob):
 		$class = null;
@@ -120,12 +121,11 @@
 		<td><?php echo $sparkJob['SparkJob']['type']; ?>&nbsp;</td>
 		<td><?php echo $sparkJob['SparkJob']['state']; ?>&nbsp;</td>
 		<td class="actions">
-			<?php echo $this->Html->link(__('View', true), array('action' => 'view', $sparkJob['SparkJob']['id'])); ?>
-			<?php echo $this->Html->link(__('Edit', true), array('action' => 'edit', $sparkJob['SparkJob']['id'])); ?>
-			<?php echo $this->Html->link(__('Delete', true), array('action' => 'delete', $sparkJob['SparkJob']['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $sparkJob['SparkJob']['id'])); ?>
+			<?php echo $this->Html->link(__('View', true),
+					['controller' => 'spark_jobs', 'action' => 'view', $sparkJob['SparkJob']['id']]); ?>
 		</td>
 	</tr>
 <?php endforeach; ?>
 	</table>
-  <?php echo $this->Html->link(__('More >> ', true), array('controller' => 'spark_jobs')); ?>
+  <?php echo $this->Html->link(__('More >> ', true), ['controller' => 'spark_jobs']); ?>
 </div>

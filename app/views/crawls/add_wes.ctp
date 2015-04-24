@@ -1,3 +1,5 @@
+<?php echo $this->element('crawls/subnav') ?>
+
 <div class='message start-up-tip hidden'>
 说明：
 <br />I.    创建一个"网络实体集(Web Entity Set, WES)"，系统将下载网页、抽取实体并构建知识图谱

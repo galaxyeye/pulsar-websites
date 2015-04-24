@@ -64,10 +64,10 @@ END;
   $textFilterTemplate =
 <<<END
 {
-    contains:"QiwurInputTemplate,手机,平板,超级本",
-    containsAny:"QiwurInputTemplate,数码相机,超级本,小米手机",
-    notContains:"QiwurInputTemplate,电脑,一体机,相机",
-    containsNone:"QiwurInputTemplate,雅虎,谷歌,华为"
+    "contains":"QiwurInputTemplate,手机,平板,超级本",
+    "containsAny":"QiwurInputTemplate,数码相机,超级本,小米手机",
+    "notContains":"QiwurInputTemplate,电脑,一体机,相机",
+    "containsNone":"QiwurInputTemplate,雅虎,谷歌,华为"
 }
 END;
 

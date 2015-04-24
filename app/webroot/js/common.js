@@ -137,13 +137,15 @@ function registerCommonEventHander() {
   });
 
   // Collaspe
-  $('.view h2, .view h3, .view h4, .related h2, .related h3, .related h4').click(function() {
+  $('.view h2, .view h3, .view h4, ' +
+    '.index h2, .index h3, .index h4, ' +
+    '.related h2, .related h3, .related h4').click(function() {
     $(this).siblings().slideToggle("slow");
   });
 
   // add/view/edit in a new layer
   $("a[target='layer']").on("click", function(event) {
-    openUrlInLayer(this.href);
+    openUrlInLayer(this.href, {title : 'brief', 'move' : '.xubox_title'});
     return false;
   });
 } // registerCommonEventHander
@@ -151,21 +153,26 @@ function registerCommonEventHander() {
 function openUrlInLayer(url, params = {}) {
   $.layer({
     type : 1,
-    // title : '弹性分布式网页集概要',
     title : params.title ? params.title : false,
     border : false,
     move: params.move ? params.move : ".movable",
     // move : ".xubox_title",
     moveType : 1,
-    area: ['751px', 'auto'],
+    area: ['800px', 'auto'],
+    maxmin: true,
     shift: 'left', //从左动画弹出
+    scrollbar: true,
     page : {'url' : url},
     // zIndex : 19891010,
     success: function(layero) {
-      // layero.find('.m').show();
-      // layero.find('.actions').hide();
-      // alert(dump(layero));
-      // registerCommonEventHander();
+      // Collaspe
+      $('.view h2, .view h3, .view h4, ' + 
+        '.index h2, .index h3, .index h4, ' + 
+        '.related h2, .related h3, .related h4').click(function() {
+        $(this).siblings().slideToggle("slow");
+      });
+
+//      layero.find('.view').resizable().css('max-height', 0.45 * $(window).height());
     }
   });
 }
