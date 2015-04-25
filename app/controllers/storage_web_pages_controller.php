@@ -25,6 +25,9 @@ class StorageWebPagesController extends AppController {
     $limit = 100;
     $page_entity_id = 0;
 
+    if (!empty($this->params['url']['regex'])) {
+      $regex = trim($this->params['url']['regex']);
+    }
     if (!empty($this->params['url']['startKey'])) {
       $startKey = trim($this->params['url']['startKey']);
     }

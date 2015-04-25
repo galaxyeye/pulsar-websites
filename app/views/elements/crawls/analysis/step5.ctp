@@ -28,14 +28,16 @@
     if(!empty($pageEntity['ScentJob'])) : 
       $scentJob = $pageEntity['ScentJob'][0];
 ?>
-  <div id="mingingResult" class="scentJobs related">
-    <h2>Minging Result</h2>
+  <div id="miningResult" class="scentJobs related">
+    <h2>mining Result</h2>
     <div>Processed <span class='extract-count'>0</span> Web Pages</div>
     <ul>
       <li>
       <?php 
-          echo $this->Html->link(__('View Minging Results', true),
-            ['controller' => 'storage_page_entities', '?' => ['regex' => $pageEntity['PageEntity']['url_filter']]]
+          $regex = $pageEntity['PageEntity']['url_filter'];
+          echo $this->Html->link(__('View mining Results', true),
+            ['controller' => 'storage_page_entities', '?' => ['regex' => $regex]],
+          	['target' => '_blank', 'class' => 'mining result']
           );
       ?>
       </li>

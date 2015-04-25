@@ -77,7 +77,7 @@ $(document).ready(function() {
   } // processStep4
 
   function processStep5() {
-    layer.load('正在分析挖掘结果，请稍候......', 300);
+    layer.load('正在查询挖掘进展，请稍候......', 300);
 
     var interval = setInterval(function() {
       if (!$('body').hasClass('visible')) {
@@ -87,8 +87,6 @@ $(document).ready(function() {
       var id = $('.scentJobs.view .model-id').text();
       var url = getCakePHPUrl('scent_jobs', 'ajax_getJobInfo', id, 'true');
       $.getJSON(url, function(results) {
-          layer.closeAll();
-
           if (results['state'] == undefined || results['state'] == 'FAILED') {
             clearInterval(interval);
             layer.msg('挖掘失败', 5, {type : 5});
@@ -102,14 +100,14 @@ $(document).ready(function() {
           $('.extract-count').text(processedCount);
 
           if (results['state'] == 'RUNNING' && results['msg'] == 'OK') {
-            layer.load('任务正在执行中，请稍候......', 2);
+            layer.load('任务正在执行中，已处理 ' + processedCount + ' 个网页', 2);
           }
 
           if (results['state'] == 'FINISHED' && results['msg'] == 'OK') {
             clearInterval(interval);
 
             layer.msg('挖掘成功，正在分析挖掘结果......', 300, {type : 1});
-            showMingingResult();
+            showMiningResult();
           }
       });
     }, 2000);
@@ -135,7 +133,7 @@ $(document).ready(function() {
 
           $('.fetched.count').text(fetchedPages);
           $('.fetched.index.count').text(fetchedIndexPages);
-          $('.fetched.index.count').text(fetchedDetailPages);    	  
+          $('.fetched.detail.count').text(fetchedDetailPages);    	  
       }
 
       return true;
@@ -175,7 +173,9 @@ $(document).ready(function() {
 
     $('.create-rule').click(function() {
       var id = $('.pageEntities.view .model-id').text();
-      var url = getCakePHPUrl('web_pages', 'indexByPageEntity', id, {page_entity_id : id});
+      var regex = $('.pageEntities.view .regex').text();
+
+      var url = "/storage_web_pages?regex=" + regex + "&page_entity_id=" + id;
       window.open(url);
     });
 
@@ -238,7 +238,7 @@ $(document).ready(function() {
     });
   } // showExtractResultAsWebsite
 
-  function showMingingResult() {
+  function showMiningResult() {
     layer.closeAll();
     $.layer({
         type: 1,
@@ -246,39 +246,7 @@ $(document).ready(function() {
         border : true,
         shade: [0.5, '#000'],
         area: ['751px', 'auto'],
-        page: {dom : '#mingingResult'}
-    });
-  }
-
-  function showExtractResultAsSQL() {
-      var id = $('.scentJobs.view .model-id').text();
-      var url = getCakePHPUrl('scent_jobs', 'ajax_getExtractResultAsSQL', id);
-      $.getJSON(url, function(sqls) {
-        layer.closeAll();
-        $("#sqlList").html($("#sqlListTemplate").render(sqls));
-        if (sqls.length > 2) {
-          $('.download').show();
-        }
-      });
-  } // showExtractResultAsSQL
-
-  function showExtractResultInLayer() {
-    layer.closeAll();
-
-    $.layer({
-      type: 1,
-      title: false,
-      border : false,
-//      shade: [0.5, '#000'],
-      shade: [0],
-      closeBtn: [0, true],
-      maxmin: true,
-      title: '挖掘结果',
-      move: '.xubox_title',
-      moveOut: true,
-      moveType: 1,
-      area: ['751px', 'auto'],
-      page: {dom : '#sqlList'}
+        page: {dom : '#miningResult'}
     });
   }
 });

@@ -49,9 +49,10 @@
 </div>
 
 <?php 
-if (! empty ( $crawl ['PageEntity'] [0] )) :
-	$pageEntity = $crawl ['PageEntity'] [0];
-	$pageEntityFieldCount = count ( $pageEntity ['PageEntityField'] );
+if (!empty($crawl['PageEntity'][0] )) :
+	$pageEntity = $crawl['PageEntity'][0];
+  $regex = $pageEntity['url_filter'];
+	$pageEntityFieldCount = count($pageEntity['PageEntityField'] );
 	?>
 <div class="pageEntities view">
 	<h2><?php  __('Page Entity');?></h2>
@@ -68,6 +69,7 @@ if (! empty ( $crawl ['PageEntity'] [0] )) :
 		<dt <?php if ($i % 2 == 0) echo $class;?>><?php __('Url Filter'); ?></dt>
 		<dd <?php if ($i++ % 2 == 0) echo $class;?>>
 			<pre><?php echo $pageEntity['url_filter']; ?></pre>
+			<span class='regex hidden'><?php echo urlencode($pageEntity['url_filter']); ?></span>
 			&nbsp;
 		</dd>
 	</dl>
