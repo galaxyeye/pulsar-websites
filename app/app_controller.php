@@ -71,7 +71,7 @@ class AppController extends Controller {
     // Session accross all domain
     ini_set('session.cookie_domain', env('HTTP_BASE'));
 
-    $this->Auth->allow('*');
+    // $this->Auth->allow('*');
 
     // Current user
     if ($this->Session->check('Auth.User')) {
