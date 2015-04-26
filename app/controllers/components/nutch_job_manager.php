@@ -1,7 +1,7 @@
 <?php 
 
 App::import('Lib', [
-  'nutch/nutch_utils',
+  'filter_utils',
   'nutch/job_info',
   'nutch/nutch_config',
   'nutch/nutch_client',
@@ -380,7 +380,7 @@ class NutchJobManagerComponent extends Object {
       $this->_updateCompletedCircularJobs($job_id, $crawl_id);
     } // if
   }
-  
+
   private function _handleFailedJob($nutchJob) {
     $this->NutchJob->id = $nutchJob['NutchJob']['id'];
 

@@ -1,6 +1,6 @@
 <?php 
 
-App::import('Lib', array('nutch/nutch_utils', 'nutch/nutch_client'));
+App::import('Lib', array('filter_utils', 'nutch/nutch_client'));
 
 class StorageWebPagesController extends AppController {
 
