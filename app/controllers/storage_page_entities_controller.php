@@ -10,10 +10,23 @@ class StoragePageEntitiesController extends AppController {
 
   function beforeFilter() {
   	parent::beforeFilter();
+    $this->Auth->allow('anonymous_index', 'anonymous_view');
+  }
+
+  function anonymous_index() {
+  	$this->index();
+  }
+
+  function anonymous_view($encodedUrl = null) {
+  	$this->view($encodedUrl);
   }
 
   function index() {
   	$tenantId = $this->currentUser['id'];
+  	if ($tenantId == 0) {
+  		$tenantId = 3;
+  	}
+
     $regex = '.+';
     $startKey = null;
     $endKey = null;
@@ -58,8 +71,11 @@ class StoragePageEntitiesController extends AppController {
     $this->set(compact('storagePageEntities', 'startKey', 'page', 'limit'));
   }
 
-  function view($encodedUrl = null, $page_entity_id = null) {
+  function view($encodedUrl = null) {
   	$tenantId = $this->currentUser['id'];
+  	if ($tenantId == 0) {
+  		$tenantId = 3;
+  	}
 
     if ($encodedUrl == null) {
       $this->redirect2Index("Encoded url is required");

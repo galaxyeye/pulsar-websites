@@ -92,6 +92,7 @@
  */
 //  Configure::write('Routing.prefixes', array('admin', 'ajax'));
 	Configure::write('Routing.prefixes', array('admin'));
+	Configure::write('Routing.prefixes', array('anonymous'));
 
 /**
  * Turn off all caching application-wide.

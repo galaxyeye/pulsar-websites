@@ -11,6 +11,16 @@ class StorageWebPagesController extends AppController {
   	parent::beforeFilter();
 
     $this->nutchClient = new \Nutch\NutchClient();
+
+    $this->Auth->allow('anonymous_index', 'anonymous_view');
+  }
+
+  function anonymous_index() {
+  	$this->index();
+  }
+
+  function anonymous_view() {
+  	$this->view();
   }
 
   /**

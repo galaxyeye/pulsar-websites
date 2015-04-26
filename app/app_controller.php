@@ -110,6 +110,10 @@ class AppController extends Controller {
       $this->layout = 'ajax';
     }
 
+    if ($this->isAnonymous()) {
+    	$this->layout = 'anonymous';
+    }
+
     // Javascript support is supplied by default
     array_push($this->helpers, 'Js');
   }
@@ -181,6 +185,14 @@ class AppController extends Controller {
   }
 
   /**
+   * TODO : use RequestHandler
+   * */
+  public function isAnonymous() {
+  	return $this->currentUser['id'] == 0;
+  	// return isset($this->params['prefix']) && ($this->params['prefix'] === 'anonymous');
+  }
+
+  /**
    * serialize the object in json format
    *
    * @param string $id Id of the user to be jsonify
@@ -231,7 +243,7 @@ class AppController extends Controller {
     $this->Auth->userScope = array('User.status' => 'ACTIVATED');
     $this->Auth->loginAction = array('controller' => 'users', 'action' => 'login');
     // $this->Auth->autoRedirect = false;
-    $this->Auth->logoutRedirect = array('controller' => 'users', 'action' => 'login');
+    $this->Auth->logoutRedirect = array('controller' => 'storage_page_entities', 'action' => 'index', 'anonymous' => true);
 
     // Specified Authorization
     if ($this->isAdmin()) {
