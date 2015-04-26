@@ -79,7 +79,19 @@ class HtmlUtils {
       return null;
     }
 
-    $dom = htmlqp($html, null, ['convert_to_encoding' => 'utf-8']);
+    $doc = new DOMDocument();
+    $doc->loadHTML('<?xml encoding="UTF-8">' . $html);
+    foreach ($doc->childNodes as $item) {
+    	if ($item->nodeType == XML_PI_NODE) {
+    		$doc->removeChild($item);
+    	}
+    }
+    $doc->encoding = 'UTF-8';
+
+    $dom = qp($doc);
+
+//     $dom = htmlqp($html, null, ['convert_to_encoding' => 'utf-8']);
+
     HtmlUtils::qpMakeLinksAbsolute($dom, $baseUri);
     // HtmlUtils::qpRemoveAllInlineStyle($dom);
 
