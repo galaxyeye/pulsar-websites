@@ -80,7 +80,6 @@ class HtmlUtils {
     }
 
     $dom = htmlqp($html, null, ['convert_to_encoding' => 'utf-8']);
-
     HtmlUtils::qpMakeLinksAbsolute($dom, $baseUri);
     // HtmlUtils::qpRemoveAllInlineStyle($dom);
 
@@ -123,7 +122,7 @@ class HtmlUtils {
     // body element
     $dom->find('#QiwurScrapingMetaInformation')->removeAttr('id');
 
-    $html = $dom->html();
+    $html = $dom->xhtml();
 
     // Strip to show the page inside our own layout
     // TODO : Can we do these replace using $dom ?
