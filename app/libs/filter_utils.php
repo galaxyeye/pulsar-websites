@@ -54,7 +54,7 @@ function normalizeUrlFilter($urlFilter) {
  * ^http://example.com/a/b/c/(.+)/{0,1}$
  * ^http://example.com/a/b/c/(\d+)/{0,1}$
  * */
-function normalizeUrlFilterRegex($regex) {	
+function normalizeUrlFilterRegex($regex) {
 	if (empty($regex) || !is_string($regex)) return null;
 
 	if (!startsWith($regex, "http") && !startsWith($regex, "^http")) {
@@ -91,8 +91,10 @@ function regex2startKey($regex) {
 	$startKey = str_replace("://", ":\\\\", $startKey);
 
 	$parts = explode("/", $startKey);
-	$parts = array_slice($parts, 0, count($parts) - 2);
-	$startKey = implode("/", $parts);
+	if (count($parts) >= 3) {
+		$parts = array_slice($parts, 0, count($parts) - 2);
+		$startKey = implode("/", $parts);
+	}
 
 	$startKey = str_replace(":\\\\", "://", $startKey);
 	return $startKey;

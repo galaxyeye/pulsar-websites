@@ -1,6 +1,6 @@
 <?php
 
-App::import('Lib', 'nutch/nutch_utils');
+App::import('Lib', 'filter_utils');
 
 class NutchJobsController extends AppController {
 

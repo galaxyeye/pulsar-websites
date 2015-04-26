@@ -154,8 +154,10 @@ class RemoteCmdBuilder extends \Object {
 	public function createGenerateCommand() {
 		$crawl = $this->crawl['Crawl'];
 
-		return $this->createCommand(
+		$command = $this->createCommand(
 				$crawl['crawlId'], JobType::GENERATE, $crawl['batchId'], $crawl['configId']);
+
+		return $command;
 	}
 
 	public function createFetchCommand() {

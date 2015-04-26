@@ -4,8 +4,10 @@ namespace Nutch;
 class NCrawlFilter {
 
   private $data = array(
-      'pageType' => 'NONE',
+      'pageType' => 'ANY',
       'urlRegexRule' => null,
+  		'startKey' => null,
+  		'endKey' => null,
       'textFilter' => null,
       'blockFilter' => null
   );
@@ -13,6 +15,11 @@ class NCrawlFilter {
   public function __construct($pageType, $urlRegexRule, $textFilter = null, $blockFilter = null) {
     $this->data['pageType'] = $pageType;
     $this->data['urlRegexRule'] = $urlRegexRule;
+
+    if (!empty($urlRegexRule)) {
+    	$this->setStartKey(regex2startKey($urlRegexRule));
+    	$this->setEndKey(regex2endKey($urlRegexRule));
+    }
 
     if (is_string($textFilter)) {
     	$this->data['textFilter'] = json_decode($textFilter, true, 4);
@@ -43,6 +50,22 @@ class NCrawlFilter {
 
   public function setUrlRegexRule($urlRegexRule) {
   	$this->data['urlRegexRule'] = $urlRegexRule;
+  }
+
+  public function getStartKey() {
+  	return $this->data['startKey'];
+  }
+
+  public function setStartKey($startKey) {
+  	$this->data['startKey'] = $startKey;
+  }
+
+  public function getEndKey() {
+  	return $this->data['endKey'];
+  }
+
+  public function setEndKey($endKey) {
+  	$this->data['endKey'] = $endKey;
   }
 
   public function getTextFilter() {
