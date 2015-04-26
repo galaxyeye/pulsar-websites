@@ -248,12 +248,11 @@ class NutchJobManagerComponent extends Object {
     $crawl_id = $nutchJob['NutchJob']['crawl_id'];
     $type = $nutchJob['NutchJob']['type'];
     $state = $nutchJob['NutchJob']['state'];
-    $round = $nutchJob['NutchJob']['round'];
-
-    $fetchedPages = $nutchJob['Crawl']['fetched_pages'];
     $crawlState = $nutchJob['Crawl']['state'];
-    $maxRound = $nutchJob['Crawl']['rounds'];
-    $maxPages = $nutchJob['Crawl']['limit'];
+
+    if ($this->_checkCrawlCompleted($nutchJob)) {
+    	return;
+    }
 
     // Adjust data structure for consistency
     $nutchJob['CrawlFilter'] = $nutchJob['Crawl']['CrawlFilter'];
@@ -284,17 +283,6 @@ class NutchJobManagerComponent extends Object {
       if ($crawlRunning && !$jobNeedSchedule) {
         $this->_updateJobInfo($nutchJob);
       }
-
-      // Complete all jobs belongs to this crawl
-      if ($round > $maxRound) {
-        $this->_completeAllJobs($id, $crawl_id);
-        $this->log("All rounds done. Crawl #$crawl_id", 'info');
-      }
-
-      if ($fetchedPages > $maxPages) {
-        $this->_completeAllJobs($id, $crawl_id);
-        $this->log("All pages done. Crawl #$crawl_id", 'info');
-      }
     } // if circular
 
     // Non circular jobs
@@ -307,6 +295,38 @@ class NutchJobManagerComponent extends Object {
     if ($state == JobState::FAILED) {
       $this->_handleFailedJob($nutchJob);
     }
+  }
+
+  private function _checkCrawlCompleted($nutchJob) {
+  	$job_id = $nutchJob['NutchJob']['id'];
+  	$crawl_id = $nutchJob['Crawl']['id'];
+
+  	$round = $nutchJob['NutchJob']['round'];
+  	$maxRound = $nutchJob['Crawl']['rounds'];
+
+  	$fetchedPages = $nutchJob['Crawl']['fetched_pages'];
+  	$maxPages = $nutchJob['Crawl']['limit'];
+
+  	$crawlCompleted = false;
+
+  	// Complete all jobs belongs to this crawl
+  	if ($round > $maxRound) {
+  		$this->_completeCrawl($job_id, $crawl_id);
+
+  		$this->log("All rounds done. Complete Crawl #$crawl_id", 'info');
+
+  		$crawlCompleted = true;
+  	}
+
+  	if ($fetchedPages > $maxPages) {
+  		$this->_completeCrawl($job_id, $crawl_id);
+
+  		$this->log("All pages done. Complete  Crawl #$crawl_id", 'info');
+
+  		$crawlCompleted = true;
+  	}
+
+  	return $crawlCompleted;
   }
 
   /**
@@ -377,7 +397,14 @@ class NutchJobManagerComponent extends Object {
         ." AND `id` <= $job_id"
          ." AND `type` IN ('INJECT', 'GENERATE', 'FETCH', 'PARSE', 'UPDATEDB')"
         ." AND `state` IN ('NOT_FOUND', 'FINISHED', 'RUNNING');";
-    // $this->log($sql, 'info');
+    $db->execute($sql);
+
+    // Update crawl fetched pages
+    $sql = "SELECT SUM(`count`) AS `count` FROM `nutch_jobs` WHERE `crawl_id`=$crawl_id AND `type`='FETCH'";
+    $fetchedPages = $db->query($sql);
+    $fetchedPages = $fetchedPages[0][0]['count'];
+
+    $sql = "UPDATE `crawls` SET `fetched_pages`=$fetchedPages WHERE `id`=$crawl_id";
     $db->execute($sql);
   }
 
@@ -393,17 +420,19 @@ class NutchJobManagerComponent extends Object {
     $db->execute($sql);
   }
 
-  private function _completeAllJobs($job_id, $crawl_id) {
-    // Once we can not find the job in Nutch Server, it's completed
+  private function _completeCrawl($job_id, $crawl_id) {
     $db =& ConnectionManager::getDataSource('default');
-    $sql = "UPDATE `nutch_jobs` SET `state`='COMPLETED'"
-        ." WHERE `crawl_id`=$crawl_id"
-        ." AND `type` IN ('INJECT', 'GENERATE', 'FETCH', 'PARSE', 'UPDATEDB')"
-        ." AND `state` NOT IN ('FAILED_COMPLETE', 'COMPLETE');";
-    // $this->log($sql, 'info');
+    $sql = "UPDATE `crawls` SET `state`='COMPLETED' WHERE `id`=$crawl_id";
     $db->execute($sql);
 
-    $this->log("All jobs are completed for crawl $$crawl_id", 'info');
+    $sql = "UPDATE `nutch_jobs` SET `state`='COMPLETED'"
+    		." WHERE `crawl_id`=$crawl_id"
+    		." AND `id` <= $job_id"
+    		." AND `type` IN ('INJECT', 'GENERATE', 'FETCH', 'PARSE', 'UPDATEDB')"
+        ." AND `state` NOT IN ('COMPLETED', 'FAILED_COMPLETED');";
+    $db->execute($sql);
+
+    $this->log("Crawl #$crawl_id is completed", 'info');
   }
 
   /**

@@ -342,7 +342,7 @@
    * @return String
    */
   function symmetric_encode($string = '', $skey = 'bIuTrY6') {
-    if ($string == '') {
+    if (empty($string)) {
       return '';
     }
 
@@ -363,7 +363,7 @@
    * @return String
    */
   function symmetric_decode($string = '', $skey = 'bIuTrY6') {
-    if ($string == '') {
+    if (empty($string)) {
       return '';
     }
 

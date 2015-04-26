@@ -147,7 +147,7 @@ class ScentJobManagerComponent extends Object {
         '-fields' => null
     ];
     $args = json_encode($args);
-
+ 
     $cacheFile = substr(json_encode($args), 0, 100);
     $pageEntities = Cache::read($cacheFile, 'minute');
     if (true && $pageEntities == null) {
@@ -155,7 +155,7 @@ class ScentJobManagerComponent extends Object {
       Cache::write($cacheFile, $pageEntities, 'minute');
     }
     $pageEntities = json_decode($pageEntities, true, 10);
-  
+
     if (count($pageEntities) > 0) {
       $pageEntities = array_values($pageEntities);
       return $pageEntities[0];

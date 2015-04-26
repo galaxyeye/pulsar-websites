@@ -105,7 +105,7 @@
 
   // NUTCH config
   //  define('NUTCH_SERVER', "http://master:8081");
-  define('NUTCH_SERVER', "http://localhost:8081");
+  define('NUTCH_SERVER', "http://master:8081");
   define('QIWU_UI_CRAWL_ID', "qiwu.ui.crawl.id");
   define('URLFILTER_REGEX_RULES', "urlfilter.regex.rules");
   define('CRAWL_FILTER_RULES', "crawl.filter.rules");
@@ -116,7 +116,7 @@
   define('REPORT_FETCH_STATUS', "fetcher.report.fetch.status");
 
   // SCENT specified constants
-  define('SCENT_SERVER', "http://localhost:8181");
+  define('SCENT_SERVER', "http://slave1:8181");
   define('SCENT_FILE_SERVER', "http://qiwur.local");
   define('SCENT_OUT_DIR_RULED_EXTRACT', "/extract/ruled");
   define('SCENT_OUT_DIR_AUTO_EXTRACT', "/extract/auto");
