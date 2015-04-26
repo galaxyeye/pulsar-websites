@@ -16,9 +16,10 @@ class NCrawlFilter {
     $this->data['pageType'] = $pageType;
     $this->data['urlRegexRule'] = $urlRegexRule;
 
-    if (!empty($urlRegexRule)) {
-    	$this->setStartKey(regex2startKey($urlRegexRule));
-    	$this->setEndKey(regex2endKey($urlRegexRule));
+    $regex = urlFilter2regex($urlRegexRule);
+    if (!empty($regex)) {
+    	$this->setStartKey(regex2startKey($regex));
+    	$this->setEndKey(regex2endKey($regex));
     }
 
     if (is_string($textFilter)) {

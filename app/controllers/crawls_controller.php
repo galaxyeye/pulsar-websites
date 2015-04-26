@@ -530,7 +530,6 @@ class CrawlsController extends AppController {
     $crawl = array('Crawl' => array(
         'id' => $id,
         'finished_rounds' => 0,
-        'fetched_pages' => 0,
         'batchId' => null,
         'configId' => null,
         'jobId' => null,

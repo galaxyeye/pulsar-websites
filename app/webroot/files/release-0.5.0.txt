@@ -1,4 +1,4 @@
-本次发布中，不包含高级数据挖掘功能，也不涉及知识工程或者知识图谱构建。
+本次发布中，包含对电商网页进行自动数据挖掘，暂不涉及知识工程及知识图谱构建。
 
 本次发布的目标，是能够支持普通技术人员无障碍地使用来自互联网的海量数据资源。
 
@@ -9,6 +9,7 @@
 
 网站：qiwur.com
 用户名：
+ivincent.zhang@gmail.com（主要测试帐号，包含历史测试数据）
 Ao4it-95393@logoloto.com
 xuezhong@qiwur.com
 mqJp6-70490@logoloto.com
@@ -20,7 +21,6 @@ vg2fx-20313@logoloto.com
 kj08m-36925@logoloto.com
 yueming@gmail.com
 yQzSJ-82323@logoloto.com
-ivincent.zhang@gmail.com
 CKAoF-24425@logoloto.com
 密码：abc123
 
