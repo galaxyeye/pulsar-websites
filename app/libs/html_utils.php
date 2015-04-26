@@ -79,12 +79,15 @@ class HtmlUtils {
       return null;
     }
 
-    $dom = htmlqp($html, null, ['convert_to_encoding' => 'utf-8']);
+    $html = mb_convert_encoding($html, 'HTML-ENTITIES', "UTF-8");
+    $dom = htmlqp($html, null, ['convert_to_encoding' => 'UTF-8']);
+
     HtmlUtils::qpMakeLinksAbsolute($dom, $baseUri);
     // HtmlUtils::qpRemoveAllInlineStyle($dom);
 
     $title = $dom->find('title')->text();
     if (in_array('raw', $options)) {
+    	$html = html_entity_decode($html, ENT_COMPAT, 'UTF-8');
     	return array('title' => $title, 'content' => $html);
     }
 
@@ -132,6 +135,8 @@ class HtmlUtils {
     $html = preg_replace("/#QiwurScrapingMetaInformation &gt;/", "body &gt;", $html);
     $html = preg_replace("/#qiwurBody &gt;/", "body &gt;", $html);
 
+    // $html = utf8_decode($html);
+    $html = html_entity_decode($html, ENT_COMPAT, 'utf-8');
     return array('title' => $title, 'content' => $html);
   }
 }
