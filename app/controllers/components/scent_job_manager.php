@@ -126,12 +126,6 @@ class ScentJobManagerComponent extends Object {
     	$pageEntities = [];
     }
 
-    foreach ($pageEntities as $k => $v) {
-      if (is_string($v)) {
-        $pageEntities[$k] = json_decode($v, true, 10);
-      }
-    }
-
     return $pageEntities;
   }
 
@@ -156,10 +150,13 @@ class ScentJobManagerComponent extends Object {
     }
     $pageEntities = json_decode($pageEntities, true, 10);
 
-    if (count($pageEntities) > 0) {
-      $pageEntities = array_values($pageEntities);
-      return $pageEntities[0];
+    $pageEntity = [];
+    foreach ($pageEntities as $k => $v) {
+    	$pageEntity = $v;
+    	break;
     }
+
+    return $pageEntity;
   }
 
   public function segment($pageEntity, $limit = 1000) {
