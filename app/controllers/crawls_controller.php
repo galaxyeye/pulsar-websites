@@ -364,7 +364,14 @@ class CrawlsController extends AppController {
     ]);
 
     if (empty($nutchJob)) {
-      return getResponseStatusJson(404);
+    	$count = $this->Crawl->NutchJob->find('count', ['NutchJob.crawl_id' => $id]);
+    	$count = $count[0][0]['count'];
+    	if ($count == 0) {
+    		return getResponseStatusJson(200, "No job yet");
+    	}
+    	else {
+    		return getResponseStatusJson(200, "All jobs are completed");
+    	}
     }
 
     $client = new \Nutch\NutchClient();
