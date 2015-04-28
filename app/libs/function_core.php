@@ -598,7 +598,7 @@
   if (!function_exists("http_build_url")) {
     function http_build_url($url, $options) {
       $parts = parse_url($url);
-      $href = $parts ['scheme'] . '://';
+      $href = $parts['scheme'] . '://';
       if (isset($parts ['user'] ) && isset($parts ['pass'] )) {
         $href .= $parts ['user'] . ':' . $parts ['pass'] . '@';
       }

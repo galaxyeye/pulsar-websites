@@ -1,5 +1,6 @@
 <?php 
 
+// TODO : remove this namespace
 namespace Nutch;
 
 /**
@@ -83,8 +84,11 @@ function urlFilter2regex($urlFilter) {
 
 /**
  * Regex format : 
+ * ^http://domain.com$
+ * ^http://domain.com/$
  * ^http://domain.com/(.+)/{0,1}$
  * ^http://example.com/a/b/c/(\d+)/{0,1}$
+ * ^http://example.com/q?a=b&c=(\d+)(.*)$
  * */
 function regex2startKey($regex) {
 	if (empty($regex)) return null;
@@ -96,14 +100,33 @@ function regex2startKey($regex) {
 		return null;
 	}
 
+	$u = parse_url($startKey);
+
+	// query argments are removed
+	if (!empty($u['path'])) {
+	  $startKey = http_build_url($startKey, ['path' => $u['path']]);
+	}
+
 	$startKey = str_replace("://", ":\\\\", $startKey);
 
 	$parts = explode("/", $startKey);
-	// if more than 3 parts, it's an legal regex
-	// or, 
-	if (count($parts) >= 3) {
+	// if more than 3 parts, it's "normal" regex
+	$count = count($parts);
+	if ($count >= 3) {
 		$parts = array_slice($parts, 0, count($parts) - 2);
 		$startKey = implode("/", $parts);
+	}
+	else if ($count == 2) {
+		// case ^http://example.com/q?a=b&c=(\d+)(.*)$
+		$startKey = implode("/", $parts);
+	}
+	else if ($count == 1) {
+		// case ^http://domain.com/$
+		$startKey = $parts[0];
+	}
+	else {
+		// case ^http://domain.com$
+		$startKey = $parts[0];
 	}
 
 	$startKey = str_replace(":\\\\", "://", $startKey);
@@ -112,15 +135,30 @@ function regex2startKey($regex) {
 
 /**
  * Regex format :
+ * ^http://domain.com$
+ * ^http://domain.com/$
  * ^http://domain.com/(.+)/{0,1}$
  * ^http://example.com/a/b/c/(\d+)/{0,1}$
+ * ^http://example.com/q?a=b&c=(\d+)(.*)$
  * */
 function regex2endKey($regex) {
 	$startKey = regex2startKey($regex);
 	if ($startKey == null) return null;
 
-//	$endKey = rtrim($startKey, "/") . "/" . chr(65534);
-	$endKey = $startKey . "\uFFFF";
+	$startKey = rtrim($startKey, "/");
+
+	$startKey = str_replace("://", ":\\\\", $startKey);
+
+	$parts = explode("/", $startKey);
+
+	if (count($parts) > 1) {
+		$endKey = $startKey . "\uFFFF";
+	}
+	else {
+		$endKey = $startKey . "/" . "\uFFFF";
+	}
+
+	$endKey = str_replace(":\\\\", "://", $endKey);
 
 	return $endKey;
 }

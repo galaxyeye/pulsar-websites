@@ -485,7 +485,7 @@ class NutchJobManagerComponent extends Object {
 
     // Nothing to fetch, complete the job, and also the crawl
     // We set the job state to be COMPLETED so that no more jobs are created for this crawl
-    if ($round > 3 && $jobCounter == 0 && $jobInfo['type'] == JobType::GENERATE) {
+    if ($round > 5 && $jobCounter == 0 && $jobInfo['type'] == JobType::GENERATE) {
       $data['state'] = JobState::COMPLETED;
     }
 
@@ -508,19 +508,8 @@ class NutchJobManagerComponent extends Object {
     }
 
     $count = 0;
-
-    $jobType = $jobInfo['type'];
-    if ($jobType == JobType::FETCH) {
-      $count = $jobInfo['result']['fetcher.count'];
-    }
-    else if ($jobType == JobType::GENERATE) {
-      $count = $jobInfo['result']['generate.count'];
-    }
-    else if ($jobType == JobType::PARSE) {
-      $count = $jobInfo['result']['parse.count'];
-    }
-    else if ($jobType == JobType::UPDATEDB) {
-      $count = $jobInfo['result']['update.count'];
+    if (isset($jobInfo['result']['majorCount'])) {
+    	$count = $jobInfo['result']['majorCount'];
     }
 
     $this->log("job countter : $count", 'debug');
