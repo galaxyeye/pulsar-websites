@@ -10,7 +10,7 @@
   define('HOST', $host);
 
   // $host is '' when run script
-  if ($host == '' || $host == 'localhost' || strpos($host, '192.168')) {
+  if ($host == '' || $host == 'localhost' || 0 === strpos($host, '192.168') || 0 === strpos($host, '127.0')) {
     define('DOMAIN', 'localhost');
 
     define('URL_BASE', 'http://'.$host);
@@ -25,6 +25,15 @@
     }
 
     define('URL_BASE', 'http://www.'.DOMAIN);
+  }
+
+  if (DOMAIN == 'localhost') {
+	  define('QIWU_NUTCH_SERVER', "http://localhost:8081");
+	  define('QIWU_SCENT_SERVER', "http://localhost:8181");
+  }
+  else {
+  	define('QIWU_NUTCH_SERVER', "http://master:8081");
+  	define('QIWU_SCENT_SERVER', "http://slave1:8181");
   }
 
   define('DEFAULT_TITLE', 'nutch ui');
@@ -79,7 +88,9 @@
   define('COOKIE_NAME', 'logoloto');
   define('COOKIE_KEY', 'iTIx32bs!2*woi!');
 
-  // Programing control
+  // Javascript
+  define('COMMON', 'common');
+
   define('JSON2', 'json2');
   define('DUMP', 'dump');
 
@@ -88,15 +99,9 @@
   define('JSRENDER', 'jquery/jsrender');
   define('LAYER', 'layer-v1.8.5/layer/layer.min');
 
-  define('COMMON', 'common');
+  // Programing control
   define('BAIDU_MAP', 'http://api.map.baidu.com/api?v=1.2');
   define('GOOGLE_MAP', 'http://maps.googleapis.com/maps/api/js?key=AIzaSyBr-GLMowalQV8XsRVlIm6Qni0R0rYLI0o&amp;sensor=false&language=en');
-
-  // SMS
-  define('SMS_GATEWAY', 'http://sdkhttp.eucp.b2m.cn/sdk/SDKService');
-  define('SMS_SN', '3SDK-EMS-0130-LHWMM');
-  define('SMS_PASSWORD', '240354');
-  define('SMS_SESSION_KEY', '611263');
 
   // if false, all email will send to system admin
   define('OPEN_MAIL', false);
@@ -105,18 +110,13 @@
 
   // NUTCH config
   //  define('NUTCH_SERVER', "http://master:8081");
-  define('NUTCH_SERVER', "http://master:8081");
+  define('NUTCH_SERVER', QIWU_NUTCH_SERVER);
   define('QIWU_UI_CRAWL_ID', "qiwu.ui.crawl.id");
   define('URLFILTER_REGEX_RULES', "urlfilter.regex.rules");
   define('CRAWL_FILTER_RULES', "crawl.filter.rules");
 
-  // NUTCH report
-  define('REPORT_FETCHED_PAGES', "fetcher.report.fetched.pages");
-  define('REPORT_FETCHED_BYTES', "fetcher.report.fetched.bytes");
-  define('REPORT_FETCH_STATUS', "fetcher.report.fetch.status");
-
   // SCENT specified constants
-  define('SCENT_SERVER', "http://slave1:8181");
+  define('SCENT_SERVER', QIWU_SCENT_SERVER);
   define('SCENT_FILE_SERVER', "http://qiwur.local");
   define('SCENT_OUT_DIR_RULED_EXTRACT', "/extract/ruled");
   define('SCENT_OUT_DIR_AUTO_EXTRACT', "/extract/auto");

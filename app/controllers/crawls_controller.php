@@ -381,12 +381,12 @@ class CrawlsController extends AppController {
 
     $rawMsg = $client->getJobInfo($nutchJob['NutchJob']['jobId']);
 
-    if ($jobType == 'FETCH') {
-      $status = $client->getNutchConfigPropert($configId, REPORT_FETCH_STATUS);
-      if (!empty($status)) {
-        $rawMsg = "{'FetchStatus' : $status, 'jobInfo' : $rawMsg }";
-      }
-    }
+//     if ($jobType == 'FETCH') {
+//       $status = $client->getNutchConfigPropert($configId, REPORT_FETCH_STATUS);
+//       if (!empty($status)) {
+//         $rawMsg = "{'FetchStatus' : $status, 'jobInfo' : $rawMsg }";
+//       }
+//     }
 
     return $rawMsg;
   }

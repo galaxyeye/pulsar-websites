@@ -473,7 +473,7 @@ class NutchJobManagerComponent extends Object {
     }
 
     $jobInfo = json_decode($rawMsg, true);
-    $jobCounter = $this->_getJobCounter($jobInfo);
+    $jobCounter = $jobInfo['affectedRows'];
     $data = [
         'id' => $job_id,
         'state' => $jobInfo['state'],
@@ -494,27 +494,6 @@ class NutchJobManagerComponent extends Object {
     }
 
     return ['rawMsg' => $rawMsg, 'job' => $jobInfo];
-  }
-
-  /**
-   * @param $count Base count to accumulate
-   * @param $jobInfo
-   * TODO : more complex counter
-   * */
-  private function _getJobCounter($jobInfo) {
-    if (empty($jobInfo['result']['jobs'])) {
-      // $this->log(json_encode($jobInfo), 'debug');
-      return 0;
-    }
-
-    $count = 0;
-    if (isset($jobInfo['result']['majorCount'])) {
-    	$count = $jobInfo['result']['majorCount'];
-    }
-
-    $this->log("job countter : $count", 'debug');
-
-    return $count;
   }
 
   // TODO : This is a very simple inter process timer, find better solution!
