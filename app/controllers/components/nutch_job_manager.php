@@ -25,6 +25,7 @@ class CrawlState {
 class NutchJobManagerComponent extends Object {
 
   const JOB_INTERVAL = 15; // 15s
+  const LOCK_TTL = 600; // 10m
 
   private $controller;
   private $remoteCmdExecutor;
@@ -235,8 +236,10 @@ class NutchJobManagerComponent extends Object {
         $this->_doScheduleJob($nutchJob);
       }
 
-      $this->_try_unlock($fp, $lockId);
-      fclose($fp);
+      $sucess = $this->_try_unlock($fp, $lockId);
+      if ($sucess) {
+        $this->_remove_lock_file($lockId);
+      }
     } // foreach
 
     // Reset cacheQueries
@@ -523,6 +526,27 @@ class NutchJobManagerComponent extends Object {
     return true;
   }
 
+  private function _remove_timeout_lock_file($lockId, $timeout) {
+  	$lockFile = LOCK_DIR . 'crawl_' . $lockId;
+
+  	if(file_exists($lockFile)) {
+  		// $this->log("time : ".time()." filetime : ".filemtime($lockFile), "info");
+
+  		// lock time out
+  		if (time() - filemtime($lockFile) > $timeout) {
+  			unlink($lockFile);
+
+  			$this->log("Lock file removed", "info");
+
+  			return true;
+  		}
+
+  		return false;
+  	}
+
+  	return true;
+  }
+
   private function _get_lock_fp($lockId) {
     $lockFile = LOCK_DIR . 'crawl_' . $lockId;
 
@@ -551,12 +575,28 @@ class NutchJobManagerComponent extends Object {
     if (!flock($fp, LOCK_UN)) {
       $this->log("Unlock $lockId failed", "info");
 
+      fclose($fp);
+
       return false;
     }
 
+    fclose($fp);
+
 //    $this->log("Unlock $lockId OK", "debug");
 
+    // $this->_remove_timeout_lock_file($lockId, LOCK_TTL);
+
     return true;
+  }
+
+  private function _remove_lock_file($lockId) {
+  	$lockFile = LOCK_DIR . 'crawl_' . $lockId;
+  
+  	//    $this->log("Lock file $lockId", 'debug');
+
+  	if (!unlink($lockFile)) {
+  		$this->log("Failed to remove lock file $lockId");
+  	}
   }
 
   private function _loadNutchJob() {
