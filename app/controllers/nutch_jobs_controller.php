@@ -36,7 +36,8 @@ class NutchJobsController extends AppController {
   function activeJobs($state = null) {
     $nutchClient = new \Nutch\NutchClient();
     $nutchJobs = $nutchClient->getjobs($state);
-    $nutchJobs = json_decode($nutchJobs, true);
+    $nutchJobs = json_decode($nutchJobs, true, 10, JSON_BIGINT_AS_STRING);
+
     if (!is_array($nutchJobs)) {
     	$nutchJobs = [];
     }
@@ -47,7 +48,7 @@ class NutchJobsController extends AppController {
   function plainActiveJobs($state = null) {
     $nutchClient = new \Nutch\NutchClient();
     $nutchJobs = $nutchClient->getjobs($state);
-    $nutchJobs = json_decode($nutchJobs, true);
+    $nutchJobs = json_decode($nutchJobs, true, 10, JSON_BIGINT_AS_STRING);
     if (!is_array($nutchJobs)) {
     	$nutchJobs = [];
     }
@@ -63,7 +64,7 @@ class NutchJobsController extends AppController {
 
     $nutchClient = new \Nutch\NutchClient();
     $nutchJob = $nutchClient->getjobInfo($jobId);
-    $nutchJob = json_decode($nutchJob, true);
+    $nutchJobs = json_decode($nutchJobs, true, 10, JSON_BIGINT_AS_STRING);
     $this->set(compact('nutchJob'));
   }
 

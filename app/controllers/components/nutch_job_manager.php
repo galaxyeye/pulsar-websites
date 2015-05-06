@@ -475,7 +475,7 @@ class NutchJobManagerComponent extends Object {
       return ['rawMsg' => $rawMsg, 'job' => null];
     }
 
-    $jobInfo = json_decode($rawMsg, true);
+    $jobInfo = json_decode($rawMsg, true, 10, JSON_BIGINT_AS_STRING);
     $jobCounter = $jobInfo['affectedRows'];
     $data = [
         'id' => $job_id,
