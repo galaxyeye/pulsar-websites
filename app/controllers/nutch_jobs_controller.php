@@ -64,7 +64,7 @@ class NutchJobsController extends AppController {
 
     $nutchClient = new \Nutch\NutchClient();
     $nutchJob = $nutchClient->getjobInfo($jobId);
-    $nutchJobs = json_decode($nutchJobs, true, 10, JSON_BIGINT_AS_STRING);
+    $nutchJob = json_decode($nutchJob, true, 10, JSON_BIGINT_AS_STRING);
     $this->set(compact('nutchJob'));
   }
 
