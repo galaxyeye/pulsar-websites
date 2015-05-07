@@ -28,11 +28,11 @@
   }
 
   if (DOMAIN == 'localhost') {
-	  define('QIWU_NUTCH_SERVER', "http://localhost:8081");
+	  define('QIWU_NUTCH_SERVER', "http://localhost:8182");
 	  define('QIWU_SCENT_SERVER', "http://localhost:8181");
   }
   else {
-  	define('QIWU_NUTCH_SERVER', "http://master:8081");
+  	define('QIWU_NUTCH_SERVER', "http://master:8182");
   	define('QIWU_SCENT_SERVER', "http://slave1:8181");
   }
 
