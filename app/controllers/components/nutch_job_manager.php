@@ -475,20 +475,20 @@ class NutchJobManagerComponent extends Object {
       return ['rawMsg' => $rawMsg, 'job' => null];
     }
 
-    $jobInfo = json_decode($rawMsg, true, 10, JSON_BIGINT_AS_STRING);
-    $jobCounter = $jobInfo['affectedRows'];
+    $jobInfo = qi_json_decode($rawMsg, true, 10, JSON_BIGINT_AS_STRING);
+    $affectedRows = $jobInfo['affectedRows'];
     $data = [
         'id' => $job_id,
         'state' => $jobInfo['state'],
         'args' => json_encode($jobInfo['args'], JSON_PRETTY_PRINT),
         'msg' => $jobInfo['msg'],
         'raw_msg' => $rawMsg,
-        'count' => $jobCounter
+        'count' => $affectedRows
     ];
 
     // Nothing to fetch, complete the job, and also the crawl
     // We set the job state to be COMPLETED so that no more jobs are created for this crawl
-    if ($round > 5 && $jobCounter == 0 && $jobInfo['type'] == JobType::GENERATE) {
+    if ($round > 5 && $affectedRows == 0 && $jobInfo['type'] == JobType::GENERATE) {
       $data['state'] = JobState::COMPLETED;
     }
 

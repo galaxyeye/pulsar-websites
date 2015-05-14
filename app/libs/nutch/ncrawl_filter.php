@@ -23,14 +23,14 @@ class NCrawlFilter {
     }
 
     if (is_string($textFilter)) {
-    	$this->data['textFilter'] = json_decode($textFilter, true, 4);
+    	$this->data['textFilter'] = qi_json_decode($textFilter, true, 4);
     }
     else if (is_object($textFilter)) {
     	$this->data['textFilter'] = $textFilter;
     }
 
     if (is_string($blockFilter)) {
-	    $this->data['blockFilter'] = json_decode($blockFilter, true, 4);
+	    $this->data['blockFilter'] = qi_json_decode($blockFilter, true, 4);
     }
     else if (is_array($blockFilter)) {
     	$this->data['blockFilter'] = $blockFilter;

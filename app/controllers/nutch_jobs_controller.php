@@ -1,4 +1,4 @@
-<?php
+<?php 
 
 App::import('Lib', 'filter_utils');
 
@@ -36,7 +36,7 @@ class NutchJobsController extends AppController {
   function activeJobs($state = null) {
     $nutchClient = new \Nutch\NutchClient();
     $nutchJobs = $nutchClient->getjobs($state);
-    $nutchJobs = json_decode($nutchJobs, true, 10, JSON_BIGINT_AS_STRING);
+    $nutchJobs = qi_json_decode($nutchJobs, true, 10, JSON_BIGINT_AS_STRING);
 
     if (!is_array($nutchJobs)) {
     	$nutchJobs = [];
@@ -48,7 +48,7 @@ class NutchJobsController extends AppController {
   function plainActiveJobs($state = null) {
     $nutchClient = new \Nutch\NutchClient();
     $nutchJobs = $nutchClient->getjobs($state);
-    $nutchJobs = json_decode($nutchJobs, true, 10, JSON_BIGINT_AS_STRING);
+    $nutchJobs = qi_json_decode($nutchJobs, true, 10, JSON_BIGINT_AS_STRING);
     if (!is_array($nutchJobs)) {
     	$nutchJobs = [];
     }
@@ -64,16 +64,20 @@ class NutchJobsController extends AppController {
 
     $nutchClient = new \Nutch\NutchClient();
     $nutchJob = $nutchClient->getjobInfo($jobId);
-    $nutchJob = json_decode($nutchJob, true, 10, JSON_BIGINT_AS_STRING);
+    $nutchJob = qi_json_decode($nutchJob, true, 10, JSON_BIGINT_AS_STRING);
     $this->set(compact('nutchJob'));
   }
 
   function parseChecker() {
   	$crawl_id = 0;
-  	if (!empty($this->params['named']['crawl_id'])) {
-  	  $crawl_id = $this->params['named']['crawl_id'];
+  	if (!empty($this->params['url']['crawl_id'])) {
+  	  $crawl_id = $this->params['url']['crawl_id'];
   	}
-  	$url = $this->params['url']['url'];
+
+  	$target = null;
+  	if (!empty($this->params['url']['target'])) {
+  		$target = $this->params['url']['target'];
+  	}
 
     if (!$this->checkTenantPrivilege($crawl_id)) {
       $this->Session->setFlash(__('Privilege denied', true));
@@ -83,7 +87,13 @@ class NutchJobsController extends AppController {
     $this->loadModel('Crawl');
     $this->Crawl->contain(array('CrawlFilter', 'Seed'));
     $crawl = $this->Crawl->read(null, $crawl_id);
-    $crawl['Crawl']['test_url'] = $crawl['Seed'][0]['url'];
+
+    if (!empty($target)) {
+    	$crawl['Crawl']['test_url'] = $target;
+    }
+    else {
+    	$crawl['Crawl']['test_url'] = $crawl['Seed'][0]['url'];
+    }
 
     if (empty($crawl['Crawl']['id'])) {
       $this->Session->setFlash(__('Crawl does not exists, id #'.$crawl_id, true));
@@ -91,7 +101,7 @@ class NutchJobsController extends AppController {
     }
 
     // create nutch config
-    $configId = $crawl_id.'-'.date('md-Hi');
+    $configId = $crawl_id.'-'.date('md-His');
     $conf = $this->NutchJobManager->createNutchConfig($crawl, $configId, "minor");
     if ($conf['state'] != 'OK') {
     	$message = __('Failed to create nutch config for #'.$crawl_id, true);
@@ -120,7 +130,7 @@ class NutchJobsController extends AppController {
   function listNutchConfigs() {
   	$nutchClient = new \Nutch\NutchClient();
   	$nutchConfigs = $nutchClient->listNutchConfig();
-  	$nutchConfigs = json_decode($nutchConfigs);
+  	$nutchConfigs = qi_json_decode($nutchConfigs);
 
   	$this->set(compact('nutchConfigs'));
   }
@@ -207,7 +217,7 @@ class NutchJobsController extends AppController {
     $client = new \Nutch\NutchClient();
     $rawMsg = $client->getJobInfo($jobId);
 
-    $jobInfo = json_decode($rawMsg, true);
+    $jobInfo = qi_json_decode($rawMsg, true);
 
     pr($jobInfo);
 

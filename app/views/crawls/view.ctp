@@ -125,7 +125,7 @@
         array('target' => '_blank')); ?></li>
     <?php endif; ?>
     <li><?=$this->Html->link(__('Nutch Parser Checker', true),
-        ['controller' => 'nutch_jobs', 'action' => 'parseChecker', '?' => $crawl['Seed'][0]['url'], 'crawl_id' => $crawl['Crawl']['id']],
+        ['controller' => 'nutch_jobs', 'action' => 'parseChecker', '?' => ['target' => $crawl['Seed'][0]['url'], 'crawl_id' => $crawl['Crawl']['id']]],
         ['target' => '_blank', 'title' => 'Check Nutch Parser using the seed']); ?></li>
   </ul>
   <hr />
@@ -263,7 +263,8 @@
       <li><?=$this->Html->link(__('New Seed', true),
           array('controller' => 'seeds', 'action' => 'add', 'crawl_id' => $crawl['Crawl']['id'])); ?> </li>
       <li><?=$this->Html->link(__('List Seeds for This Crawl', true),
-          array('controller' => 'seeds', 'action' => 'index', 'crawl_id' => $crawl['Crawl']['id']), array('target' => '_blank')); ?> </li>
+          array('controller' => 'seeds', 'action' => 'index', 'crawl_id' => $crawl['Crawl']['id']), 
+      		array('target' => '_blank')); ?> </li>
     </ul>
   </div>
 </div>

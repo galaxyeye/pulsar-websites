@@ -88,7 +88,7 @@ function urlFilter2regex($urlFilter) {
  * ^http://domain.com/$
  * ^http://domain.com/(.+)/{0,1}$
  * ^http://example.com/a/b/c/(\d+)/{0,1}$
- * ^http://example.com/q?a=b&c=(\d+)(.*)$
+ * ^http://example.com/q\?a=b&c=(\d+)(.*)$
  * */
 function regex2startKey($regex) {
 	if (empty($regex)) return null;
@@ -102,30 +102,34 @@ function regex2startKey($regex) {
 
 	$u = parse_url($startKey);
 
-	// query argments are removed
+	// removed query argments
 	if (!empty($u['path'])) {
 	  $startKey = http_build_url($startKey, ['path' => $u['path']]);
 	}
+	// case : ^http://example.com/q\?a=b&c=(\d+)(.*)$ -> http://example.com/q\
+	$startKey = rtrim($startKey, "\\");
 
+	// convert "://" to ":\\\\" or anything else, we convert it back later
 	$startKey = str_replace("://", ":\\\\", $startKey);
 
 	$parts = explode("/", $startKey);
 	// if more than 3 parts, it's "normal" regex
 	$count = count($parts);
 	if ($count >= 3) {
+		// case : ^http://example.com/a/b/c/(\d+)/{0,1}$
 		$parts = array_slice($parts, 0, count($parts) - 2);
 		$startKey = implode("/", $parts);
 	}
 	else if ($count == 2) {
-		// case ^http://example.com/q?a=b&c=(\d+)(.*)$
+		// case : ^http://example.com/q?a=b&c=(\d+)(.*)$
 		$startKey = implode("/", $parts);
 	}
 	else if ($count == 1) {
-		// case ^http://domain.com/$
+		// case : ^http://domain.com/$
 		$startKey = $parts[0];
 	}
 	else {
-		// case ^http://domain.com$
+		// case : ^http://domain.com$
 		$startKey = $parts[0];
 	}
 
@@ -165,7 +169,7 @@ function regex2endKey($regex) {
 
 function filterNutchConfig($nutchConfig, $useWhiteList = true) {
 	if (is_string($nutchConfig)) {
-		$nutchConfig = json_decode($nutchConfig);
+		$nutchConfig = qi_json_decode($nutchConfig);
 	}
 
 	if (!$useWhiteList || empty($nutchConfig)) {

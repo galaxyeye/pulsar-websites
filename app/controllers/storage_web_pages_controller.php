@@ -136,7 +136,7 @@ class StorageWebPagesController extends AppController {
     }
 
     $storageWebPage['StorageWebPage']['content'] = "";
-    $results = json_decode($results, true, 10);
+    $results = qi_json_decode($results, true, 10);
     // Fix satellite version 0.1 bug
     if (!empty($results['result'])) {
       App::import('Lib', array('html_utils'));
@@ -170,7 +170,7 @@ class StorageWebPagesController extends AppController {
   function _getStorageWebPagesByCrawlFilter($crawl, $fields = null, $limit = 100) {
   	$executor = new \Nutch\RemoteCmdExecutor();
   	$webPages = $executor->queryByCrawlFilter($crawl, $fields, $limit);
-  	$webPages = json_decode($webPages, true, 10);
+  	$webPages = qi_json_decode($webPages, true, 10);
   	if (!isset($webPages['values'])) {
   		$webPages['values'] = [];
   	}
@@ -197,7 +197,7 @@ class StorageWebPagesController extends AppController {
       $storageWebPages = $this->nutchClient->query($args);
       Cache::write($args, $storageWebPages, 'minute');
     }
-    $storageWebPages = json_decode($storageWebPages, true, 10);
+    $storageWebPages = qi_json_decode($storageWebPages, true, 10);
 
     if (empty($storageWebPages['values'])) {
       $storageWebPages['values'] = [];
@@ -218,7 +218,7 @@ class StorageWebPagesController extends AppController {
       Cache::write("_getStorageWebPage-".$url, $storageWebPages, 'minute');
     }
 
-    $storageWebPages = json_decode($storageWebPages, true, 10);
+    $storageWebPages = qi_json_decode($storageWebPages, true, 10);
 
     if (empty($storageWebPages['values'])) {
       return array('StorageWebPage' => array('url' => $url, 'title' => '', 'content' => ''));

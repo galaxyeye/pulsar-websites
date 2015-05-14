@@ -52,7 +52,7 @@ class ScentJobsController extends AppController {
       	return getResponseStatusJson(500);
       }
 
-      $results = json_decode($rawMsg, true, 10);
+      $results = qi_json_decode($rawMsg, true, 10);
 
       $this->ScentJob->id = $id;
       $this->ScentJob->save(array(
@@ -121,7 +121,7 @@ class ScentJobsController extends AppController {
     $this->ScentJob->recursive = -1;
     $scentJob = $this->ScentJob->read(null, $id);
     $rawMsg = $scentJob['ScentJob']['raw_msg'];
-    $results = json_decode($rawMsg, true, 10);
+    $results = qi_json_decode($rawMsg, true, 10);
 
     $path = '/tmp/scent-extract/'.$results['result']['OutFolder'].DS;
     $params = array(
@@ -138,7 +138,7 @@ class ScentJobsController extends AppController {
   // TODO : Save extract result in HDFS/HBASE
   function _getExtractResult($scentJob) {
     $rawMsg = $scentJob['ScentJob']['raw_msg'];
-    $results = json_decode($rawMsg, true, 10);
+    $results = qi_json_decode($rawMsg, true, 10);
 
     if (!isset($results['result']['OutFolder'])) {
       return null;

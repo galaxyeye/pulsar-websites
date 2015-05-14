@@ -59,31 +59,49 @@ class RemoteCmdBuilder extends \Object {
 		return $nutchSeedList;
 	}
 
-	public function buildNutchConfig($priority = "minor") {
+	/**
+	 * TODO : \uFFFF is used for "the largest character", but json_encode($NCrawlFilters) encode it into "\uFFFF",
+	 * which is not expected
+	 * */
+	public function buildCrawlFilters() {
 		$crawl = $this->crawl;
-		$crawl_id = $crawl['Crawl']['id'];
-		$configId = $crawl['Crawl']['configId'];
 
-		$allUrlFilters = "";
 		$NCrawlFilters = array('crawlFilters' => []);
 		foreach ($crawl['CrawlFilter'] as $f) {
 			$f['url_filter'] = \Nutch\normalizeUrlFilter($f['url_filter']);
 
 			$NCrawlFilter = new NCrawlFilter($f['page_type'], $f['url_filter'], $f['text_filter'], $f['block_filter']);
 			array_push($NCrawlFilters['crawlFilters'], $NCrawlFilter->data());
+		}
+
+		return $NCrawlFilters;
+	}
+
+	public function buildUrlFilters() {
+		$crawl = $this->crawl;
+
+		$allUrlFilters = "";
+		foreach ($crawl['CrawlFilter'] as $f) {
+			$f['url_filter'] = \Nutch\normalizeUrlFilter($f['url_filter']);
+
 			$allUrlFilters .= $f['url_filter'];
 			$allUrlFilters .= "\n";
 		}
+
 		$allUrlFilters .= "-.\n";
 
-//   	$s = json_encode($NCrawlFilters, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
-// 		pr($s);
-//  		pr($allUrlFilters);
+		return $allUrlFilters;
+	}
+
+	public function buildNutchConfig($priority = "minor") {
+		$crawl = $this->crawl;
+		$crawl_id = $crawl['Crawl']['id'];
+		$configId = $crawl['Crawl']['configId'];
 
 		$params = [
 				QIWU_UI_CRAWL_ID => $crawl_id,
-				URLFILTER_REGEX_RULES => $allUrlFilters,
-				CRAWL_FILTER_RULES => json_encode($NCrawlFilters)
+				URLFILTER_REGEX_RULES => $this->buildUrlFilters(),
+				CRAWL_FILTER_RULES => json_encode($this->buildCrawlFilters())
 		];
 
 		return new NutchConfig($configId, $priority, $params);

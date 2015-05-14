@@ -104,13 +104,13 @@ class RemoteCmdBuilder {
     $limit = intval($limit);
 
     $jobConfig = new JobConfig($p['crawlId'], JobType::AUTOEXTRACT, $p['configId']);
-    $jobConfig->setArgument("-tenantId", intval($p['user_id']));
-    $jobConfig->setArgument("-regex", $regex);
-    $jobConfig->setArgument("-startKey", $startKey);
-    $jobConfig->setArgument("-endKey", $endKey);
-    $jobConfig->setArgument("-limit", intval($limit));
-    $jobConfig->setArgument("-domain", $p['domain']);
-    $jobConfig->setArgument("-builder", $p['builder']);
+    $jobConfig->setArgument("tenantId", intval($p['user_id']));
+    $jobConfig->setArgument("regex", $regex);
+    $jobConfig->setArgument("startKey", $startKey);
+    $jobConfig->setArgument("endKey", $endKey);
+    $jobConfig->setArgument("limit", intval($limit));
+    $jobConfig->setArgument("domain", $p['domain']);
+    $jobConfig->setArgument("builder", $p['builder']);
 
     return new RemoteCommand($jobConfig);
   }
@@ -128,12 +128,12 @@ class RemoteCmdBuilder {
     $limit = intval($limit);
 
     $jobConfig = new JobConfig($p['crawlId'], JobType::RULEDEXTRACT, $p['configId']);
-    $jobConfig->setArgument("-tenantId", intval($p['user_id']));
-    $jobConfig->setArgument("-regex", $regex);
-    $jobConfig->setArgument("-startKey", $startKey);
-    $jobConfig->setArgument("-endKey", $endKey);
-    $jobConfig->setArgument("-limit", intval($limit));
-    $jobConfig->setArgument("-rules", '[base64]'.base64_encode($p['extract_rules']));
+    $jobConfig->setArgument("tenantId", intval($p['user_id']));
+    $jobConfig->setArgument("regex", $regex);
+    $jobConfig->setArgument("startKey", $startKey);
+    $jobConfig->setArgument("endKey", $endKey);
+    $jobConfig->setArgument("limit", intval($limit));
+    $jobConfig->setArgument("rules", '[base64]'.base64_encode($p['extract_rules']));
 
 //     pr($jobConfig->__toString());
 //     die();

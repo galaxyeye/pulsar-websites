@@ -618,7 +618,7 @@ die();
 	public function simpleJSONDecode() {
 		$json = '{"a":1,"b":2,"c":3,"d":4,"e":5}';
 
-		pr(json_decode($json, true));
+		pr(qi_json_decode($json, true));
 
 		$this->autoRender = false;
 		exit();

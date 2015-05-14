@@ -333,6 +333,31 @@
   }
 
   /**
+   * Fix option JSON_BIGINT_AS_STRING not implemented bug
+   * */
+  function qi_json_decode($json, $assoc = null, $depth = 10, $options = null) {
+  	$obj = null;
+
+	  if (false && version_compare(PHP_VERSION, '5.4.0', '>=') && !(defined('JSON_C_VERSION') && PHP_INT_SIZE > 4)) {
+	  	/** In PHP >=5.4.0, qi_json_decode() accepts an options parameter, that allows you
+	  	 * to specify that large ints (like Steam Transaction IDs) should be treated as
+	  	 * strings, rather than the PHP default behaviour of converting them to floats.
+	  	 */
+	  	$obj = json_decode($json, $assoc, $depth, JSON_BIGINT_AS_STRING);
+	  } else {
+	  	/** Not all servers will support that, however, so for older versions we must
+	  	 * manually detect large ints in the JSON string and quote them (thus converting
+	  	 *them to strings) before decoding, hence the preg_replace() call.
+	  	 */
+	  	$max_int_length = strlen((string) PHP_INT_MAX) - 1;
+	  	$json_without_bigints = preg_replace('/:\s*(-?\d{'.$max_int_length.',})/', ': "$1"', $json);
+	  	$obj = json_decode($json_without_bigints, $assoc, $depth);
+	  }
+
+	  return $obj;
+  }
+
+  /**
    * 简单对称加密算法之加密
    * @param String $string 需要加密的字串
    * @param String $skey 加密EKY

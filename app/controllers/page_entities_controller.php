@@ -71,7 +71,7 @@ class PageEntitiesController extends AppController {
     }
 
     $data = $this->params['data'];
-    $fields = json_decode($data, true, 4);
+    $fields = qi_json_decode($data, true, 4);
     foreach ($fields as &$field) {
       $field['page_entity_id'] = $id;
       $field['user_id'] = $this->currentUser['id'];

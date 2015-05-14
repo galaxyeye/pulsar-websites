@@ -120,7 +120,7 @@ class ScentJobManagerComponent extends Object {
       $pageEntities = $this->scentClient->query($args);
       Cache::write($cacheFile, $pageEntities, 'minute');
     }
-    $pageEntities = json_decode($pageEntities, true, 10);
+    $pageEntities = qi_json_decode($pageEntities, true, 10);
 
     if (empty($pageEntities)) {
     	$pageEntities = [];
@@ -148,7 +148,7 @@ class ScentJobManagerComponent extends Object {
       $pageEntities = $this->scentClient->query($args);
       Cache::write($cacheFile, $pageEntities, 'minute');
     }
-    $pageEntities = json_decode($pageEntities, true, 10);
+    $pageEntities = qi_json_decode($pageEntities, true, 10);
 
     $pageEntity = [];
     foreach ($pageEntities as $k => $v) {

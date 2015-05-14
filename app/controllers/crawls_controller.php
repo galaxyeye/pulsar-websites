@@ -428,6 +428,9 @@ class CrawlsController extends AppController {
       if ($configId['state'] != 'OK' && $configId['state'] != 'DUPLICATE') {
         $this->redirect2View($id, "Failed to create nutch config for #$id, message : ".$configId['state']);
       }
+      else {
+      	$this->log("NutchConfig created, configId : ".$configId['configId'], "info");
+      }
       $crawl['Crawl']['configId'] = $configId['configId'];
 
       // Create seed
@@ -547,7 +550,7 @@ class CrawlsController extends AppController {
     $this->Crawl->id = $id;
     $this->Crawl->save($crawl);
 
-    $this->_pauseNutchJobs($id);
+    $this->_stopNutchJobs($id);
 
     $this->redirect2View($id, __("Reset crawl #".$id, true));
   }
@@ -634,6 +637,15 @@ class CrawlsController extends AppController {
     $crawl['Crawl']['batchId'] = 'a.test.batch.id';
 
     $cmdBuilder = new \Nutch\RemoteCmdBuilder($crawl);
+
+    pr("-----crawl filters-----");
+    $crawlFilters = $cmdBuilder->buildCrawlFilters();
+    pr($crawlFilters);
+    pr(json_encode($crawlFilters, JSON_PRETTY_PRINT));
+
+    pr("-----url filters-----");
+    $urlFilters = $cmdBuilder->buildUrlFilters();
+    pr($urlFilters);
 
     pr("-----nutch config-----");
     $nutchConfig = $cmdBuilder->buildNutchConfig();
