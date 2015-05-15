@@ -488,7 +488,7 @@ class NutchJobManagerComponent extends Object {
 
     // Nothing to fetch, complete the job, and also the crawl
     // We set the job state to be COMPLETED so that no more jobs are created for this crawl
-    if ($round > 5 && $affectedRows == 0 && $jobInfo['type'] == JobType::GENERATE) {
+    if ($round > 5 && $affectedRows == 0 && $jobInfo['type'] == JobType::UPDATEDB) {
       $data['state'] = JobState::COMPLETED;
     }
 
