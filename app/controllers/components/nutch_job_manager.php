@@ -492,7 +492,7 @@ class NutchJobManagerComponent extends Object {
 
     // Nothing to fetch, complete the job, and also the crawl
     $recentAffectedRows = $this->_getRecentAffectedRows($crawl_id, 10);
-    if ($recentAffectedRows == 0) {
+    if ($round > 5 && $recentAffectedRows == 0 && $jobInfo['type'] == JobType::UPDATEDB) {
     	$this->_completeCrawl($job_id, $crawl_id);
     }
 
