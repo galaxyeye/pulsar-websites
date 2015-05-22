@@ -316,12 +316,12 @@ class CrawlsController extends AppController {
       return getResponseStatusJson(401);
     }
 
-    $sql = "SELECT SUM(`fetch_count`) AS fetch_count FROM `nutch_jobs`"
+    $sql = "SELECT SUM(`count`) AS count FROM `nutch_jobs`"
         ." WHERE `crawl_id`=$id "
         ." AND `type`='FETCH'";
     $count = $this->Crawl->query($sql);
 
-    $count = $count[0][0]['fetch_count'];
+    $count = $count[0][0]['count'];
 
     return $count;
   }
