@@ -486,17 +486,29 @@ class NutchJobManagerComponent extends Object {
         'count' => $affectedRows
     ];
 
-    // Nothing to fetch, complete the job, and also the crawl
-    // We set the job state to be COMPLETED so that no more jobs are created for this crawl
-    if ($round > 5 && $affectedRows == 0 && $jobInfo['type'] == JobType::UPDATEDB) {
-      $data['state'] = JobState::COMPLETED;
-    }
-
     if (!$this->NutchJob->save($data)) {
       $this->log("Failed to update nutch job  #$job_id");
     }
 
+    // Nothing to fetch, complete the job, and also the crawl
+    $recentAffectedRows = $this->_getRecentAffectedRows($crawl_id, 10);
+    if ($recentAffectedRows == 0) {
+    	$this->_completeCrawl($job_id, $crawl_id);
+    }
+
     return ['rawMsg' => $rawMsg, 'job' => $jobInfo];
+  }
+
+  private function _getRecentAffectedRows($crawl_id, $limit = 10) {
+  	$db =& ConnectionManager::getDataSource('default');
+
+  	$sql = "SELECT SUM(`count`) AS `count` FROM "
+  			." (SELECT `count` FROM `nutch_jobs` WHERE `crawl_id`=$crawl_id ORDER BY `id` DESC LIMIT $limit)"
+  			." AS AffectedRows;";
+  	$count = $db->query($sql);
+  	$count = $count[0][0]['count'];
+
+  	return $count;
   }
 
   // TODO : This is a very simple inter process timer, find better solution!
