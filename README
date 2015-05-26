@@ -1,1 +1,5 @@
 A php based nutch ui, and more.
+
+
+This project works with https://github.com/galaxyeye/qiwur-nutch,
+which is an powerful crawler based on Apache Nutch.
