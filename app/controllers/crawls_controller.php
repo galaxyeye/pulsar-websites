@@ -451,8 +451,8 @@ class CrawlsController extends AppController {
 
       // Inject
       $jobId = $this->NutchJobManager->inject($crawl);
-      if (empty($jobId)) {
-        $this->redirect2View($id, "Failed to inject for crawl #$id", 'error');
+      if (!$jobId) {
+        $this->redirect2View($id, "Failed to inject for crawl #$id, please try later", 'warn');
       }
 
       // Update state

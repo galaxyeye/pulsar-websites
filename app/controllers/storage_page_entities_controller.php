@@ -26,6 +26,7 @@ class StoragePageEntitiesController extends AppController {
   	if ($tenantId == 0) {
   		$tenantId = 3;
   	}
+//   	$tenantId = 0;
 
     $regex = '.+';
     $startKey = null;
@@ -64,6 +65,7 @@ class StoragePageEntitiesController extends AppController {
 
     $storagePageEntities = $this->ScentJobManager->getStoragePageEntities($tenantId,
     		$regex, $startKey, $endKey, ["title", "baseUri"], $start, $limit);
+
     if (!is_array($storagePageEntities)) {
       $storagePageEntities = [];
     }
@@ -71,11 +73,12 @@ class StoragePageEntitiesController extends AppController {
     $this->set(compact('storagePageEntities', 'startKey', 'page', 'limit'));
   }
 
-  function view($encodedUrl = null) {
+  function view($encodedUrl = null, $rawContent = false) {
   	$tenantId = $this->currentUser['id'];
   	if ($tenantId == 0) {
   		$tenantId = 3;
   	}
+//   	$tenantId = 0;
 
     if ($encodedUrl == null) {
       $this->redirect2Index("Encoded url is required");
@@ -92,9 +95,15 @@ class StoragePageEntitiesController extends AppController {
 
     App::import('Lib', array('html_utils'));
     $result = HtmlUtils::stripHTML($storagePageEntity['entityAttributes'], $url, $options);
+
     $content = $result['content'];
     if (empty($content)) {
       $this->redirect2Index("No content available, url : ".$url);
+    }
+
+    if (in_array("raw", $options)) {
+    	echo $content;
+    	die();
     }
 
     $pageEntity = [

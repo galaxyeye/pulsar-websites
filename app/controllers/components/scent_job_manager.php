@@ -103,14 +103,14 @@ class ScentJobManagerComponent extends Object {
   public function getStoragePageEntities($tenantId, 
     $regex = '.+', $startKey = null, $endKey = null, $fields = null, $start, $limit = 100) {
     $args = [
-        '-table' => 'pageentity',
-        '-tenantId' => intval($tenantId),
-        '-regex' => $regex,
-        '-startKey' => $startKey,
-        '-endKey' => $endKey,
-        '-start' => intval($start),
-    		'-limit' => intval($limit),
-        '-fields' => $fields
+        'table' => 'pageentity',
+        'tenantId' => intval($tenantId),
+        'regex' => $regex,
+        'startKey' => $startKey,
+        'endKey' => $endKey,
+        'start' => intval($start),
+    		'limit' => intval($limit),
+        'fields' => $fields
     ];
     $args = json_encode($args);
 
@@ -118,6 +118,7 @@ class ScentJobManagerComponent extends Object {
     $pageEntities = Cache::read($cacheFile, 'minute');
     if ($pageEntities == null) {
       $pageEntities = $this->scentClient->query($args);
+
       Cache::write($cacheFile, $pageEntities, 'minute');
     }
     $pageEntities = qi_json_decode($pageEntities, true, 10);
@@ -131,20 +132,20 @@ class ScentJobManagerComponent extends Object {
 
   public function getStoragePageEntity($tenantId, $url) {
     $args = [
-        '-table' => 'pageentity',
-        '-tenantId' => intval($tenantId),
-        '-startKey' => $url,
-        '-endKey' => $url,
-        '-regex' => ".+",
-        '-start' => 0,
-        '-limit' => 2,
-        '-fields' => null
+        'table' => 'pageentity',
+        'tenantId' => intval($tenantId),
+        'startKey' => $url,
+        'endKey' => $url,
+        'regex' => ".+",
+        'start' => 0,
+        'limit' => 2,
+        'fields' => null
     ];
     $args = json_encode($args);
- 
+
     $cacheFile = substr(json_encode($args), 0, 100);
     $pageEntities = Cache::read($cacheFile, 'minute');
-    if (true && $pageEntities == null) {
+    if ($pageEntities == null) {
       $pageEntities = $this->scentClient->query($args);
       Cache::write($cacheFile, $pageEntities, 'minute');
     }

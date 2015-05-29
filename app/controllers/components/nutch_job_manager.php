@@ -135,7 +135,7 @@ class NutchJobManagerComponent extends Object {
 
   public function createNutchJob($crawl, $jobType, $batchId = null, $round = 0) {
     if (!$this->_validateCrawl($crawl, " line #".__LINE__)) {
-      return;
+      return false;
     }
 
     $user_id = $crawl['Crawl']['user_id'];
@@ -149,7 +149,7 @@ class NutchJobManagerComponent extends Object {
 
     if (empty($jobId) || striContains($jobId, 'exception')) {
       $this->log("Failed to create Nutch Job $jobType, message : ".$rawMsg);
-      return $jobId;
+      return false;
     }
 
     // Record the submission result
@@ -219,7 +219,7 @@ class NutchJobManagerComponent extends Object {
 
     $count = count($nutchJobs);
     if ($count > 0) {
-      $this->log("Schedule $count nutch jobs", 'info');
+      // $this->log("Schedule $count nutch jobs", 'debug');
     }
 
     $min = date('Hi');
@@ -314,18 +314,18 @@ class NutchJobManagerComponent extends Object {
 
   	// Complete all jobs belongs to this crawl
   	if ($round > $maxRound) {
+  		$this->log("All rounds done, round : $round, max round : $maxRound. "
+  				."Complete crawl #$crawl_id", 'info');
+
   		$this->_completeCrawl($job_id, $crawl_id);
-
-  		$this->log("All rounds done. Complete Crawl #$crawl_id", 'info');
-
   		$crawlCompleted = true;
   	}
 
   	if ($fetchedPages > $maxPages) {
+  		$this->log("All pages done, fetched pages : $fetchedPages, required pages : $maxPages."
+  				."Complete crawl #$crawl_id", 'info');
+
   		$this->_completeCrawl($job_id, $crawl_id);
-
-  		$this->log("All pages done. Complete  Crawl #$crawl_id", 'info');
-
   		$crawlCompleted = true;
   	}
 
@@ -359,7 +359,7 @@ class NutchJobManagerComponent extends Object {
     if (key_exists($currentJobType, $jobChangeMap)) {
       $nextJobType = $jobChangeMap[$currentJobType];
 
-      $this->log("Schedule job for crawl #$crawl_id, $currentJobType -> $nextJobType", 'debug');
+      $this->log("Schedule job for crawl #$crawl_id, $currentJobType -> $nextJobType", 'info');
 
       // Update finished round
       $this->NutchJob->Crawl->id = $crawl_id;
@@ -377,10 +377,17 @@ class NutchJobManagerComponent extends Object {
       // Create nutch job
       $crawl = $nutchJob;
       $crawl['CrawlFilter'] = $crawl['Crawl']['CrawlFilter'];
-      $this->createNutchJob($crawl, $nextJobType, $batchId, $round);
-
+      // May try for several times
+      $jobId = $this->createNutchJob($crawl, $nextJobType, $batchId, $round);
       // Set completed job status to be COMPLETED
-      $this->_updateCompletedCircularJobs($job_id, $crawl_id);
+      if ($jobId) {
+      	// Nutch job created successful
+      	$this->_updateCompletedCircularJobs($job_id, $crawl_id);
+      }
+      else {
+      	$this->log("Failed to schedule job for crawl #$crawl_id, "
+      			."$currentJobType -> $nextJobType, will try later", 'info');
+      }
     } // if
   }
 
@@ -493,6 +500,7 @@ class NutchJobManagerComponent extends Object {
     // Nothing to fetch, complete the job, and also the crawl
     $recentAffectedRows = $this->_getRecentAffectedRows($crawl_id, 10);
     if ($round > 5 && $recentAffectedRows == 0 && $jobInfo['type'] == JobType::UPDATEDB) {
+    	LOG.info("No rows affected during last 10 rounds, complete the crawl");
     	$this->_completeCrawl($job_id, $crawl_id);
     }
 

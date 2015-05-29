@@ -131,11 +131,11 @@ class PageEntitiesController extends AppController {
   function startFeatureAnalysis() {
   	$id = $this->params['url']['id'];
   	$this->_validateId($id);
-  
+
   	$limit = $this->params['url']['limit'];
-  
+
   	$pageEntity = $this->PageEntity->read(null, $id);
-  
+
   	$pageEntity['PageEntity']['domain'] = $this->_asXml($pageEntity);
   	$jobId = $this->ScentJobManager->featureAnalysis($pageEntity, $limit);
   	$message = 'FeatureAnalysis job submitted';
@@ -143,11 +143,11 @@ class PageEntitiesController extends AppController {
   		$message = 'Failed to execute job RuledExtract';
   		$this->redirect2View($id, $message);
   	}
-  
+
   	$this->loadModel('ScentJob');
   	$this->ScentJob->recursive = -1;
   	$scentJob = $this->ScentJob->find('first', array('conditions' => array('jobId' => $jobId)));
-  
+
   	$this->Session->setFlash($message);
   	$this->redirect(array('controller' => 'scent_jobs', 'action' => 'view', $scentJob['ScentJob']['id']));
   } // startFeatureAnalysis
@@ -193,6 +193,8 @@ class PageEntitiesController extends AppController {
 
     $domain = $this->params['url']['domain'];
     $limit = $this->params['url']['limit'];
+    $limit = 100;
+
     $builder = $this->params['url']['builder'];
 
     $pageEntity = $this->PageEntity->read(null, $id);
