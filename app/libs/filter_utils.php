@@ -86,6 +86,7 @@ function urlFilter2regex($urlFilter) {
  * Regex format : 
  * ^http://domain.com$
  * ^http://domain.com/$
+ * ^http://domain.com/item(.+)$
  * ^http://domain.com/(.+)/{0,1}$
  * ^http://example.com/a/b/c/(\d+)/{0,1}$
  * ^http://example.com/q\?a=b&c=(\d+)(.*)$
@@ -134,6 +135,8 @@ function regex2startKey($regex) {
 	}
 
 	$startKey = str_replace(":\\\\", "://", $startKey);
+	$startKey = preg_replace("/\(.+\)/", "", $startKey);
+
 	return $startKey;
 }
 
