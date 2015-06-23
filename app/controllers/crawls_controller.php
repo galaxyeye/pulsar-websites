@@ -7,6 +7,11 @@ class CrawlsController extends AppController {
   var $paginate = ['Crawl' => ['limit'=> 500, 'order' => 'Crawl.id DESC']];
 
   function index() {
+//   	$url = "http://baoxian.taobao.com/item.htm(\d+)";
+//   	$startKey = \Nutch\regex2startKey($url);
+//   	echo $startKey;
+//   	die();
+
     $this->Crawl->recursive = 0;
     $this->set('crawls', $this->paginate(['Crawl.user_id' => $this->currentUser['id']]));
   }
