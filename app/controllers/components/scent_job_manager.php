@@ -114,7 +114,7 @@ class ScentJobManagerComponent extends Object {
     ];
     $args = json_encode($args);
 
-    $cacheFile = substr(json_encode($args), 0, 100);
+    $cacheFile = md5(__FUNCTION__.'-'.$args);
     $pageEntities = Cache::read($cacheFile, 'minute');
     if ($pageEntities == null) {
       $pageEntities = $this->scentClient->query($args);
@@ -143,7 +143,7 @@ class ScentJobManagerComponent extends Object {
     ];
     $args = json_encode($args);
 
-    $cacheFile = substr(json_encode($args), 0, 100);
+    $cacheFile = md5(__FUNCTION__.'-'.$args);
     $pageEntities = Cache::read($cacheFile, 'minute');
     if ($pageEntities == null) {
       $pageEntities = $this->scentClient->query($args);
@@ -192,7 +192,7 @@ class ScentJobManagerComponent extends Object {
       $this->log("Failed to save ScentJob : $jobId");
     }
   }
-  
+
   private function _validate($pageEntity) {
     assert(isset($pageEntity['PageEntity']));
     assert(isset($pageEntity['PageEntityField']));

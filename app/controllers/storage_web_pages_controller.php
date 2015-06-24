@@ -125,14 +125,15 @@ class StorageWebPagesController extends AppController {
     $pageEntity = $this->_getPageEntity($storageWebPage, $page_entity_id);
     $content = $storageWebPage['StorageWebPage']['content'];
 
-    $results = Cache::read("viewAnalysisResult-".$url, 'minute');
+    $cacheFile = md5(__FUNCTION__.'-'.$url);
+    $results = Cache::read($cacheFile, 'minute');
     if ($results == null) {
       \App::import('Lib', array('scent/scent_client'));
 
       $scentClient = new \Scent\ScentClient();
       $results = $scentClient->extract(['-html' => $content, '-format' => 'all']);
 
-      Cache::write("viewAnalysisResult-".$url, $results, 'minute');
+      Cache::write($cacheFile, $results, 'minute');
     }
 
     $storageWebPage['StorageWebPage']['content'] = "";
@@ -191,11 +192,11 @@ class StorageWebPagesController extends AppController {
     ];
 
     $args = json_encode($args);
-
-    $storageWebPages = Cache::read(json_encode($args), 'minute');
+    $cacheFile = md5(__FUNCTION__.'-'.$args);
+    $storageWebPages = Cache::read($cacheFile, 'minute');
     if ($storageWebPages == null) {
       $storageWebPages = $this->nutchClient->query($args);
-      Cache::write($args, $storageWebPages, 'minute');
+      Cache::write($cacheFile, $storageWebPages, 'minute');
     }
     $storageWebPages = qi_json_decode($storageWebPages, true, 10);
 
@@ -209,13 +210,14 @@ class StorageWebPagesController extends AppController {
   private function _getStorageWebPage($url, $options = []) {
     App::import('Lib', array('html_utils'));
 
-    $storageWebPages = Cache::read("_getStorageWebPage-".$url, 'minute');
+    $cacheFile = md5(__FUNCTION__.'-'.$url);
+    $storageWebPages = Cache::read($cacheFile, 'minute');
     if ($storageWebPages == null) {
       $nutchClient = new \Nutch\NutchClient();
       $dbFilter = new \Nutch\DbFilter($url, $url);
       $storageWebPages = $nutchClient->query($dbFilter);
 
-      Cache::write("_getStorageWebPage-".$url, $storageWebPages, 'minute');
+      Cache::write($cacheFile, $storageWebPages, 'minute');
     }
 
     $storageWebPages = qi_json_decode($storageWebPages, true, 10);
