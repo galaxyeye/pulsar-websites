@@ -14,6 +14,7 @@ class StoragePageEntitiesController extends AppController {
   }
 
   function anonymous_index() {
+  	$this->params['url']['limit'] = 1000;
   	$this->index();
   }
 
@@ -23,10 +24,10 @@ class StoragePageEntitiesController extends AppController {
 
   function index() {
   	$tenantId = $this->currentUser['id'];
-  	if ($tenantId == 0) {
-  		$tenantId = 3;
-  	}
-//   	$tenantId = 0;
+//   	if ($tenantId == 0) {
+//   		$tenantId = 3;
+//   	}
+//    	$tenantId = 0;
 
     $regex = '.+';
     $startKey = null;
@@ -44,12 +45,12 @@ class StoragePageEntitiesController extends AppController {
     if (!empty($this->params['url']['endKey'])) {
       $endKey = trim($this->params['url']['endKey']);
     }
+    if (!empty($this->params['url']['limit'])) {
+    	$limit = intval($this->params['url']['limit']);
+    }
     if (!empty($this->params['url']['page'])) {
       $page = intval($this->params['url']['page']);
       $start = ($page - 1) * $limit;
-    }
-    if (!empty($this->params['url']['limit'])) {
-      $limit = intval($this->params['url']['limit']);
     }
 
     if ($startKey == null) {
@@ -74,11 +75,11 @@ class StoragePageEntitiesController extends AppController {
   }
 
   function view($encodedUrl = null, $rawContent = false) {
-  	$tenantId = $this->currentUser['id'];
-  	if ($tenantId == 0) {
-  		$tenantId = 3;
-  	}
-//   	$tenantId = 0;
+   	$tenantId = $this->currentUser['id'];
+//   	if ($tenantId == 0) {
+//   		$tenantId = 3;
+//   	}
+//    	$tenantId = 0;
 
     if ($encodedUrl == null) {
       $this->redirect2Index("Encoded url is required");

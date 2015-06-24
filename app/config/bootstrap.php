@@ -33,7 +33,7 @@
   }
   else {
   	define('QIWU_NUTCH_SERVER', "http://master:8182");
-  	define('QIWU_SCENT_SERVER', "http://slave1:8181");
+  	define('QIWU_SCENT_SERVER', "http://master:8181");
   }
 
   define('DEFAULT_TITLE', 'nutch ui');
