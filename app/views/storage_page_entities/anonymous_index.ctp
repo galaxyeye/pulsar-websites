@@ -18,7 +18,7 @@
     <th>No</th>
     <th>Url</th>
     <th>Title</th>
-    <th class="actions"><?php __('Actions');?></th>
+    <th class="actions">View</th>
   </tr>
   <?php 
   $i = 0;
@@ -34,7 +34,11 @@
     <td><?=$storagePageEntity['baseUri']?></td>
     <td class='pageInfo'><?=$storagePageEntity['title'] ?></td>
     <td class="actions">
-      <?=$this->Html->link(__("View", true),
+        <?=$this->Html->link(__("Raw Page", true),
+        		['controller' => 'storage_web_pages', 'action' => 'view', $encodedUrl],
+        		['target' => '_blank']); ?>&nbsp;
+        &nbsp;
+      <?=$this->Html->link(__("Extracted Result", true),
           ['action' => 'view', $encodedUrl],
           ['target' => '_blank']); ?>&nbsp;
     </td>

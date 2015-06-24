@@ -19,8 +19,8 @@ class StorageWebPagesController extends AppController {
   	$this->index();
   }
 
-  function anonymous_view() {
-  	$this->view();
+  function anonymous_view($encodedUrl) {
+  	$this->view($encodedUrl);
   }
 
   /**
@@ -83,7 +83,7 @@ class StorageWebPagesController extends AppController {
    * Download a web page from nutch server if exists.
    * By default, some of it's own tags is stripped to show it nested in our view correctly.
    * */
-  function view($url) {
+  function view($encodedUrl) {
     $this->layout = 'empty';
 
     $options = array();
@@ -100,7 +100,7 @@ class StorageWebPagesController extends AppController {
       array_push($options, 'raw');
     }
 
-    $url = symmetric_decode($url);
+    $url = symmetric_decode($encodedUrl);
     $storageWebPage = $this->_getStorageWebPage($url, $options);
 
     $pageEntity = $this->_getPageEntity($storageWebPage, $page_entity_id);

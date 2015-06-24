@@ -26,6 +26,9 @@
     <div class="user"><?php echo $currentUser['name'] ?></div>
     <ul id="menu" class="clearfix">
       <li class="item">
+        <a href="<?php echo Router::url('/anonymous/storage_web_pages') ?>">Downloaded Pages</a>
+      </li>
+      <li class="item">
         <a href="<?php echo Router::url('/anonymous/storage_page_entities') ?>">Extracted Pages</a>
       </li>
       <li class="lgo">

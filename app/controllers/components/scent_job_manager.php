@@ -116,12 +116,17 @@ class ScentJobManagerComponent extends Object {
 
     $cacheFile = md5(__FUNCTION__.'-'.$args);
     $pageEntities = Cache::read($cacheFile, 'minute');
-    if ($pageEntities == null) {
+    if (true || $pageEntities == null) {
       $pageEntities = $this->scentClient->query($args);
-
       Cache::write($cacheFile, $pageEntities, 'minute');
     }
-    $pageEntities = qi_json_decode($pageEntities, true, 10);
+
+    if (!startsWith($pageEntities, "{\"exception\":")) {
+    	$pageEntities = qi_json_decode($pageEntities, true, 10);
+    }
+    else {
+    	$this->log($pageEntities);
+    }
 
     if (empty($pageEntities)) {
     	$pageEntities = [];
@@ -146,7 +151,7 @@ class ScentJobManagerComponent extends Object {
     $cacheFile = md5(__FUNCTION__.'-'.$args);
     $pageEntities = Cache::read($cacheFile, 'minute');
     if ($pageEntities == null) {
-      $pageEntities = $this->scentClient->query($args);
+      $pageEntities = $this->scentClient->query($args);      
       Cache::write($cacheFile, $pageEntities, 'minute');
     }
     $pageEntities = qi_json_decode($pageEntities, true, 10);

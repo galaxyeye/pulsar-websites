@@ -3,7 +3,13 @@
   <dl><?php $i = 0; $class = ' class="altrow"';?>
     <dt <?php if ($i % 2 == 0) echo $class;?>><?php __('Url'); ?></dt>
     <dd <?php if ($i++ % 2 == 0) echo $class;?>>
-        <?php echo $pageEntity['PageEntity']['url']; ?>
+        <?php 
+          $url = $pageEntity['PageEntity']['url'];
+	        $encodedUrl = symmetric_encode($url);
+        ?>
+        <?=$this->Html->link($url,
+        		['controller' => 'storage_web_pages', 'action' => 'view', $encodedUrl],
+        		['target' => '_blank']); ?>&nbsp;
         &nbsp;
     </dd>
     <dt <?php if ($i % 2 == 0) echo $class;?>><?php __('Title'); ?></dt>
