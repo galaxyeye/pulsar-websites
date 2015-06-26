@@ -5,7 +5,11 @@
   // database deploy
   define('STAT_DB', 'default');
 
-  $host = isset($_SERVER['HTTP_X_FORWARDED_HOST']) ? $_SERVER['HTTP_X_FORWARDED_HOST'] : (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '');
+  define('DEBUG_REMOTE_SERVER', false);
+  define('DEBUG_HTTP_CLIENT', true);
+
+  $host = isset($_SERVER['HTTP_X_FORWARDED_HOST']) ? $_SERVER['HTTP_X_FORWARDED_HOST'] : 
+  	(isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '');
 
   define('HOST', $host);
 
@@ -27,7 +31,7 @@
     define('URL_BASE', 'http://www.'.DOMAIN);
   }
 
-  if (DOMAIN == 'localhost') {
+  if (!DEBUG_REMOTE_SERVER && DOMAIN == 'localhost') {
 	  define('QIWU_NUTCH_SERVER', "http://localhost:8182");
 	  define('QIWU_SCENT_SERVER', "http://localhost:8181");
   }
@@ -112,6 +116,8 @@
   //  define('NUTCH_SERVER', "http://master:8081");
   define('NUTCH_SERVER', QIWU_NUTCH_SERVER);
   define('QIWU_UI_CRAWL_ID', "qiwu.ui.crawl.id");
+  define('STORAGE_CRAWL_ID', "storage.crawl.id");
+  define('FETCHER_FETCH_MODE', "fetcher.fetch.mode");
   define('URLFILTER_REGEX_RULES', "urlfilter.regex.rules");
   define('CRAWL_FILTER_RULES', "crawl.filter.rules");
 
@@ -123,8 +129,6 @@
   define('SCENT_OUT_DIR_WEB_CACHE', "/web");
 
   define('CONTENTFILTER_CONTENT_RULES', "contentfilter.content.rules");
-
-  define('DEBUG_HTTP_CLIENT', false);
 
   require('global.php');
 

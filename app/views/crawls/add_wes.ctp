@@ -15,6 +15,7 @@
 
     $m = [
         'name' => '<p class="m hidden">任务名称，默认自动生成</p>',
+    		'crawl_mode' => '<p class="m hidden">是否支持Ajax</p>',
         'rounds' => '<p class="m hidden">抓取深度。爬虫采用广度优先算法，即：<br />
                 I : 爬种子链接，得到第一层网页集；<br />
                II : 抽取第一层网页集中的URL，作为第二层网页集合的种子，并开始爬第二层网页；<br />
@@ -29,22 +30,27 @@
     ];
 
     echo $this->Form->input('Seed.0.url', 
-        array('label' => '入口链接', 'div' => 'input text medium', 'type' => 'text', 'after' => $m['Seed.url']));
+        array('label' => 'Seed Url', 'div' => 'input text medium', 'type' => 'text', 'after' => $m['Seed.url']));
     echo "<div class='seed-url-testing-message hidden'>链接可用性测试中，请稍候...</div>";
     // echo "<button>测试链接</button>";
 
     echo $this->Form->input('CrawlFilter.0.url_filter',
-        array('label' => '列表页链接模式', 'div' => 'input text medium', 'type' => 'text', 'after' => $m['CrawlFilter.0.url_filter']));
+        array('label' => 'Index Page Url Pattern', 'div' => 'input text medium', 'type' => 'text', 'after' => $m['CrawlFilter.0.url_filter']));
     echo $this->Form->hidden('CrawlFilter.0.page_type', array('value' => 'INDEX'));
 
     echo $this->Form->input('CrawlFilter.1.url_filter',
-        array('label' => '详细页链接模式', 'div' => 'input text medium', 'type' => 'text', 'after' => $m['CrawlFilter.1.url_filter']));
+        array('label' => 'Detail Page Url Pattern', 'div' => 'input text medium', 'type' => 'text', 'after' => $m['CrawlFilter.1.url_filter']));
     echo $this->Form->hidden('CrawlFilter.1.page_type', array('value' => 'DETAIL'));
 
-    echo $this->Form->input('PageEntity.0.name', array('label' => '实体名', 
+    echo $this->Form->input('PageEntity.0.name', array('label' => 'Entity Name', 
     		'div' => 'input text required', 'after' => $m['PageEntity.name']));
 
-    echo $this->Form->input('description', array('label' => '简单说明', 'rows' => '1'));
+    echo $this->Form->input('CrawlFilter.crawl_mode', array('label' => 'Ajax Support',
+    		'default' => "native",
+    		'options' => ['native' => 'Without Ajax Support', 'crowdsourcing' => 'With Ajax Support'],
+    		'after' => $m['crawl_mode']));
+
+    echo $this->Form->input('description', array('rows' => '1'));
   ?>
   </fieldset>
 <?php echo $this->Form->end(__('Submit', true)); ?>

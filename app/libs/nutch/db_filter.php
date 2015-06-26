@@ -5,28 +5,31 @@ namespace Nutch;
 class DbFilter {
 
   private $data = array(
-      'startKey' => null,
+  		'startKey' => null,
       'endKey' => null,
   		'urlFilter' => '.+',
       'fields' => null,
   		'start' => 0,
   		'limit' => 100,
       'batchId' => null,
-      'keysReversed' => false
+      'crawlId' => null,
+  		'keysReversed' => false
   );
 
   public function __construct($startKey = null, $endKey = null, $urlFilter = null, $fields = null,
-  		$limit = 100, $batchId = null) {
-    $this->data['startKey'] = $startKey;
+  		$start = 0, $limit = 100, $batchId = null, $crawlId = null) {
+  	$this->data['startKey'] = $startKey;
     $this->data['endKey'] = $endKey;
     $this->data['urlFilter'] = $urlFilter;
     $this->data['fields'] = $fields;
-    $this->data['limit'] = $limit;
+    $this->data['start'] = intval($start);
+    $this->data['limit'] = intval($limit);
     $this->data['batchId'] = $batchId;
+    $this->data['crawlId'] = $crawlId;
   }
 
   public function setStart($start) {
-  	$this->data['start'] = $start;
+  	$this->data['start'] = intval($start);
   }
 
   public function setStartKey($startKey) {
@@ -46,11 +49,15 @@ class DbFilter {
   }
 
   public function setLimit($limit) {
-  	$this->data['limit'] = $limit;
+  	$this->data['limit'] = intval($limit);
   }
 
   public function setBatchId($batchId) {
   	$this->data['batchId'] = $batchId;
+  }
+
+  public function setCrawlId($crawlId) {
+  	$this->data['crawlId'] = $crawlId;
   }
 
   public function data() {

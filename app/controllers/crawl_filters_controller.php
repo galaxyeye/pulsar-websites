@@ -21,15 +21,13 @@ class CrawlFiltersController extends AppController {
 			if ($this->data['CrawlFilter']['filter_mode'] == 'BASIC') {
 				$textFilter = json_encode($this->data['TextFilter'], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 				$blockFilter = json_encode($this->data['BlockFilter'], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
-
-				$this->data['CrawlFilter']['text_filter'] = $textFilter;
-				$this->data['CrawlFilter']['block_filter'] = $blockFilter;
 			}
 
 			$this->data['CrawlFilter']['user_id'] = $this->currentUser['id'];
 
+			$crawlFilter = $this->CrawlFilter->tidyCrawlFilter($this->data['CrawlFilter']);
 			$this->CrawlFilter->create();
-			if ($this->CrawlFilter->save($this->data)) {
+			if ($this->CrawlFilter->save($crawlFilter)) {
 				$this->Session->setFlash(__('The crawl filter has been saved', true));
 				$this->redirect(array('controller' => 'crawls', 'action' => 'view', $crawl_id));
 			} else {
@@ -55,11 +53,14 @@ class CrawlFiltersController extends AppController {
 
 		if (!empty($this->data)) {
 			$this->CrawlFilter->recursive = -1;
-			$crawlFilter = $this->CrawlFilter->read(null, $this->data['CrawlFilter']['id']);
+			$crawlFilter = $this->CrawlFilter->read(null, $id);
+			$crawl_id = $crawlFilter['CrawlFilter']['crawl_id'];
 
-			if ($this->CrawlFilter->save($this->data)) {
+			$crawlFilter = $this->CrawlFilter->tidyCrawlFilter($this->data['CrawlFilter']);
+
+			if ($this->CrawlFilter->save($crawlFilter)) {
 				$this->Session->setFlash(__('The crawl filter has been saved', true));
-				$this->redirect(array('controller' => 'crawls', 'action'=>'view', $crawlFilter['CrawlFilter']['crawl_id']));
+				$this->redirect(array('controller' => 'crawls', 'action'=>'view', $crawl_id));
 			} else {
 				$this->Session->setFlash(__('The crawl filter could not be saved. Please, try again.', true));
 			}
@@ -165,4 +166,3 @@ class CrawlFiltersController extends AppController {
 		$this->redirect(array('action' => 'index'));
 	}
 }
-?>

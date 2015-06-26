@@ -2,7 +2,7 @@
 
 class DATABASE_CONFIG {
 
-	public $default__ = array(
+	public $default_ = array(
 			'driver' => 'mysql',
 			'persistent' => true,
 			'host' => 'localhost',
@@ -13,10 +13,10 @@ class DATABASE_CONFIG {
 			'prefix' => ''
 	);
 
-	public $default = array(
+	public $default__ = array(
 			'driver' => 'mysql',
 			'persistent' => true,
-			'host' => 'galaxyeye',
+			'host' => 'localhost',
 			'login' => 'vincent',
 			'password' => 'ViVopu__zpoooiq',
 			'database' => 'qiwu_data_engine',
@@ -24,7 +24,7 @@ class DATABASE_CONFIG {
 			'prefix' => ''
 	);
 
-	public $default___ = array(
+	public $default = array(
 			'driver' => 'mysql',
 			'persistent' => true,
 			'host' => 'qiwur.com',

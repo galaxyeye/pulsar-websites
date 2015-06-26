@@ -171,6 +171,7 @@ class StorageWebPagesController extends AppController {
   function _getStorageWebPagesByCrawlFilter($crawl, $fields = null, $limit = 100) {
   	$executor = new \Nutch\RemoteCmdExecutor();
   	$webPages = $executor->queryByCrawlFilter($crawl, $fields, $limit);
+
   	$webPages = qi_json_decode($webPages, true, 10);
   	if (!isset($webPages['values'])) {
   		$webPages['values'] = [];
@@ -179,23 +180,17 @@ class StorageWebPagesController extends AppController {
   	return $webPages['values'];
   }
 
+  /**
+   * Get web pages from hbase, via issue a query to nutchserver
+   */
   function _getStorageWebPages($regex = '.+', $startKey = null, $endKey = null, $fields = null, $start = 0, $limit = 100) {
-    $args = [
-        'urlFilter' => \Nutch\normalizeUrlFilter($regex),
-        'startKey' => $startKey,
-        'endKey' => $endKey,
-        'fields' => $fields,
-    		'start' => $start,
-        'limit' => $limit,
-        'batchId' => null,
-        'keysReversed' => false
-    ];
+    $dbFilter = new \Nutch\DbFilter($startKey, $endKey, \Nutch\normalizeUrlFilter($regex), $fields, 
+    		$start, $limit, null, $this->currentUser['id']);
 
-    $args = json_encode($args);
-    $cacheFile = md5(__FUNCTION__.'-'.$args);
+    $cacheFile = md5(__FUNCTION__.'-'.$dbFilter->__toString());
     $storageWebPages = Cache::read($cacheFile, 'minute');
     if ($storageWebPages == null) {
-      $storageWebPages = $this->nutchClient->query($args);
+      $storageWebPages = $this->nutchClient->query($dbFilter);
       Cache::write($cacheFile, $storageWebPages, 'minute');
     }
     $storageWebPages = qi_json_decode($storageWebPages, true, 10);
@@ -207,6 +202,11 @@ class StorageWebPagesController extends AppController {
     return $storageWebPages['values'];
   }
 
+  /**
+   * @param $configId
+   * @param $url
+   * @param $options
+  /***/
   private function _getStorageWebPage($url, $options = []) {
     App::import('Lib', array('html_utils'));
 
@@ -215,6 +215,8 @@ class StorageWebPagesController extends AppController {
     if ($storageWebPages == null) {
       $nutchClient = new \Nutch\NutchClient();
       $dbFilter = new \Nutch\DbFilter($url, $url);
+      $dbFilter->setCrawlId($this->currentUser['id']);
+
       $storageWebPages = $nutchClient->query($dbFilter);
 
       Cache::write($cacheFile, $storageWebPages, 'minute');

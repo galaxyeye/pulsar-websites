@@ -12,6 +12,7 @@
   <?php 
 	$m = [
 			'name' => '<p class="m hidden">任务名称，默认自动生成</p>',
+			'crawl_mode' => '<p class="m hidden">是否支持Ajax</p>',
 			'rounds' => '<p class="m hidden">爬虫采用广度优先算法，即：<br />
 						  I : 爬种子链接，得到第一层网页集；<br />
 						 II : 抽取第一层网页集中的URL，作为第二层网页集合的种子，并开始爬第二层网页；<br />
@@ -60,6 +61,10 @@
 	/***********************************************************/
 	echo "<fieldset class='crawl'><legend>爬虫信息</legend>";
 	echo $this->Form->input('name', array('label' => '任务名称', 'default' => $defaultCrawlName, 'after' => $m['name']));
+	echo $this->Form->input('crawl_mode', array('label' => 'Ajax Support',
+				'default' => "native",
+    		'options' => ['native' => 'Without Ajax Support', 'crowdsourcing' => 'With Ajax Support'],
+				'after' => $m['crawl_mode']));
 	echo $this->Form->input('Seed.0.url', array('label' => '入口链接', 'value' => $seedTemplate, 'after' => $m['Seed.url']));
 	echo $this->Form->input('rounds', array('label' => '抓取周期数', 'default' => 100, 'after' => $m['rounds']));
 	echo $this->Form->input('description', array('label' => '简单说明', 'rows' => '1', 'after' => $m['description']));

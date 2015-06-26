@@ -6,6 +6,7 @@
 	<tr>
 			<th><?php echo $this->Paginator->sort('id');?></th>
 			<th><?php echo $this->Paginator->sort('name');?></th>
+			<th><?php echo $this->Paginator->sort('crawl_mode');?></th>
 			<th><?php echo $this->Paginator->sort('rounds');?></th>
 			<th><?php echo $this->Paginator->sort('R/Finish', 'finished_rounds');?></th>
 			<th><?php echo $this->Paginator->sort('limit');?></th>
@@ -26,6 +27,7 @@
 	<tr<?php echo $class;?>>
 		<td><?php echo $crawl['Crawl']['id']; ?>&nbsp;</td>
 		<td><?php echo $crawl['Crawl']['name']; ?>&nbsp;</td>
+		<td><?php echo $crawl['Crawl']['crawl_mode']; ?>&nbsp;</td>
 		<td><?php echo $crawl['Crawl']['rounds']; ?>&nbsp;</td>
 		<td><?php echo $crawl['Crawl']['finished_rounds']; ?>&nbsp;</td>
 		<td><?php echo $crawl['Crawl']['limit']; ?>&nbsp;</td>

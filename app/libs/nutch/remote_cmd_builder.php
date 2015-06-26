@@ -60,7 +60,7 @@ class RemoteCmdBuilder extends \Object {
 	}
 
 	/**
-	 * TODO : \uFFFF is used for "the largest character", but json_encode($NCrawlFilters) encode it into "\uFFFF",
+	 * TODO : \uFFFF is used for "the largest character", but json_encode($NCrawlFilters) encode it into "\\\\uFFFF",
 	 * which is not expected
 	 * */
 	public function buildCrawlFilters() {
@@ -97,8 +97,10 @@ class RemoteCmdBuilder extends \Object {
 		$crawl = $this->crawl;
 		$crawl_id = $crawl['Crawl']['id'];
 		$configId = $crawl['Crawl']['configId'];
+		$user_id = $crawl['Crawl']['user_id'];
 
 		$params = [
+				STORAGE_CRAWL_ID => $user_id,
 				QIWU_UI_CRAWL_ID => $crawl_id,
 				URLFILTER_REGEX_RULES => $this->buildUrlFilters(),
 				CRAWL_FILTER_RULES => json_encode($this->buildCrawlFilters())
@@ -128,6 +130,7 @@ class RemoteCmdBuilder extends \Object {
 		$allUrlFilters .= "-.\n";
 
 		$dbFilter = new DbFilter($startKey, $endKey, $allUrlFilters, $fields, $limit);
+		$dbFilter->setCrawlId($crawl['Crawl']['user_id']);
 
 		return $dbFilter;
 	}
