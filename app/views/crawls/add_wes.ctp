@@ -29,7 +29,7 @@
                 <br />如果网页中包含关联实体，譬如"商品"详细页中也包含"店铺"和"评论"。可在创建后进入编辑页面进行详细配置。</p>'
     ];
 
-    echo $this->Form->input('Seed.0.url', 
+    echo $this->Form->input('Seed.0.url',
         array('label' => 'Seed Url', 'div' => 'input text medium', 'type' => 'text', 'after' => $m['Seed.url']));
     echo "<div class='seed-url-testing-message hidden'>链接可用性测试中，请稍候...</div>";
     // echo "<button>测试链接</button>";
