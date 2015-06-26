@@ -5,7 +5,7 @@
   // database deploy
   define('STAT_DB', 'default');
 
-  define('DEBUG_REMOTE_SERVER', false);
+  define('DEBUG_REMOTE_SERVER', true);
   define('DEBUG_HTTP_CLIENT', true);
 
   $host = isset($_SERVER['HTTP_X_FORWARDED_HOST']) ? $_SERVER['HTTP_X_FORWARDED_HOST'] : 
