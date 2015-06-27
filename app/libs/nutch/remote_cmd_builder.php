@@ -130,7 +130,10 @@ class RemoteCmdBuilder extends \Object {
 		$allUrlFilters .= "-.\n";
 
 		$dbFilter = new DbFilter($startKey, $endKey, $allUrlFilters, $fields, $limit);
-		$dbFilter->setCrawlId($crawl['Crawl']['user_id']);
+
+		// it's a bad idea to allocate a table for each user
+		// TODO : consider remove user id
+		// $dbFilter->setCrawlId($crawl['Crawl']['user_id']);
 
 		return $dbFilter;
 	}

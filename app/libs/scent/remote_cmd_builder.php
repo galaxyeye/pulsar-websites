@@ -104,7 +104,9 @@ class RemoteCmdBuilder {
     $limit = intval($limit);
 
     $jobConfig = new JobConfig($p['crawlId'], JobType::AUTOEXTRACT, $p['configId']);
-    $jobConfig->setArgument("crawlId", $p['user_id']); // storage.crawl.id
+    // it's a bad idea to allocate a table for each user
+    // TODO : consider remove user id
+    // $jobConfig->setArgument("crawlId", $p['user_id']); // storage.crawl.id
     $jobConfig->setArgument("tenantId", intval($p['user_id']));
     $jobConfig->setArgument("regex", $regex);
     $jobConfig->setArgument("startKey", $startKey);
@@ -129,7 +131,9 @@ class RemoteCmdBuilder {
     $limit = intval($limit);
 
     $jobConfig = new JobConfig($p['crawlId'], JobType::RULEDEXTRACT, $p['configId']);
-    $jobConfig->setArgument("crawlId", $p['user_id']); // storage.crawl.id
+    // it's a bad idea to allocate a table for each user
+    // TODO : consider remove user id
+    // $jobConfig->setArgument("crawlId", $p['user_id']); // storage.crawl.id
     $jobConfig->setArgument("tenantId", intval($p['user_id']));
     $jobConfig->setArgument("regex", $regex);
     $jobConfig->setArgument("startKey", $startKey);

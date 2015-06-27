@@ -206,7 +206,7 @@ class StorageWebPagesController extends AppController {
    * @param $configId
    * @param $url
    * @param $options
-  /***/
+   **/
   private function _getStorageWebPage($url, $options = []) {
     App::import('Lib', array('html_utils'));
 
@@ -215,7 +215,9 @@ class StorageWebPagesController extends AppController {
     if ($storageWebPages == null) {
       $nutchClient = new \Nutch\NutchClient();
       $dbFilter = new \Nutch\DbFilter($url, $url);
-      $dbFilter->setCrawlId($this->currentUser['id']);
+
+//    bad idea to create a table for each user?
+//    $dbFilter->setCrawlId($this->currentUser['id']);
 
       $storageWebPages = $nutchClient->query($dbFilter);
 

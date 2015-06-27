@@ -17,7 +17,7 @@ class DbFilter {
   );
 
   public function __construct($startKey = null, $endKey = null, $urlFilter = null, $fields = null,
-  		$start = 0, $limit = 100, $batchId = null, $crawlId = null) {
+  		$start = 0, $limit = 100, $batchId = null, $storageCrawlId = null) {
   	$this->data['startKey'] = $startKey;
     $this->data['endKey'] = $endKey;
     $this->data['urlFilter'] = $urlFilter;
@@ -25,7 +25,9 @@ class DbFilter {
     $this->data['start'] = intval($start);
     $this->data['limit'] = intval($limit);
     $this->data['batchId'] = $batchId;
-    $this->data['crawlId'] = $crawlId;
+
+    // bad idea?
+    // $this->data['crawlId'] = $storageCrawlId;
   }
 
   public function setStart($start) {
@@ -56,8 +58,10 @@ class DbFilter {
   	$this->data['batchId'] = $batchId;
   }
 
+  // TODO : consider remove this
+  // it's a bad idea to allocate a table for each user
   public function setCrawlId($crawlId) {
-  	$this->data['crawlId'] = $crawlId;
+  	// $this->data['crawlId'] = $crawlId;
   }
 
   public function data() {
