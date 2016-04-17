@@ -89,7 +89,7 @@
   define('AVATAR_PREDEFINED_MAX', 40);
 
   // Cookie
-  define('COOKIE_NAME', 'logoloto');
+  define('COOKIE_NAME', 'qiwur-data-ui');
   define('COOKIE_KEY', 'iTIx32bs!2*woi!');
 
   // Javascript

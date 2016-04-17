@@ -35,7 +35,7 @@ class AppController extends Controller {
   		'name' => USER_ANONYMOUS_NAME,
   		'group_id' => ENTERPRISE_GROUP_ID
   );
-  
+
   // Default current user is anonymous user
   public $currentUser = array(
   		'id' => 0,
@@ -71,7 +71,7 @@ class AppController extends Controller {
     // Session accross all domain
     ini_set('session.cookie_domain', env('HTTP_BASE'));
 
-    // $this->Auth->allow('*');
+    $this->Auth->allow('*');
 
     // Current user
     if ($this->Session->check('Auth.User')) {

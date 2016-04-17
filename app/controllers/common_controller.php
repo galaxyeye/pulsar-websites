@@ -39,16 +39,80 @@ class CommonController extends AppController {
 	}
 
 	public function ajax_checkUrlAvailable() {
-		App::import('Lib', array('http_client'));
-		$client = new HttpClient();
+        App::import('Lib', array('http_client'));
+        $client = new HttpClient();
 
-		$url = $this->params['url']['u'];
-		$exists = $client->url_exists($url);
+        $url = $this->params['url']['u'];
+        $exists = $client->url_exists($url);
 		// $content = $client->get($url);
 
-		echo $exists ? 1 : 0;
+        echo $exists ? 1 : 0;
 
-  	$this->autoRender = false;
+	    $this->autoRender = false;
+	}
+
+	public function graph($name) {
+		$nodes = [
+			['category' => '人物', 'name' => 'Shu-Jen Han', 'profile' => ['Email' => 'sjhan@us.ibm.com', 'Tel' => '+19149452876']],
+			['category' => '人物', 'name' => 'Leo Lester', 'profile' => ['党派' => 'Reading Borough Conservatives']],
+			['category' => '人物', 'name' => 'Arvind Krishna', 'profile' => ['党派' => '']],
+			['category' => '机构', 'name' => 'IBM T. J. Watson Research Center', 
+					'profile' => ['Homepage' => 'http://www.research.ibm.com/labs/watson/index.shtml']
+			],
+		];
+
+		$links = [
+			['source' => 'Shu-Jen Han', 'target' => 'Arvind Krishna', 'name' => '同事'],
+			['source' => 'Shu-Jen Han', 'target' => 'Joan Hart', 'name' => '同事'],
+			['source' => 'Shu-Jen Han', 'target' => 'Yang Liu', 'name' => '同事'],
+			['source' => 'Shu-Jen Han', 'target' => 'Hasan Nayfeh', 'name' => '同事'],
+			['source' => 'Shu-Jen Han', 'target' => 'Faisal Chowdhury', 'name' => '同事'],
+			['source' => 'Shu-Jen Han', 'target' => 'Fanghao Yang', 'name' => '同事'],
+			['source' => 'Shu-Jen Han', 'target' => 'Bob Hopkins', 'name' => '同事'],
+			['source' => 'Shu-Jen Han', 'target' => 'Emrah Acar', 'name' => '同事'],
+			['source' => 'Shu-Jen Han', 'target' => 'National Tsing Hua University', 'name' => '毕业于'],
+			['source' => 'Shu-Jen Han', 'target' => 'Stanford University', 'name' => '毕业于'],
+			['source' => 'Shu-Jen Han', 'target' => 'IBM T. J. Watson Research Center', 'name' => '就职于'],
+
+			['source' => 'Leo Lester', 'target' => 'Tony Jones', 'name' => '党派竞争对手', 'weight' => 1],
+			['source' => 'Leo Lester', 'target' => 'James Moore', 'name' => '党派竞争对手', 'weight' => 1],
+			['source' => 'Leo Lester', 'target' => 'Robert Alan Booth', 'name' => '党派竞争对手', 'weight' => 1],
+			['source' => 'Leo Lester', 'target' => 'Axel Pierru', 'name' => '共同作者', 'weight' => 1],
+			['source' => 'Leo Lester', 'target' => 'Brian Efird', 'name' => '共同作者', 'weight' => 1],
+			['source' => 'Leo Lester', 'target' => 'Philipp Galkin', 'name' => '共同作者', 'weight' => 1],
+			['source' => 'Leo Lester', 'target' => 'Brian Efird', 'name' => '共同作者', 'weight' => 1],
+			['source' => 'Leo Lester', 'target' => 'KAPSARC', 'name' => '曾就职于', 'weight' => 1],
+			['source' => 'Leo Lester', 'target' => 'BG Group', 'name' => '曾就职于', 'weight' => 1],
+			['source' => 'Leo Lester', 'target' => 'University of Reading', 'name' => '毕业于', 'weight' => 1],
+			['source' => 'Leo Lester', 'target' => 'University of Oxford', 'name' => '毕业于', 'weight' => 1],
+
+			['source' => 'Arvind Krishna', 'target' => 'Shu-Jen Han', 'name' => '同事', 'weight' => 1],
+			['source' => 'Arvind Krishna', 'target' => 'Sonia Jain Krishna', 'name' => '同事', 'weight' => 2],
+			['source' => 'Arvind Krishna', 'target' => 'IBM T. J. Watson Research Center', 'name' => '主管', 'weight' => 2]
+		];
+
+		$this->_searchGraph($name, ['nodes' => $nodes, 'links' => $links]);
+
+		$this->autoRender = false;
+	}
+
+	public function _searchGraph($name, $g) {
+		$nodes = [];
+		$links = [];
+
+		foreach ($g['nodes'] as $node) {
+			if ($node['name'] == $name) {
+				array_push($nodes, $node);
+			}
+		}
+
+		foreach ($g['links'] as $link) {
+			if ($link['source'] == $name) {
+				array_push($links, $link);
+			}
+		}
+
+		echo json_encode(['nodes' => $nodes, 'links' => $links]);
 	}
 
 	public function ajax_kissyPictureUpload() {
@@ -234,4 +298,4 @@ class CommonController extends AppController {
 		return $password;
 	}
 }
-?>
+

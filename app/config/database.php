@@ -2,12 +2,12 @@
 
 class DATABASE_CONFIG {
 
-	public $default_ = array(
+	public $default = array(
 			'driver' => 'mysql',
 			'persistent' => true,
 			'host' => 'localhost',
 			'login' => 'root',
-			'password' => 'ABC!@#',
+			'password' => 'abc123',
 			'database' => 'qiwu_data_engine',
 			'encoding'=> 'utf8',
 			'prefix' => ''
@@ -24,12 +24,12 @@ class DATABASE_CONFIG {
 			'prefix' => ''
 	);
 
-	public $default = array(
+	public $default___ = array(
 			'driver' => 'mysql',
 			'persistent' => true,
 			'host' => 'qiwur.com',
 			'login' => 'vincent',
-			'password' => 'ViVopu__zpoooiq',
+			'password' => 'ViVopu__zpoooiq@vincent',
 			'database' => 'qiwu_data_engine',
 			'encoding'=> 'utf8',
 			'prefix' => ''

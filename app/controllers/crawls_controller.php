@@ -16,6 +16,24 @@ class CrawlsController extends AppController {
     $this->set('crawls', $this->paginate(['Crawl.user_id' => $this->currentUser['id']]));
   }
 
+  function testWiki() {
+  	$api = \Mediawiki\Api\MediawikiApi::newFromApiEndpoint( 'http://people.qiwur.com/w/index.php/Shu-Jen_Han' );
+  	$api = \Mediawiki\Api\MediawikiApi::newFromPage( 'https://en.wikipedia.org/wiki/Berlin' );
+
+//   	$api->login( new \Mediawiki\Api\ApiUser( 'Galaxyeyebot', '12345qwert' ) );
+//   	$api->logout();
+  }
+
+  public function testQueryGetResponse() {
+  	App::import('Vendor', array('addwiki/MediawikiApi'));
+    App::import('Vendor','MediawikiApi' ,array('file'=>'addwiki'.DS.'MediawikiApi.php'));
+  	// App::import('Vendor','Securimage' ,array('file'=>'securimage'.DS.'securimage.php'));
+
+  	$api = \Mediawiki\Api\MediawikiApi::newFromApiEndpoint( 'http://deployment.wikimedia.beta.wmflabs.org/w/api.php' );
+  	$response = $api->getRequest( new SimpleRequest( 'query' ) );
+  	$this->assertEquals( array( 'batchcomplete' => '' ), $response );
+  }
+
   /**
    * Step : 
    * 1. seed
