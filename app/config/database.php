@@ -8,7 +8,7 @@ class DATABASE_CONFIG {
 			'host' => 'localhost',
 			'login' => 'root',
 			'password' => 'abc123',
-			'database' => 'qiwu_data_engine',
+			'database' => 'qiwu_ui_v1',
 			'encoding'=> 'utf8',
 			'prefix' => ''
 	);

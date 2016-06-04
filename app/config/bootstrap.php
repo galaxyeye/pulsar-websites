@@ -137,5 +137,6 @@
     'common' => 'common',
     'stat' => 'stat',
     'nutch' => 'nutch',
+  	'wiki' => 'wiki',
     'analysis' => 'analysis'
   )));

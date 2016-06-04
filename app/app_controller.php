@@ -120,21 +120,21 @@ class AppController extends Controller {
 
   public function afterFilter() {
     if ($this->_needLogAction()) {
-          $db =& ConnectionManager::getDataSource(STAT_DB);
+      $db =& ConnectionManager::getDataSource(STAT_DB);
 
       // Logging
-          $sql = sprintf("INSERT INTO `stat_accesses` (`controller`, `action`, `param1`, `param2`, `param3`, `ip`, `referer`, `uucookie`, `user_id`) "
-                                    ."VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', %d)",
-                                $this->params['controller'], $this->params['action'], 
-                                isset($this->params['pass'][0]) ? $this->params['pass'][0] : null,
-                                isset($this->params['pass'][1]) ? $this->params['pass'][1] : null,
-                                isset($this->params['pass'][2]) ? $this->params['pass'][2] : null,
-                                CLIENT_IP, 
-                                isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : null,
-                                $this->uniqueCookie,
-                                $this->currentUser['id']);
+      $sql = sprintf("INSERT INTO `stat_accesses` (`controller`, `action`, `param1`, `param2`, `param3`, `ip`, `referer`, `uucookie`, `user_id`) "
+          ."VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', %d)",
+          $this->params['controller'], $this->params['action'], 
+          isset($this->params['pass'][0]) ? $this->params['pass'][0] : null,
+          isset($this->params['pass'][1]) ? $this->params['pass'][1] : null,
+          isset($this->params['pass'][2]) ? $this->params['pass'][2] : null,
+          CLIENT_IP, 
+          isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : null,
+          $this->uniqueCookie,
+          $this->currentUser['id']);
         // $db->query($sql);
-    }
+    } // if
 
     if (!$this->isAdmin()) {
       $this->NutchJobManager->scheduleNutchJobs();

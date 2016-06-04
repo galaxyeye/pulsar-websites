@@ -40,11 +40,11 @@ class NutchClient {
 	private $httpClient;
 
 	function __construct() {
-		$this->httpClient = new \HttpClient();
+        $this->httpClient = new \HttpClient();
 	}
 
 	public function getNutchStatus() {
-		return $this->httpClient->get_content($this->nutchUrl."/admin");
+        return $this->httpClient->get_content($this->nutchUrl."/admin");
 	}
 
 	/**

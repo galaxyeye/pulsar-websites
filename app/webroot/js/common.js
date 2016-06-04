@@ -191,6 +191,38 @@ function openTip(tip, target, guide, time) {
 }
 
 /**
+ * display a object by property-name/property-value pairs
+ * */
+function object2html(obj) {
+	if (!obj) return "";
+
+    if (typeof(obj) === 'string') {
+      return obj;
+    }
+
+    if (typeof(obj) !== 'object') {
+  	  return '';
+    }
+
+    var html = '<ul>';
+
+    $.each(obj, function(name, value) {
+      html += '<li>';
+
+      if (typeof(value) === 'string') {
+          html += name + " : " + value;
+      } else if (typeof(value) === 'object') {
+    	  html += object2html(value);
+      }
+
+      html += '</li>';
+    });
+    html += '</ul>';
+
+    return html;
+}
+
+/**
  * The Page Visibility API now allows us to more accurately detect when a page is hidden to the user.
  * The following code makes use of the API, falling back to the less reliable blur/focus method in incompatible browsers.
  * Current browser support:
