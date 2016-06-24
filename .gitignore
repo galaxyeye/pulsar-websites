@@ -4,3 +4,6 @@
 /config/database.php
 /logs/*
 /data
+/vendor
+!/vendor/cakephp
+!/vendor/shells

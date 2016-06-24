@@ -61,7 +61,6 @@
 
 <!-- JavaScript -->
 <?php 
-  echo $this->element('sql_dump');
   if(isset($js)) echo $this->element('js', array('scripts_for_layout' => $scripts_for_layout));
 ?>
 

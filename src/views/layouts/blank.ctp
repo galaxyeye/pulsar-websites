@@ -26,9 +26,6 @@
 	<span class='webapp-data'><?php if (isset($webappData)) {echo json_encode($webappData);}?></span>
 </div>
 <?php echo $content_for_layout; ?>
-<?php 
-	echo $this->element('sql_dump');
-	if(isset($js)) echo $this->element('js', array('scripts_for_layout' => $scripts_for_layout));
-?>
+<?php if(isset($js)) echo $this->element('js', array('scripts_for_layout' => $scripts_for_layout)); ?>
 </body>
 </html>

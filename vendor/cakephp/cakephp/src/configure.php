@@ -281,6 +281,7 @@ class Configure extends Object {
 		$_this =& Configure::getInstance();
 
 		if (!isset($_this->Cake['version'])) {
+			$config = "";
 			require(CORE_PATH . 'config' . DS . 'config.php');
 			$_this->write($config);
 		}
@@ -761,6 +762,7 @@ class App extends Object {
 			$paths['components'][] = $src . 'controller' . DS . 'components' . DS;
 			$paths['views'][] = $src . 'view' . DS;
 			$paths['helpers'][] = $src . 'view' . DS . 'helpers' . DS;
+			$paths['plugins'][] = $path;
 			$paths['plugins'][] = $path . 'plugins' . DS;
 			$paths['vendor'][] = $path . 'vendor' . DS;
 			$paths['shells'][] = $cake . 'console' . DS . 'libs' . DS;

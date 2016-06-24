@@ -28,5 +28,11 @@
     "prefer-stable": true,
     "require": {
         "workdigital/casperjs-php-driver": "1.*"
+    },
+    "repositories": {
+        "packagist": {
+            "type": "composer",
+            "url": "https://packagist.phpcomposer.com"
+        }
     }
 }

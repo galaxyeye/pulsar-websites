@@ -11,8 +11,9 @@ class AppController extends Controller {
   public $components = array(
     'Session', 'Acl', 'Auth', 'RequestHandler',
     'Cookie' => array('name' => COOKIE_NAME, 'key' => COOKIE_KEY, 'time' => 3600, 'path' => '/', 'secure' => false),
-    'Email',
-    'UserTracker',
+//    'Email',
+//    'UserTracker',
+    'DebugKit.Toolbar',
     'NutchJobManager'
   );
 

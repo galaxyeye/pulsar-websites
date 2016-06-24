@@ -1,8 +1,0 @@
-clear
-
-while true;
-  do /home/www-data/logoloto/cake/console/cake -app /home/www-data/logoloto/app mail_sender dequeueLmails > /dev/null 2>&1
-  sleep 5;
-done
-
-exit;
