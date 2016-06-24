@@ -319,7 +319,7 @@ class ShellDispatcher {
 		}
 
 		$title = sprintf(__('Error: Unknown %1$s command %2$s.', true), $this->shellName, $arg);
-		$message = sprintf(__('For usage try `cakephp %s help`', true), $this->shell);
+		$message = sprintf(__('For usage try `cake %s help`', true), $this->shell);
 		$this->stderr($title . "\n" . $message . "\n");
 		return false;
 	}
@@ -430,8 +430,9 @@ class ShellDispatcher {
  */
 	function parseParams($params) {
 		$this->__parseParams($params);
-		$defaults = array('src' => 'src', 'root' => dirname(dirname(dirname(__FILE__))), 'working' => null, 'webroot' => 'webroot');
+		$defaults = array('src' => ROOT_DIR.'src', 'root' => ROOT_DIR, 'working' => null, 'webroot' => 'webroot');
 		$params = array_merge($defaults, array_intersect_key($this->params, $defaults));
+		
 		$isWin = false;
 		foreach ($defaults as $default => $value) {
 			if (strpos($params[$default], '\\') !== false) {

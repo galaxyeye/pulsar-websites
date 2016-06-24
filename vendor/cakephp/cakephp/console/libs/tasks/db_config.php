@@ -61,7 +61,7 @@ class DbConfigTask extends Shell {
  * @access public
  */
 	function initialize() {
-		$this->path = $this->params['working'] . DS . 'config' . DS;
+		$this->path = CONFIG;
 	}
 
 /**

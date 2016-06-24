@@ -3,3 +3,4 @@
 /config/core.php
 /config/database.php
 /logs/*
+/data

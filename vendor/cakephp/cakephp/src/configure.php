@@ -656,8 +656,8 @@ class App extends Object {
 			'views' => array(VIEWS),
 			'helpers' => array(HELPERS),
 			'locales' => array(ROOT . 'locale' . DS),
-			'shells' => array(ROOT . 'vendor' . DS . 'shells' . DS, VENDOR . 'shells' . DS),
-			'vendor' => array(ROOT . 'vendor' . DS, VENDOR),
+			'shells' => array(VENDOR . 'shells' . DS, APP_SRC . 'vendor' . DS . 'shells'),
+			'vendor' => array(VENDOR, APP_SRC . 'vendor' . DS),
 			'plugins' => array(ROOT . 'plugins' . DS)
 		);
 
@@ -764,6 +764,7 @@ class App extends Object {
 			$paths['plugins'][] = $path . 'plugins' . DS;
 			$paths['vendor'][] = $path . 'vendor' . DS;
 			$paths['shells'][] = $cake . 'console' . DS . 'libs' . DS;
+			$paths['shells'][] = $cake . 'console' . DS;
 
 			Cache::write('core_paths', array_filter($paths), '_cake_core_');
 		}
