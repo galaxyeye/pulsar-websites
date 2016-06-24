@@ -1,0 +1,9 @@
+locks/*
+cache/models/*
+cache/persistent/*
+cache/common/daily_/*
+cache/common/minute_/*
+cache/common/minutes10_/*
+cache/common/minutes2_/*
+cache/common/minutes5_/*
+cache/views/*

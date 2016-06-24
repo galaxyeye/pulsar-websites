@@ -1,0 +1,32 @@
+{
+    "name": "warpspeed/controller",
+    "description": "Warp Speed Control System",
+    "homepage": "http://warpspeed.cn",
+    "type": "project",
+    "license": "Apache 2.0",
+    "require": {
+        "php": ">=5.5.9",
+        "mobiledetect/mobiledetectlib": "2.*"
+    },
+    "require-dev": {
+        "psy/psysh": "@stable"
+    },
+    "suggest": {
+        "phpunit/phpunit": "Allows automated tests to be run without system-wide install."
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "App\\Test\\": "tests"
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "require": {
+        "workdigital/casperjs-php-driver": "1.*"
+    }
+}
