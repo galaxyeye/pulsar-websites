@@ -124,7 +124,6 @@ class StorageWebPagesController extends AppController
       $storageWebPage = $this->_getStorageWebPage($url, $options);
     }
 
-
     $pageEntity = $this->_getPageEntity($storageWebPage, $page_entity_id);
 
     if (in_array('raw', $options)) {
@@ -133,6 +132,9 @@ class StorageWebPagesController extends AppController
     }
 
     $this->set(compact('storageWebPage', 'pageEntity', 'options'));
+
+    // disable debug panel which lead to a very bad js performance
+    Configure::write('debug', 0);
   }
 
   function sketch()

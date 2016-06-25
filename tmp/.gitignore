@@ -1,6 +1,7 @@
 locks/*
 cache/models/*
 cache/persistent/*
+cache/common/hourly_/*
 cache/common/daily_/*
 cache/common/minute_/*
 cache/common/minutes10_/*

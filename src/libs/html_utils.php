@@ -1,143 +1,149 @@
-<?php 
+<?php
 
 App::import('Vendor', 'qp');
 
-class HtmlUtils {
+class HtmlUtils
+{
 
-  public static function getAbsoluteUrl($baseUrl, $href) {
-    if (startsWith($href, "javascript")) {
-    return;
+    public static function getAbsoluteUrl($baseUrl, $href)
+    {
+        if (startsWith($href, "javascript")) {
+            return;
+        }
+
+        if (!startsWith($href, 'http')) {
+            $path = '/' . ltrim($href, '/');
+            $href = http_build_url($baseUrl, array('path' => $path));
+        } // if
+
+        return $href;
     }
 
-    if (!startsWith($href, 'http')) {
-    $path = '/' . ltrim($href, '/');
-    $href = http_build_url($url, array ('path' => $path));
-    } // if
+    /**
+     * standard DOMDocument
+     * */
+    public static function makeLinksAbsolute(&$dom, $baseUrl)
+    {
+        $anchors = $dom->getElementsByTagName('a');
 
-    return $href;
-  }
+        foreach ($anchors as &$element) {
+            $href = $element->getAttribute('href');
 
-  /**
-   * standard DOMDocument
-   * */
-  public static function makeLinksAbsolute(&$dom, $baseUrl) {
-    $anchors = $dom->getElementsByTagName('a');
+            if (!startsWith($href, 'http')) {
+                $path = '/' . ltrim($href, '/');
+                $href = http_build_url($baseUrl, array('path' => $path));
+            } // if
 
-    foreach($anchors as &$element ) {
-    $href = $element->getAttribute('href');
+            $element->setAttribute('href', $href);
+        } // foreach
+    } // makeLinksAbsolute
 
-    if (!startsWith($href, 'http')) {
-      $path = '/' . ltrim($href, '/');
-      $href = http_build_url($baseUrl, array ('path' => $path));
-    } // if
+    /**
+     * Query Path
+     * */
+    public static function qpMakeLinksAbsolute($dom, $baseUrl)
+    {
+        $anchors = $dom->find('a, link');
 
-    $element->setAttribute('href', $href);
-    } // foreach
-  } // makeLinksAbsolute
+        $anchors->each(function ($index, $item) use ($baseUrl) {
+            $href = $item->getAttribute('href');
+            if (startsWith($href, "javascript")) {
+                return;
+            }
 
-  /**
-   * Query Path
-   * */
-  public static function qpMakeLinksAbsolute($dom, $baseUrl) {
-    $anchors = $dom->find('a, link');
+            if (!startsWith($href, 'http')) {
+                $path = '/' . ltrim($href, '/');
+                $href = http_build_url($baseUrl, array('path' => $path));
+            } // if
 
-    $anchors->each(function($index, $item) use($baseUrl) {
-      $href = $item->getAttribute('href');
-      if (startsWith($href, "javascript")) {
-        return;
-      }
+            $item->setAttribute('href', $href);
+        });
 
-      if (!startsWith($href, 'http')) {
-        $path = '/' . ltrim($href, '/');
-        $href = http_build_url($baseUrl, array ('path' => $path));
-      } // if
+    } // qpMakeLinksAbsolute
 
-      $item->setAttribute('href', $href);
-    });
+    /**
+     * Query Path
+     * */
+    public static function qpRemoveAllInlineStyle($dom)
+    {
+        $dom->each(function ($index, $item) {
+            $item->removeAttribute('style');
+        });
+    } // qpRemoveAllInlineStyle
 
-  } // qpMakeLinksAbsolute
+    /**
+     * Strip HTML
+     * */
+    public static function stripHTML($html, $baseUri, $options)
+    {
+        if (empty($html)) {
+            return null;
+        }
 
-  /**
-   * Query Path
-   * */
-  public static function qpRemoveAllInlineStyle($dom) {
-    $dom->each(function($index, $item) {
-    $item->removeAttribute('style');
-    });
-  } // qpRemoveAllInlineStyle
+        $MIN_CONTENT_LENGTH = 100;
+        if (strlen($html) < $MIN_CONTENT_LENGTH) {
+            return null;
+        }
 
-  /**
-   * Strip HTML
-   * */
-  public static function stripHTML($html, $baseUri, $options) {
-    if (empty($html)) {
-      return null;
+        $html = mb_convert_encoding($html, 'HTML-ENTITIES', "UTF-8");
+        $dom = htmlqp($html, null, ['convert_to_encoding' => 'utf-8']);
+
+        if ($baseUri) {
+            HtmlUtils::qpMakeLinksAbsolute($dom, $baseUri);
+        }
+
+        $title = $dom->find('title')->text();
+        if (in_array('raw', $options)) {
+            $html = html_entity_decode($html, ENT_COMPAT, 'utf-8');
+            return array('title' => $title, 'content' => $html);
+        }
+
+        $dom->find('*')->each(function ($index, $item) {
+            $item->removeAttribute('style');
+        });
+
+        $removeTags = [
+            'title', 'base', 'script', 'meta', 'iframe',
+            'link[rel=icon]', 'link[rel="shortcut icon"]'
+        ];
+
+        if (isset($options['removeTags'])) {
+            $removeTags = $options['removeTags'];
+        }
+
+        foreach ($removeTags as $removal) {
+            $dom->find($removal)->remove();
+        }
+
+        if (in_array('simpleCss', $options)) {
+            foreach (['style', 'link', 'head'] as $removal) {
+                $dom->find($removal)->remove();
+            }
+        }
+
+        // Add qiwur specified information
+        $dom->find('html')->attr('id', 'qiwurHtml');
+        $dom->find('body')->attr('id', 'qiwurBody');
+        $dom->find('img')->html("")->removeAttr("src");
+
+        // A fix for older QiwurScrapingMetaInformation holder protocol
+        // we can not make this information at the first div, instead of which
+        // we move the information to a created input element at to bottom of
+        // body element
+        $dom->find('#QiwurScrapingMetaInformation')->removeAttr('id');
+
+        $html = $dom->xhtml();
+
+        // Strip to show the page inside our own layout
+        // TODO : Can we do these replace using $dom ?
+        $html = preg_replace("/<html|<body|<head/", "<div", $html);
+        $html = preg_replace("/DOCTYPE|dtd|xml/i", "", $html);
+
+        $html = preg_replace("/#QiwurScrapingMetaInformation &gt;/", "body &gt;", $html);
+        $html = preg_replace("/#qiwurBody &gt;/", "body &gt;", $html);
+
+        // $html = utf8_decode($html);
+        $html = html_entity_decode($html, ENT_COMPAT, 'utf-8');
+        return array('title' => $title, 'content' => $html);
     }
-
-    $MIN_CONTENT_LENGTH = 100;
-    if (strlen($html) < $MIN_CONTENT_LENGTH) {
-      return null;
-    }
-
-    $html = mb_convert_encoding($html, 'HTML-ENTITIES', "UTF-8");
-    $dom = htmlqp($html, null, ['convert_to_encoding' => 'utf-8']);
-
-    if ($baseUri) {
-      HtmlUtils::qpMakeLinksAbsolute($dom, $baseUri);
-    }
-
-    $title = $dom->find('title')->text();
-    if (in_array('raw', $options)) {
-    	$html = html_entity_decode($html, ENT_COMPAT, 'utf-8');
-    	return array('title' => $title, 'content' => $html);
-    }
-
-    $dom->find('*')->each(function($index, $item) {
-    	$item->removeAttribute('style');
-    });
-
-    $removeTags = [
-    		'title', 'base', 'script', 'meta', 'iframe',
-    		'link[rel=icon]', 'link[rel="shortcut icon"]'
-    ];
-
-    if (isset($options['removeTags'])) {
-    	$removeTags = $options['removeTags'];
-    }
-
-    foreach ($removeTags as $removal) {
-      $dom->find($removal)->remove();
-    }
-
-    if (in_array('simpleCss', $options)) {
-      foreach (['style', 'link', 'head'] as $removal) {
-        $dom->find($removal)->remove();
-      }
-    }
-
-    // Add qiwur specified information
-    $dom->find('html')->attr('id', 'qiwurHtml');
-    $dom->find('body')->attr('id', 'qiwurBody');
-    $dom->find('img')->html("")->removeAttr("src");
-
-    // A fix for older QiwurScrapingMetaInformation holder protocol
-    // we can not make this information at the first div, instead of which
-    // we move the information to a created input element at to bottom of 
-    // body element
-    $dom->find('#QiwurScrapingMetaInformation')->removeAttr('id');
-
-    $html = $dom->xhtml();
-
-    // Strip to show the page inside our own layout
-    // TODO : Can we do these replace using $dom ?
-    $html = preg_replace("/<html|<body|<head/", "<div", $html);
-    $html = preg_replace("/DOCTYPE|dtd|xml/i", "", $html);
-
-    $html = preg_replace("/#QiwurScrapingMetaInformation &gt;/", "body &gt;", $html);
-    $html = preg_replace("/#qiwurBody &gt;/", "body &gt;", $html);
-
-    // $html = utf8_decode($html);
-    $html = html_entity_decode($html, ENT_COMPAT, 'utf-8');
-    return array('title' => $title, 'content' => $html);
-  }
 }

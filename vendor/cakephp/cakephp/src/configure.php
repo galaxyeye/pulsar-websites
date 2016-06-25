@@ -658,8 +658,8 @@ class App extends Object {
 			'helpers' => array(HELPERS),
 			'locales' => array(ROOT . 'locale' . DS),
 			'shells' => array(VENDOR . 'shells' . DS, APP_SRC . 'vendor' . DS . 'shells'),
-			'vendor' => array(VENDOR, APP_SRC . 'vendor' . DS),
-			'plugins' => array(ROOT . 'plugins' . DS)
+			'vendors' => array(VENDOR, APP_SRC . 'vendor' . DS),
+			'plugins' => array(ROOT_DIR . 'plugins' . DS)
 		);
 
 		if ($reset == true) {
@@ -764,7 +764,7 @@ class App extends Object {
 			$paths['helpers'][] = $src . 'view' . DS . 'helpers' . DS;
 			$paths['plugins'][] = $path;
 			$paths['plugins'][] = $path . 'plugins' . DS;
-			$paths['vendor'][] = $path . 'vendor' . DS;
+			$paths['vendors'][] = $path . 'vendor' . DS;
 			$paths['shells'][] = $cake . 'console' . DS . 'libs' . DS;
 			$paths['shells'][] = $cake . 'console' . DS;
 
