@@ -4,12 +4,12 @@ $(document).ready(function () {
     var revertPosition = true;
     var alwaysShowShapeInformation = false;
 
-    $(".shape.trimed").each(function () {
+    $(".shape.aligned").each(function () {
         var zIndex = $(this).css('z-index');
         $(this).css('z-index', zIndex + 1000);
     });
 
-    $(".shape.trimed").mouseover(function () {
+    $(".shape.aligned").mouseover(function () {
         // $(this).find(".detail").attr("style", "width:1000px").show();
         if (!alwaysShowShapeInformation) {
             $(this).find(".detail").show();
@@ -20,20 +20,20 @@ $(document).ready(function () {
         }
     });
 
-    $('.hide-trimed-shapes').click(function() {
-        $(".shape.trimed").hide();
+    $('.hide-aligned-shapes').click(function() {
+        $(".shape.aligned").hide();
     });
 
-    $('.show-trimed-shapes').click(function() {
-        $(".shape.trimed").show();
+    $('.show-aligned-shapes').click(function() {
+        $(".shape.aligned").show();
     });
 
-    $('.hide-non-trimed-shapes').click(function() {
-        $(".shape:not(.trimed)").hide();
+    $('.hide-non-aligned-shapes').click(function() {
+        $(".shape:not(.aligned)").hide();
     });
 
-    $('.show-non-trimed-shapes').click(function() {
-        $(".shape:not(.trimed)").show();
+    $('.show-non-aligned-shapes').click(function() {
+        $(".shape:not(.aligned)").show();
     });
 
     $('.show-shape-information').click(function() {
@@ -44,6 +44,16 @@ $(document).ready(function () {
     $('.hide-shape-information').click(function() {
         alwaysShowShapeInformation = false;
         $(".shape .detail").hide();
+    });
+
+    $('.show-all-shape-information').click(function() {
+        $(".message").html("");
+        $(".message").append("<ol class='shape-information'></ol>");
+        $(".shape.aligned").each(function (i, item) {
+            $(".message ol").append("<li>" + item.textContent + "</li>");
+        });
+
+        showSystemPanel();
     });
 
     // $('.trigger-shape-information').click(function() {
@@ -59,18 +69,47 @@ $(document).ready(function () {
 
     $('.get-shape-selectors').click(function() {
         $(".message").html("");
-        $(".message").append("<ol class='shape-information'></ol>");
-        $(".shape.trimed").each(function (i, item) {
-            $(".message ol").append("<li>" + item.textContent + "</li>");
-        });
+        // $(".message").append("<ol class='shape-information'></ol>");
+        // $(".shape.aligned").each(function (i, item) {
+        //     // $(".message ol").append("<li>" + $(item).find(".detail > div:first").text() + "</li>");
+        //     $(".message ol").append("<li>" + $(item).find(".detail > div:first").text() + "</li>");
+        // });
+
+        var json = JSON.stringify(alignedRectangles);
+        json = json.replace(/\[{/g, "[\n\t{");
+        json = json.replace(/},{/g, "},\n\t{");
+        json = json.replace(/}\]/g, "}\n]");
+        $(".message").append("<pre>" + json + "</pre>");
 
         showSystemPanel();
     });
 
+    createGrid(100);
+
     enableDraggable();
 
+    function createGrid(size) {
+        var ratioW = Math.floor($(document).width() / size),
+            ratioH = Math.floor($(document).height() / size);
+
+        var parent = $('<div />', {
+            class: 'grid',
+            width: ratioW  * size,
+            height: ratioH  * size
+        }).addClass('grid').appendTo('.canvas');
+
+        for (var i = 0; i < ratioH; i++) {
+            for(var p = 0; p < ratioW; p++) {
+                $('<div />', {
+                    width: size - 1,
+                    height: size - 1
+                }).appendTo(parent);
+            }
+        }
+    }
+
     function enableDraggable() {
-        $('div.shapes *').draggable({
+        $('div.shapes .shape').draggable({
             zIndex: $('.xubox_layer').css('z-index') + 1,
             grid: [50, 20],
             refreshPositions: true,
@@ -92,23 +131,12 @@ $(document).ready(function () {
 
     function showSystemPanel() {
         $("#systemPanel").show();
-        $.layer({
+        layer.open({
             type : 1,
-            // title : '弹性分布式网页集概要',
             title : "Message",
-            border : false,
-            shade : 0,
-            move : ".xubox_title",
-            moveType : 1,
-            moveOut : true,
-            area: ['751px', 'auto'],
             maxmin: true,
-            offset : ['', ''],
             shift: 'left', //从左动画弹出
-            page : {dom : '#systemPanel'},
-            // zIndex : 19891010,
-            success: function(layero) {
-            }
+            content: $("#autoExtractResult")
         });
     }
 });

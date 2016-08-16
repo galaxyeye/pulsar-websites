@@ -14,6 +14,5 @@ $(document).ready(function() {
           clearInterval(interval);
         }
       });
-    }
   }, 3000);
 });

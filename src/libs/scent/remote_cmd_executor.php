@@ -45,7 +45,8 @@ class RemoteCmdExecutor extends \Object {
     $jobId = false;
 
     if ($remoteCommand !== false) {
-      $jobId = $this->client->executeJob($remoteCommand->getJobConfig());
+      $result = $this->client->executeJob($remoteCommand->getJobConfig());
+      $jobId = $result['content'];
     }
 
     return $jobId;

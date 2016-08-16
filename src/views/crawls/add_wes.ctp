@@ -45,10 +45,10 @@
     echo $this->Form->input('PageEntity.0.name', array('label' => 'Entity Name', 
     		'div' => 'input text required', 'after' => $m['PageEntity.name']));
 
-    echo $this->Form->input('CrawlFilter.crawl_mode', array('label' => 'Ajax Support',
-    		'default' => "native",
-    		'options' => ['native' => 'Without Ajax Support', 'crowdsourcing' => 'With Ajax Support'],
-    		'after' => $m['crawl_mode']));
+//    echo $this->Form->input('CrawlFilter.crawl_mode', array('label' => 'Ajax Support',
+//    		'default' => "native",
+//    		'options' => ['native' => 'Without Ajax Support', 'crowdsourcing' => 'With Ajax Support'],
+//    		'after' => $m['crawl_mode']));
 
     echo $this->Form->input('description', array('rows' => '1'));
   ?>

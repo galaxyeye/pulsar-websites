@@ -1,8 +1,5 @@
 <?php echo $this->element('jobs/subnav') ?>
 
-<br />
-<hr />
-
 <div class="nutchJobs index">
   <h2><?php __('Nutch Jobs');?></h2>
   <table cellpadding="0" cellspacing="0">

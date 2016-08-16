@@ -1,89 +1,92 @@
-<?php 
-
-// TODO : remove this namespace
-namespace Nutch;
+<?php
 
 /**
  * @property $urlFilter string url filters seperated by "\n" or "\r\n"
- * @return array 
+ * @return array
  * */
-function splitUrlFilter($urlFilter) {
-	$urlFilter = str_ireplace("+http", "http", $urlFilter);
-	$urlFilter = str_ireplace("-http", "http", $urlFilter);
-	$urlFilter = str_ireplace("\r\n", "\n", $urlFilter);
-	$urlFilter = trim($urlFilter);
+function splitUrlFilter($urlFilter)
+{
+    $urlFilter = str_ireplace("+http", "http", $urlFilter);
+    $urlFilter = str_ireplace("-http", "http", $urlFilter);
+    $urlFilter = str_ireplace("\r\n", "\n", $urlFilter);
+    $urlFilter = trim($urlFilter);
 
-	return explode("\n", $urlFilter);
+    return explode("\n", $urlFilter);
 }
 
 /**
  * @property $urlFilter string url filters seperated by "\n" or "\r\n"
  * @return string
  * */
-function normalizeUrlFilter($urlFilter) {
-	if (empty($urlFilter)) {
-		return null;
-	}
+function normalizeUrlFilter($urlFilter)
+{
+    if (empty($urlFilter)) {
+        return null;
+    }
 
-	$urlFilter = str_ireplace("\r\n", "\n", $urlFilter);
-	$urlFilter = trim($urlFilter);
-	$normalized = "";
-	foreach(explode("\n", $urlFilter) as $f) {
-		$f = normalizeUrlFilterRegex($f);
+    $urlFilter = str_ireplace("\r\n", "\n", $urlFilter);
+    $urlFilter = trim($urlFilter);
+    $normalized = "";
+    foreach (explode("\n", $urlFilter) as $f) {
+        $f = normalizeUrlFilterRegex($f);
 
-		$f = trim($f);
+        $f = trim($f);
 
-		if (empty($f)) {
-			continue;
-		}
+        if (empty($f)) {
+            continue;
+        }
 
-		$ch = substr($f, 0, 1);
-		if ($ch != '+' && $ch != '-') {
-			$normalized .= "+";
-		}
-		$f = rtrim($f, "/");
+        $ch = substr($f, 0, 1);
+        if ($ch != '+' && $ch != '-') {
+            $normalized .= "+";
+        }
 
-		$normalized .= $f;
-		$normalized .= "\n";
-	}
+        $f = rtrim($f, "/");
+        $normalized .= $f;
 
-	return rtrim($normalized, "\n");
+        $normalized .= "\n";
+    }
+
+    return rtrim($normalized, "\n");
 }
 
 /**
- * Regex format : 
+ * Regex format :
  * ^http://example.com/a/b/c/(.+)/{0,1}$
  * ^http://example.com/a/b/c/(\d+)/{0,1}$
  * */
-function normalizeUrlFilterRegex($regex) {
-	if (empty($regex) || !is_string($regex)) return null;
+function normalizeUrlFilterRegex($regex)
+{
+    if (empty($regex) || !is_string($regex)) return null;
 
-	if (!startsWith($regex, "http") && !startsWith($regex, "^http")) {
-		return $regex;
-	}
+    if (!startsWith($regex, "http") && !startsWith($regex, "^http")) {
+        return $regex;
+    }
 
-	$regex = ltrim($regex, "^");
-	$regex = rtrim($regex, "$");
-	$regex = '^'.$regex.'$';
-	return $regex;
+    $regex = ltrim($regex, "^");
+    $regex = rtrim($regex, "$");
+    $regex = '^' . $regex . '$';
+    return $regex;
 }
 
-function regex2urlFilter($regex) {
-	if (empty($regex)) return null;
+function regex2urlFilter($regex)
+{
+    if (empty($regex)) return null;
 
-	return normalizeUrlFilterRegex($regex);
+    return normalizeUrlFilterRegex($regex);
 }
 
-function urlFilter2regex($urlFilter) {
-	if (empty($urlFilter)) return null;
+function urlFilter2regex($urlFilter)
+{
+    if (empty($urlFilter)) return null;
 
-	$regex = ltrim($urlFilter, "+-");
+    $regex = ltrim($urlFilter, "+-");
 
-	return $regex;
+    return $regex;
 }
 
 /**
- * Regex format : 
+ * Regex format :
  * ^http://domain.com$
  * ^http://domain.com/$
  * ^http://domain.com/item(.+)$
@@ -91,53 +94,51 @@ function urlFilter2regex($urlFilter) {
  * ^http://example.com/a/b/c/(\d+)/{0,1}$
  * ^http://example.com/q\?a=b&c=(\d+)(.*)$
  * */
-function regex2startKey($regex) {
-	if (empty($regex)) return null;
+function regex2startKey($regex)
+{
+    if (empty($regex)) return null;
 
-	$startKey = ltrim($regex, "^");
-	$startKey = rtrim($startKey, "$");
+    $startKey = ltrim($regex, "^");
+    $startKey = rtrim($startKey, "$");
 
-	if (!startsWith($startKey, "http")) {
-		return null;
-	}
+    if (!startsWith($startKey, "http")) {
+        return null;
+    }
 
-	$u = parse_url($startKey);
+    $u = parse_url($startKey);
 
-	// removed query argments
-	if (!empty($u['path'])) {
-	  $startKey = http_build_url($startKey, ['path' => $u['path']]);
-	}
-	// case : ^http://example.com/q\?a=b&c=(\d+)(.*)$ -> http://example.com/q\
-	$startKey = rtrim($startKey, "\\");
+    // removed query argments
+    if (!empty($u['path'])) {
+        $startKey = http_build_url($startKey, ['path' => $u['path']]);
+    }
+    // case : ^http://example.com/q\?a=b&c=(\d+)(.*)$ -> http://example.com/q\
+    $startKey = rtrim($startKey, "\\");
 
-	// convert "://" to ":\\\\" or anything else, we convert it back later
-	$startKey = str_replace("://", ":\\\\", $startKey);
+    // convert "://" to ":\\\\" or anything else, we convert it back later
+    $startKey = str_replace("://", ":\\\\", $startKey);
 
-	$parts = explode("/", $startKey);
-	// if more than 3 parts, it's "normal" regex
-	$count = count($parts);
-	if ($count >= 3) {
-		// case : ^http://example.com/a/b/c/(\d+)/{0,1}$
-		$parts = array_slice($parts, 0, count($parts) - 2);
-		$startKey = implode("/", $parts);
-	}
-	else if ($count == 2) {
-		// case : ^http://example.com/q?a=b&c=(\d+)(.*)$
-		$startKey = implode("/", $parts);
-	}
-	else if ($count == 1) {
-		// case : ^http://domain.com/$
-		$startKey = $parts[0];
-	}
-	else {
-		// case : ^http://domain.com$
-		$startKey = $parts[0];
-	}
+    $parts = explode("/", $startKey);
+    // if more than 3 parts, it's "normal" regex
+    $count = count($parts);
+    if ($count >= 3) {
+        // case : ^http://example.com/a/b/c/(\d+)/{0,1}$
+        $parts = array_slice($parts, 0, count($parts) - 2);
+        $startKey = implode("/", $parts);
+    } else if ($count == 2) {
+        // case : ^http://example.com/q?a=b&c=(\d+)(.*)$
+        $startKey = implode("/", $parts);
+    } else if ($count == 1) {
+        // case : ^http://domain.com/$
+        $startKey = $parts[0];
+    } else {
+        // case : ^http://domain.com$
+        $startKey = $parts[0];
+    }
 
-	$startKey = str_replace(":\\\\", "://", $startKey);
-	$startKey = preg_replace("/\(.+\)/", "", $startKey);
+    $startKey = str_replace(":\\\\", "://", $startKey);
+    $startKey = preg_replace("/\(.+\)/", "", $startKey);
 
-	return $startKey;
+    return $startKey;
 }
 
 /**
@@ -148,63 +149,64 @@ function regex2startKey($regex) {
  * ^http://example.com/a/b/c/(\d+)/{0,1}$
  * ^http://example.com/q?a=b&c=(\d+)(.*)$
  * */
-function regex2endKey($regex) {
-	$startKey = regex2startKey($regex);
-	if ($startKey == null) return null;
+function regex2endKey($regex)
+{
+    $startKey = regex2startKey($regex);
+    if ($startKey == null) return null;
 
-	$startKey = rtrim($startKey, "/");
+    $startKey = rtrim($startKey, "/");
 
-	$startKey = str_replace("://", ":\\\\", $startKey);
+    $startKey = str_replace("://", ":\\\\", $startKey);
 
-	$parts = explode("/", $startKey);
+    $parts = explode("/", $startKey);
 
-	if (count($parts) > 1) {
-		$endKey = $startKey . "\uFFFF";
-	}
-	else {
-		$endKey = $startKey . "/" . "\uFFFF";
-	}
+    if (count($parts) > 1) {
+        $endKey = $startKey . "\uFFFF";
+    } else {
+        $endKey = $startKey . "/" . "\uFFFF";
+    }
 
-	$endKey = str_replace(":\\\\", "://", $endKey);
+    $endKey = str_replace(":\\\\", "://", $endKey);
 
-	return $endKey;
+    return $endKey;
 }
 
-function filterNutchConfig($nutchConfig, $useWhiteList = true) {
-	if (is_string($nutchConfig)) {
-		$nutchConfig = qi_json_decode($nutchConfig);
-	}
+function filterNutchConfig($nutchConfig, $useWhiteList = true)
+{
+    if (is_string($nutchConfig)) {
+        $nutchConfig = qi_json_decode($nutchConfig);
+    }
 
-	if (!$useWhiteList || empty($nutchConfig)) {
-		return $nutchConfig;
-	}
+    if (!$useWhiteList || empty($nutchConfig)) {
+        return $nutchConfig;
+    }
 
-	$whiteList = array(
-		'/^crawl*/',
-		'/^fetcher*/',
-		'/^file*/',
-		'/^generate*/',
-		'/^http*/',
-		'/^index*/',
-		'/^nutch*/',
-		'/^generate*/',
-		'/^parser*/',
-		'/^solr*/',
-		'/^urlfilter*/',
-		'/^urlnormalizer*/',
-	);
+    $whiteList = array(
+        '/^crawl*/',
+        '/^fetcher*/',
+        '/^file*/',
+        '/^generate*/',
+        '/^http*/',
+        '/^index*/',
+        '/^nutch*/',
+        '/^generate*/',
+        '/^parser*/',
+        '/^solr*/',
+        '/^urlfilter*/',
+        '/^urlnormalizer*/',
+    );
 
-	// TODO : add a black list
-	$blackList = array();
+    // TODO : add a black list
+    $blackList = array();
 
-	$result = array();
-	foreach ($nutchConfig as $k => $v) {
-		foreach ($whiteList as $pattern) {
-			if (preg_match($pattern, $k)) {
-				$result[$k] = $v;
-			}
-		}
-	}
+    $result = array();
+    foreach ($nutchConfig as $k => $v) {
+        foreach ($whiteList as $pattern) {
+            if (preg_match($pattern, $k)) {
+                $result[$k] = $v;
+            }
+        }
+    }
 
-	return $result;
+    return $result;
 }

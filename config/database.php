@@ -2,7 +2,7 @@
 
 class DATABASE_CONFIG {
 
-	public $default = array(
+	public $default_ = array(
 			'driver' => 'mysql',
 			'persistent' => true,
 			'host' => 'localhost',
@@ -24,7 +24,7 @@ class DATABASE_CONFIG {
 			'prefix' => ''
 	);
 
-	public $default___ = array(
+	public $default = array(
 			'driver' => 'mysql',
 			'persistent' => true,
 			'host' => 'qiwur.com',

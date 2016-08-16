@@ -58,7 +58,7 @@
     <tr <?php echo $class;?>>
       <td class='model-id'><?php echo $crawlFilter['id'];?></td>
       <td><pre><?php echo $crawlFilter['page_type'];?></pre></td>
-      <td><pre><?php echo $crawlFilter['url_filter'];?></pre></td>
+      <td><pre><?php echo substr($crawlFilter['url_filter'], 0, 1000);?><?=strlen($crawlFilter['url_filter']) > 1000 ? "<br />..." : ""?></pre></td>
       <td><pre><?php echo $crawlFilter['text_filter'];?></pre></td>
       <td><pre><?php echo $crawlFilter['block_filter'];?></pre></td>
       <td class="actions">

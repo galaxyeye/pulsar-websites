@@ -1,4 +1,4 @@
-<div class="actions">
+<div class="horizon-nav2">
   <ul>
       <li>
         <?php echo $this->Html->link(__('Nutch Jobs', true), array('controller' => 'nutch_jobs', 'action' => 'index')); ?>

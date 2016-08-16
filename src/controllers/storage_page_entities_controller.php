@@ -1,6 +1,6 @@
 <?php 
 
-App::import('Lib', array('scent/scent_client', 'scent/db_filter'));
+App::import('Lib', array('filter_utils', 'scent/scent_client', 'scent/db_filter'));
 
 class StoragePageEntitiesController extends AppController {
 
@@ -54,14 +54,14 @@ class StoragePageEntitiesController extends AppController {
     }
 
     if ($startKey == null) {
-    	$startKey = \Nutch\regex2startKey($regex);
+    	$startKey = regex2startKey($regex);
     	if ($endKey == null && $startKey != null) {
     		$endKey = $startKey . "\uFFFF";
     	}
     }
 
     if ($endKey == null) {
-    	$endKey = \Nutch\regex2endKey($regex);
+    	$endKey = regex2endKey($regex);
     }
 
     $storagePageEntities = $this->ScentJobManager->getStoragePageEntities($tenantId,

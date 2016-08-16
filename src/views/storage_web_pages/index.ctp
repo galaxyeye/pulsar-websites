@@ -14,11 +14,14 @@
 <?php echo $this->Form->end(__('Submit', true));?>
 </div>
 
+<?php if ($localStorageMode) : ?>
+  <p class="message yellow">We are under local storage mode</p>
+<?php endif; ?>
+
 <div class="storageWebPages index">
-  <h2>
-    <span><?php __('Fetched Web Page Links');?></span>
-  </h2>
+  <h2><span><?php __('Fetched Web Page Links');?></span></h2>
   <p class="message">Any links below leads you to web mining rules analysis</p>
+
   <table cellpadding="0" cellspacing="0">
   <tr>
     <th>No</th>

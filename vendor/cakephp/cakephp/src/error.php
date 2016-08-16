@@ -32,19 +32,19 @@ App::import('Controller', 'App');
 class CakeErrorController extends AppController {
 	var $name = 'CakeError';
 
-/**
- * Uses Property
- *
- * @var array
- */
+	/**
+	 * Uses Property
+	 *
+	 * @var array
+	 */
 	var $uses = array();
 
-/**
- * __construct
- *
- * @access public
- * @return void
- */
+	/**
+	 * __construct
+	 *
+	 * @access public
+	 * @return void
+	 */
 	function __construct() {
 		parent::__construct();
 		$this->_set(Router::getPaths());
@@ -67,20 +67,20 @@ class CakeErrorController extends AppController {
  */
 class ErrorHandler extends Object {
 
-/**
- * Controller instance.
- *
- * @var Controller
- * @access public
- */
+	/**
+	 * Controller instance.
+	 *
+	 * @var Controller
+	 * @access public
+	 */
 	var $controller = null;
 
-/**
- * Class constructor.
- *
- * @param string $method Method producing the error
- * @param array $messages Error messages
- */
+	/**
+	 * Class constructor.
+	 *
+	 * @param string $method Method producing the error
+	 * @param array $messages Error messages
+	 */
 	function __construct($method, $messages) {
 		App::import('Core', 'Sanitize');
 		static $__previousError = null;
@@ -125,12 +125,12 @@ class ErrorHandler extends Object {
 		$this->_stop();
 	}
 
-/**
- * Displays an error page (e.g. 404 Not found).
- *
- * @param array $params Parameters for controller
- * @access public
- */
+	/**
+	 * Displays an error page (e.g. 404 Not found).
+	 *
+	 * @param array $params Parameters for controller
+	 * @access public
+	 */
 	function error($params) {
 		extract($params, EXTR_OVERWRITE);
 		$this->controller->set(array(
@@ -142,12 +142,12 @@ class ErrorHandler extends Object {
 		$this->_outputMessage('error404');
 	}
 
-/**
- * Convenience method to display a 404 page.
- *
- * @param array $params Parameters for controller
- * @access public
- */
+	/**
+	 * Convenience method to display a 404 page.
+	 *
+	 * @param array $params Parameters for controller
+	 * @access public
+	 */
 	function error404($params) {
 		extract($params, EXTR_OVERWRITE);
 
@@ -165,12 +165,12 @@ class ErrorHandler extends Object {
 		$this->_outputMessage('error404');
 	}
 
-/**
- * Convenience method to display a 500 page.
- *
- * @param array $params Parameters for controller
- * @access public
- */
+	/**
+	 * Convenience method to display a 500 page.
+	 *
+	 * @param array $params Parameters for controller
+	 * @access public
+	 */
 	function error500($params) {
 		extract($params, EXTR_OVERWRITE);
 
@@ -187,12 +187,12 @@ class ErrorHandler extends Object {
 		));
 		$this->_outputMessage('error500');
 	}
-/**
- * Renders the Missing Controller web page.
- *
- * @param array $params Parameters for controller
- * @access public
- */
+	/**
+	 * Renders the Missing Controller web page.
+	 *
+	 * @param array $params Parameters for controller
+	 * @access public
+	 */
 	function missingController($params) {
 		extract($params, EXTR_OVERWRITE);
 
@@ -205,12 +205,12 @@ class ErrorHandler extends Object {
 		$this->_outputMessage('missingController');
 	}
 
-/**
- * Renders the Missing Action web page.
- *
- * @param array $params Parameters for controller
- * @access public
- */
+	/**
+	 * Renders the Missing Action web page.
+	 *
+	 * @param array $params Parameters for controller
+	 * @access public
+	 */
 	function missingAction($params) {
 		extract($params, EXTR_OVERWRITE);
 
@@ -224,12 +224,12 @@ class ErrorHandler extends Object {
 		$this->_outputMessage('missingAction');
 	}
 
-/**
- * Renders the Private Action web page.
- *
- * @param array $params Parameters for controller
- * @access public
- */
+	/**
+	 * Renders the Private Action web page.
+	 *
+	 * @param array $params Parameters for controller
+	 * @access public
+	 */
 	function privateAction($params) {
 		extract($params, EXTR_OVERWRITE);
 
@@ -241,12 +241,12 @@ class ErrorHandler extends Object {
 		$this->_outputMessage('privateAction');
 	}
 
-/**
- * Renders the Missing Table web page.
- *
- * @param array $params Parameters for controller
- * @access public
- */
+	/**
+	 * Renders the Missing Table web page.
+	 *
+	 * @param array $params Parameters for controller
+	 * @access public
+	 */
 	function missingTable($params) {
 		extract($params, EXTR_OVERWRITE);
 
@@ -260,12 +260,12 @@ class ErrorHandler extends Object {
 		$this->_outputMessage('missingTable');
 	}
 
-/**
- * Renders the Missing Database web page.
- *
- * @param array $params Parameters for controller
- * @access public
- */
+	/**
+	 * Renders the Missing Database web page.
+	 *
+	 * @param array $params Parameters for controller
+	 * @access public
+	 */
 	function missingDatabase($params = array()) {
 		$this->controller->header("HTTP/1.0 500 Internal Server Error");
 		$this->controller->set(array(
@@ -275,12 +275,12 @@ class ErrorHandler extends Object {
 		$this->_outputMessage('missingScaffolddb');
 	}
 
-/**
- * Renders the Missing View web page.
- *
- * @param array $params Parameters for controller
- * @access public
- */
+	/**
+	 * Renders the Missing View web page.
+	 *
+	 * @param array $params Parameters for controller
+	 * @access public
+	 */
 	function missingView($params) {
 		extract($params, EXTR_OVERWRITE);
 
@@ -293,12 +293,12 @@ class ErrorHandler extends Object {
 		$this->_outputMessage('missingView');
 	}
 
-/**
- * Renders the Missing Layout web page.
- *
- * @param array $params Parameters for controller
- * @access public
- */
+	/**
+	 * Renders the Missing Layout web page.
+	 *
+	 * @param array $params Parameters for controller
+	 * @access public
+	 */
 	function missingLayout($params) {
 		extract($params, EXTR_OVERWRITE);
 
@@ -310,12 +310,12 @@ class ErrorHandler extends Object {
 		$this->_outputMessage('missingLayout');
 	}
 
-/**
- * Renders the Database Connection web page.
- *
- * @param array $params Parameters for controller
- * @access public
- */
+	/**
+	 * Renders the Database Connection web page.
+	 *
+	 * @param array $params Parameters for controller
+	 * @access public
+	 */
 	function missingConnection($params) {
 		extract($params, EXTR_OVERWRITE);
 
@@ -328,12 +328,12 @@ class ErrorHandler extends Object {
 		$this->_outputMessage('missingConnection');
 	}
 
-/**
- * Renders the Missing Helper file web page.
- *
- * @param array $params Parameters for controller
- * @access public
- */
+	/**
+	 * Renders the Missing Helper file web page.
+	 *
+	 * @param array $params Parameters for controller
+	 * @access public
+	 */
 	function missingHelperFile($params) {
 		extract($params, EXTR_OVERWRITE);
 
@@ -345,12 +345,12 @@ class ErrorHandler extends Object {
 		$this->_outputMessage('missingHelperFile');
 	}
 
-/**
- * Renders the Missing Helper class web page.
- *
- * @param array $params Parameters for controller
- * @access public
- */
+	/**
+	 * Renders the Missing Helper class web page.
+	 *
+	 * @param array $params Parameters for controller
+	 * @access public
+	 */
 	function missingHelperClass($params) {
 		extract($params, EXTR_OVERWRITE);
 
@@ -362,12 +362,12 @@ class ErrorHandler extends Object {
 		$this->_outputMessage('missingHelperClass');
 	}
 
-/**
- * Renders the Missing Behavior file web page.
- *
- * @param array $params Parameters for controller
- * @access public
- */
+	/**
+	 * Renders the Missing Behavior file web page.
+	 *
+	 * @param array $params Parameters for controller
+	 * @access public
+	 */
 	function missingBehaviorFile($params) {
 		extract($params, EXTR_OVERWRITE);
 
@@ -379,12 +379,12 @@ class ErrorHandler extends Object {
 		$this->_outputMessage('missingBehaviorFile');
 	}
 
-/**
- * Renders the Missing Behavior class web page.
- *
- * @param array $params Parameters for controller
- * @access public
- */
+	/**
+	 * Renders the Missing Behavior class web page.
+	 *
+	 * @param array $params Parameters for controller
+	 * @access public
+	 */
 	function missingBehaviorClass($params) {
 		extract($params, EXTR_OVERWRITE);
 
@@ -396,12 +396,12 @@ class ErrorHandler extends Object {
 		$this->_outputMessage('missingBehaviorClass');
 	}
 
-/**
- * Renders the Missing Component file web page.
- *
- * @param array $params Parameters for controller
- * @access public
- */
+	/**
+	 * Renders the Missing Component file web page.
+	 *
+	 * @param array $params Parameters for controller
+	 * @access public
+	 */
 	function missingComponentFile($params) {
 		extract($params, EXTR_OVERWRITE);
 
@@ -414,12 +414,12 @@ class ErrorHandler extends Object {
 		$this->_outputMessage('missingComponentFile');
 	}
 
-/**
- * Renders the Missing Component class web page.
- *
- * @param array $params Parameters for controller
- * @access public
- */
+	/**
+	 * Renders the Missing Component class web page.
+	 *
+	 * @param array $params Parameters for controller
+	 * @access public
+	 */
 	function missingComponentClass($params) {
 		extract($params, EXTR_OVERWRITE);
 
@@ -432,12 +432,12 @@ class ErrorHandler extends Object {
 		$this->_outputMessage('missingComponentClass');
 	}
 
-/**
- * Renders the Missing Model class web page.
- *
- * @param unknown_type $params Parameters for controller
- * @access public
- */
+	/**
+	 * Renders the Missing Model class web page.
+	 *
+	 * @param unknown_type $params Parameters for controller
+	 * @access public
+	 */
 	function missingModel($params) {
 		extract($params, EXTR_OVERWRITE);
 
@@ -448,11 +448,11 @@ class ErrorHandler extends Object {
 		$this->_outputMessage('missingModel');
 	}
 
-/**
- * Output message
- *
- * @access protected
- */
+	/**
+	 * Output message
+	 *
+	 * @access protected
+	 */
 	function _outputMessage($template) {
 		$this->controller->render($template);
 		$this->controller->afterFilter();

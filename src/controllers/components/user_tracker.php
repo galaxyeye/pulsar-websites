@@ -1,4 +1,8 @@
 <?php
+
+/**
+ * 
+ * */
 class UserTrackerComponent extends Object {
 	public $controller;
 	

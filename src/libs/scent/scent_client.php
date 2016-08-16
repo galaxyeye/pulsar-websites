@@ -18,12 +18,13 @@ class ScentClient {
 		$this->httpClient = new \HttpClient();
 	}
 
-	public function getScentStatus() {
+	public function getStatus() {
 		return $this->httpClient->get_content($this->scentUrl."/admin");
 	}
 
 	/**
-	 * @property $args \Scent\DbFilter, json encoded string or an array
+	 * @param DbFilter $args json encoded string or an array
+	 * @return object
 	 * */
 	public function query($args) {
 		if (is_object($args)) {
@@ -41,6 +42,7 @@ class ScentClient {
 	}
 
 	/**
+	 * @param $jobConfig Nutch\JobConfig
 	 * @return jobId as string
 	 * */
 	public function executeJob($jobConfig) {

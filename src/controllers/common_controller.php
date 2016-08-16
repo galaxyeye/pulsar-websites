@@ -13,6 +13,7 @@
  * @copyright     Copyright 2009-2010, Shanghai Lanvue Network Technology Co.,Ltd. (http://www.lanvue.com)
  */
 ?>
+
 <?php
 class CommonController extends AppController {
 
@@ -44,9 +45,8 @@ class CommonController extends AppController {
 
         $url = $this->params['url']['u'];
         $exists = $client->url_exists($url);
-        // $content = $client->get($url);
 
-        echo $exists ? 1 : 0;
+        echo json_encode(['status' => 'success', 'value' => $exists]);
 
         $this->autoRender = false;
     }

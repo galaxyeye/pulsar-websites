@@ -1,41 +1,37 @@
 <?php 
 
-App::import('Lib', [
-  'filter_utils',
-  'nutch/job_info',
-  'nutch/nutch_config',
-  'nutch/nutch_client',
-  'nutch/remote_cmd_executor'
+namespace Nutch;
+
+\App::import('Lib', [
+    'filter_utils',
+    'nutch/nutch',
+    'nutch/job_info',
+    'nutch/nutch_config',
+    'nutch/nutch_client',
+    'nutch/remote_cmd_executor'
 ]);
 
-use \Nutch\JobState;
-use \Nutch\JobType;
-
-class CrawlState {
-  const __default = self::IDLE;
-  const IDLE = 'IDLE';
-  const CREATED = 'CREATED';
-  const RUNNING = 'RUNNING';
-  const PAUSED = 'PAUSED';
-  const STOPPED = 'STOPPED';
-  const FINISHED = 'FINISHED';
-  const COMPLETED = 'COMPLETED';
-}
-
-class NutchJobManagerComponent extends Object {
+class JobScheduler extends \Object {
 
   const JOB_INTERVAL = 15; // 15s
   const LOCK_TTL = 600; // 10m
 
   private $controller;
   private $remoteCmdExecutor;
+  private $nutchClient;
 
-  public function startup(&$controller) {
+  public function __construct($controller) {
     $this->controller = &$controller;
 
-    $this->_loadNutchJob();
+    $this->_loadNutchJobModel();
 
-    $this->remoteCmdExecutor = new \Nutch\RemoteCmdExecutor();
+    $this->remoteCmdExecutor = new RemoteCmdExecutor();
+    $this->nutchClient = new NutchClient();
+  }
+
+  public function setDebugMsg($debugMsg) {
+    $this->remoteCmdExecutor->setDebugMsg($debugMsg);
+    $this->nutchClient->setDebugMsg($debugMsg);
   }
 
   /**
@@ -43,6 +39,7 @@ class NutchJobManagerComponent extends Object {
    * @param $crawl The Crawl
    * @param $configId The specified configId, if set to be null, use $crawl['Crawl']['configId'],
    *        if both passed $configId and $crawl['Crawl']['configId'] are empty, calculate one by the server
+   * @return array
    * */
   public function createNutchConfig($crawl, $configId = null, $priority = "minor") {
     if(!$this->_validateCrawl($crawl)) {
@@ -57,6 +54,7 @@ class NutchJobManagerComponent extends Object {
 
     // create nutch config in nutch server
     $configId = $this->remoteCmdExecutor->createNutchConfig($crawl, $priority);
+    
     // currently, handles only DUPLICATE exception
     if (empty($configId)) {
       return ['configId' => $configId, 'state' => 'DUPLICATE'];
@@ -145,6 +143,7 @@ class NutchJobManagerComponent extends Object {
     // Submit the Job
     $crawl['Crawl']['batchId'] = $batchId;
     $rawMsg = $this->remoteCmdExecutor->executeRemoteJob($crawl, $jobType);
+
     $jobId = $rawMsg;
 
     if (empty($jobId) || striContains($jobId, 'exception')) {
@@ -171,7 +170,7 @@ class NutchJobManagerComponent extends Object {
     }
 
     $nutch_job_id = $this->NutchJob->id;
-    $this->log("Created new NutchJob #$nutch_job_id, #$crawl_id, $jobId", 'debug');
+    $this->log("Created new NutchJob #$nutch_job_id, #$crawl_id, $jobId", LOG_INFO);
 
     return $jobId;
   }
@@ -195,7 +194,7 @@ class NutchJobManagerComponent extends Object {
    *  );
    * 
    * */
-  public function scheduleNutchJobs() {
+  public function schedule() {
     if (!$this->_check_timeout("crawl_jobs_scheduler", self::JOB_INTERVAL)) {
       return;
     }
@@ -203,7 +202,7 @@ class NutchJobManagerComponent extends Object {
     $limit = 5;
 
     // Explicitly disable in-memory query caching
-    $this->_loadNutchJob();
+    $this->_loadNutchJobModel();
     $cacheQueries = $this->NutchJob->cacheQueries;
     $this->NutchJob->cacheQueries = false;
 
@@ -224,7 +223,6 @@ class NutchJobManagerComponent extends Object {
 
     $min = date('Hi');
     foreach ($nutchJobs as $nutchJob) {
-      $id = $nutchJob['NutchJob']['id'];
       $crawl_id = $nutchJob['NutchJob']['crawl_id'];
 
 //       $this->log("", 'debug');
@@ -247,15 +245,15 @@ class NutchJobManagerComponent extends Object {
   }
 
   private function _doScheduleJob($nutchJob) {
+    if ($this->_checkCrawlCompleted($nutchJob)) {
+    	return;
+    }
+
     $job_id = $nutchJob['NutchJob']['id'];
     $crawl_id = $nutchJob['NutchJob']['crawl_id'];
     $type = $nutchJob['NutchJob']['type'];
     $state = $nutchJob['NutchJob']['state'];
     $crawlState = $nutchJob['Crawl']['state'];
-
-    if ($this->_checkCrawlCompleted($nutchJob)) {
-    	return;
-    }
 
     // Adjust data structure for consistency
     $nutchJob['CrawlFilter'] = $nutchJob['Crawl']['CrawlFilter'];
@@ -265,7 +263,7 @@ class NutchJobManagerComponent extends Object {
     $configId = $this->createNutchConfig($crawl, null, "major");
     if ($configId['state'] != 'DUPLICATE') {
     	$this->log("A new config id has been created during schedule, "
-    			."this may indicate that the server has been restarted", "info");
+    			."this may indicate that the server has been restarted", LOG_INFO);
     }
 
     // Start scheduling jobs
@@ -301,7 +299,12 @@ class NutchJobManagerComponent extends Object {
   }
 
   private function _checkCrawlCompleted($nutchJob) {
-  	$job_id = $nutchJob['NutchJob']['id'];
+    $crawlStatus = $nutchJob['Crawl']['state'];
+    if (CrawlState::COMPLETED == $crawlStatus || CrawlState::STOPPED == $crawlStatus) {
+      return true;
+    }
+
+    $job_id = $nutchJob['NutchJob']['id'];
   	$crawl_id = $nutchJob['Crawl']['id'];
 
   	$round = $nutchJob['NutchJob']['round'];
@@ -314,16 +317,16 @@ class NutchJobManagerComponent extends Object {
 
   	// Complete all jobs belongs to this crawl
   	if ($round > $maxRound) {
-  		$this->log("All rounds done, round : $round, max round : $maxRound. "
-  				."Complete crawl #$crawl_id", 'info');
+  		$this->log("All rounds done, round : $round, max round : $maxRound."
+  				." Complete crawl #$crawl_id", 'info');
 
   		$this->_completeCrawl($job_id, $crawl_id);
   		$crawlCompleted = true;
   	}
 
   	if ($fetchedPages > $maxPages) {
-  		$this->log("All pages done, fetched pages : $fetchedPages, required pages : $maxPages."
-  				."Complete crawl #$crawl_id", 'info');
+  		$this->log("All pages done, fetched pages : $fetchedPages, expected pages : $maxPages."
+  				." Complete crawl #$crawl_id", 'info');
 
   		$this->_completeCrawl($job_id, $crawl_id);
   		$crawlCompleted = true;
@@ -400,8 +403,13 @@ class NutchJobManagerComponent extends Object {
   }
 
   private function _updateCompletedCircularJobs($job_id, $crawl_id) {
+    if (!$job_id && $crawl_id) {
+      $this->log("Invalid Argument : $job_id, $crawl_id");
+      return;
+    }
+
     // Once we can not find the job in Nutch Server, it's completed
-    $db =& ConnectionManager::getDataSource('default');
+    $db =& \ConnectionManager::getDataSource('default');
     $sql = "UPDATE `nutch_jobs` SET `state`='COMPLETED'"
         ." WHERE `crawl_id`=$crawl_id"
         ." AND `id` <= $job_id"
@@ -414,13 +422,20 @@ class NutchJobManagerComponent extends Object {
     $fetchedPages = $db->query($sql);
     $fetchedPages = $fetchedPages[0][0]['count'];
 
-    $sql = "UPDATE `crawls` SET `fetched_pages`=$fetchedPages WHERE `id`=$crawl_id";
-    $db->execute($sql);
+    if ($fetchedPages) {
+      $sql = "UPDATE `crawls` SET `fetched_pages`=$fetchedPages WHERE `id`=$crawl_id";
+      $db->execute($sql);
+    }
   }
 
   private function _updateCompletedNonCircularJobs($job_id, $crawl_id) {
+    if (!$job_id && $crawl_id) {
+      $this->log("Invalid Argument : $job_id, $crawl_id");
+      return;
+    }
+
     // Once we can not find the job in Nutch Server, it's completed
-    $db =& ConnectionManager::getDataSource('default');
+    $db =& \ConnectionManager::getDataSource('default');
     $sql = "UPDATE `nutch_jobs` SET `state`='COMPLETED'"
         ." WHERE `crawl_id`=$crawl_id"
         ." AND `id` <= $job_id"
@@ -431,7 +446,12 @@ class NutchJobManagerComponent extends Object {
   }
 
   private function _completeCrawl($job_id, $crawl_id) {
-    $db =& ConnectionManager::getDataSource('default');
+    if (!$job_id && $crawl_id) {
+      $this->log("Invalid Argument : $job_id, $crawl_id");
+      return;
+    }
+
+    $db =& \ConnectionManager::getDataSource('default');
     $sql = "UPDATE `crawls` SET `state`='COMPLETED' WHERE `id`=$crawl_id";
     $db->execute($sql);
 
@@ -447,7 +467,6 @@ class NutchJobManagerComponent extends Object {
 
   /**
    * update job state
-   * TODO : move to cron job
    * */
   private function _updateJobInfo($nutchJob, $force = false) {
     if (!$this->_validateNutchJob($nutchJob, " line #".__LINE__)) {
@@ -459,6 +478,7 @@ class NutchJobManagerComponent extends Object {
     $jobId = $nutchJob['NutchJob']['jobId'];
     $state = $nutchJob['NutchJob']['state'];
     $round = $nutchJob['NutchJob']['round'];
+    $fetched_pages = $nutchJob['NutchJob']['fetched_pages'];
 
     // $this->log('-----------update job info------------', 'debug');
 
@@ -474,8 +494,7 @@ class NutchJobManagerComponent extends Object {
     }
 
     // update job status
-    $client = new \Nutch\NutchClient();
-    $rawMsg = $client->getJobInfo($jobId);
+    $rawMsg = $this->nutchClient->getJobInfo($jobId);
 
     if (empty($rawMsg) || striContains($rawMsg, '{"exception')) {
       $this->log("Failed to get JobInfo".$rawMsg);
@@ -484,6 +503,11 @@ class NutchJobManagerComponent extends Object {
 
     $jobInfo = qi_json_decode($rawMsg, true, 10, JSON_BIGINT_AS_STRING);
     $affectedRows = $jobInfo['affectedRows'];
+    if ($affectedRows < $fetched_pages) {
+      // the message if from another task in the same job
+      // and this is also not accurate enough
+      $affectedRows += $fetched_pages;
+    }
     $data = [
         'id' => $job_id,
         'state' => $jobInfo['state'],
@@ -498,9 +522,10 @@ class NutchJobManagerComponent extends Object {
     }
 
     // Nothing to fetch, complete the job, and also the crawl
-    $recentAffectedRows = $this->_getRecentAffectedRows($crawl_id, 5);
-    if ($round > 5 && $recentAffectedRows == 0 && $jobInfo['type'] == JobType::UPDATEDB) {
-    	$this->log("No rows affected during last 10 rounds, complete the crawl", 'info');
+    // 4 * 5 + 1 : every round have 4 tasks
+    $recentAffectedRows = $this->_getRecentAffectedRows($crawl_id, 4 * 5 + 1);
+    if ($round > 5 && $recentAffectedRows == 0) {
+    	$this->log("No rows affected during last 5 rounds, complete the crawl", 'info');
     	$this->_completeCrawl($job_id, $crawl_id);
     }
 
@@ -508,7 +533,7 @@ class NutchJobManagerComponent extends Object {
   }
 
   private function _getRecentAffectedRows($crawl_id, $limit = 10) {
-  	$db =& ConnectionManager::getDataSource('default');
+  	$db =& \ConnectionManager::getDataSource('default');
 
   	$sql = "SELECT SUM(`count`) AS `count` FROM "
   			." (SELECT `count` FROM `nutch_jobs` WHERE `crawl_id`=$crawl_id ORDER BY `id` DESC LIMIT $limit)"
@@ -524,13 +549,13 @@ class NutchJobManagerComponent extends Object {
     $lockFile = LOCK_DIR . 'timer-' . $timerId;
     if(file_exists($lockFile)) {
 
-//      $this->log("time : ".time()." filetime : ".filemtime($lockFile), "info");
+//      $this->log("time : ".time()." filetime : ".filemtime($lockFile), LOG_INFO);
 
       // lock time out
       if (time() - filemtime($lockFile) > $timeout) {
         touch($lockFile);
 
-        // $this->log("Timer file timed out", "info");
+        // $this->log("Timer file timed out", LOG_INFO);
 
         return true;
       }
@@ -541,7 +566,7 @@ class NutchJobManagerComponent extends Object {
     $fp = fopen($lockFile, 'w');
     fwrite($fp, $timerId);
 
-//    $this->log("Lock $id OK", "info");
+//    $this->log("Lock $id OK", LOG_INFO);
 
     return true;
   }
@@ -550,13 +575,13 @@ class NutchJobManagerComponent extends Object {
   	$lockFile = LOCK_DIR . 'crawl_' . $lockId;
 
   	if(file_exists($lockFile)) {
-  		// $this->log("time : ".time()." filetime : ".filemtime($lockFile), "info");
+  		// $this->log("time : ".time()." filetime : ".filemtime($lockFile), LOG_INFO);
 
   		// lock time out
   		if (time() - filemtime($lockFile) > $timeout) {
   			unlink($lockFile);
 
-  			$this->log("Lock file removed", "info");
+  			$this->log("Lock file removed", LOG_INFO);
 
   			return true;
   		}
@@ -581,7 +606,7 @@ class NutchJobManagerComponent extends Object {
     /* Activate the LOCK_NB option on an LOCK_EX operation */
     // No blocking, return immediately if the lock is not available
     if(!flock($fp, LOCK_EX | LOCK_NB)) {
-      $this->log("Lock $lockId failed", "info");
+      $this->log("Lock $lockId failed", LOG_INFO);
       return false;
     }
 
@@ -593,7 +618,7 @@ class NutchJobManagerComponent extends Object {
   private function _try_unlock($fp, $lockId) {
     // release the lock
     if (!flock($fp, LOCK_UN)) {
-      $this->log("Unlock $lockId failed", "info");
+      $this->log("Unlock $lockId failed", LOG_INFO);
 
       fclose($fp);
 
@@ -619,7 +644,7 @@ class NutchJobManagerComponent extends Object {
   	}
   }
 
-  private function _loadNutchJob() {
+  private function _loadNutchJobModel() {
     $this->controller->loadModel('NutchJob');
     $this->NutchJob = &$this->controller->NutchJob;
   }

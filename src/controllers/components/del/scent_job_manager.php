@@ -8,6 +8,9 @@ App::import('Lib', array(
 
 use \Scent\JobType;
 
+/**
+ * @Deprecated
+ * */
 class ScentJobManagerComponent extends Object {
 
   private $controller;

@@ -28,6 +28,11 @@
       <?=$crawl['Crawl']['name']; ?>
       &nbsp;
     </dd>
+    <dt <?php if ($i % 2 == 0) echo $class;?>><?php __('Nutch Crawl Id'); ?></dt>
+    <dd <?php if ($i++ % 2 == 0) echo $class;?>>
+      <?=$crawl['Crawl']['crawlId']; ?>
+      &nbsp;
+    </dd>
     <dt <?php if ($i % 2 == 0) echo $class;?>><?php __('Config Id'); ?></dt>
     <dd <?php if ($i++ % 2 == 0) echo $class;?>>
       <?=$crawl['Crawl']['configId']; ?>
@@ -36,6 +41,11 @@
     <dt <?php if ($i % 2 == 0) echo $class;?>><?php __('Rounds'); ?></dt>
     <dd <?php if ($i++ % 2 == 0) echo $class;?>>
       <?=$crawl['Crawl']['rounds']; ?>
+      &nbsp;
+    </dd>
+    <dt <?php if ($i % 2 == 0) echo $class;?>><?php __('Frequency'); ?></dt>
+    <dd <?php if ($i++ % 2 == 0) echo $class;?>>
+      <?=$crawl['Crawl']['frequency']; ?>
       &nbsp;
     </dd>
     <dt <?php if ($i % 2 == 0) echo $class;?>><?php __('Finished Rounds'); ?></dt>
@@ -127,6 +137,7 @@
     <li><?=$this->Html->link(__('Nutch Parser Checker', true),
         ['controller' => 'nutch_jobs', 'action' => 'parseChecker', '?' => ['target' => $crawl['Seed'][0]['url'], 'crawl_id' => $crawl['Crawl']['id']]],
         ['target' => '_blank', 'title' => 'Check Nutch Parser using the seed']); ?></li>
+    <li><?=$this->Html->link(__('Test Nutch Message', true), ['action' => 'testNutchMessage', $crawl['Crawl']['id']]); ?> </li>    
   </ul>
   <hr />
   <h3>Actions</h3>

@@ -1,6 +1,6 @@
 html { background: url(/img/stripe2.png) repeat scroll 0 0 #F8E088; font-size: 100.01%; }
 body { background: none; font-family: "Lucida Grande", "Lucida Sans Unicode", Tahoma, sans-serif; font-size: small; letter-spacing: .01em; margin: 17px 0 0 0; text-align: center; }
-article, aside, figure, footer, header, hgroup, menu, nav, section { display: block; }
+article, aside, figure, footer, header, menu, nav, section { display: block; }
 #container { box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 5px; o-box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 5px; position: relative; text-align: left; }
 #nav { background: #cf3b19 url(/images/bghome.png) right repeat-y; border-left: 1px solid #b83a1f; border-top: 1px solid #b83a1f; height: 3.0em; }
 #stage { background: #fff; }

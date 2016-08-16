@@ -19,11 +19,16 @@ class HttpClient {
   ); // stop after 3 redirects
 
   private $url = false;
+  private $debugMsg = true;
 
   function __construct($options = null) {
     if ($options != null) {
       array_merge($this->options, $options);
     }
+  }
+  
+  public function setDebugMsg($debugMsg) {
+    $this->debugMsg = $debugMsg;
   }
 
   function url_exists($url) {
@@ -48,12 +53,16 @@ class HttpClient {
       return false;
     }
   }
-
+  
+  /**
+   * @return string
+   **/
   public function get_content($url) {
   	$this->url = $url;
 
     $options = array(CURLOPT_HEADER => true);
     $result = $this->get($url, $options);
+    
     return $result['content'];
   }
 
@@ -83,6 +92,11 @@ class HttpClient {
     return array('header' => $header, 'content' => $content);
   }
 
+  /**
+   * @param string $url
+   * @param string $data
+   * @return object
+   **/
   public function putJson($url, $data) {
   	$this->url = $url;
 
@@ -110,6 +124,11 @@ class HttpClient {
     return $output;
   }
 
+  /**
+   * @param string $url
+   * @param string $data
+   * @return string
+   **/
   public function put($url, $data) {
   	$this->url = $url;
 
@@ -130,13 +149,28 @@ class HttpClient {
     );
 
     $output = curl_exec($ch);
+
+    $err = curl_errno($ch);
+    $errmsg = curl_error($ch);
+    $header = curl_getinfo($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
     curl_close($ch);
 
     $this->_debugMsg("HttpClient::put ".$data);
 
-    return $output;
+    $header['errno'] = $err;
+    $header['errmsg'] = $errmsg;
+
+    return ['header' => $header, 'content' => $output];
   }
 
+  /**
+   * @param string $url target url
+   * @param string $data query data
+   * @param bool $metadata Show metadata or not
+   * @return object
+   **/
   public function postJson($url, $data) {
   	$this->url = $url;
 
@@ -156,15 +190,25 @@ class HttpClient {
     );
 
     $output = curl_exec($ch);
+
+    $err = curl_errno($ch);
+    $errmsg = curl_error($ch);
+    $header = curl_getinfo($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
     curl_close($ch);
 
     $this->_debugMsg("HttpClient::postJson ".$data);
 
-    return $output;
+    $header['errno'] = $err;
+    $header['errmsg'] = $errmsg;
+    $header['requestData'] = $data;
+
+    return ['header' => $header, 'content' => $output];
   }
 
   private function _debugMsg($message) {
-  	if (DEBUG_HTTP_CLIENT) {
+  	if ($this->debugMsg) {
       CakeLog::write('debug', $this->url . ' '. $message);
   	}
   }

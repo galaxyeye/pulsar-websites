@@ -125,6 +125,21 @@ tr:nth-child(2n) td {
 	display: none;
 }
 
+.canvas {
+	position: absolute;
+}
+
+.grid {
+	border: 1px solid #ccc;
+	border-width: 1px 0 0 1px;
+}
+
+.grid div {
+	border: 1px dotted #ccc;
+	border-width: 0 1px 1px 0;
+	float: left;
+}
+
 .shape {
 	border: 1px dotted #088000;
 	position: absolute;
@@ -132,7 +147,7 @@ tr:nth-child(2n) td {
 	vertical-align: middle;
 }
 
-.shape.trimed {
+.shape.aligned {
 	border: 1px dotted #a20000;
 	border-top: 3px solid #a20000;
 	color: #ff3300;

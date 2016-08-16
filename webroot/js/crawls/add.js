@@ -4,7 +4,7 @@ $(document).ready(function() {
   // layer.msg(startUpTip, 3, -1);
 
   $('.crawls .help').on('click', function() {
-    openTip(startUpTip, '.crawls .help', 3);
+      layer.tips(startUpTip, '.crawls .help');
   });
 
   $('.add').on('click', function() {

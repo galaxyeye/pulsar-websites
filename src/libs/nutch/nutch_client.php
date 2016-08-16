@@ -11,45 +11,30 @@ namespace Nutch;
 
 class NutchClient {
 
-	private static $JobType = array (
-			"INJECT" => "INJECT",
-			"GENERATE" => "GENERATE",
-			"FETCH" => "FETCH",
-			"PARSE" => "PARSE",
-			"UPDATEDB" => "UPDATEDB",
-			"INDEX" => "INDEX",
-			"READDB" => "READDB",
-			"EXTRACT" => "EXTRACT",
-			"CLASS" => "CLASS"
-	);
-
-	private static $State = array (
-			"IDLE",
-			"RUNNING",
-			"FINISHED",
-			"FAILED",
-			"KILLED",
-			"STOPPING",
-			"KILLING",
-			"ANY"
-	);
-
 	// TODO : nutch url
 	private $nutchUrl = NUTCH_SERVER;
 
 	private $httpClient;
 
-	function __construct() {
+	public function __construct() {
         $this->httpClient = new \HttpClient();
 	}
 
-	public function getNutchStatus() {
+	public function setDebugMsg($debugMsg) {
+		$this->httpClient->setDebugMsg($debugMsg);
+	}
+
+	/**
+	 * @return string
+	 **/
+	public function getStatus() {
         return $this->httpClient->get_content($this->nutchUrl."/admin");
 	}
 
 	/**
-	 * @return jobId as string
-	 * */
+	 * @param NutchConfig $jobConfig
+	 * @return object
+	 **/
 	public function executeJob($jobConfig) {
 		return $this->httpClient->postJson($this->nutchUrl."/job/create", $jobConfig->__toString());
 	}
@@ -57,6 +42,10 @@ class NutchClient {
 	public function stopJob($jobId) {
 		return $this->httpClient->get_content($this->nutchUrl."/job/$jobId/stop");
 	}
+
+//	public function resumeJob($jobId) {
+//		return $this->httpClient->get_content($this->nutchUrl."/job/$jobId/stop");
+//	}
 
 	public function abortJob($jobId) {
 		return $this->httpClient->get_content($this->nutchUrl."/job/$jobId/abort");
@@ -83,7 +72,7 @@ class NutchClient {
 	}
 
 	public function deleteNutchConfig($nutchConfigId) {
-		return $this->httpClient->get_content($this->nutchUrl."/config/".$configId);
+		return $this->httpClient->get_content($this->nutchUrl."/config/".$nutchConfigId);
 	}
 
 	public function getNutchConfigPropert($nutchConfigId, $propertId) {
@@ -95,7 +84,8 @@ class NutchClient {
 	}
 
 	/**
-	 * @property $args \Nutch\DbFilter or array
+	 * @param DbFilter $args or array
+	 * @return object
 	 * */
 	public function query($args) {
 		if (is_object($args)) {
@@ -120,10 +110,18 @@ class NutchClient {
 				)
 		);
 	 *********************************************************/
+	/**
+	 * @param array $seedList
+	 * @return object
+	 **/
 	public function createSeed($seedList) {
 		return $this->httpClient->postJson($this->nutchUrl."/seed/create", json_encode($seedList));
 	}
 
+	/**
+	 * @param object $url
+	 * @return object
+	 **/
 	public function parseChecker($url) {
 		return $this->httpClient->putJson($this->nutchUrl."/tools/parseChecker", json_encode($url));
 	}

@@ -13,21 +13,18 @@ $(document).ready(function() {
     }
   });
 
-  $.layer({
-    type : 1,
-    // title : '弹性分布式网页集概要',
+  layer.open({
+    type: 1,
     title : "齐物数据引擎操作界面",
-    border : false,
-    shade : [0],
-    move : ".xubox_title",
-    moveType : 1,
-    moveOut : true,
-    area: ['751px', 'auto'],
+    skin: 'layui-layer-rim', //加上边框
+    move: '.layui-layer-title',
+    moveType: 1,
+    area: ['800px', '500px'],
     maxmin: true,
-    offset : ['', ''],
-    shift: 'left', // 从左动画弹出
-    page : {dom : '#systemPanel'},
-    success: function(layero) {
+    shift: 'left', //从左动画弹出
+    scrollbar: true,
+    content: $("#systemPanel"),
+    success: function (layero, index) {
       _renderPageEntityFields();
     }
   });

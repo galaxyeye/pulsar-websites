@@ -30,11 +30,13 @@ $includes = array(
     CAKE . 'cache.php',
     CAKE . 'string.php',
     CAKE . 'class_registry.php',
+#    CAKE . 'error.php'
     CORE_PATH . 'console' . DS . 'error.php'
 );
 
 foreach ($includes as $inc) {
     if (!require($inc)) {
+        pr("Failed to load Cake core file {$inc}");
         $this->stderr("Failed to load Cake core file {$inc}");
         return false;
     }

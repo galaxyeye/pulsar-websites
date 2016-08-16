@@ -72,7 +72,7 @@ class ConnectionManager extends Object {
  * @access public
  * @static
  */
-	function &getInstance() {
+	static function &getInstance() {
 		static $instance = array();
 
 		if (!$instance) {
@@ -90,7 +90,7 @@ class ConnectionManager extends Object {
  * @access public
  * @static
  */
-	function &getDataSource($name) {
+	static function &getDataSource($name) {
 		$_this =& ConnectionManager::getInstance();
 
 		if (!empty($_this->_dataSources[$name])) {

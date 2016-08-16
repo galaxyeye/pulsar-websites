@@ -180,7 +180,7 @@ class Debugger extends Object {
  * @access public
  * @static
  */
-	function &getInstance($class = null) {
+	static function &getInstance($class = null) {
 		static $instance = array();
 		if (!empty($class)) {
 			if (!$instance || strtolower($class) != strtolower(get_class($instance[0]))) {
@@ -292,7 +292,7 @@ class Debugger extends Object {
 			break;
 		}
 
-		$helpCode = null;
+		$helpID = null;
 		if (!empty($_this->helpPath) && preg_match('/.*\[([0-9]+)\]$/', $description, $codes)) {
 			if (isset($codes[1])) {
 				$helpID = $codes[1];
@@ -300,9 +300,14 @@ class Debugger extends Object {
 			}
 		}
 
+		if (!isset($level) || !isset($error)) {
+
+		}
+
 		$data = compact(
 			'level', 'error', 'code', 'helpID', 'description', 'file', 'path', 'line', 'context'
 		);
+		// var_dump($data);
 		echo $_this->_output($data);
 
 		if (Configure::read('log')) {
@@ -701,7 +706,7 @@ class Debugger extends Object {
  * @static
  * @link http://book.cakephp.org/view/1191/Using-the-Debugger-Class
  */
-	function invoke(&$debugger) {
+	static function invoke(&$debugger) {
 		set_error_handler(array(&$debugger, 'handleError'));
 	}
 }

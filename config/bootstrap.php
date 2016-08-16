@@ -7,6 +7,9 @@
 require __DIR__ . '/paths.php';
 
 // Use composer to load the autoloader.
+require ROOT . DS . 'vendor' . DS . 'autoload.php';
+
+// Use composer to load the autoloader.
 // require ROOT . DS . 'vendor' . DS . 'autoload.php';
 
 /**
@@ -21,4 +24,5 @@ require __DIR__ . '/paths.php';
 require CORE_PATH . 'config' . DS . 'bootstrap.php';
 
 require 'constant_vars.php';
+
 require 'global_vars.php';

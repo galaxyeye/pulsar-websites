@@ -1,9 +1,7 @@
 <?php
-App::import('Lib', array('function_core', 'ip', 'nutch_job_manager'));
+App::import('Lib', array('function_core', 'ip'));
 
-// App::import('Lib', 'QueryPath', array('file' => 'QueryPath/QueryPath.php'));
-
-define('TIME_START', time());
+// TODO : use a vendor lib
 define('CLIENT_IP', IPv6ToIPv4MappedFormat(getRealRemoteIp()));
 
 class AppController extends Controller {
@@ -13,23 +11,8 @@ class AppController extends Controller {
     'Cookie' => array('name' => COOKIE_NAME, 'key' => COOKIE_KEY, 'time' => 3600, 'path' => '/', 'secure' => false),
 //    'Email',
 //    'UserTracker',
-    'DebugKit.Toolbar',
-    'NutchJobManager'
+    'DebugKit.Toolbar'
   );
-
-  // Default current user is anonymous user
-  public static $DEFAULT_USER = array(
-  		'id' => 0,
-  		'email' => USER_ANONYMOUS_EMAIL,
-  		'name' => USER_ANONYMOUS_NAME,
-  		'password' => '',
-  		'avatar' => AVATAR_DEFAULT,
-  		'avatar_big' => AVATAR_DEFAULT,
-  		'group_id' => USER_GROUP_ID,
-  		'point' => 0, 'level' => 0, 'exp' => 0,
-  		'created' => '1970-01-01 00:00:00', 'modified' => '1970-01-01 00:00:00',
-  		'status' => 'ACTIVATED', 'gender' => '', 'birth' => '', 'referrer' => 0,
-  		'salary' => '', 'ip' => '');
 
   // Default current user is anonymous user
   public $currentUser = array(
@@ -68,6 +51,15 @@ class AppController extends Controller {
     }
 
     $this->_setAuth();
+
+    // disable all cached item?
+    // Cache::clear();
+    
+    // FIX mb_split/mbregex problem on aliyun servers : "mbregex compile err: invalid regular expression"
+    // This problem does not see on dev machine.
+    // TODO : check the difference between dev server and aliyun server
+    mb_internal_encoding("UTF-8");
+    mb_regex_encoding("UTF-8");
   }
 
   public function beforeRender() {
@@ -100,29 +92,30 @@ class AppController extends Controller {
     }
 
     // Javascript support is supplied by default
+    // TODO : check if this is useful
     array_push($this->helpers, 'Js');
   }
 
   public function afterFilter() {
-    if ($this->_needLogAction()) {
+    $ACTION_LOG_OPEN = false;
+    if ($ACTION_LOG_OPEN && $this->_needLogAction()) {
       $db =& ConnectionManager::getDataSource(STAT_DB);
 
       // Logging
       $sql = sprintf("INSERT INTO `stat_accesses` (`controller`, `action`, `param1`, `param2`, `param3`, `ip`, `referer`, `uucookie`, `user_id`) "
           ."VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', %d)",
-          $this->params['controller'], $this->params['action'], 
+          $this->params['controller'], $this->params['action'],
           isset($this->params['pass'][0]) ? $this->params['pass'][0] : null,
           isset($this->params['pass'][1]) ? $this->params['pass'][1] : null,
           isset($this->params['pass'][2]) ? $this->params['pass'][2] : null,
-          CLIENT_IP, 
+          CLIENT_IP,
           isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : null,
           $this->uniqueCookie,
           $this->currentUser['id']);
-        // $db->query($sql);
+      $db->query($sql);
     } // if
 
     if (!$this->isAdmin()) {
-      $this->NutchJobManager->scheduleNutchJobs();
     }
 
     if ($this->isAjax() || $this->RequestHandler->isAjax()) {

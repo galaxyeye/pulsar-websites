@@ -1,28 +1,7 @@
 <?php 
 namespace Scent;
 
-\App::import('Lib', array('scent/job_config', 'scent/scent_config', 'scent/remote_command'));
-
-class JobType {
-  const __default = self::CLASS;
-  const SEGMENT = 'SEGMENT';
-  const AUTOEXTRACT = 'AUTOEXTRACT';
-  const RULEDEXTRACT = 'RULEDEXTRACT';
-  const BUILD = 'BUILD';
-  const CLAZZ = 'CLASS';
-}
-
-class JobState {
-  const __default = self::IDLE;
-  const IDLE = 'IDLE';
-  const RUNNING = 'RUNNING';
-  const FINISHED = 'FINISHED';
-  const FAILED = 'FAILED';
-  const KILLED = 'KILLED';
-  const STOPPING = 'STOPPING';
-  const KILLING = 'KILLING';
-  const ANY = 'ANY';
-}
+\App::import('Lib', array('filter_utils', 'scent/scent', 'scent/job_config', 'scent/scent_config', 'scent/remote_command'));
 
 class RemoteCmdBuilder {
 
@@ -54,7 +33,7 @@ class RemoteCmdBuilder {
   public function buildScentConfig() {
     $p = $this->pageEntity['PageEntity'];
 
-    $urlFilter = \Nutch\normalizeUrlFilter($p['url_filter']);
+    $urlFilter = normalizeUrlFilter($p['url_filter']);
     $urlFilter .= '-.';
     $textFilter = $p['text_filter'];
 
@@ -93,11 +72,11 @@ class RemoteCmdBuilder {
 
   public function createAutoExtractCommand() {
     $p = $this->pageEntity['PageEntity'];
-    $urlFilter = \Nutch\splitUrlFilter($p['url_filter']);
+    $urlFilter = splitUrlFilter($p['url_filter']);
 
     $regex = $urlFilter[0]; // TODO : To support multiple filters
-    $startKey = \Nutch\regex2startKey($regex);
-    $endKey = \Nutch\regex2endKey($regex);
+    $startKey = regex2startKey($regex);
+    $endKey = regex2endKey($regex);
 
     $limit = 10000;
     if (!empty($p['limit'])) $limit = $p['limit'];
@@ -120,11 +99,11 @@ class RemoteCmdBuilder {
 
   public function createRuledExtractCommand() {
     $p = $this->pageEntity['PageEntity'];
-    $urlFilter = \Nutch\splitUrlFilter($p['url_filter']);
+    $urlFilter = splitUrlFilter($p['url_filter']);
 
     $regex = $urlFilter[0];
-    $startKey = \Nutch\regex2startKey($regex);
-    $endKey = \Nutch\regex2endKey($regex);
+    $startKey = regex2startKey($regex);
+    $endKey = regex2endKey($regex);
 
     $limit = 10000;
     if (!empty($p['limit'])) $limit = $p['limit'];

@@ -610,6 +610,9 @@
     closedir($dir);
   }
 
+  /**
+   * Get Top Level Domain
+  */
   function get_tld($url) {
     $info = parse_url($url);
     $host = $info['host'];

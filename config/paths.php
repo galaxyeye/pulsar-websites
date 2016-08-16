@@ -72,6 +72,8 @@ define('TESTS', ROOT . DS . 'tests' . DS);
  */
 define('TMP', ROOT . DS . 'tmp' . DS);
 
+define('LOCK_DIR', TMP . 'locks' . DS);
+
 /**
  * Path to the logs directory.
  */

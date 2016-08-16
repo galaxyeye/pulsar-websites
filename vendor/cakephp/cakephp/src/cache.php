@@ -280,7 +280,7 @@ class Cache {
  * @access public
  * @static
  */
-	function write($key, $value, $config = null) {
+	static function write($key, $value, $config = null) {
 		$self =& Cache::getInstance();
 
 		if (!$config) {
@@ -326,7 +326,7 @@ class Cache {
  * @access public
  * @static
  */
-	function read($key, $config = null) {
+	static function read($key, $config = null) {
 		$self =& Cache::getInstance();
 
 		if (!$config) {
@@ -473,7 +473,7 @@ class Cache {
  * @access public
  * @static
  */
-	function clear($check = false, $config = null) {
+	public static function clear($check = false, $config = null) {
 		$self =& Cache::getInstance();
 		if (!$config) {
 			$config = $self->__name;

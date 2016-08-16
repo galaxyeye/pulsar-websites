@@ -26,6 +26,9 @@ class JobConfig {
     return crawlId;
   }
 
+  /**
+   * @param $crawlId string
+   * */
   public function setCrawlId($crawlId) {
     $this->data['crawlId'] = $crawlId;
   }

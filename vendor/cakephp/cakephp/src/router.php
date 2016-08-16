@@ -185,7 +185,7 @@ class Router {
  * @access public
  * @static
  */
-	function &getInstance() {
+	public static function &getInstance() {
 		static $instance = array();
 
 		if (!$instance) {
@@ -202,7 +202,7 @@ class Router {
  * @see Router::$__named
  * @static
  */
-	function getNamedExpressions() {
+	public static function getNamedExpressions() {
 		$self =& Router::getInstance();
 		return $self->__named;
 	}
@@ -256,7 +256,7 @@ class Router {
  * @access public
  * @static
  */
-	function connect($route, $defaults = array(), $options = array()) {
+	public static function connect($route, $defaults = array(), $options = array()) {
 		$self =& Router::getInstance();
 
 		foreach ($self->__prefixes as $prefix) {
@@ -329,7 +329,7 @@ class Router {
  * @access public
  * @static
  */
-	function connectNamed($named, $options = array()) {
+	public static function connectNamed($named, $options = array()) {
 		$self =& Router::getInstance();
 
 		if (isset($options['argSeparator'])) {
@@ -374,7 +374,7 @@ class Router {
  * @access public
  * @static
  */
-	function defaults($connect = true) {
+	public static function defaults($connect = true) {
 		$self =& Router::getInstance();
 		$self->__connectDefaults = $connect;
 	}
@@ -394,7 +394,7 @@ class Router {
  * @access public
  * @static
  */
-	function mapResources($controller, $options = array()) {
+	public static function mapResources($controller, $options = array()) {
 		$self =& Router::getInstance();
 		$options = array_merge(array('prefix' => '/', 'id' => $self->__named['ID'] . '|' . $self->__named['UUID']), $options);
 		$prefix = $options['prefix'];
@@ -422,7 +422,7 @@ class Router {
  * @access public
  * @static
  */
-	function prefixes() {
+	public static function prefixes() {
 		$self =& Router::getInstance();
 		return $self->__prefixes;
 	}
@@ -436,7 +436,7 @@ class Router {
  * @access public
  * @static
  */
-	function parse($url) {
+	public static function parse($url) {
 		$self =& Router::getInstance();
 		if (!$self->__defaultsMapped && $self->__connectDefaults) {
 			$self->__connectDefaultRoutes();
@@ -754,7 +754,7 @@ class Router {
  * @access public
  * @static
  */
-	function url($url = null, $full = false) {
+	public static function url($url = null, $full = false) {
 		$self =& Router::getInstance();
 		$defaults = $params = array('plugin' => null, 'controller' => null, 'action' => 'index');
 

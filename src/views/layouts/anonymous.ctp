@@ -3,7 +3,7 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <title>齐物数据引擎 - 格物，齐物，用物</title>
-  <?php echo $this->element('css', array('css' => array('default'))); ?>
+  <?php echo $this->element('css', array('css' => array('foundation.min', 'wufoo', 'qiwu-ui2'))); ?>
   <?php echo $this->element('css', array('css' => array('jquery/jquery-ui-1.11.3/jquery-ui'))); ?>
 
   <script type="text/javascript">
@@ -46,15 +46,9 @@
 
   <img id="bottom" src="/img/bottom.png" alt="" />
   <div id="footer">
-    <h1 class="logo"><a href="<?php echo Router::url('/') ?>">奇点驱动</a></h1>
-    <p> &middot; <strong>奇点驱动</strong> &middot; 上海奇点驱动网络科技有限公司 &middot;</p>
+    <h1 class="logo"><a href="<?php echo Router::url('/') ?>">翘曲速率</a></h1>
+    <p> &middot; <strong>翘曲速率</strong> &middot; 北京翘曲速率信息科技有限公司 &middot;</p>
   </div><!--footer-->
-
-<!-- JavaScript -->
-<?php 
-  echo $this->element('sql_dump');
-  if(isset($js)) echo $this->element('js', array('scripts_for_layout' => $scripts_for_layout));
-?>
 
 </body>
 </html>
