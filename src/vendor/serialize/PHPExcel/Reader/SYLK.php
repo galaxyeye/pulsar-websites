@@ -249,7 +249,7 @@ class PHPExcel_Reader_SYLK implements PHPExcel_Reader_IReader
 		$rowData = array();
 		$column = $row = '';
 		while (($rowData = fgets($fileHandle)) !== FALSE) {
-			$rowData = explode("\t",str_replace('¤',';',str_replace(';',"\t",str_replace(';;','¤',rtrim($rowData)))));
+			$rowData = explode("\t",str_replace('ï¿½',';',str_replace(';',"\t",str_replace(';;','ï¿½',rtrim($rowData)))));
 			$dataType = array_shift($rowData);
 			//	Read shared styles
 			if ($dataType == 'P') {

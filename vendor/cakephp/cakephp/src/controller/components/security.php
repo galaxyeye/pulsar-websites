@@ -722,7 +722,7 @@ class SecurityComponent extends Object {
 			'type' => 'basic',
 			'realm' => env('SERVER_NAME'),
 			'qop' => 'auth',
-			'nonce' => String::uuid()
+			'nonce' => Text::uuid()
 		), array_filter($options));
 		$options = array_merge(array('opaque' => md5($options['realm'])), $options);
 	}

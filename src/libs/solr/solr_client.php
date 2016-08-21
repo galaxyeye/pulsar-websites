@@ -10,7 +10,15 @@ namespace Solr;
  */
 class SolrClient
 {
+    /**
+     * @var string
+     * */
     private $solrUrlBase;
+    
+    /**
+     * @var string
+     * */
+    private $solrCollection;
 
     private $params = [
         'debugQuery' => 'on',
@@ -26,8 +34,9 @@ class SolrClient
      * */
     private $httpClient;
 
-    public function __construct($solrUrlBase) {
+    public function __construct($solrUrlBase, $solrCollection) {
         $this->solrUrlBase = $solrUrlBase;
+        $this->solrCollection = $solrCollection;
         $this->httpClient = new \HttpClient();
     }
 
@@ -35,19 +44,37 @@ class SolrClient
      * @param $q string Query String
      * @return array
      * */
-    public function browse($q)
+    public function browse($expression, $start = 0, $rows = 20)
     {
-        $url = $this->solrUrlBase;
-        $url .= "browse?debugQuery=on&hl=on&indent=on&rows=20&start=0&wt=json";
-        $url .= "&q=".urlencode($q);
+        $url = $this->solrUrlBase . '/' . $this->solrCollection . '/';
+        $url .= "browse?debugQuery=on&hl=on&indent=on&start=$start&rows=$rows&wt=json";
+        $url .= "&q=".urlencode($expression);
 
         $json = $this->httpClient->get_content($url);
         $response = json_decode($json, true);
 
+//         pr($url);
+//         pr($response);
+//         die();
+
+        $header = [
+            'numFound' => $response['response']['numFound'],
+            'QTime' => $response['responseHeader']['QTime']
+        ];
+
         $results = [];
+        if (empty($response)) {
+            return ['header' => $header, 'results' => $results];
+        }
+
         foreach ($response['response']['docs'] as $doc) {
             $id = $doc['id'];
+
             $highlighting = $response['highlighting'][$id];
+
+            $title = implode("|", $highlighting['title']);
+            $title = str_replace(["<b>", "</b>"], ["<em>", "</em>"], $title);
+
             $shortContent = implode("。", $highlighting['content']);
             $shortContent = str_replace(["<b>", "</b>"], ["<em>", "</em>"], $shortContent);
 
@@ -57,7 +84,7 @@ class SolrClient
                 'sentence' => $response['responseHeader']['params']['q'],
                 'domain' => $doc['domain'],
                 'url' => $doc['url'],
-                'title' => isset($doc['title'][0]) ? $doc['title'][0] : "",
+                'title' => $title,
                 'content' => $doc['content'][0],
                 'shortContent' => $shortContent,
                 'quickView' => $doc['url']
@@ -65,7 +92,8 @@ class SolrClient
 
             $results[] = $result;
         }
-        
-        return $results;
+
+        $header['count'] = count($results);
+        return ['header' => $header, 'results' => $results];
     }
 }

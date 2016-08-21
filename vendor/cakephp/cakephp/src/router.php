@@ -281,6 +281,7 @@ class Router {
 			trigger_error(__('Route classes must extend CakeRoute', true), E_USER_WARNING);
 			return false;
 		}
+
 		$self->routes[] =& $Route;
 		return $self->routes;
 	}
@@ -613,7 +614,7 @@ class Router {
  * @access public
  * @static
  */
-	function setRequestInfo($params) {
+	public static function setRequestInfo($params) {
 		$self =& Router::getInstance();
 		$defaults = array('plugin' => null, 'controller' => null, 'action' => null);
 		$params[0] = array_merge($defaults, (array)$params[0]);
@@ -637,7 +638,7 @@ class Router {
  * @access public
  * @static
  */
-	function getParams($current = false) {
+	public static function getParams($current = false) {
 		$self =& Router::getInstance();
 		if ($current) {
 			return $self->__params[count($self->__params) - 1];
@@ -657,7 +658,7 @@ class Router {
  * @access public
  * @static
  */
-	function getParam($name = 'controller', $current = false) {
+	public static function getParam($name = 'controller', $current = false) {
 		$params = Router::getParams($current);
 		if (isset($params[$name])) {
 			return $params[$name];
@@ -673,7 +674,7 @@ class Router {
  * @access public
  * @static
  */
-	function getPaths($current = false) {
+	public static function getPaths($current = false) {
 		$self =& Router::getInstance();
 		if ($current) {
 			return $self->__paths[count($self->__paths) - 1];
@@ -692,7 +693,7 @@ class Router {
  * @return void
  * @static
  */
-	function reload() {
+	public static function reload() {
 		$self =& Router::getInstance();
 		foreach (get_class_vars('Router') as $key => $val) {
 			$self->{$key} = $val;
@@ -703,13 +704,13 @@ class Router {
 /**
  * Promote a route (by default, the last one added) to the beginning of the list
  *
- * @param $which A zero-based array index representing the route to move. For example,
+ * @param $which array A zero-based array index representing the route to move. For example,
  *    if 3 routes have been added, the last route would be 2.
  * @return boolean Retuns false if no route exists at the position specified by $which.
  * @access public
  * @static
  */
-	function promote($which = null) {
+	public static function promote($which = null) {
 		$self =& Router::getInstance();
 		if ($which === null) {
 			$which = count($self->routes) - 1;

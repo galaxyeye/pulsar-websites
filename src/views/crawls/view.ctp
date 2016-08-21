@@ -38,6 +38,11 @@
       <?=$crawl['Crawl']['configId']; ?>
       &nbsp;
     </dd>
+    <dt <?php if ($i % 2 == 0) echo $class;?>><?php __('Solr Collection'); ?></dt>
+    <dd <?php if ($i++ % 2 == 0) echo $class;?>>
+      <?=$crawl['Crawl']['solrCollection']; ?>
+      &nbsp;
+    </dd>
     <dt <?php if ($i % 2 == 0) echo $class;?>><?php __('Rounds'); ?></dt>
     <dd <?php if ($i++ % 2 == 0) echo $class;?>>
       <?=$crawl['Crawl']['rounds']; ?>
@@ -148,6 +153,8 @@
     <li><?=$this->Html->link(__('Edit Crawl', true), ['action' => 'edit', $crawl['Crawl']['id']]); ?> </li>
     <li><?=$this->Html->link(__('New Wes', true), ['action' => 'addWes'], ['target' => '_blank']); ?> </li>
     <li><?=$this->Html->link(__('New Crawl', true), ['action' => 'add'], ['target' => '_blank']); ?> </li>
+    <li><?php echo $this->Html->link(__('Solr UI', true),
+                SOLR_URL_BASE . '/solr/' . $crawl['Crawl']['solrCollection'] . '/browse', ['target' => '_blank']) ?></li>
   </ul>
 </div>
 
@@ -207,11 +214,9 @@
       <td><?=$nutchJob['state']; ?>&nbsp;</td>
       <td class="actions">
         <?php 
-          echo $this->Html->link (__('View', true), 
-              ['controller' => 'nutch_jobs','action' => 'view', $nutchJob['id']],
-              ['target' => 'layer']
-          );
-//       ?>
+          echo $this->Html->link (__('View', true), ['controller' => 'nutch_jobs','action' => 'view', $nutchJob['id']],
+              ['target' => 'layer']); ?>
+		<?php echo $this->Html->link(__('Resume', true), ['controller' => 'nutch_jobs', 'action' => 'resume', $crawl['Crawl']['id']]); ?>
       </td>
     </tr>
   <?php endforeach; ?>

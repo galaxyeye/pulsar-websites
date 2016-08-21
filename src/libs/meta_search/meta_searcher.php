@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: vincent
@@ -14,8 +15,10 @@ namespace MetaSearch;
 class MetaSearcher {
     private $baiduUrlBase = "https://www.baidu.com/";
 
-    public function searchBaidu($queryString) {
-        $url = $this->baiduUrlBase . "s?wd=" . urlencode($queryString);
+    public function searchBaidu($queryString, $start = 0) {
+        $url = $this->baiduUrlBase . "s?"
+                ."wd=" . urlencode($queryString)
+                ."pn=" . $start;
 
         $httpClient = new \HttpClient();
         $html = $httpClient->get_content($url);
@@ -26,6 +29,7 @@ class MetaSearcher {
             'convert_to_encoding' => 'utf-8'
         ]);
 
+        $header = [];
         $results = [];
         foreach($qp->find(".result.c-container") as $item) {
 //            $itemQP = htmlqp($item, null, [
@@ -58,6 +62,7 @@ class MetaSearcher {
             }
         };
 
-        return $results;
+        $header['count'] = count($results);
+        return ['header' => $header, 'results' => $results];
     }
 }

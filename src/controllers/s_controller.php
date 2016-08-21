@@ -1,7 +1,10 @@
 <?php
 
 App::import('Vendor', 'qp');
-App::import('Lib', 'solr/solr_client');
+App::import('Lib', ['solr/solr_client', 'meta_search/meta_searcher']);
+
+use MetaSearch\MetaSearcher;
+use Solr\SolrClient;
 
 // const CHINESE_SPLIT_PATTERN = "[:alnum:]+|\\s+|[，；。：！？]";
 
@@ -9,8 +12,9 @@ class SController extends AppController
 {
     var $name = 'S';
     var $uses = array();
-    var $searchUrlBase = "http://master:8983/solr/information_native_0724/";
-    var $baiduUrlBase = "https://www.baidu.com/";
+    var $solrUrlBase = "http://master:8983/solr";
+    var $solrCollection = "information_native_0724";
+    var $providers = ['warpspeed', 'baidu'];
 
     public function beforeFilter()
     {
@@ -51,90 +55,115 @@ class SController extends AppController
     	    $src = $this->params['url']['prd'];
     	}
 
-    	$searchResults = [];
-    	$start = time();
-    	if (!empty($w)) {
-    	    if ($provider == "baidu") {
-    	        $searchResults = $this->queryBaidu($w);
-    	    }
-    	    else if ($provider == "warpspeed") {
-                $solrClient = new Solr\SolrClient($this->searchUrlBase);
-                $searchResults = $solrClient->browse($w);
-    	    }
-            else {
-                $solrClient = new Solr\SolrClient($this->searchUrlBase);
-
-                $r = $solrClient->browse($w);
-                $r2 = $this->queryBaidu($w);
-
-                $searchResults = array_merge($r, $r2);
-            }
+    	/**
+    	 * Solr collection
+    	 * */
+    	if (isset($this->params['url']['solrCollection'])) {
+    	    $this->solrCollection = $this->params['url']['solrCollection'];
     	}
-        $end = time();
+
+    	$page = 1;
+    	if (isset($this->params['named']['page'])) {
+    	    $page = $this->params['named']['page'];
+    	}
+    	$limit = 20;
+    	if (isset($this->params['named']['limit'])) {
+    	    $limit = $this->params['named']['limit'];
+    	}
+
+    	$queryResult = $this->query($w, ($page - 1) * $limit, $limit, $provider);
 
         /**
          * All status :
          * success
          * */
-        $header = [
-            'status' => 'success',
-            'qtime' => $end - $start
-        ];
-        $docs = $searchResults;
+        $docs = $queryResult['docs'];
 
         if ($fmt == "json") {
+            $header = [
+                    'status' => 'success',
+                    'qtime' => $end - $start
+            ];
+
     		$this->autoRender = false;
         	echo json_encode($docs, JSON_UNESCAPED_UNICODE);
         }
         else {
-        	$this->set(compact('header', 'docs', 'w'));
+            $header = $queryResult['header']['warpspeed'];
+            $expression = $queryResult['expression'];
+            $providers = $this->providers;
+
+            $this->paginate($page, $limit, $header['count'], $header['numFound'], ['limit' => $limit]);
+        	$this->set(compact('header', 'docs', 'w', 'providers'));
         }
     }
 
-    public function queryBaidu($queryString)
-    {
-        $url = $this->baiduUrlBase . "s?wd=" . urlencode($queryString);
-        $httpClient = new HttpClient();
-        $html = $httpClient->get_content($url);
+    /**
+     * Override the default paginate
+     * */
+    public function paginate($page, $limit, $current, $count, $options) {
+        $pageCount = intval(ceil($count / $limit));
 
-        // $html = mb_convert_encoding($html, 'HTML-ENTITIES', "UTF-8");
+        $paging = array(
+                'page'		=> $page,
+                'current'	=> $current,
+                'count'		=> $count,
+                'prevPage'	=> ($page > 1),
+                'nextPage'	=> ($count > ($page * $limit)),
+                'pageCount'	=> $pageCount,
+                'options'	=> $options,
+                'defaults' => []
+        );
+        $this->params['paging']["MonitorTasks"] = $paging;
 
-        $qp = htmlqp($html, null, [
-            'convert_to_encoding' => 'utf-8'
-        ]);
+        if (!in_array('Paginator', $this->helpers) && !array_key_exists('Paginator', $this->helpers)) {
+            $this->helpers[] = 'Paginator';
+        }
+    }
 
-        $results = [];
-        foreach($qp->find(".result.c-container") as $item) {
-//            $itemQP = htmlqp($item, null, [
-//                'convert_to_encoding' => 'utf-8'
-//            ]);
-            $itemQP = htmlqp($item);
+    private function query($expression, $start = 0, $rows = 30, $provider = null) {
+        $searchResults = [];
+        $startTime = time();
 
-            $url = $itemQP->find(".c-showurl")->text();
-            // $url = preg_replace("/[^A-Za-z0-9 \\.]/", '', $url);
-            // TODO : there is an unknown non-printable character at the end of url
-            $url = preg_replace("/[^A-Za-z0-9 \\.]/", '', $url);
+        $header = [
+                'baidu' => ['numFound' => 0, 'count' => 0], 
+                'warpspeed' => ['numFound' => 0, 'count' => 0]
+        ];
 
-            if (false == strpos($url, "http")) {
-                $url = "http://".$url;
+        if (!empty($expression)) {
+            if ($provider == "baidu") {
+                $metaSearcher = new \MetaSearch\MetaSearcher();
+                $searchResults = $metaSearcher->searchBaidu($expression, $start, $rows);
+
+                $header["baidu"] = $searchResults['header'];
+                $searchResults = $searchResults['results'];
             }
+            else if ($provider == "warpspeed") {
+                $solrClient = new \Solr\SolrClient($this->solrUrlBase, $this->solrCollection);
+                $searchResults = $solrClient->browse($expression, $start, $rows);
 
-            $result = [
-                'provider' => 'baidu',
-                'sentence' => $itemQP->find("h3")->text(),
-                'domain' => "",
-                'url' => $url,
-                'title' => $itemQP->find("h3")->innerHTML(),
-                'content' => $itemQP->find(".c-abstract")->innerHTML(),
-                'quickView' => $itemQP->find(".c-showurl")->innerHTML(),
-            ];
-
-            if (!empty($result['title']) && !empty($result['content'])) {
-                $result['shortContent'] = $result['content'];
-                $results[] = $result;
+                $header["warpspeed"] = $searchResults['header'];
+                $searchResults = $searchResults['results'];
             }
-        };
+            else {
+                $solrClient = new \Solr\SolrClient($this->solrUrlBase, $this->solrCollection);
+                $r = $solrClient->browse($expression, $start, $rows);
+                $header["warpspeed"] = $r['header'];
+                $r = $r['results'];
 
-        return $results;
+                $metaSearcher = new \MetaSearch\MetaSearcher();
+                $r2 = $metaSearcher->searchBaidu($expression, $start, $rows);
+                $header["baidu"] = $r2['header'];
+                $r2 = $r2['results'];
+
+                $searchResults = array_merge($r, $r2);
+            }
+        }
+        $endTime = time();
+
+        $docs = $searchResults;
+
+        return ['header' => $header, 'docs' => $docs, 'expression' => $expression];
     }
 }
+

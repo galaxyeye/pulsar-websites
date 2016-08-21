@@ -91,7 +91,7 @@
  * [Note Routing.admin is deprecated in 1.3.  Use Routing.prefixes instead]
  */
 //  Configure::write('Routing.prefixes', array('admin', 'ajax'));
-	Configure::write('Routing.prefixes', array('admin', 'anonymous'));
+	Configure::write('Routing.prefixes', array('admin', 'anonymous', 'u'));
 
 /**
  * Turn off all caching application-wide.

@@ -55,6 +55,7 @@ class HttpClient {
   }
   
   /**
+   * @param $url string
    * @return string
    **/
   public function get_content($url) {

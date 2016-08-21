@@ -3,6 +3,11 @@ class SettingsController extends AppController {
 
 	var $name = 'Settings';
 
+	function u_index() {
+		$this->Setting->recursive = 0;
+		$this->set('settings', $this->paginate());
+	}
+
 	function index() {
 		$this->Setting->recursive = 0;
 		$this->set('settings', $this->paginate());

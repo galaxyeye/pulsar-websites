@@ -1,7 +1,7 @@
 <?php
 App::import('Lib', array('function_core', 'ip'));
 
-// TODO : use a vendor lib
+// TODO : use a vendor library to do this
 define('CLIENT_IP', IPv6ToIPv4MappedFormat(getRealRemoteIp()));
 
 class AppController extends Controller {
@@ -11,7 +11,7 @@ class AppController extends Controller {
     'Cookie' => array('name' => COOKIE_NAME, 'key' => COOKIE_KEY, 'time' => 3600, 'path' => '/', 'secure' => false),
 //    'Email',
 //    'UserTracker',
-    'DebugKit.Toolbar'
+//    'DebugKit.Toolbar'
   );
 
   // Default current user is anonymous user
@@ -43,7 +43,7 @@ class AppController extends Controller {
     // Session accross all domain
     ini_set('session.cookie_domain', env('HTTP_BASE'));
 
-    $this->Auth->allow('*');
+    // $this->Auth->allow('*');
 
     // Current user
     if ($this->Session->check('Auth.User')) {
@@ -67,13 +67,9 @@ class AppController extends Controller {
     $this->set('currentUser', $this->currentUser);
     $this->set('settings', $this->settings);
 
-    $title = DEFAULT_TITLE;
-    $keywords = DEFAULT_KEYWORDS;
-    $description = DEFAULT_DESCRIPTION;
-
-    $this->set('title_for_layout', $title);
-    $this->set('meta_keywords', $keywords);
-    $this->set('meta_description', $description);
+    $this->set('title_for_layout', DEFAULT_TITLE);
+    $this->set('meta_keywords', DEFAULT_KEYWORDS);
+    $this->set('meta_description', DEFAULT_DESCRIPTION);
 
     if (isset($this->params['named']['preview']) && $this->params['named']['preview']) {
       $this->layout = 'preview';
@@ -85,10 +81,17 @@ class AppController extends Controller {
 
     if ($this->isAjax()) {
       $this->layout = 'ajax';
+      $this->autoRender = false;
+      $this->autoLayout = false;
     }
 
     if ($this->isAnonymous()) {
     	$this->layout = 'anonymous';
+    }
+
+    if ($this->isCustomer()) {
+      // TODO : check account role
+      $this->layout = 'customer';
     }
 
     // Javascript support is supplied by default
@@ -102,7 +105,9 @@ class AppController extends Controller {
       $db =& ConnectionManager::getDataSource(STAT_DB);
 
       // Logging
-      $sql = sprintf("INSERT INTO `stat_accesses` (`controller`, `action`, `param1`, `param2`, `param3`, `ip`, `referer`, `uucookie`, `user_id`) "
+      $sql = sprintf(<<<TAG
+INSERT INTO `stat_accesses` (`controller`, `action`, `param1`, `param2`, `param3`, `ip`, `referer`, `uucookie`, `user_id`) 
+TAG
           ."VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', %d)",
           $this->params['controller'], $this->params['action'],
           isset($this->params['pass'][0]) ? $this->params['pass'][0] : null,
@@ -114,14 +119,6 @@ class AppController extends Controller {
           $this->currentUser['id']);
       $db->query($sql);
     } // if
-
-    if (!$this->isAdmin()) {
-    }
-
-    if ($this->isAjax() || $this->RequestHandler->isAjax()) {
-      $this->autoRender = false;
-      $this->autoLayout = false;
-    }
   }
 
   /**
@@ -147,7 +144,7 @@ class AppController extends Controller {
       echo $this->toString();
     }
 
-    Configure::Write('debug', 0);
+    Configure::write('debug', 0);
     $this->autoRender = false;
   }
 
@@ -158,8 +155,12 @@ class AppController extends Controller {
   /**
    * TODO : use RequestHandler
    * */
-  public function isAjax(){
+  public function isAjax() {
     return isset($this->params['prefix']) && ($this->params['prefix'] === 'ajax');
+  }
+
+  public function isCustomer() {
+    return isset($this->params['prefix']) && ($this->params['prefix'] === 'u');
   }
 
   /**
@@ -174,7 +175,7 @@ class AppController extends Controller {
    * serialize the object in json format
    *
    * @param string $id Id of the user to be jsonify
-   * @access public
+   * @return string
    */
   protected function jsonify($id = null) {
     return json_encode($this->_load($id));
@@ -199,7 +200,9 @@ class AppController extends Controller {
   protected function _loadSettings() {
     if (($settings = Cache::read("settings", 'hourly')) === false) {
       $db =& ConnectionManager::getDataSource('default');
-      $sql = 'SELECT * FROM `settings` AS `Setting`';
+      $sql = <<<'TAG'
+SELECT * FROM `settings` AS `Setting`
+TAG;
       $settings = $db->query($sql);
 
       $settings2 = array();
@@ -233,6 +236,11 @@ class AppController extends Controller {
 
       $this->Auth->loginAction = array('controller' => 'users', 'action' => 'admin_login');
     }
+
+    if ($this->isCustomer()) {
+      $this->Auth->loginAction = ['controller' => 'users', 'action' => 'login', 'u' => true];
+      $this->Auth->logoutRedirect = ['controller' => 'users', 'action' => 'login', 'u' => true];
+    }
   }
 
   protected function _needLogAction() {
@@ -254,7 +262,9 @@ class AppController extends Controller {
     }
 
     $db =& ConnectionManager::getDataSource('default');
-    $sql = "SELECT `User`.* FROM `users` AS `User` WHERE `User`.`id`=$user[id]";
+    $sql = <<<TAG
+SELECT `User`.* FROM `users` AS `User` WHERE `User`.`id`=$user[id]
+TAG;
     $data = $db->query($sql);
     $this->currentUser = array_merge($user, $data[0]['User']);
   }
@@ -277,7 +287,7 @@ class AppController extends Controller {
     $this->redirect(array('action' => 'view', $id));
   }
 
-  protected function _validateId($id, $redirect = array('action' => 'index')) {
+  protected function _validateId($id, $redirect = ['action' => 'index']) {
     $modelClass = $this->modelClass;
     if (is_array($id)) {
       if (!isset($id[$modelClass]['id'])) {
@@ -299,6 +309,12 @@ class AppController extends Controller {
     }
   }
 
+  /**
+   * Multiple tenant support
+   * @param $id integer The tenant user id
+   * @param $modelClass string Model class name
+   * @return boolean
+   * */
   protected function checkTenantPrivilege($id, $modelClass = null) {
     if ($modelClass == null) {
       $modelClass = $this->modelClass;
@@ -333,7 +349,7 @@ class AppController extends Controller {
     return true;
   }
 
-  // TODO : move to a component?
+  // TODO : move to a library?
   protected function _tidyCrawlFilter($crawlFilters) {
     $tidiedCrawlFilters = array();
 

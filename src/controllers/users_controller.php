@@ -25,7 +25,7 @@ class UsersController extends AppController {
 	 * serialize the object in json format
 	 *
 	 * @param string $id Id of the user to be jsonify, if $id is null, return current user
-	 * @access public
+	 * @return string
 	 */
 	protected function jsonify($id = null) {
 		if ($id == null) {
@@ -37,6 +37,49 @@ class UsersController extends AppController {
 			unset($data['User']['password']);
 			return json_encode($data);
 		}
+	}
+
+	public function u_index(){
+		$this->paginate['User'] = array('limit'=> 500, 'order' => 'User.id DESC');
+
+		if (!isset($this->params['url']['status'])) {
+			$this->set('users', $this->paginate());
+		}
+		else {
+			$status = isset($this->params['url']['status']) ? $this->params['url']['status'] : null;
+			$group = isset($this->params['url']['group']) ? $this->params['url']['group'] : null;
+			$sY = isset($this->params['url']['sY']) ? $this->params['url']['sY'] : '';
+			$sM = isset($this->params['url']['sM']) ? $this->params['url']['sM'] : '';
+			$sD = isset($this->params['url']['sD']) ? $this->params['url']['sD'] : '';
+			$eY = isset($this->params['url']['eY']) ? $this->params['url']['eY'] : '';
+			$eM = isset($this->params['url']['eM']) ? $this->params['url']['eM'] : '';
+			$eD = isset($this->params['url']['eD']) ? $this->params['url']['eD'] : '';
+			$type = isset($this->params['url']['type']) ? $this->params['url']['type'] : null;
+			$key = isset($this->params['url']['key']) ? $this->params['url']['key'] : null;
+
+			$start = $sY.$sM.$sD;
+			$end = $eY.$eM.$eD;
+
+			$conditions = array();
+			$conditions['AND']['User.created BETWEEN ? AND ?'] = array($start, $end);
+
+			if ($status != 'ALL'){
+				$conditions['AND']['User.status'] = $status;
+			}
+
+			if ($group != 'ALL' && is_numeric($group)){
+				$conditions['AND']['User.group_id'] = $group;
+			}
+
+			if ($type != 'NONE' && !empty($type)) {
+				$conditions['AND']['User.'.$type.' LIKE '] = '%%'.$key.'%%';
+			}
+
+			$this->set('users', $this->paginate($conditions));
+		}
+
+		$default = array('ALL' => 'ALL');
+		$this->set('groups', $default + $this->User->Group->find('list'));
 	}
 
 	public function admin_index(){
@@ -609,7 +652,7 @@ class UsersController extends AppController {
 		$this->captcha->image_width = 110;
 		$this->captcha->image_bg_color = '#e1e1e1';
 		$this->captcha->draw_lines = false;
-    $this->captcha->arc_line_colors = '#999999,#cccccc';
+	    $this->captcha->arc_line_colors = '#999999,#cccccc';
 		$this->captcha->code_length = 4;
 		$this->captcha->font_size = 18;
 		$this->captcha->text_transparency_percentage = 25;
@@ -631,7 +674,7 @@ class UsersController extends AppController {
 	}
 
 	public function logout() {
-		$this->currentUser = self::$DEFAULT_USER;
+		$this->currentUser = DEFAULT_USER;
 		$this->redirect($this->Auth->logout());
 	}
 
@@ -641,7 +684,15 @@ class UsersController extends AppController {
 	public function admin_logout(){
 		$this->redirect($this->Auth->logout());
 	}
+	
+	public function u_login() {
+	}
 
+	public function u_logout() {
+		$this->currentUser = DEFAULT_USER;
+		$this->redirect($this->Auth->logout());
+	}
+	
 	public function loginService() {
 		$id = isset($this->params['url']['id']) ? $this->params['url']['id'] : false;
 		$s = isset($this->params['url']['s']) ? $this->params['url']['s'] : false;

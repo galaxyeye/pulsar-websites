@@ -226,11 +226,13 @@ class CrawlsController extends AppController
         $success = true;
         $message = "";
 
-        $crawlName = "crawl-" . $this->data['PageEntity'][0]['name'];
-        $crawlName = preg_replace("/\s+/i", "-", $crawlName);
+        $crawlName = $this->data['PageEntity'][0]['name'];
+        $crawlName = preg_replace("/\\s+/i", "-", $crawlName);
 
         $this->data['Crawl']['name'] = $crawlName;
         $this->data['Crawl']['state'] = 'CREATED';
+        $this->data['Crawl']['crawlId'] = STORAGE_CRAWL_ID_VALUE;
+        $this->data['Crawl']['solrCollection'] = SOLR_COLLECTION;
         $this->data['Crawl']['rounds'] = 100;
         $this->data['Crawl']['limit'] = 5000;
         $this->data['Crawl']['user_id'] = $this->currentUser['id'];
@@ -553,7 +555,6 @@ class CrawlsController extends AppController
             $crawl['Crawl']['configId'] = $configId['configId'];
         }
 
-
         $this->_resumeNutchJobs($id);
         $this->_updateState($id, CrawlState::RUNNING);
 
@@ -710,6 +711,8 @@ class CrawlsController extends AppController
         $crawl['Crawl']['batchId'] = 'a.test.batch.id';
 
         App::import('Lib', 'nutch/job_scheduler');
+        $crawl['Crawl']['solrCollection'] = SOLR_COLLECTION;
+        // TODO : check this : pass by value?
         $cmdBuilder = new Nutch\RemoteCmdBuilder($crawl);
 
         pr("-----crawl filters-----");
@@ -730,7 +733,7 @@ class CrawlsController extends AppController
         pr(json_encode($nutchSeedList));
 
         pr("-----nutch commands-----");
-        $commands = $cmdBuilder->createCommands($crawl);
+        $commands = $cmdBuilder->createCommands();
         for ($i = 0; $i < min(count($commands), 10); ++$i) {
             pr($commands[$i]->getJobConfig()->__toString());
         }
@@ -923,7 +926,7 @@ class CrawlsController extends AppController
         $db =& ConnectionManager::getDataSource('default');
         $sql = "UPDATE `nutch_jobs` SET `state`='COMPLETED'"
             . " WHERE `crawl_id`=$crawl_id"
-            . " AND `type` IN ('INJECT', 'GENERATE', 'FETCH', 'PARSE', 'UPDATEDB')"
+            . " AND `type` IN ('INJECT', 'GENERATE', 'FETCH', 'PARSE', 'UPDATEDB', 'INDEX')"
             . " AND `state` NOT IN ('COMPLETED', 'FAILED_COMPLETED')";
         $db->execute($sql);
 
@@ -938,7 +941,7 @@ class CrawlsController extends AppController
         $db =& ConnectionManager::getDataSource('default');
         $sql = "UPDATE `nutch_jobs` SET `state`='PAUSED'"
             . " WHERE `crawl_id`=$crawl_id"
-            . " AND `type` IN ('INJECT', 'GENERATE', 'FETCH', 'PARSE', 'UPDATEDB')"
+            . " AND `type` IN ('INJECT', 'GENERATE', 'FETCH', 'PARSE', 'UPDATEDB', 'INDEX')"
             . " AND `state` IN ('RUNNING')"
             . " ORDER BY `id` DESC LIMIT 1"
             . ";";
@@ -958,7 +961,7 @@ class CrawlsController extends AppController
         $db =& ConnectionManager::getDataSource('default');
         $sql = "UPDATE `nutch_jobs` SET `state`='FINISHED'"
             . " WHERE `crawl_id`=$crawl_id"
-            . " AND `type` IN ('INJECT', 'GENERATE', 'FETCH', 'PARSE', 'UPDATEDB')"
+            . " AND `type` IN ('INJECT', 'GENERATE', 'FETCH', 'PARSE', 'UPDATEDB', 'INDEX')"
             . " AND `state` IN ('PAUSED')"
             . " ORDER BY `id` DESC LIMIT 1"
             . ";";

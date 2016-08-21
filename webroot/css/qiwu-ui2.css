@@ -199,12 +199,6 @@ div.actions ul li a:hover { text-decoration: underline; }
 .actions.columns h3 { color: #15848F; }
 
 /*************************
- * jQuery-ui integration
- ************************/
-.ui-widget form { text-align: left; }
-.ui-widget input { line-height: 2em; margin-left: 6em; margin-top: -2em; padding: 2px 5px; width: 40em; }
-
-/*************************
  * Layer integration
  ************************/
 .xubox_page { width: 100%; }
@@ -260,4 +254,40 @@ div.actions ul li a:hover { text-decoration: underline; }
 
 #crawlsAnalysis .add-wes.form form, #crawlsAnalysis .add-wes.form .message {
 	background: none repeat scroll 0px 0px #E5F0FF;
+}
+
+#topicsUMonitor .topics table td:first-child { width: 20%;}
+#topicsUMonitor .topics table td:nth-child(2) { width: 75%; }
+
+/**
+ * #topicsUEdit2
+ * */
+#topicsUEdit2 .ui-dialog { text-align: left;}
+
+#topicsUEdit2 .ui-dialog label { display: inline; }
+
+#topicsUEdit2 .cpmTable td {
+    min-width: 365px;
+}
+
+#topicsUEdit2 .buttonclass {
+    width: 365px;
+}
+
+/*This is the trick to make autocomplete menu popup properly in the dialog */
+#topicsUEdit2 ul.ui-front {
+    z-index: 1100 !important;
+}
+
+/*
+Tthe equationedito editor has this class -- equationditorDialog
+Without it, the autocomplete widget will be messed by jquery.ui.dialog _movetotop().
+*/
+#topicsUEdit2 .equationditorDialog {
+    z-index: 1100 !important;
+}
+
+#topicsUEdit2 .cpmTable button.ui-button-icon-only {
+    padding: 2px 8px;
+    line-height: 20px;
 }

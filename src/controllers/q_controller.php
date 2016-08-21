@@ -78,32 +78,8 @@ class QController extends AppController
     }
 
     public function querySolr($w, $method = "browse") {
-//    	$sentences = mb_split(CHINESE_SPLIT_PATTERN, $w);
-    	// $sentences = mb_split("[,，\+]|\s+", $w);
-    	// $sentences[] = str_replace(",，+", " ", $w);
-    	
-//    	$searchResults = [];
-//     	foreach ($sentences as $sentence) {
-//     		if (empty($sentence)) continue;
-
-//     		$searchResult = Cache::read($sentence, "minute");
-//     		if (true || !$searchResult) {
-//     		    if ($method == "select") {
-//     		        $searchResult = $this->searchSolrSelectAPI($sentence, $sentences);
-//     		    }
-//     		    else {
-//     		        $searchResult = $this->searchSolrBrowseAPI($sentence, $sentences);
-//     		    }
-//     			Cache::write($sentence, $searchResult, "minute");
-//     		}
-
-//     		foreach ($searchResult as $result) {
-//     			$searchResults[] = $result;
-//     		}
-//     	}
-
-        // Let the solr handles this
-        $sentences = $w;
+        $sentences = "\"".$w."\"";
+        $sentences = str_replace([",", "，", "\s+"], ["\"+\"", "\"+\"", "\"+\""], $sentences);
 		$searchResults = Cache::read($sentences, "minute");
 		if (true || $searchResults) {
 		    if ($method == "select") {
@@ -161,8 +137,12 @@ class QController extends AppController
         
         // pr($response['response']['docs']);
         // pr($response['highlighting']);
-        
+
         $results = [];
+        if (empty($response)) {
+            return $results;
+        }
+
         foreach ($response['response']['docs'] as $doc) {
             $id = $doc['id'];
             $highlighting = $response['highlighting'][$id];

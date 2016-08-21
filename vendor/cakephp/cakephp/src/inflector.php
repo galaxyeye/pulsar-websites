@@ -293,7 +293,7 @@ class Inflector {
  * @return object
  * @access public
  */
-	function &getInstance() {
+	public static function &getInstance() {
 		static $instance = array();
 
 		if (!$instance) {
@@ -348,7 +348,7 @@ class Inflector {
  * @return void
  * @static
  */
-	function rules($type, $rules, $reset = false) {
+	public static function rules($type, $rules, $reset = false) {
 		$_this =& Inflector::getInstance();
 		$var = '_'.$type;
 
@@ -394,7 +394,7 @@ class Inflector {
  * @static
  * @link http://book.cakephp.org/view/1479/Class-methods
  */
-	function pluralize($word) {
+	public static function pluralize($word) {
 		$_this =& Inflector::getInstance();
 
 		if (isset($_this->_pluralized[$word])) {
@@ -441,7 +441,7 @@ class Inflector {
  * @static
  * @link http://book.cakephp.org/view/1479/Class-methods
  */
-	function singularize($word) {
+	public static function singularize($word) {
 		$_this =& Inflector::getInstance();
 
 		if (isset($_this->_singularized[$word])) {
@@ -490,7 +490,7 @@ class Inflector {
  * @static
  * @link http://book.cakephp.org/view/1479/Class-methods
  */
-	function camelize($lowerCaseAndUnderscoredWord) {
+	public static function camelize($lowerCaseAndUnderscoredWord) {
 		$_this =& Inflector::getInstance();
 		if (!($result = $_this->_cache(__FUNCTION__, $lowerCaseAndUnderscoredWord))) {
 			$result = str_replace(' ', '', Inflector::humanize($lowerCaseAndUnderscoredWord));
@@ -508,7 +508,7 @@ class Inflector {
  * @static
  * @link http://book.cakephp.org/view/1479/Class-methods
  */
-	function underscore($camelCasedWord) {
+	public static function underscore($camelCasedWord) {
 		$_this =& Inflector::getInstance();
 		if (!($result = $_this->_cache(__FUNCTION__, $camelCasedWord))) {
 			$result = strtolower(preg_replace('/(?<=\\w)([A-Z])/', '_\\1', $camelCasedWord));
@@ -527,7 +527,7 @@ class Inflector {
  * @static
  * @link http://book.cakephp.org/view/1479/Class-methods
  */
-	function humanize($lowerCaseAndUnderscoredWord) {
+	public static function humanize($lowerCaseAndUnderscoredWord) {
 		$_this =& Inflector::getInstance();
 		if (!($result = $_this->_cache(__FUNCTION__, $lowerCaseAndUnderscoredWord))) {
 			$result = ucwords(str_replace('_', ' ', $lowerCaseAndUnderscoredWord));
@@ -545,7 +545,7 @@ class Inflector {
  * @static
  * @link http://book.cakephp.org/view/1479/Class-methods
  */
-	function tableize($className) {
+	public static function tableize($className) {
 		$_this =& Inflector::getInstance();
 		if (!($result = $_this->_cache(__FUNCTION__, $className))) {
 			$result = Inflector::pluralize(Inflector::underscore($className));
@@ -581,7 +581,7 @@ class Inflector {
  * @static
  * @link http://book.cakephp.org/view/1479/Class-methods
  */
-	function variable($string) {
+	public static function variable($string) {
 		$_this =& Inflector::getInstance();
 		if (!($result = $_this->_cache(__FUNCTION__, $string))) {
 			$string2 = Inflector::camelize(Inflector::underscore($string));
@@ -605,7 +605,7 @@ class Inflector {
  * @static
  * @link http://book.cakephp.org/view/1479/Class-methods
  */
-	function slug($string, $replacement = '_', $map = array()) {
+	public static function slug($string, $replacement = '_', $map = array()) {
 		$_this =& Inflector::getInstance();
 
 		if (is_array($replacement)) {

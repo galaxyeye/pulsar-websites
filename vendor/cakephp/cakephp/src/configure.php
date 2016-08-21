@@ -42,7 +42,7 @@ class Configure extends Object {
  * @return Configure instance
  * @access public
  */
-    static function &getInstance($boot = true) {
+    public static function &getInstance($boot = true) {
         static $instance = array();
         if (!$instance) {
             if (!class_exists('Set')) {
@@ -78,7 +78,7 @@ class Configure extends Object {
  * @return boolean True if write was successful
  * @access public
  */
-    function write($config, $value = null) {
+    public static function write($config, $value = null) {
         $_this =& Configure::getInstance();
 
         if (!is_array($config)) {
@@ -150,7 +150,7 @@ class Configure extends Object {
  * @return string value of Configure::$var
  * @access public
  */
-    static function read($var = 'debug') {
+    public static function read($var = 'debug') {
         $_this =& Configure::getInstance();
 
         if ($var === 'debug') {
@@ -200,7 +200,7 @@ class Configure extends Object {
  * @return void
  * @access public
  */
-    function delete($var = null) {
+    public static function delete($var = null) {
         $_this =& Configure::getInstance();
 
         if (strpos($var, '.') === false) {
@@ -228,7 +228,7 @@ class Configure extends Object {
  * @return mixed false if file not found, void if load successful
  * @access public
  */
-    function load($fileName) {
+    public static function load($fileName) {
         $found = $plugin = $pluginPath = false;
         list($plugin, $fileName) = pluginSplit($fileName);
         if ($plugin) {
@@ -741,7 +741,7 @@ class App extends Object {
  * @return array numeric keyed array of core lib paths
  * @access public
  */
-    function core($type = null) {
+    public static function core($type = null) {
         static $paths = false;
         if ($paths === false) {
             $paths = Cache::read('core_paths', '_cake_core_');

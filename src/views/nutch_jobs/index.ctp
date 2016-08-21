@@ -31,7 +31,7 @@
             <th><?php echo $this->Paginator->sort('jobId'); ?></th>
             <th><?php echo $this->Paginator->sort('type'); ?></th>
             <th><?php echo $this->Paginator->sort('state'); ?></th>
-            <th><?php echo $this->Paginator->sort('count'); ?></th>
+            <th><?php echo $this->Paginator->sort('fetched_pages'); ?></th>
             <th><?php echo $this->Paginator->sort('created'); ?></th>
             <th class="actions"><?php __('Actions'); ?></th>
         </tr>

@@ -12,6 +12,7 @@
     <?php
     $m = [
         'name' => '<p class="m hidden">任务名称，默认自动生成</p>',
+        'crawlId' => '<p class="m hidden">任务主表，默认值由系统配置</p>',
         'crawl_mode' => '<p class="m hidden">是否支持Ajax</p>',
         'rounds' => '<p class="m hidden">爬虫采用广度优先算法，即：<br />
 						  I : 爬种子链接，得到第一层网页集；<br />
@@ -61,6 +62,8 @@
     /***********************************************************/
     echo "<fieldset class='crawl'><legend>爬虫信息</legend>";
     echo $this->Form->input('name', array('label' => '任务名称', 'default' => $defaultCrawlName, 'after' => $m['name']));
+    echo $this->Form->input('crawlId', array('label' => 'crawlId', 'default' => STORAGE_CRAWL_ID_VALUE, 'after' => $m['crawlId']));
+    echo $this->Form->input('solrCollection', array('label' => 'solrCollection', 'default' => SOLR_COLLECTION, 'after' => $m['crawlId']));
     echo $this->Form->input('crawl_mode', array('label' => 'Ajax Support',
         'default' => "CROWDSOURCING",
         'options' => ['NATIVE' => 'Without Ajax Support', 'CROWDSOURCING' => 'With Ajax Support'],

@@ -28,10 +28,10 @@ $includes = array(
     CAKE . 'configure.php',
     CAKE . 'file.php',
     CAKE . 'cache.php',
-    CAKE . 'string.php',
+    CAKE . 'text.php',
     CAKE . 'class_registry.php',
 #    CAKE . 'error.php'
-    CORE_PATH . 'console' . DS . 'error.php'
+#    CORE_PATH . 'console' . DS . 'error.php'
 );
 
 foreach ($includes as $inc) {

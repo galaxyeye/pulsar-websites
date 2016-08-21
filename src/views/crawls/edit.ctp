@@ -20,6 +20,8 @@
 
     echo $this->Form->input('id');
     echo $this->Form->input('name', array('label' => 'Crawl Name', 'after' => $m['name']));
+    echo $this->Form->input('crawlId', array('label' => 'crawlId', 'default' => STORAGE_CRAWL_ID_VALUE, 'after' => $m['crawlId']));
+    echo $this->Form->input('solrCollection', array('label' => 'solrCollection', 'default' => SOLR_COLLECTION, 'after' => $m['crawlId']));
     echo $this->Form->input('crawl_mode', array('label' => 'Ajax Support',
     		'options' => ['native' => 'Without Ajax Support', 'crowdsourcing' => 'With Ajax Support'],
         'after' => $m['crawl_mode']));

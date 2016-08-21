@@ -55,6 +55,10 @@ class NutchClient {
 		return $this->httpClient->get_content($this->nutchUrl."/job/");
 	}
 
+	/**
+	 * @param $jobId string
+	 * @return string
+	 */
 	public function getjobInfo($jobId) {
 		return $this->httpClient->get_content($this->nutchUrl."/job/".$jobId);
 	}

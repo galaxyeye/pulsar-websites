@@ -19,7 +19,8 @@ $jobChangeMap = array(
     "GENERATE" => "FETCH",
     "FETCH" => "PARSE",
     "PARSE" => "UPDATEDB",
-    "UPDATEDB" => "GENERATE"
+    "UPDATEDB" => "INDEX",
+    "INDEX" => "GENERATE"
 );
 
 $jobStateChangeMap = array(
@@ -28,7 +29,8 @@ $jobStateChangeMap = array(
     "GENERATE" => "FETCH",
     "FETCH" => "PARSE",
     "PARSE" => "UPDATEDB",
-    "UPDATEDB" => "GENERATE"
+    "UPDATEDB" => "INDEX",
+    "INDEX" => "GENERATE"
 );
 
 $jsEvents = array(

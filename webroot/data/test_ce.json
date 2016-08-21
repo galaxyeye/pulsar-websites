@@ -1,0 +1,60 @@
+{
+    "type": "Program",
+    "body": [
+        {
+            "type": "ExpressionStatement",
+            "expression": {
+                "type": "LogicalExpression",
+                "operator": "||",
+                "left": {
+                    "type": "BinaryExpression",
+                    "operator": "==",
+                    "left": {
+                        "type": "Identifier",
+                        "name": "sourceIp"
+                    },
+                    "right": {
+                        "type": "Literal",
+                        "value": "10.1.2.49",
+                        "raw": "\"10.1.2.49\""
+                    }
+                },
+                "right": {
+                    "type": "LogicalExpression",
+                    "operator": "&&",
+                    "left": {
+                        "type": "BinaryExpression",
+                        "operator": ">=",
+                        "left": {
+                            "type": "Identifier",
+                            "name": "priority"
+                        },
+                        "right": {
+                            "type": "Literal",
+                            "value": 1,
+                            "raw": "1"
+                        }
+                    },
+                    "right": {
+                        "type": "UnaryExpression",
+                        "operator": "!",
+                        "argument": {
+                            "type": "BinaryExpression",
+                            "operator": "!=",
+                            "left": {
+                                "type": "Identifier",
+                                "name": "device"
+                            },
+                            "right": {
+                                "type": "Literal",
+                                "value": "linksys",
+                                "raw": "\"linksys\""
+                            }
+                        },
+                        "prefix": true
+                    }
+                }
+            }
+        }
+    ]
+}

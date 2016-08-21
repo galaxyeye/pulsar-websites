@@ -40,7 +40,7 @@ class Set {
  * @access public
  * @static
  */
-	function merge($arr1, $arr2 = null) {
+	public static function merge($arr1, $arr2 = null) {
 		$args = func_get_args();
 
 		$r = (array)current($args);
@@ -67,7 +67,7 @@ class Set {
  * @access public
  * @static
  */
-	function filter($var, $isArray = false) {
+	public static function filter($var, $isArray = false) {
 		if (is_array($var) && (!empty($var) || $isArray)) {
 			return array_filter($var, array('Set', 'filter'));
 		}
@@ -87,7 +87,7 @@ class Set {
  * @access public
  * @static
  */
-	function pushDiff($array, $array2) {
+	public static function pushDiff($array, $array2) {
 		if (empty($array) && !empty($array2)) {
 			return $array2;
 		}
@@ -115,7 +115,7 @@ class Set {
  * @access public
  * @static
  */
-	function map($class = 'stdClass', $tmp = 'stdClass') {
+	public static function map($class = 'stdClass', $tmp = 'stdClass') {
 		if (is_array($class)) {
 			$val = $class;
 			$class = $tmp;
@@ -227,7 +227,7 @@ class Set {
  * @access public
  * @static
  */
-	function numeric($array = null) {
+	public static function numeric($array = null) {
 		if (empty($array)) {
 			return null;
 		}
@@ -265,7 +265,7 @@ class Set {
  * @access public
  * @static
  */
-	function enum($select, $list = null) {
+	public static function enum($select, $list = null) {
 		if (empty($list)) {
 			$list = array('no', 'yes');
 		}
@@ -289,7 +289,7 @@ class Set {
  * @access public
  * @static
  */
-	function format($data, $format, $keys) {
+	public static function format($data, $format, $keys) {
 
 		$extracted = array();
 		$count = count($keys);
@@ -370,7 +370,7 @@ class Set {
  * @access public
  * @static
  */
-	function extract($path, $data = null, $options = array()) {
+	public static function extract($path, $data = null, $options = array()) {
 		if (is_string($data)) {
 			$tmp = $data;
 			$data = $path;
@@ -520,7 +520,7 @@ class Set {
  * @access public
  * @static
  */
-	function matches($conditions, $data = array(), $i = null, $length = null) {
+	public static function matches($conditions, $data = array(), $i = null, $length = null) {
 		if (empty($conditions)) {
 			return true;
 		}
@@ -595,7 +595,7 @@ class Set {
  * @access public
  * @static
  */
-	function classicExtract($data, $path = null) {
+	public static function classicExtract($data, $path = null) {
 		if (empty($path)) {
 			return $data;
 		}
@@ -610,7 +610,7 @@ class Set {
 			if (!class_exists('String')) {
 				App::import('Core', 'String');
 			}
-			$path = String::tokenize($path, '.', '{', '}');
+			$path = Text::tokenize($path, '.', '{', '}');
 		}
 		$tmp = array();
 
@@ -684,7 +684,7 @@ class Set {
  * @access public
  * @static
  */
-	function insert($list, $path, $data = null) {
+	public static function insert($list, $path, $data = null) {
 		if (!is_array($path)) {
 			$path = explode('.', $path);
 		}
@@ -715,7 +715,7 @@ class Set {
  * @access public
  * @static
  */
-	function remove($list, $path = null) {
+	public static function remove($list, $path = null) {
 		if (empty($path)) {
 			return $list;
 		}
@@ -749,7 +749,7 @@ class Set {
  * @access public
  * @static
  */
-	function check($data, $path = null) {
+	public static function check($data, $path = null) {
 		if (empty($path)) {
 			return $data;
 		}
@@ -783,7 +783,7 @@ class Set {
  * @access public
  * @static
  */
-	function diff($val1, $val2 = null) {
+	public static function diff($val1, $val2 = null) {
 		if (empty($val1)) {
 			return (array)$val2;
 		}
@@ -811,7 +811,7 @@ class Set {
  * @access public
  * @static
  */
-	function contains($val1, $val2 = null) {
+	public static function contains($val1, $val2 = null) {
 		if (empty($val1) || empty($val2)) {
 			return false;
 		}
@@ -839,7 +839,7 @@ class Set {
  * @access public
  * @static
  */
-	function countDim($array = null, $all = false, $count = 0) {
+	public static function countDim($array = null, $all = false, $count = 0) {
 		if ($all) {
 			$depth = array($count);
 			if (is_array($array) && reset($array) !== false) {
@@ -869,7 +869,7 @@ class Set {
  * @access public
  * @static
  */
-	function normalize($list, $assoc = true, $sep = ',', $trim = true) {
+	public static function normalize($list, $assoc = true, $sep = ',', $trim = true) {
 		if (is_string($list)) {
 			$list = explode($sep, $list);
 			if ($trim) {
@@ -922,7 +922,7 @@ class Set {
  * @access public
  * @static
  */
-	function combine($data, $path1 = null, $path2 = null, $groupPath = null) {
+	public static function combine($data, $path1 = null, $path2 = null, $groupPath = null) {
 		if (empty($data)) {
 			return array();
 		}
@@ -984,7 +984,7 @@ class Set {
  * @public
  * @static
  */
-	function reverse($object) {
+	public static function reverse($object) {
 		$out = array();
 		if (is_a($object, 'XmlNode')) {
 			$out = $object->toArray();
@@ -1033,7 +1033,7 @@ class Set {
  * @access public
  * @static
  */
-	function flatten($data, $separator = '.') {
+	public static function flatten($data, $separator = '.') {
 		$result = array();
 		$path = null;
 
@@ -1091,7 +1091,7 @@ class Set {
  * @return array Sorted array of data
  * @static
  */
-	function sort($data, $path, $dir) {
+	public static function sort($data, $path, $dir) {
 		$result = Set::__flatten(Set::extract($data, $path));
 		list($keys, $values) = array(Set::extract($result, '{n}.id'), Set::extract($result, '{n}.value'));
 
@@ -1129,7 +1129,7 @@ class Set {
  * @access public
  * @static
  */
-	function apply($path, $data, $callback, $options = array()) {
+	public static function apply($path, $data, $callback, $options = array()) {
 		$defaults = array('type' => 'pass');
 		$options = array_merge($defaults, $options);
 

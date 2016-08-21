@@ -16,8 +16,21 @@ class JobScheduler extends \Object {
   const JOB_INTERVAL = 15; // 15s
   const LOCK_TTL = 600; // 10m
 
+  /**
+   * @var \NutchJob
+   */
+  private $NutchJob;
+  /**
+   * @var \AppController
+   */
   private $controller;
+  /**
+   * @var \Nutch\RemoteCmdExecutor
+   */
   private $remoteCmdExecutor;
+  /**
+   * @var \Nutch\NutchClient
+   */
   private $nutchClient;
 
   public function __construct($controller) {
@@ -74,7 +87,7 @@ class JobScheduler extends \Object {
 
   public function createSeed($crawl, $updateCrawl = true) {
     if(!$this->_validateCrawl($crawl, " line #".__LINE__)) {
-      return;
+      return null;
     }
 
     $crawl_id = $crawl['Crawl']['id'];
@@ -95,19 +108,22 @@ class JobScheduler extends \Object {
     return $seedDirectory;
   }
 
+  /**
+   * @return \NutchJob|null
+   */
   public function inject($crawl) {
     if(!$this->_validateCrawl($crawl, " line #".__LINE__)) {
-      return;
+      return null;
     }
 
     if (!empty($crawl['Crawl']['batchId'])) {
       $this->log("Failed to inect, batchId is not empty");
-      return;
+      return null;
     }
 
     if (empty($crawl['Crawl']['seedDirectory'])) {
       $this->log("Failed to inect, seed directory is empty");
-      return;
+      return null;
     }
 
     return $this->createNutchJob($crawl, JobType::INJECT);
@@ -115,12 +131,12 @@ class JobScheduler extends \Object {
 
   public function runParseChecker($crawl) {
     if(!$this->_validateCrawl($crawl, " line #".__LINE__)) {
-      return;
+      return null;
     }
 
     if (empty($crawl['Crawl']['test_url'])) {
       $this->log("Failed to run parse checker, invalid test url");
-      return;
+      return null;
     }
 
     $jobType = JobType::PARSECHECKER;
@@ -138,6 +154,7 @@ class JobScheduler extends \Object {
 
     $user_id = $crawl['Crawl']['user_id'];
     $crawl_id = $crawl['Crawl']['id'];
+    $crawlId = $crawl['Crawl']['crawlId'];
     $configId = $crawl['Crawl']['configId'];
 
     // Submit the Job
@@ -154,6 +171,7 @@ class JobScheduler extends \Object {
     // Record the submission result
     $data = [
         'round' => $round,
+        'crawlId' => $crawlId,
         'confId' => $configId,
         'batchId' => $batchId,
         'jobId' => $jobId,
@@ -190,7 +208,8 @@ class JobScheduler extends \Object {
    *    "GENERATE" => "FETCH",
    *    "FETCH" => "PARSE",
    *    "PARSE" => "UPDATEDB",
-   *    "UPDATEDB" => "GENERATE"
+   *    "UPDATEDB" => "INDEX",
+   *    "INDEX" => "GENERATE"
    *  );
    * 
    * */
@@ -208,7 +227,7 @@ class JobScheduler extends \Object {
 
     $this->NutchJob->contain(['Crawl' => 'CrawlFilter']);
     $nutchJobs = $this->NutchJob->find('all', [
-        'fields' => ['id', 'round', 'jobId', 'batchId', 'state', 'type', 'crawl_id', 'user_id'],
+        'fields' => ['id', 'round', 'jobId', 'crawlId', 'batchId', 'state', 'type', 'count', 'crawl_id', 'user_id'],
         'conditions' => [
             "NutchJob.state NOT IN('STOPPED', 'COMPLETED', 'FAILED_COMPLETED')",
         ],
@@ -234,8 +253,8 @@ class JobScheduler extends \Object {
         $this->_doScheduleJob($nutchJob);
       }
 
-      $sucess = $this->_try_unlock($fp, $lockId);
-      if ($sucess) {
+      $success = $this->_try_unlock($fp, $lockId);
+      if ($success) {
         $this->_remove_lock_file($lockId);
       }
     } // foreach
@@ -372,7 +391,7 @@ class JobScheduler extends \Object {
 
       // The next round
       // Generate batchId for the next job
-      if ($nextJobType == \Nutch\JobType::GENERATE) {
+      if ($nextJobType == JobType::GENERATE) {
         $round += 1;
         $batchId = '-'.$round.'-'.$user_id.'-'.$crawl_id.'-'.date('Ymd-His');
       }
@@ -413,7 +432,7 @@ class JobScheduler extends \Object {
     $sql = "UPDATE `nutch_jobs` SET `state`='COMPLETED'"
         ." WHERE `crawl_id`=$crawl_id"
         ." AND `id` <= $job_id"
-         ." AND `type` IN ('INJECT', 'GENERATE', 'FETCH', 'PARSE', 'UPDATEDB')"
+         ." AND `type` IN ('INJECT', 'GENERATE', 'FETCH', 'PARSE', 'UPDATEDB', 'INDEX')"
         ." AND `state` IN ('NOT_FOUND', 'FINISHED', 'RUNNING');";
     $db->execute($sql);
 
@@ -439,7 +458,7 @@ class JobScheduler extends \Object {
     $sql = "UPDATE `nutch_jobs` SET `state`='COMPLETED'"
         ." WHERE `crawl_id`=$crawl_id"
         ." AND `id` <= $job_id"
-        ." AND `type` NOT IN ('INJECT', 'GENERATE', 'FETCH', 'PARSE', 'UPDATEDB')"
+        ." AND `type` NOT IN ('INJECT', 'GENERATE', 'FETCH', 'PARSE', 'UPDATEDB', 'INDEX')"
         ." AND (`state`='NOT_FOUND' OR `state`='FINISHED');";
     // $this->log($sql, 'info');
     $db->execute($sql);
@@ -458,7 +477,7 @@ class JobScheduler extends \Object {
     $sql = "UPDATE `nutch_jobs` SET `state`='COMPLETED'"
     		." WHERE `crawl_id`=$crawl_id"
     		." AND `id` <= $job_id"
-    		." AND `type` IN ('INJECT', 'GENERATE', 'FETCH', 'PARSE', 'UPDATEDB')"
+    		." AND `type` IN ('INJECT', 'GENERATE', 'FETCH', 'PARSE', 'UPDATEDB', 'INDEX')"
         ." AND `state` NOT IN ('COMPLETED', 'FAILED_COMPLETED');";
     $db->execute($sql);
 
@@ -467,10 +486,13 @@ class JobScheduler extends \Object {
 
   /**
    * update job state
+   * @param $nutchJob \NutchJob
+   * @param $force bool
+   * @return array status
    * */
   private function _updateJobInfo($nutchJob, $force = false) {
     if (!$this->_validateNutchJob($nutchJob, " line #".__LINE__)) {
-      return;
+      return ['rawMsg' => "Invalid nutch job", 'job' => null];
     }
 
     $job_id = $nutchJob['NutchJob']['id'];
@@ -478,7 +500,7 @@ class JobScheduler extends \Object {
     $jobId = $nutchJob['NutchJob']['jobId'];
     $state = $nutchJob['NutchJob']['state'];
     $round = $nutchJob['NutchJob']['round'];
-    $fetched_pages = $nutchJob['NutchJob']['fetched_pages'];
+    $count = $nutchJob['NutchJob']['count'];
 
     // $this->log('-----------update job info------------', 'debug');
 
@@ -489,7 +511,7 @@ class JobScheduler extends \Object {
           JobState::NOT_FOUND
       ];
       if (in_array($state, $ignoreStatus)) {
-        return;
+        return ['rawMsg' => "Ignored Status $state", 'job' => null];
       }
     }
 
@@ -503,11 +525,12 @@ class JobScheduler extends \Object {
 
     $jobInfo = qi_json_decode($rawMsg, true, 10, JSON_BIGINT_AS_STRING);
     $affectedRows = $jobInfo['affectedRows'];
-    if ($affectedRows < $fetched_pages) {
+    if ($affectedRows < $count) {
       // the message if from another task in the same job
       // and this is also not accurate enough
-      $affectedRows += $fetched_pages;
+      $affectedRows += $count;
     }
+
     $data = [
         'id' => $job_id,
         'state' => $jobInfo['state'],
@@ -649,6 +672,11 @@ class JobScheduler extends \Object {
     $this->NutchJob = &$this->controller->NutchJob;
   }
 
+  /**
+   * @param $nutchJob array
+   * @param $msg string
+   * @return bool
+   */
   private function _validateNutchJob($nutchJob, $msg = "") {
     $valid = true;
 

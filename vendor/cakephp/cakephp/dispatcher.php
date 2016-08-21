@@ -110,9 +110,6 @@ class Dispatcher extends Object {
 		}
 		$this->here = $this->base . '/' . $url;
 
-// var_dump($url);
-// die();
-
 		if ($this->asset($url) || $this->cached($url)) {
 			$this->_stop();
 		}
@@ -120,12 +117,14 @@ class Dispatcher extends Object {
 
 		if (!is_object($controller)) {
 			Router::setRequestInfo(array($this->params, array('base' => $this->base, 'webroot' => $this->webroot)));
-			return $this->cakeError('missingController', array(array(
+			$error = $this->cakeError('missingController', array(array(
 				'className' => Inflector::camelize($this->params['controller']) . 'Controller',
 				'webroot' => $this->webroot,
 				'url' => $url,
 				'base' => $this->base
 			)));
+
+			return $error;
 		}
 		$privateAction = $this->params['action'][0] === '_';
 		$prefixes = Router::prefixes();

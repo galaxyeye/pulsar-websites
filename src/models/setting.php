@@ -25,4 +25,3 @@ class Setting extends AppModel {
 		),
 	);
 }
-?>

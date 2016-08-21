@@ -30,8 +30,8 @@ if (!class_exists('Object')) {
 if (!class_exists('CakeLog')) {
 	require_once LIBS . 'cake_log.php';
 }
-if (!class_exists('String')) {
-	require_once LIBS . 'string.php';
+if (!class_exists('Text')) {
+	require_once LIBS . 'text.php';
 }
 
 /**
@@ -313,7 +313,7 @@ class Debugger extends Object {
 		if (Configure::read('log')) {
 			$tpl = $_this->_templates['log']['error'];
 			$options = array('before' => '{:', 'after' => '}');
-			CakeLog::write($level, String::insert($tpl, $data, $options));
+			CakeLog::write($level, Text::insert($tpl, $data, $options));
 		}
 
 		if ($error == 'Fatal Error') {
@@ -400,7 +400,7 @@ class Debugger extends Object {
 				$trace['path'] = Debugger::trimPath($trace['file']);
 				$trace['reference'] = $reference;
 				unset($trace['object'], $trace['args']);
-				$back[] = String::insert($tpl, $trace, array('before' => '{:', 'after' => '}'));
+				$back[] = Text::insert($tpl, $trace, array('before' => '{:', 'after' => '}'));
 			}
 		}
 
@@ -662,7 +662,7 @@ class Debugger extends Object {
 				if (isset($detect[$key]) && empty($insert[$detect[$key]])) {
 					continue;
 				}
-				$links[$key] = String::insert($val, $insert, $insertOpts);
+				$links[$key] = Text::insert($val, $insert, $insertOpts);
 			}
 		}
 
@@ -673,12 +673,12 @@ class Debugger extends Object {
 			if (is_array($$key)) {
 				$$key = join("\n", $$key);
 			}
-			$info .= String::insert($tpl[$key], compact($key) + $insert, $insertOpts);
+			$info .= Text::insert($tpl[$key], compact($key) + $insert, $insertOpts);
 		}
 		$links = join(' | ', $links);
 		unset($data['context']);
 
-		echo String::insert($tpl['error'], compact('links', 'info') + $data, $insertOpts);
+		echo Text::insert($tpl['error'], compact('links', 'info') + $data, $insertOpts);
 	}
 
 /**
@@ -687,7 +687,7 @@ class Debugger extends Object {
  * @access public
  * @static
  */
-	function checkSecurityKeys() {
+	public static function checkSecurityKeys() {
 		if (Configure::read('Security.salt') == 'DYhG93b0qyJfIxfs2guVoUubWwvniR2G0FgaC9mi') {
 			trigger_error(__('Please change the value of \'Security.salt\' in src/config/core.php to a salt value specific to your application', true), E_USER_NOTICE);
 		}

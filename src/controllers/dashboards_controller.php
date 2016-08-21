@@ -4,6 +4,9 @@ class DashboardsController extends AppController
 {
 	var $name = 'Dashboards';
 
+	public function u_index() {
+	}
+
 	public function index()
 	{
 		$this->loadModel("Crawl");
