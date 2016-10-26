@@ -4,10 +4,10 @@
  * Program switches
  * */
 define('DEBUG_REMOTE_SERVER', false);
-define('DEBUG_HTTP_CLIENT', false);
+define('DEBUG_HTTP_CLIENT', true);
 
 // Enable nutch job auto scheduler
-define('ENABLE_NUTCH_JOB_AUTO_SCHEDULER', false);
+define('ENABLE_NUTCH_JOB_AUTO_SCHEDULER', true);
 
 // Load web pages from HDFS or from local disk, it's used for debug
 define('STORAGE_WEB_PAGES_MODE', '');

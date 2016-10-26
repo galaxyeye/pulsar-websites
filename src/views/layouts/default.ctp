@@ -9,10 +9,11 @@
 
     <script type="text/javascript">
         var globalPageData = {
-            "webroot": "<?php echo $this->Html->webroot?>",
-            "controller": "<?php echo $this->params['controller']?>",
-            "action": "<?php echo $this->params['action']?>",
-            "here": "<?php echo $this->here ?>"
+            "webroot": "<?=$this->Html->webroot?>",
+            // "prefix": "<?=$this->params['prefix']?>",
+            "controller": "<?=$this->params['controller']?>",
+            "action": "<?=$this->params['action']?>",
+            "here": "<?=$this->here ?>"
         };
     </script>
 </head>

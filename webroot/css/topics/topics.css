@@ -1,0 +1,66 @@
+#container hr {
+    margin: 0;
+}
+
+.head .sub-nav {
+    line-height:28px;
+    margin-left: 5em;
+    margin-top: 14px;
+}
+
+.data-counter {
+    line-height:30px;
+}
+
+.filter div {
+    min-height: 30px;
+    line-height:30px;
+}
+
+.datetime input {
+    display: inline;
+    width: 8em;
+    line-height: 18px;
+}
+
+.datetime input#dateFrom {
+    margin-left: 2em;
+}
+
+input#FilterSourceSite {
+    color: #CCC;
+}
+
+input#FilterAuthor {
+    color: #CCC;
+}
+
+.doc-list {
+    background-color: #f5f5f5;
+}
+
+.doc-list table th {
+    background-color: #E5F0FF;
+}
+
+.doc-list-actions {
+    padding: 15px 0;
+}
+
+div.show-mode {
+    line-height:30px;
+}
+
+span.result-counter {
+    margin-left: 15px;
+}
+
+.actions .ui-widget li {
+    margin: 2px;
+    position: relative;
+    padding: 4px 0;
+    cursor: pointer;
+    float: left;
+    list-style: none;
+    border:none;
+}

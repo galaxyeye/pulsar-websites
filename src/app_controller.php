@@ -43,7 +43,7 @@ class AppController extends Controller {
     // Session accross all domain
     ini_set('session.cookie_domain', env('HTTP_BASE'));
 
-    // $this->Auth->allow('*');
+    $this->Auth->allow('*');
 
     // Current user
     if ($this->Session->check('Auth.User')) {
@@ -133,7 +133,7 @@ TAG
     if ($type == 'json') {
       echo $this->jsonify($id);
     }
-    else if ($type == 'xml'){
+    else if ($type == 'xml') {
       // TODO
       echo 'not implemented';
     }
@@ -148,7 +148,7 @@ TAG
     $this->autoRender = false;
   }
 
-  public function isAdmin(){
+  public function isAdmin() {
     return isset($this->params['prefix']) && ($this->params['prefix'] === 'admin');
   }
 

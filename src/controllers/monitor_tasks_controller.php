@@ -49,7 +49,7 @@ class MonitorTasksController extends AppController {
 		}
 
 		$expression = $monitorTask['MonitorTask']['expression'];
-		$queryResult = $this->query($expression, ($page - 1) * $limit, $limit, $provider);
+		$queryResult = $this->query($expression, "", ($page - 1) * $limit, $limit, $provider);
 
 		$header = $queryResult['header']['warpspeed'];
 		$docs = $queryResult['docs'];
@@ -99,7 +99,7 @@ class MonitorTasksController extends AppController {
 		}
 
 		$expression = $monitorTask['MonitorTask']['expression'];
-		$queryResult = $this->query($expression, ($page - 1) * $limit, $limit, $provider);
+		$queryResult = $this->query($expression, "", ($page - 1) * $limit, $limit, $provider);
 
 		$header = $queryResult['header']['warpspeed'];
 		$docs = $queryResult['docs'];
@@ -176,7 +176,7 @@ class MonitorTasksController extends AppController {
 	    }
 	}
 	
-	private function query($expression, $start = 0, $rows = 30, $provider = null) {
+	private function query($expression, $highlightWords = "", $start = 0, $rows = 30, $provider = null) {
 		$searchResults = [];
 		$startTime = time();
 
@@ -191,14 +191,14 @@ class MonitorTasksController extends AppController {
 			}
 			else if ($provider == "warpspeed") {
 				$solrClient = new \Solr\SolrClient($this->solrUrlBase, $this->solrCollection);
-				$searchResults = $solrClient->browse($expression, $start, $rows);
+				$searchResults = $solrClient->browse($expression, $highlightWords, $start, $rows);
 				$searchResults = $searchResults['results'];
 				
 				$header[$provider] = $searchResults['header'];
 			}
 			else {
 				$solrClient = new \Solr\SolrClient($this->solrUrlBase, $this->solrCollection);
-				$r = $solrClient->browse($expression, $start, $rows);
+				$r = $solrClient->browse($expression, $highlightWords, $start, $rows);
 				$header["warpspeed"] = $r['header'];
 				$r = $r['results'];
 
@@ -214,6 +214,6 @@ class MonitorTasksController extends AppController {
 
 		$docs = $searchResults;
 
-		return ['header' => $header, 'docs' => $docs, 'expression' => $expression];
+		return ['header' => $header, 'docs' => $docs, 'expression' => $expression, 'highlightWords' => $highlightWords];
 	}
 }

@@ -12,13 +12,6 @@ var optionTrends = {
     tooltip: {
         trigger: 'axis'
     },
-    toolbox: {
-        show: true,
-        feature: {
-            magicType: {show: true, type: ['stack', 'tiled']},
-            saveAsImage: {show: true}
-        }
-    },
     xAxis: {
         type: 'category',
         boundaryGap: false,
@@ -49,13 +42,6 @@ var optionAlert = {
     },
     legend: {
         data: ['按时间', '按等级']
-    },
-    toolbox: {
-        show: true,
-        feature: {
-            magicType: {show: true, type: ['stack', 'tiled']},
-            saveAsImage: {show: true}
-        }
     },
     xAxis: {
         type: 'category',

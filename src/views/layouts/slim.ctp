@@ -9,10 +9,11 @@
 
     <script type="text/javascript">
         var globalPageData = {
-            "webroot": "<?php echo $this->Html->webroot?>",
-            "controller": "<?php echo $this->params['controller']?>",
-            "action": "<?php echo $this->params['action']?>",
-            "here": "<?php echo $this->here ?>"
+            "webroot": "<?=$this->Html->webroot?>",
+            // "prefix": "<?=$this->params['prefix']?>",
+            "controller": "<?=$this->params['controller']?>",
+            "action": "<?=$this->params['action']?>",
+            "here": "<?=$this->here ?>"
         };
     </script>
 </head>
@@ -23,21 +24,15 @@
 
     <div id="nav">
         <h1 class="logo">
-            <a href="<?php echo Router::url('/') ?>" title="Nutch UI">Nutch UI</a>
+            <a href="<?php echo Router::url('/q') ?>" title="Search">Search</a>
         </h1>
         <div class="user"><?php echo $currentUser['name'] ?></div>
         <ul id="menu" class="clearfix">
-            <li class="item">
-                <a href="<?php echo Router::url('/') ?>">Dashboard</a>
+            <li class="item2">
+                <a href="<?php echo Router::url('/q') ?>">新闻和小说</a>
             </li>
             <li class="item2">
-                <a href="<?php echo Router::url('/s') ?>">Search</a>
-            </li>
-            <li class="item2">
-                <a href="<?php echo Router::url('/monitor_tasks') ?>">Monitor Tasks</a>
-            </li>
-            <li class="lgo">
-                <a href="<?php echo Router::url('/users/logout') ?>">Logout</a>
+                <a href="<?php echo Router::url('/ec') ?>">电商</a>
             </li>
         </ul>
     </div><!-- nav -->

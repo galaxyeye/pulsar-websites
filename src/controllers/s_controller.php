@@ -1,10 +1,7 @@
 <?php
 
 App::import('Vendor', 'qp');
-App::import('Lib', ['solr/solr_client', 'meta_search/meta_searcher']);
-
-use MetaSearch\MetaSearcher;
-use Solr\SolrClient;
+App::import('Lib', 'indexer_query');
 
 // const CHINESE_SPLIT_PATTERN = "[:alnum:]+|\\s+|[，；。：！？]";
 
@@ -25,7 +22,7 @@ class SController extends AppController
     public function index()
     {
     	// Cache::clear();
-        
+
     	/**
     	 * Query words
     	 * */
@@ -52,15 +49,16 @@ class SController extends AppController
 
     	$provider = "mashup";
     	if (isset($this->params['url']['prd'])) {
-    	    $src = $this->params['url']['prd'];
+    	    $provider = $this->params['url']['prd'];
     	}
 
     	/**
     	 * Solr collection
     	 * */
-    	if (isset($this->params['url']['solrCollection'])) {
-    	    $this->solrCollection = $this->params['url']['solrCollection'];
+    	if (isset($this->params['url']['sc'])) {
+    	    $this->solrCollection = $this->params['url']['sc'];
     	}
+    	$sc = $this->solrCollection;
 
     	$page = 1;
     	if (isset($this->params['named']['page'])) {
@@ -71,7 +69,8 @@ class SController extends AppController
     	    $limit = $this->params['named']['limit'];
     	}
 
-    	$queryResult = $this->query($w, ($page - 1) * $limit, $limit, $provider);
+    	$queryer = new IndexQuery($this->solrUrlBase, $this->solrCollection);
+    	$queryResult = $queryer->query($w, "", ($page - 1) * $limit, $limit, $provider);
 
         /**
          * All status :
@@ -82,7 +81,7 @@ class SController extends AppController
         if ($fmt == "json") {
             $header = [
                     'status' => 'success',
-                    'qtime' => $end - $start
+                    'qtime' => 0
             ];
 
     		$this->autoRender = false;
@@ -94,7 +93,7 @@ class SController extends AppController
             $providers = $this->providers;
 
             $this->paginate($page, $limit, $header['count'], $header['numFound'], ['limit' => $limit]);
-        	$this->set(compact('header', 'docs', 'w', 'providers'));
+        	$this->set(compact('header', 'docs', 'w', 'sc', 'providers'));
         }
     }
 
@@ -120,50 +119,4 @@ class SController extends AppController
             $this->helpers[] = 'Paginator';
         }
     }
-
-    private function query($expression, $start = 0, $rows = 30, $provider = null) {
-        $searchResults = [];
-        $startTime = time();
-
-        $header = [
-                'baidu' => ['numFound' => 0, 'count' => 0], 
-                'warpspeed' => ['numFound' => 0, 'count' => 0]
-        ];
-
-        if (!empty($expression)) {
-            if ($provider == "baidu") {
-                $metaSearcher = new \MetaSearch\MetaSearcher();
-                $searchResults = $metaSearcher->searchBaidu($expression, $start, $rows);
-
-                $header["baidu"] = $searchResults['header'];
-                $searchResults = $searchResults['results'];
-            }
-            else if ($provider == "warpspeed") {
-                $solrClient = new \Solr\SolrClient($this->solrUrlBase, $this->solrCollection);
-                $searchResults = $solrClient->browse($expression, $start, $rows);
-
-                $header["warpspeed"] = $searchResults['header'];
-                $searchResults = $searchResults['results'];
-            }
-            else {
-                $solrClient = new \Solr\SolrClient($this->solrUrlBase, $this->solrCollection);
-                $r = $solrClient->browse($expression, $start, $rows);
-                $header["warpspeed"] = $r['header'];
-                $r = $r['results'];
-
-                $metaSearcher = new \MetaSearch\MetaSearcher();
-                $r2 = $metaSearcher->searchBaidu($expression, $start, $rows);
-                $header["baidu"] = $r2['header'];
-                $r2 = $r2['results'];
-
-                $searchResults = array_merge($r, $r2);
-            }
-        }
-        $endTime = time();
-
-        $docs = $searchResults;
-
-        return ['header' => $header, 'docs' => $docs, 'expression' => $expression];
-    }
 }
-

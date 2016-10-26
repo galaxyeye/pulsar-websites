@@ -5,12 +5,12 @@ App::import('Lib', 'indexer_query');
 
 // const CHINESE_SPLIT_PATTERN = "[:alnum:]+|\s+|[，；。：！？]";
 
-class QController extends AppController
+class EcController extends AppController
 {
-    var $name = 'Q';
+    var $name = 'Ec';
     var $uses = array();
     var $solrUrlBase = "http://master:8983/solr";
-    var $solrCollection = "novel_native_0808";
+    var $solrCollection = "ec_0901";
     var $providers = ['warpspeed', 'baidu'];
 
     /**
@@ -117,28 +117,25 @@ class QController extends AppController
     	    'docs' => []
     	];
     	$queryResult = $this->query($w, ($page - 1) * $limit, $limit, $debugQuery, $provider);
-
+		
         /**
          * All status :
          * success
          * */
-        $docs = $queryResult['docs'];
+        $docs = $queryResult['results'];
 
         if ($fmt == "json") {
     		$this->autoRender = false;
-			pr(json_encode($docs, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
+        	pr(json_encode($docs, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
         }
 		else if ($fmt == "php") {
 			$this->autoRender = false;
 			pr($docs);
 		}
         else {
-            $header = $queryResult['header']['warpspeed'];
-            $expression = $queryResult['expression'];
+            $header = $queryResult['header'];
             $providers = $this->providers;
 
-//             $url = array_merge($this->params['pass'], $this->params['named']);
-//             unset($url['page']);
             $options = [];
             $parts = explode('?', $_SERVER['REQUEST_URI'], 2);
             if (count($parts) == 2) {
@@ -180,8 +177,11 @@ class QController extends AppController
 //         $sentences = str_replace([",", "，", "\s+"], ["\"+\"", "\"+\"", "\"+\""], $sentences);
 		$searchResults = Cache::read($sentences, "minute");
 		if (true || $searchResults) {
-		    $queryer = new IndexQuery($this->solrUrlBase, $this->solrCollection);
-		    $searchResults = $queryer->query($sentences, "", $start, $rows, $debugQuery, $provider);
+//		    $queryer = new IndexQuery($this->solrUrlBase, $this->solrCollection);
+//		    $searchResults = $queryer->query($sentences, $start, $rows, $debugQuery, $provider);
+
+			$solrClient = new \Solr\SolrClient($this->solrUrlBase, $this->solrCollection);
+			$searchResults = $solrClient->queryProduct($expression, $start, $rows, $debugQuery);
 
 			Cache::write($sentences, $searchResults, "minute");
 		}

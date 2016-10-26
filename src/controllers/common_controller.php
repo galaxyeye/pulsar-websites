@@ -40,6 +40,8 @@ class CommonController extends AppController {
     }
 
     public function ajax_checkUrlAvailable() {
+        $this->autoRender = false;
+
         App::import('Lib', array('http_client'));
         $client = new HttpClient();
 
@@ -47,8 +49,50 @@ class CommonController extends AppController {
         $exists = $client->url_exists($url);
 
         echo json_encode(['status' => 'success', 'value' => $exists]);
+    }
 
+    public function symmetricEncode() {
         $this->autoRender = false;
+        if (isset($this->params['url']['text'])) {
+            $text = $this->params['url']['text'];
+        }
+        else {
+            $text = $this->params['form']['text'];
+        }
+        echo symmetric_encode($text);
+    }
+
+    public function symmetricDecode() {
+        $this->autoRender = false;
+        if (isset($this->params['url']['text'])) {
+            $text = $this->params['url']['text'];
+        }
+        else {
+            $text = $this->params['form']['text'];
+        }
+        echo symmetric_decode($text);
+    }
+
+    public function base64Encode() {
+        $this->autoRender = false;
+        if (isset($this->params['url']['text'])) {
+            $text = $this->params['url']['text'];
+        }
+        else {
+            $text = $this->params['form']['text'];
+        }
+        echo base64_encode($text);
+    }
+
+    public function base64Decode() {
+        $this->autoRender = false;
+        if (isset($this->params['url']['text'])) {
+            $text = $this->params['url']['text'];
+        }
+        else {
+            $text = $this->params['form']['text'];
+        }
+        echo base64_decode($text);
     }
 
     public function graph($name = null) {

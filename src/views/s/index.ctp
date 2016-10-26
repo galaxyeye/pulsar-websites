@@ -13,6 +13,15 @@
         text-align: right;
         margin: 0;
     }
+    
+    .search div.input.radio {
+        text-align: left;
+    }
+
+    .search div.input.radio input {
+        margin: 0;
+        padding: 0;
+    }
 
     .search div.input input[type=text] {
         height: 40px;
@@ -25,10 +34,15 @@
     }
 </style>
 
+<?php 
+$solrCollections = ['information_native_0724' => '媒体', 'novel_native_0808' => '小说'];
+?>
+
 <form method="get" action="s">
     <div class="search cl">
         <div class="input z">
         	<input type="text" name="w" value="<?=$w?>">
+        	<?= $this->Form->input('sc', ['name' => 'sc', 'options' => $solrCollections, 'default' => $sc, 'type' => 'radio']) ?>
         	<input type="hidden" name="fmt" value="html">
         </div>
         <div class="submit z"><input value="搜索" type="submit"></div>

@@ -1,7 +1,8 @@
 <?php 
 	echo $html->css($css);
 
-	$base_dir = WEBROOT_DIR . "js" . DS . $this->params["controller"];
+	$base_dir = WEBROOT_DIR . "css" . DS . $this->params["controller"];
+
 	// model specified css
 	if (is_file($base_dir . DS . $this->params["controller"] . ".css")) {
 		echo $html->css($this->params["controller"]."/".$this->params["controller"]);
