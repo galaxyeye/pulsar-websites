@@ -1,7 +1,18 @@
 <?php
 
-global $allExtractors, $jobChangeMap, $crawlStatusChangeMap, $jobType2Status, $jsEvents,
+global $allResourceCategories, $defaultTopic, $allExtractors, $jobChangeMap, $crawlStatusChangeMap, $jobType2Status, $jsEvents,
        $seedTemplate, $urlFilterTemplate, $textFilterTemplate, $blockFilterTemplate, $regexSampleExample, $httpCodes;
+
+$allResourceCategories = ['微博','博客','资讯','论坛','贴吧'];
+
+$defaultTopic = [
+    'Topic' => [
+        'id' => 0,
+        'category' => '所有主题',
+        'name' => '所有主题',
+        'expression' => ''
+    ]
+];
 
 $allExtractors = array(
     'TextExtractor' => 'TextExtractor',

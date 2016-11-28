@@ -7,6 +7,12 @@
     <?php echo $this->element('css', array('css' => array('foundation.min', 'wufoo', 'info-monitor'))); ?>
     <?php echo $this->element('css', array('css' => array('jquery/jquery-ui-1.11.4'))); ?>
 
+    <style type="text/css">
+        .debug.message, .debug.field {
+            display: <?=(Configure::read('debug') > 0) ? 'block' : 'none' ?>;
+        }
+    </style>
+
     <script type="text/javascript">
         var globalPageData = {
             "webroot": "<?=$this->Html->webroot?>",

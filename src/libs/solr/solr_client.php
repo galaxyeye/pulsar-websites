@@ -52,7 +52,9 @@ class SolrClient
     public function queryProduct($expression, $start = 0, $rows = 20, $debugQuery = 'off')
     {
         $url = $this->solrUrlBase . '/' . $this->solrCollection . '/';
-        $url .= "select?hl=on&indent=on&start=$start&rows=$rows&wt=json";
+
+        $sort = urlencode('last_modified desc');
+        $url .= "select?hl=on&indent=on&start=$start&rows=$rows&wt=json&sort=$sort&TZ=Asia/Shanghai";
         if ($debugQuery == 'on') {
             $url .= "&debugQuery=$debugQuery";
         }
@@ -128,53 +130,13 @@ class SolrClient
         $urlBase = $this->solrUrlBase . '/' . $this->solrCollection . '/';
 
         $defaultSolrParams = [
-//            'fl' => "id,url,title,article_title,html_content,domain,host,site_name,encoding,resource_category,author,director,last_crawl_time,publish_time",
-//            'start' => 0,
-//            'rows' => 20,
-//            // There is a bug while extracting publish_time
-//            'sort' => urlencode('publish_time desc,last_crawl_time desc'),
-//            // 'sort' => urlencode('last_crawl_time desc'),
-//            'hl' => 'on',
-//            'indent' => 'on',
-//            'wt' => 'json',
-//            'debugQuery' => null
-        ];
-
-        if ($solrParams != null) {
-            $solrParams = array_merge($defaultSolrParams, $solrParams);
-        }
-        else {
-            $solrParams = $defaultSolrParams;
-        }
-
-        $queryParams = "";
-        foreach ($solrParams as $k => $v) {
-            if (!empty($v)) {
-                $queryParams .= "$k=$v&";
-            }
-        }
-
-        $queryUrl = $urlBase."query?$queryParams";
-
-        $json = $this->httpClient->get_content($queryUrl);
-        $response = json_decode($json, true);
-
-        return $response;
-    }
-
-    public function querySolrByParameters($solrParams = null, $highlightWords = "", $queryHandler = "browse") {
-        $urlBase = $this->solrUrlBase . '/' . $this->solrCollection . '/';
-
-        $defaultSolrParams = [
-            'fl' => "id,url,title,article_title,html_content,domain,host,site_name,encoding,resource_category,author,director,last_crawl_time,publish_time",
-            'start' => 0,
-            'rows' => 20,
+            'fl' => "id",
             // There is a bug while extracting publish_time
             'sort' => urlencode('publish_time desc,last_crawl_time desc'),
-            // 'sort' => urlencode('last_crawl_time desc'),
             'hl' => 'on',
             'indent' => 'on',
             'wt' => 'json',
+            'TZ' => CURRENT_TIME_ZONE,
             'debugQuery' => null
         ];
 
@@ -188,7 +150,45 @@ class SolrClient
         $queryParams = "";
         foreach ($solrParams as $k => $v) {
             if (!empty($v)) {
-                // $v = urlencode($v);
+                $queryParams .= "$k=$v&";
+            }
+        }
+        $queryUrl = $urlBase."query?$queryParams";
+
+        $response = $this->httpClient->get_content($queryUrl);
+        $result = json_decode($response, true);
+        $result['header'] = ['request' => [
+            'url' => urldecode($queryUrl)
+        ]];
+
+        return $result;
+    }
+
+    public function querySolrByParameters($solrParams = null, $highlightWords = "", $queryHandler = "browse") {
+        $urlBase = $this->solrUrlBase . '/' . $this->solrCollection . '/';
+
+        $defaultSolrParams = [
+            'fl' => "id,url,title,article_title,html_content,domain,host,site_name,reference,encoding,resource_category,author,director,last_crawl_time,publish_time",
+            'start' => 0,
+            'rows' => 40,
+            'sort' => urlencode('publish_time desc,last_crawl_time desc'),
+            'hl' => 'on',
+            'indent' => 'on',
+            'wt' => 'json',
+            'TZ' => CURRENT_TIME_ZONE,
+            'debugQuery' => null
+        ];
+
+        if ($solrParams != null) {
+            $solrParams = array_merge($defaultSolrParams, $solrParams);
+        }
+        else {
+            $solrParams = $defaultSolrParams;
+        }
+
+        $queryParams = "";
+        foreach ($solrParams as $k => $v) {
+            if (!empty($v)) {
                 $queryParams .= "$k=$v&";
             }
         }
@@ -197,13 +197,7 @@ class SolrClient
 
         $json = $this->httpClient->get_content($queryUrl);
         $response = json_decode($json, true);
-
-        if ($resultMode = "data") {
-            $response = $this->convertResult($queryUrl, $response, $highlightWords);
-        }
-        else if ($resultMode = "stat") {
-            pr($response);
-        }
+        $response = $this->convertResult($queryUrl, $response, $highlightWords);
 
         return $response;
     }
@@ -293,11 +287,17 @@ class SolrClient
         foreach ($response['response']['docs'] as $doc) {
             $id = $doc['id'];
 
+            $responseQ = "";
+            if (isset($response['responseHeader']['params']['q'])) {
+                $responseQ = $response['responseHeader']['params']['q'];
+            }
+
             $sentiment = "中";
             if (isset($doc['sentiment_main'])) {
                 $sentiment = $doc['sentiment_main'];
             }
 
+            /** Title/Abstract/Content */
             $content = $this->getContent($doc);
 
             $shortContent = $content;
@@ -308,53 +308,78 @@ class SolrClient
 
             $title = $this->getTitle($doc, $highlighting);
 
-            $publish_time = $doc['last_crawl_time'];
-            if (isset($doc['publish_time'])) {
-                $publish_time = $doc['publish_time'];
-            }
-
-            $sourceSite = "";
-            if (isset($doc['source_site'])) {
-                $sourceSite = $doc['source_site'];
-            }
-            else if (isset($doc['host'])) {
-                $sourceSite = $doc['host'];
-            }
-
-            $author = "";
-            if (isset($doc['author'])) {
-                $author = implode(",", $doc['author']);
-            }
-            else if (isset($doc['director'])) {
-                $author = implode(",", $doc['director']);
-            }
-            // Fix author extraction bug, and further more, we can have a name/姓氏 list
-            if (strlen($author) >= 7) {
-                $author = "";
+            $abstract = $shortContent;
+            if (isset($doc['abstract'])) {
+                $abstract = $doc['abstract'];
             }
 
             $title = $this->highlighting($highlightWords, $title);
             $content = $this->highlighting($highlightWords, $content);
             $shortContent = $this->highlighting($highlightWords, $shortContent);
+            $abstract = $this->highlighting($highlightWords, $abstract);
+
+            /** Author */
+            // Fix author extraction bug, and further more, we can have a name/姓氏 list
+            $author = "";
+            if (isset($doc['author'])) {
+                $author .= implode(",", $doc['author']);
+            }
+            if (isset($doc['director'])) {
+                $author .= implode(",", $doc['director']);
+            }
+
+            /** Date time */
+            $lastCrawlTime = new \DateTime($doc['last_crawl_time'], new \DateTimeZone('UTC'));
+            $lastCrawlTime->setTimezone(new \DateTimeZone(CURRENT_TIME_ZONE));
+            $publishTime = $lastCrawlTime;
+            $publishTimeStr = date_format($publishTime, 'Y-m-d');
+            if (isset($doc['publish_time'])) {
+                $publishTime = new \DateTime($doc['publish_time'], new \DateTimeZone('UTC'));
+                $publishTime ->setTimezone(new \DateTimeZone(CURRENT_TIME_ZONE));
+                $publishTimeStr = date_format($publishTime, 'Y-m-d H:i:s');
+            }
+
+            /** Site/Host/Domain */
+            $sourceSite = "";
+            if (isset($doc['reference'])) {
+                $sourceSite = $doc['reference'];
+            }
+            else if (isset($doc['host'])) {
+                $sourceSite = $doc['host'];
+            }
+
+            $siteName = $doc['host'];
+            if (isset($doc['site_name'])) {
+                $siteName = $doc['site_name'];
+            }
 
             $result = [
                 'provider' => 'warpspeed',
-                'sentence' => $response['responseHeader']['params']['q'],
+                'sentence' => $responseQ,
 
                 'id' => $id,
                 'solr_id' => $id,
 
-                'domain' => $doc['domain'],
-                'sentiment' => $sentiment,
                 'url' => $doc['url'],
+
+                'last_crawl_time' => $lastCrawlTime,
+                'publish_time' => $publishTime,
+                'publish_time_str' => $publishTimeStr,
+
+                'domain' => $doc['domain'],
+                'site_name' => $siteName,
+                'source_site' => $sourceSite,
+
                 'title' => $title,
                 'content' => $content,
                 'html_content' => $content,
                 'shortContent' => $shortContent,
-                'quickView' => $doc['url'],
-                'publish_time' => $publish_time,
+                'sentiment' => $sentiment,
+
+                'original_url' => $doc['url'],
                 'author' => $author,
-                'source_site' => $sourceSite
+
+                'abstract' => $abstract
             ];
 
             $results[] = $result;

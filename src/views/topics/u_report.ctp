@@ -42,16 +42,17 @@ $topicId = $topic['Topic']['id'];
             <div class="sub-nav two columns">
                 <?= $this->Html->link("数据", ['action' => 'monitor', $topicId]) ?>
                 <?= $this->Html->link("统计", ['action' => 'stat', $topicId]) ?>
-                <a style="background: darkblue; padding: 3px; color: white">报告</a>
+                <a class="selected">报告</a>
             </div>
             <div class="column"></div>
         </div>
         <div class="filter datetime cl">
             <div class="columns">
                 <span>时间：</span>
-                <?= $this->Html->link("今天", ['action' => 'monitor', $topicId, symmetric_encode("last_crawl_time:[NOW/DAY TO NOW]")]) ?> |
-                <?= $this->Html->link("昨天", ['action' => 'monitor', $topicId, symmetric_encode("last_crawl_time:[NOW-1DAY/DAY TO NOW/DAY]")]) ?> |
-                <?= $this->Html->link("最近七天", ['action' => 'monitor', $topicId, symmetric_encode("last_crawl_time:[NOW/DAY-7DAY TO NOW]")]) ?>
+                <?= $this->Html->link("今天", ['action' => 'report', $topicId, symmetric_encode("last_crawl_time:[NOW/DAY TO NOW]")]) ?> |
+                <?= $this->Html->link("昨天", ['action' => 'report', $topicId, symmetric_encode("last_crawl_time:[NOW-1DAY/DAY TO NOW/DAY]")]) ?> |
+                <?= $this->Html->link("最近七天", ['action' => 'report', $topicId, symmetric_encode("last_crawl_time:[NOW/DAY-7DAY TO NOW]")]) ?> |
+                <?= $this->Html->link("最近30天", ['action' => 'report', $topicId, symmetric_encode("last_crawl_time:[NOW/DAY-30DAY TO NOW]")]) ?>
                 <input type="text" id="dateFrom" name="dateFrom" />
                 <input type="text" id="dateTo" name="dateTo" />
             </div>

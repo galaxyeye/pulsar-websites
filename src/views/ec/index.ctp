@@ -46,25 +46,35 @@
 <?php 
     $solrCollections = ['ec_0901' => '电商（beta）'];
     $formats = ['html' => 'html格式', 'json' => 'json格式', 'php' => 'php格式'];
-    $debugQuerySwithes = ['off' => '不启用调试', 'on' => '启用调试'];
+    $debugQuerySwitches = ['off' => '不启用调试', 'on' => '启用调试'];
 ?>
 
 <form method="get" action="/ec">
-    <div class="search clearfix">
-    	<div class="text input four columns">
-    		<input type="text" name="w" value="<?=$w?>">
-	    	<input type="hidden" name="fmt" value="html">
-    	</div>
-        <div class="one columns input submit">
-        	<input value="全文搜索" type="submit">
-        </div>
+    <div class="search cl">
+        <div class="text input six columns"></div>
         <?= $this->Form->input('sc', ['name' => 'sc', 'options' => $solrCollections,
     	        'default' => $sc, 'type' => 'radio', 'div' => 'two columns input radio']) ?>
         <?= $this->Form->input('fmt', ['name' => 'fmt', 'options' => $formats,
             'default' => 'html', 'type' => 'radio', 'div' => 'two columns input radio']) ?>
-    	<?= $this->Form->input('debugQuery', ['name' => 'debugQuery', 'options' => $debugQuerySwithes,
+    	<?= $this->Form->input('debugQuery', ['name' => 'debugQuery', 'options' => $debugQuerySwitches,
     	        'default' => $debugQuery, 'type' => 'radio', 'div' => 'two columns input radio']) ?>
-        <div class="one columns input submit">&nbsp;</div>
+    </div>
+    <div class="filter cl">
+        <div class="one column">时间</div>
+        <div class="two columns"><input type="text" id="startTime" name="startTime" /></div>
+        <div class="two columns"><input type="text" id="endTime" name="endTime" /></div>
+        <div class="column"></div>
+    </div>
+
+    <div class="filter cl">
+        <div class="one column">价格</div>
+        <div class="two columns"><input type="text" name="startPrice" value="0" /></div>
+        <div class="two columns"><input type="text" name="endPrice" /></div>
+        <div class="column"></div>
+    </div>
+
+    <div class="input submit">
+        <input value="搜索" type="submit" />
     </div>
 </form>
 
@@ -79,15 +89,12 @@
 </div>
 <?php endif; ?>
 
-<div class="docs index">
+<div id="reloadableArea" class="docs index">
     <?php $i = 0; ?>
 
     <div>
     	<p>
     	<?php 
-    	// $this->Paginator->options(['url' => array_merge($this->passedArgs, ["?" => "w=$w"])]);
-    	// $this->Paginator->options(['url' => array_merge($this->passedArgs, ["?" => "w=$w"])]);
-
     	echo $this->Paginator->counter([
     	'format' => __('Page %page% of %pages%, showing %current% records out of %count% total, starting on record %start%, ending on %end%', true)
     	]);
@@ -151,6 +158,16 @@
                     &nbsp;
                 </dd>
             <?php endif; ?>
+            <dt<?php if ($i % 2 == 0) echo $class ?>>时间</dt>
+            <dd<?php if ($i++ % 2 == 0) echo $class ?>>
+                <?php
+                $lastModifiedTime = new \DateTime($doc['last_modified'], new \DateTimeZone('UTC'));
+                $lastModifiedTime->setTimezone(new \DateTimeZone(CURRENT_TIME_ZONE));
+                $lastModifiedTime = date_format($lastModifiedTime, 'Y-m-d H:i:s');
+                ?>
+                <div><?=$lastModifiedTime; ?></div>
+                &nbsp;
+            </dd>
         </dl>
 
         <?php

@@ -11,6 +11,9 @@ define('STAT_DB', 'default');
  * */
 define('TIME_START', time());
 
+define('CURRENT_TIME_ZONE', 'Asia/Shanghai');
+define('CURRENT_TIME_ZONE_OFFSET_HOURS', +8);
+
 // System directories
 define("GLOBAL_DATA_DIR", "/tmp/warps");
 define("ROOT_DATA_DIR", GLOBAL_DATA_DIR . "/satellite");

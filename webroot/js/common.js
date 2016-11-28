@@ -330,9 +330,8 @@ function registerCommonEventHandler() {
         var now = Date.now(); // unix timestamp in milliseconds
         var lastScheduleTime = getcookie(SCHEDULE_COOKIE_NAME);
         if (now - lastScheduleTime > SCHEDULE_PERIOD * 1000) {
-            setcookie(SCHEDULE_COOKIE_NAME, now, 60 * 60 * 1, "/");
-
-            $.get(getCakePHPUrl("nutch_jobs", "schedule"));
+            // setcookie(SCHEDULE_COOKIE_NAME, now, 60 * 60 * 1, "/");
+            // $.get(getCakePHPUrl("nutch_jobs", "schedule"));
         }
     }, SCHEDULE_PERIOD * 1000);
 } // registerCommonEventHandler

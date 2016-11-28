@@ -6,6 +6,12 @@
   <?php echo $this->element('css', array('css' => array('default'))); ?>
   <?php echo $this->element('css', array('css' => array('jquery/jquery-ui-1.11.3/jquery-ui'))); ?>
 
+  <style type="text/css">
+    .debug.message, .debug.field {
+      display: <?=(Configure::read('debug') > 0) ? 'block' : 'none' ?>;
+    }
+  </style>
+
   <script type="text/javascript">
     var globalPageData = {
       "webroot" : "<?php echo $this->Html->webroot?>",

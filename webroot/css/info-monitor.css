@@ -10,7 +10,7 @@ p { color: #222222; }
 pre { text-align: left; }
 ul, ul li { list-style:none }
 ol { list-style: inside none decimal; }
-em { color:#e52600; font-style:normal }
+em { font-style:normal; background-color: yellow }
 dl { line-height: 2em; margin: 0em 0em; width: 60%; }
 dl.altrow { background: #f4f4f4; }
 dt { font-weight: bold; padding-left: 4px; vertical-align: top; }
@@ -127,6 +127,20 @@ pre { background: none repeat scroll 0% 0% #FFF; box-shadow: 1px 2px 4px rgba(0,
 .small { font-size:small; }
 .smaller { font-size:smaller; }
 .noShadow { -moz-box-shadow: none !important; }
+
+.w_1em { width:1em; }
+.w_2em { width:2em; }
+.w_3em { width:3em; }
+.w_4em { width:4em; }
+.w_5em { width:5em; }
+.w_8em { width:8em; }
+.w_10em { width:10em; }
+.w_15em { width:15em; }
+.w_20em { width:20em; }
+.w_30em { width:30em; }
+.w_50em { width:50em; }
+.w_60em { width:60em; }
+.w_100em { width:100em; }
 
 /*************************
  * Code template
@@ -248,15 +262,12 @@ div.actions ul li a:hover { text-decoration: underline; }
 }
 
 #crawlsAnalysis .add-wes.form {
-  background: repeat scroll 0px 0px #F8E088;
+  background: repeat scroll 0 0 #F8E088;
 }
 
 #crawlsAnalysis .add-wes.form form, #crawlsAnalysis .add-wes.form .message {
-	background: none repeat scroll 0px 0px #E5F0FF;
+	background: none repeat scroll 0 0 #E5F0FF;
 }
-
-#topicsUMonitor .topics table td:first-child { width: 20%;}
-#topicsUMonitor .topics table td:nth-child(2) { width: 75%; }
 
 /**
  * #topicsUEdit2

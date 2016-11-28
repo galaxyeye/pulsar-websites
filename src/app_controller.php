@@ -38,7 +38,7 @@ class AppController extends Controller {
     $this->settings = $this->_loadSettings();
 
     // Timezone setting
-    date_default_timezone_set('Asia/Shanghai');
+    date_default_timezone_set(CURRENT_TIME_ZONE);
 
     // Session accross all domain
     ini_set('session.cookie_domain', env('HTTP_BASE'));

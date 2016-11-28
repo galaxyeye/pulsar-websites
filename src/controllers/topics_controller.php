@@ -12,6 +12,9 @@ class TopicsController extends AppController
     private $solrUrlBase = SOLR_URL_BASE;
     private $solrCollection = SOLR_COLLECTION;
 
+    private $defaultTimeField = "publish_time";
+    // private $defaultTimeField = "last_crawl_time";
+
     private $defaultDoc = [
         'id' => '',
         'solr_id' => '',
@@ -85,26 +88,29 @@ class TopicsController extends AppController
 
     function u_quickView($id, $encodedUrl = null)
     {
-        if (!$id) {
-            $this->Session->setFlash(__('Invalid topic', true));
-            $this->redirect(array('action' => 'index'));
+        global $defaultTopic;
+        $topic = $defaultTopic;
+        if ($id) {
+            $topic = $this->Topic->read(null, $id);
         }
-        $this->set('topic', $this->Topic->read(null, $id));
+
+        $highlightWords = $this->getHighlightWords($topic['Topic']['expression']);
 
         $docId = symmetric_decode($encodedUrl);
         $params = [
-            'q' => "id:$docId",
+            'q' => urlencode("id:$docId"),
             'rows' => 1
         ];
-        $queryResult = $this->querySolrByParameters($params);
-        $docs = $queryResult['docs'];
+        $queryResult = $this->querySolrByParameters($params, $highlightWords);
+        $solrUrl = $queryResult['header'][DEFAULT_PROVIDER]['request']['url'];
 
-        // $quickView = $docs[0]['quickView'];
-        // pr($docs);
+        if (empty($queryResult['docs'])) {
+            echo "404 Not found";
+            die();
+        }
 
-        $url = isset($docs[0]['url']) ? $docs[0]['url'] : "";
-        $quickView = isset($docs[0]['html_content']) ? $docs[0]['html_content'] : "";
-        $this->set(compact("url", "quickView"));
+        $doc = $queryResult['docs'][0];
+        $this->set(compact('topic', 'doc', 'solrUrl'));
     }
 
     function u_add()
@@ -184,52 +190,29 @@ class TopicsController extends AppController
         $this->redirect(array('action' => 'index'));
     }
 
-    public function u_monitor($id = null, $query = null)
+    public function u_monitor($id = null)
     {
+        /** Get topic list */
         $this->Topic->recursive = -1;
-        $topics = parent::paginate();
+        // $topics = parent::paginate();
+        $topics = $this->Topic->find('all');
 
         $this->set(compact('topics'));
 
-        if ($id == null) {
-            $id = $topics[0]['Topic']['id'];
-        }
-        if (!$id) {
-            $this->Session->setFlash(__('Invalid topic', true));
-            $this->redirect(array('action' => 'index'));
-        }
+        /** Common parameters */
+        $commonParams = $this->getCommonParams($id);
 
-        $params = $this->getParams($id);
-
-        $topic = $params['topic'];        // topic data model
-        $page = $params['page'];        // page number
-        $limit = $params['limit'];        // number per page
-        $start = $params['start'];        // rows count to start
-        $rows = $params['rows'];        // number per page
-        $expression = $params['expression'];
-
-        $solrParams['start'] = $start;
-        $solrParams['rows'] = $rows;
-
-        $q = null;
-        if (!empty($expression)) {
-            $q .= "$expression";
-        }
-        if (!empty($query)) {
-            $query = symmetric_decode($query);
-            $q .= " AND $query";
-        }
-
-        $solrParams['q'] = urlencode($q);
-
+        /** Query solr */
+        $expression = $commonParams['expression'];
+        $solrParams = $commonParams['solrParams'];
         $highlightWords = $this->getHighlightWords($expression);
-
         $queryResult = $this->querySolrByParameters($solrParams, $highlightWords);
 
         // $queryResult = $this->marshupQuery($expression, $highlightWords, ($page - 1) * $limit, $limit, $provider);
 
         // $queryResult = $this->dummyQueryResult;
 
+        /** Convert query result */
         $header = $queryResult['header'][DEFAULT_PROVIDER];
         $docs = $queryResult['docs'];
         foreach ($docs as &$doc) {
@@ -238,7 +221,10 @@ class TopicsController extends AppController
         $q = $queryResult['q'];
         $providers = $this->providers;
 
-        // 	public function paginate($page, $limit, $current, $count, $options)
+        /** Generate view variables */
+        $topic = $commonParams['topic'];            // topic data model
+        $page = $commonParams['page'];              // page number
+        $limit = $commonParams['limit'];            // number per page
         $this->paginate($page, $limit, $header['count'], $header['numFound'], ['limit' => $limit]);
         $this->set(compact('topic', 'header', 'docs', 'q', 'providers', 'id'));
     }
@@ -250,70 +236,93 @@ class TopicsController extends AppController
 
         $this->set(compact('topics'));
 
-        if ($id == null) {
-            $id = $topics[0]['Topic']['id'];
-        }
-        if (!$id) {
-            $this->Session->setFlash(__('Invalid topic', true));
-            $this->redirect(array('action' => 'index'));
+        global $defaultTopic;
+        $topic = $defaultTopic;
+        if ($id) {
+            $topic = $this->Topic->read(null, $id);
         }
 
-        $result = $this->u_statTrends($id);
-        $topic = $result['topic'];
-        $xdata = $result['xdata'];
-        $ydata = $result['ydata'];
-
-        $this->set(compact('topic', 'id', 'xdata', 'ydata'));
+        $this->set(compact('topic', 'id'));
     }
 
-    public function u_statTrends($id = null, $solrParamQ = null, $solrParams = null, $format = "php")
+    /**
+     * TODO : publish_time
+     * @param $id
+     * @param $format
+     * @return string|object
+     * */
+    public function u_statTrends($id = null, $format = "php")
     {
-        if ($solrParamQ == null) {
-            $solrParamQ = "last_crawl_time:[NOW/DAY-30DAYS TO NOW]";
-        }
-        else {
-            $solrParamQ = base64_decode($solrParamQ);
-        }
-
+        $fl = $this->defaultTimeField;
         $defaultSolrParams = [
-            "fl" => "last_crawl_time",
+            "fl" => $fl,
             "facet" => "true",
-            "facet.range" => "last_crawl_time",
+            "facet.range" => $fl,
             "facet.range.start" => "NOW/MONTH",
             "facet.range.end" => "NOW",
             "facet.range.gap" => "%2B1DAY",
             "group" => "true",
             "group.limit" => 1,
-            "group.func" => "rint(div(sum(ms(last_crawl_time),mul(8,3600000)),mul(24,3600000)))"
+            "group.func" => "rint(div(ms($fl),mul(24,3600000)))"
         ];
 
-        if ($solrParams != null) {
-            $solrParams = json_decode(base64_decode($solrParams));
-            $solrParams = array_merge($solrParams, $defaultSolrParams);
+        $commonParams = $this->getCommonParams($id);
+        $solrParamQ = $commonParams['solrParamQ'];
+        $solrParams = array_merge($defaultSolrParams, $commonParams['solrParams']);
+
+        /** Calculate facet.range */
+        $dateRange = $commonParams['dateRange'];
+        if (isset($dateRange['startTime'])) {
+            $solrParams['facet.range.start'] = $dateRange['startTime'];
         }
-        else {
-            $solrParams = $defaultSolrParams;
+        if (isset($dateRange['endTime'])) {
+            $solrParams['facet.range.end'] = $dateRange['endTime'];
         }
 
-        $result = $this->statCommon($id, $solrParamQ, $solrParams);
+        /** Calculate date gap unit */
+        $dateGapUnit = 'DAY';
+        $startTime = $solrParams['facet.range.start'];
+        $endTime = $solrParams['facet.range.end'];
+        if ($startTime == 'NOW/DAY' || ($startTime == 'NOW/DAY-1DAY' && $endTime == 'NOW/DAY')) {
+            $dateGapUnit = 'HOUR';
+        }
+        $solrParams['facet.range.gap'] = "%2B1$dateGapUnit";
+
+        $result = $this->statCommon($id, $solrParamQ, $solrParams, $commonParams);
+
+        $xAxis = [
+            "type" => 'category',
+            "boundaryGap" => "false",
+            "data" => []
+        ];
+
+        $series = [];
+
         $searchResults = $result['searchResults'];
         $searchResults['grouped'] = "ignored";
-        $data = $searchResults['facet_counts']['facet_ranges']['last_crawl_time']['counts'];
+        $data = $searchResults['facet_counts']['facet_ranges'][$fl]['counts'];
 
-        $xdata = [];
-        $ydata = [];
+        $serial = [
+            'name' => '统计',
+            'type' => 'line',
+            'smooth' => 'true',
+            'itemStyle' => ['normal' => ['label' => ['show' => 'true']]],
+            'data' => []
+        ];
 
         for ($i = 0; $i < count($data); $i += 2) {
-            $date = date_parse($data[$i]);
-            array_push($xdata, $date['day']);
-            array_push($ydata, $data[$i + 1]);
+            $date = date_create($data[$i], new DateTimeZone('UTC'));
+            date_timezone_set($date, new DateTimeZone(CURRENT_TIME_ZONE));
+            $date = date_parse(date_format($date, 'Y-m-d H:i:s'));
+
+            array_push($xAxis['data'], $date[strtolower($dateGapUnit)]);
+            array_push($serial['data'], $data[$i + 1]);
         }
 
-        $result['xdata'] = $xdata;
-        $result['ydata'] = $ydata;
-
-        $result['solrParamQ'] = $solrParamQ;
-        $result['solrParams'] = $solrParams;
+        array_push($series, $serial);
+        $result['xAxis'] = $xAxis;
+        $result['series'] = $series;
+        $result['header'] = $result['searchResults']['header'];
 
         if ($format == 'php') {
             return $result;
@@ -324,7 +333,207 @@ class TopicsController extends AppController
         }
     }
 
-    public function u_statMediaDistribution($id = null, $solrParamQ = null, $solrParams = null, $format = "php") {
+    public function u_statMediaDistribution($id = null, $format = "php") {
+        $fl = $this->defaultTimeField;
+        $defaultSolrParams = [
+            "fl" => $fl,
+            "group" => "true",
+            "group.limit" => 1,
+            "group.field" => "resource_category"
+        ];
+
+        $commonParams = $this->getCommonParams($id);
+        $solrParamQ = $commonParams['solrParamQ'];
+        $solrParams = array_merge($defaultSolrParams, $commonParams['solrParams']);
+
+        $result = $this->statCommon($id, $solrParamQ, $solrParams, $commonParams);
+
+        $groups = $result['searchResults']['grouped']['resource_category']['groups'];
+
+        $series = [
+            [
+                'name' => '资源类型分布',
+                'type' => 'pie',
+                'radius' => '55%',
+                'center' => ['50%', '50%'],
+                'itemStyle' => [
+                    'emphasis' => [
+                        'shadowBlur' => 10,
+                        'shadowOffsetX' => 0,
+                        'shadowColor' => 'rgba(0, 0, 0, 0.5)'
+                    ]
+                ],
+                'data' => [
+                    ['value' => 0, 'name' => '微博'],
+                    ['value' => 0, 'name' => '博客'],
+                    ['value' => 0, 'name' => '资讯'],
+                    ['value' => 0, 'name' => '论坛'],
+                    ['value' => 0, 'name' => '贴吧']
+                ]
+            ]
+        ];
+
+        foreach ($groups as $group) {
+            foreach ($series[0]['data'] as &$item) {
+                if ($item['name'] == $group['groupValue']) {
+                    $item['value'] = $group['doclist']['numFound'];
+                }
+            }
+        }
+
+        $result['series'] = $series;
+
+        if ($format == 'php') {
+            return $result;
+        }
+        else if ($format == 'json') {
+            $this->autoRender = false;
+            return json_encode($result);
+        }
+    }
+
+    public function u_statTrendsGroupByMedia($id = null, $format = "php") {
+        $fl = $this->defaultTimeField;
+        global $allResourceCategories;
+        $defaultSolrParams = [
+            "fl" => $fl,
+            "facet" => "true",
+            "facet.range" => $fl,
+            "facet.range.start" => "NOW/MONTH",
+            "facet.range.end" => "NOW",
+            "facet.range.gap" => "%2B1DAY",
+            "group" => "true",
+            "group.limit" => 1,
+            "group.func" => "rint(div(sum(ms($fl),mul(8,3600000)),mul(24,3600000)))"
+        ];
+
+        $series = [];
+
+        foreach ($allResourceCategories as $resourceCategory) {
+            $solrParamQ = "*:*";
+            $solrParams = [];
+
+            if (isset($this->params['form']['solrParamQ'])) {
+                $solrParamQ = $this->params['form']['solrParamQ'];
+            }
+            if (isset($this->params['form']['solrParams'])) {
+                $solrParams = $this->params['form']['solrParams'];
+            }
+
+            $solrParamQ .= " AND resource_category:$resourceCategory";
+            $solrParams = array_merge($defaultSolrParams, $solrParams);
+
+            $xAxis = [
+                "type" => 'category',
+                "boundaryGap" => "false",
+                "data" => []
+            ];
+
+            $result = $this->statCommon($id, $solrParamQ, $solrParams);
+
+            $searchResults = $result['searchResults'];
+            $searchResults['grouped'] = "ignored";
+            $data = $searchResults['facet_counts']['facet_ranges'][$fl]['counts'];
+
+            $serial = [
+                'name' => $resourceCategory,
+                'type' => 'line',
+                'smooth' => 'true',
+                'itemStyle' => ['normal' => ['label' => ['show' => 'true']]],
+                'data' => []
+            ];
+
+            if (empty($xAxis['data'])) {
+                for ($i = 0; $i < count($data); $i += 2) {
+                    $date = date_parse($data[$i]);
+                    array_push($xAxis['data'], $date['day']);
+                }
+            }
+
+            for ($i = 0; $i < count($data); $i += 2) {
+                array_push($serial['data'], $data[$i + 1]);
+            }
+
+            array_push($series, $serial);
+        }
+
+        $result['xAxis'] = $xAxis;
+        $result['series'] = $series;
+
+        if ($format == 'php') {
+            return $result;
+        }
+        else if ($format == 'json') {
+            $this->autoRender = false;
+            return json_encode($result);
+        }
+    }
+
+    public function u_statSentiment($id = null, $format = "php") {
+        $fl = $this->defaultTimeField;
+        $defaultSolrParams = [
+            "fl" => $fl,
+            "group" => "true",
+            "group.limit" => 1,
+            "group.field" => "sentiment_main"
+        ];
+
+        $solrParamQ = "*:*";
+        $solrParams = [];
+        if (isset($this->params['form']['solrParamQ'])) {
+            $solrParamQ = $this->params['form']['solrParamQ'];
+        }
+        if (isset($this->params['form']['solrParams'])) {
+            $solrParams = $this->params['form']['solrParams'];
+        }
+
+        $solrParams = array_merge($defaultSolrParams, $solrParams);
+
+        $result = $this->statCommon($id, $solrParamQ, $solrParams);
+
+        $groups = $result['searchResults']['grouped']['sentiment_main']['groups'];
+
+        $series = [
+            [
+                'name' => '正负面统计',
+                'type' => 'pie',
+                'radius' => '55%',
+                'center' => ['50%', '50%'],
+                'itemStyle' => [
+                    'emphasis' => [
+                        'shadowBlur' => 10,
+                        'shadowOffsetX' => 0,
+                        'shadowColor' => 'rgba(0, 0, 0, 0.5)'
+                    ]
+                ],
+                'data' => [
+                    ['value' => 0, 'name' => '正面'],
+                    ['value' => 0, 'name' => '负面'],
+                    ['value' => 0, 'name' => '中性']
+                ]
+            ]
+        ];
+
+        foreach ($groups as $group) {
+            foreach ($series[0]['data'] as &$item) {
+                if ($item['name'] == $group['groupValue']) {
+                    $item['value'] = $group['doclist']['numFound'];
+                }
+            }
+        }
+
+        $result['series'] = $series;
+
+        if ($format == 'php') {
+            return $result;
+        }
+        else if ($format == 'json') {
+            $this->autoRender = false;
+            return json_encode($result);
+        }
+    }
+
+    public function u_statAlert($id = null, $format = "php") {
         $result = [
             'id' => $id,
             'name' => __FUNCTION__,
@@ -341,7 +550,7 @@ class TopicsController extends AppController
         }
     }
 
-    public function u_statTrendsGroupByMedia($id = null, $solrParamQ = null, $solrParams = null, $format = "php") {
+    public function u_statHotWords($id = null, $format = "php") {
         $result = [
             'id' => $id,
             'name' => __FUNCTION__,
@@ -358,7 +567,7 @@ class TopicsController extends AppController
         }
     }
 
-    public function u_statSentiment($id = null, $solrParamQ = null, $solrParams = null, $format = "php") {
+    public function u_statHotEvents($id = null, $format = "php") {
         $result = [
             'id' => $id,
             'name' => __FUNCTION__,
@@ -375,58 +584,7 @@ class TopicsController extends AppController
         }
     }
 
-    public function u_statAlert($id = null, $solrParamQ = null, $solrParams = null, $format = "php") {
-        $result = [
-            'id' => $id,
-            'name' => __FUNCTION__,
-            'xdata' => [1,2,3,4,5],
-            'ydata' => [1,2,3,4,5]
-        ];
-
-        if ($format == 'php') {
-            return $result;
-        }
-        else if ($format == 'json') {
-            $this->autoRender = false;
-            return json_encode($result);
-        }
-    }
-
-    public function u_statHotWords($id = null, $solrParamQ = null, $solrParams = null, $format = "php") {
-        $result = [
-            'id' => $id,
-            'name' => __FUNCTION__,
-            'xdata' => [1,2,3,4,5],
-            'ydata' => [1,2,3,4,5]
-        ];
-
-        if ($format == 'php') {
-            return $result;
-        }
-        else if ($format == 'json') {
-            $this->autoRender = false;
-            return json_encode($result);
-        }
-    }
-
-    public function u_statHotEvents($id = null, $solrParamQ = null, $solrParams = null, $format = "php") {
-        $result = [
-            'id' => $id,
-            'name' => __FUNCTION__,
-            'xdata' => [1,2,3,4,5],
-            'ydata' => [1,2,3,4,5]
-        ];
-
-        if ($format == 'php') {
-            return $result;
-        }
-        else if ($format == 'json') {
-            $this->autoRender = false;
-            return json_encode($result);
-        }
-    }
-
-    public function u_statTagComparation($id = null, $solrParamQ = null, $solrParams = null, $format = "php") {
+    public function u_statTagComparation($id = null, $format = "php") {
         $result = [
             'id' => $id,
             'name' => __FUNCTION__,
@@ -450,7 +608,9 @@ class TopicsController extends AppController
 
     public function u_browseToday($expression = null)
     {
-        $q = 'last_crawl_time:[NOW-1DAY/DAY TO *]';
+        $fl = $this->defaultTimeField;
+
+        $q = "$fl:[NOW-1DAY/DAY TO *]";
         if ($expression != null) {
             $q .= " AND $expression";
         }
@@ -458,8 +618,6 @@ class TopicsController extends AppController
         $solrParams['q'] = urlencode($q);
 
         $response = $this->querySolrByParameters($solrParams);
-
-        pr($response);
 
         $this->autoRender = false;
     }
@@ -513,7 +671,7 @@ class TopicsController extends AppController
         }
     }
 
-    private function statCommon($id = null, $solrParamQ = "", $solrParams = [])
+    private function statCommon($id = null, $solrParamQ = "", $solrParams = [], $commonParams = null)
     {
         $this->Topic->recursive = -1;
         $topics = parent::paginate();
@@ -523,30 +681,21 @@ class TopicsController extends AppController
         if ($id == null) {
             $id = $topics[0]['Topic']['id'];
         }
-        if (!$id) {
-            $this->Session->setFlash(__('Invalid topic', true));
-            $this->redirect(array('action' => 'index'));
+
+        if ($commonParams == null) {
+            $commonParams = $this->getCommonParams($id);
         }
-
-        $params = $this->getParams($id);
-
-        $topic = $params['topic'];        // topic data model
-        $expression = $params['expression'];
-
-        $q = "";
-        if (!empty($solrParamQ)) {
-            $q .= "$solrParamQ";
-        }
-        if (!empty($expression)) {
-            $q .= " AND $expression";
-        }
-
-        $solrParams['q'] = urlencode($q);
+        $topic = $commonParams['topic'];        // topic data model
 
         $solrClient = new \Solr\SolrClient($this->solrUrlBase, $this->solrCollection);
         $searchResults = $solrClient->statSolrByParameters($solrParams);
 
-        return ['topic' => $topic, 'solrParams' => $solrParams, 'searchResults' => $searchResults];
+        return [
+            'topic' => $topic,
+            'solrParamQ' => $commonParams['solrParamQ'],
+            'solrParams' => $commonParams['solrParams'],
+            'searchResults' => $searchResults
+        ];
     }
 
     /**
@@ -554,37 +703,125 @@ class TopicsController extends AppController
      * @param $id {int} topic id
      * @return array
      * */
-    private function getParams($id = null)
+    private function getCommonParams($id = null)
     {
-        $topic = $this->Topic->read(null, $id);
+        if (empty($id)) {
+            global $defaultTopic;
+            $topic = $defaultTopic;
+        }
+        else {
+            $topic = $this->Topic->read(null, $id);
+        }
 
+        /** Limit */
         $page = 1;
         if (isset($this->params['named']['page'])) {
             $page = $this->params['named']['page'];
         }
-        $limit = 20;
+        $limit = 40;
         if (isset($this->params['named']['limit'])) {
             $limit = $this->params['named']['limit'];
         }
 
+        /** Expression */
         $expression = $topic['Topic']['expression'];
-        if (stripos($expression, ":") === false) {
+        if (!empty($expression) && stripos($expression, ":") === false) {
             $expression = "text:($expression)";
         }
 
-        $solrParams = [
-            'topic' => $topic,
+        /** Date range */
+        $dateRange = ['startTime' => 'NOW/-30DAY', 'endTime' => 'NOW'];
+        if (isset($this->params['form']['dateRange'])) {
+            $dateRange = $this->params['form']['dateRange'];
+        }
+        else if (isset($this->params['url']['dateRange'])) {
+            $dateRange = $this->params['url']['dateRange'];
+        }
 
+        /** Solr q parameter */
+        $solrParamQ = $this->buildSolrParamQ($expression);
+
+        /** Solr parameters array */
+        $solrParams = [];
+        if (isset($this->params['form']['solrParams'])) {
+            $solrParams = $this->params['form']['solrParams'];
+        }
+        else if (isset($this->params['url']['solrParams'])) {
+            $solrParams = $this->params['url']['solrParams'];
+        }
+        $solrParams['q'] = urlencode($solrParamQ);
+        $solrParams['rows'] = $limit;
+        $solrParams['start'] = ($page - 1) * $limit;
+
+        $commonParams = [
+            'topic' => $topic,
             'page' => $page,
             'limit' => $limit,
-
-            'start' => ($page - 1) * $limit,
-            'rows' => $limit,
-
-            'expression' => $expression
+            'expression' => $expression,
+            'solrParamQ' => $solrParamQ,
+            'solrParams' => $solrParams,
+            'dateRange' => $dateRange,
+            'q' => $solrParamQ
         ];
 
-        return $solrParams;
+        return $commonParams;
+    }
+
+    private function buildSolrParamQ($expression) {
+        /** Solr q parameter */
+        $solrParamQ = "";
+        $solrParamQArray = [];
+        if (isset($this->params['form']['solrParamQ'])) {
+            $solrParamQ = $this->params['form']['solrParamQ'];
+        }
+        else if (isset($this->params['url']['solrParamQ'])) {
+            $solrParamQ = $this->params['url']['solrParamQ'];
+        }
+
+        /** Explode query string into array */
+        if (is_string($solrParamQ)) {
+            $params = explode("AND", $solrParamQ);
+            foreach ($params as $param) {
+                $param = trim($param);
+                $kv = explode(':', $param);
+                if (count($kv) == 2) {
+                    $solrParamQArray[$kv[0]] = $kv[1];
+                }
+            }
+        }
+
+        /** Add some default parameters */
+        if (empty($solrParamQArray['publish_time'])) {
+            $solrParamQArray['publish_time'] = '[NOW-3MONTH TO NOW]';
+        }
+
+        if (empty($solrParamQArray['last_crawl_time'])) {
+            $solrParamQArray['last_crawl_time'] = '[NOW-3MONTH TO NOW]';
+        }
+
+        if (!empty($expression)) {
+            $solrParamQArray['expression'] = $expression;
+        }
+
+//        if (empty($id)) {
+//            $solrParamQArray['*'] = '*';
+//        }
+
+        $solrParamQ = "";
+        $i = 0;
+        foreach ($solrParamQArray as $k => $v) {
+            if ($i++ > 0) {
+                $solrParamQ .= " AND ";
+            }
+            if ($k == 'expression') {
+                $solrParamQ .= "$v";
+            }
+            else {
+                $solrParamQ .= "$k:$v";
+            }
+        }
+
+        return $solrParamQ;
     }
 
     /**

@@ -73,4 +73,4 @@ define('HBASE_HREGIONSERVER_PORT', 60030);
 define('SOLR_ADMIN_SERVER', "master");
 define('SOLR_ADMIN_PORT', 8983);
 define('SOLR_URL_BASE', "http://" . SOLR_ADMIN_SERVER . ':' . SOLR_ADMIN_PORT . '/solr');
-define('SOLR_COLLECTION', "information_0915_integration_test");
+define('SOLR_COLLECTION', "information_1101_integration_test");

@@ -563,7 +563,7 @@ class Inflector {
  * @static
  * @link http://book.cakephp.org/view/1479/Class-methods
  */
-	function classify($tableName) {
+	public static function classify($tableName) {
 		$_this =& Inflector::getInstance();
 		if (!($result = $_this->_cache(__FUNCTION__, $tableName))) {
 			$result = Inflector::camelize(Inflector::singularize($tableName));

@@ -29,7 +29,7 @@ class EcController extends AppController
     public function index()
     {
     	// Cache::clear();
-    	
+
         /**
          * Output format, html or json
          * */
@@ -55,7 +55,7 @@ class EcController extends AppController
     	 * */
     	$rh = "browse";
     	if (isset($this->params['url']['rh'])) {
-    	    $fmt = $this->params['url']['rh'];
+    	    $rh = $this->params['url']['rh'];
     	}
 
     	/**
@@ -66,9 +66,9 @@ class EcController extends AppController
     	}
     	$sc = $this->solrCollection;
 
-    	$rh = "browse";
-    	if (isset($this->params['url']['rh'])) {
-    	    $fmt = $this->params['url']['rh'];
+		$fmt = "html";
+    	if (isset($this->params['url']['fmt'])) {
+    	    $fmt = $this->params['url']['fmt'];
     	}
 
     	/**
@@ -93,21 +93,41 @@ class EcController extends AppController
     	    $limit = $this->params['named']['limit'];
     	}
 
-    	// TODO : user array_merge
+		$startTime = null;
+		if (isset($this->params['url']['startTime'])) {
+			$startTime = $this->params['url']['startTime'];
+		}
+
+		$endTime = null;
+		if (isset($this->params['url']['endTime'])) {
+			$endTime = $this->params['url']['endTime'];
+		}
+
+		$startPrice = 0;
+		if (isset($this->params['url']['startPrice'])) {
+			$startPrice = $this->params['url']['startPrice'];
+		}
+
+		$endPrice = null;
+		if (isset($this->params['url']['endPrice'])) {
+			$endPrice = $this->params['url']['endPrice'];
+		}
+
+		// TODO : user array_merge
     	// $params = array_merge($params, $this->params['named'], $this->params['url']);
 
-        $queryResult = [
+        $defaultQueryResult = [
     	   'header' => [
     	       'warpspeed' => [
-    	           'numFound' => 0, 
-    	               'count' => 0, 
+    	           'numFound' => 0,
+    	               'count' => 0,
     	               'request' => [
     	               'url' => ''
     	               ]
                 ],
     	        'baidu' => [
-    	           'numFound' => 0, 
-    	           'count' => 0, 
+    	           'numFound' => 0,
+    	           'count' => 0,
     	           'request' => [
     	               'url' => ''
     	           ]
@@ -116,8 +136,22 @@ class EcController extends AppController
             'expression' => $w,
     	    'docs' => []
     	];
+
+		if ($startTime != null && $endTime != null) {
+			$w .= " AND last_modified:[{$startTime}T00:00:00Z TO {$endTime}T00:00:00Z]";
+		}
+
+		if ($startPrice != null && $endPrice != null) {
+			$w .= " AND price:[$startPrice TO $endPrice]";
+		}
+
+		$pos = strpos($w, " AND ");
+		if ($pos !== -1) {
+			$w = substr($w, strlen(" AND "));
+		}
+
     	$queryResult = $this->query($w, ($page - 1) * $limit, $limit, $debugQuery, $provider);
-		
+
         /**
          * All status :
          * success
@@ -126,11 +160,14 @@ class EcController extends AppController
 
         if ($fmt == "json") {
     		$this->autoRender = false;
-        	pr(json_encode($docs, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
+        	$result = json_encode($docs, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
+			echo "<pre>$result</pre>";
         }
 		else if ($fmt == "php") {
 			$this->autoRender = false;
-			pr($docs);
+			echo "<pre>";
+			print_r($docs);
+			echo "</pre>";
 		}
         else {
             $header = $queryResult['header'];
@@ -171,19 +208,13 @@ class EcController extends AppController
         }
     }
 
-    public function query($expression, $start = 0, $rows = 30, $debugQuery = 'off', $provider = null) {
-        $sentences = $expression;
-//         $sentences = "\"".$expression."\"";
-//         $sentences = str_replace([",", "，", "\s+"], ["\"+\"", "\"+\"", "\"+\""], $sentences);
-		$searchResults = Cache::read($sentences, "minute");
+    public function query($expression, $start = 0, $rows = 30, $startTime = null, $endTime = null, $debugQuery = 'off', $provider = null) {
+		$searchResults = Cache::read($expression, "minute");
 		if (true || $searchResults) {
-//		    $queryer = new IndexQuery($this->solrUrlBase, $this->solrCollection);
-//		    $searchResults = $queryer->query($sentences, $start, $rows, $debugQuery, $provider);
-
 			$solrClient = new \Solr\SolrClient($this->solrUrlBase, $this->solrCollection);
-			$searchResults = $solrClient->queryProduct($expression, $start, $rows, $debugQuery);
+			$searchResults = $solrClient->queryProduct($expression, $start, $rows, $startTime, $endTime, $debugQuery);
 
-			Cache::write($sentences, $searchResults, "minute");
+			Cache::write($expression, $searchResults, "minute");
 		}
 
     	return $searchResults;

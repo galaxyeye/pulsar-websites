@@ -1,21 +1,5 @@
 // 基于准备好的dom，初始化echarts实例
-var chartTrends = echarts.init(document.getElementById('chart-trends'));
-
-var xAxisData = [ '00', '01', '02', '03', '04', '05', '06', '07', '08', '09',
-    '10', '11', '12', '13', '14', '15', '16', '17', '18', '19',
-    '20', '21', '22'];
-
-var yAxisData = [ '92', '98', '83', '89', '94', '100', '150', '179', '160', '150',
-    '120', '100', '120', '150', '168', '149', '120', '100', '98', '83',
-    '69', '79', '58'];
-
-if (xdata) {
-    xAxisData = xdata;
-}
-
-if (ydata) {
-    yAxisData = ydata;
-}
+var mainChart = echarts.init(document.getElementById('chart-trends'));
 
 var statTrends = {
     title: {
@@ -27,7 +11,7 @@ var statTrends = {
     xAxis: {
         type: 'category',
         boundaryGap: false,
-        data: xdata
+        data: []
     },
     yAxis: {
         type: 'value',
@@ -37,7 +21,7 @@ var statTrends = {
         name: '统计',
         type: 'line',
         smooth: true,
-        data: ydata,
+        data: [],
         itemStyle: {
             normal: {
                 label: {
@@ -91,32 +75,34 @@ var statMediaDistribution = {
     title: {
         text: '资源类型分布'
     },
-
     tooltip : {
         trigger: 'item',
         formatter: "{a} <br/>{b} : {c} ({d}%)"
     },
-
-    visualMap: {
-        show: false,
-        min: 80,
-        max: 600,
-        inRange: {
-            colorLightness: [0, 1]
-        }
+    legend: {
+        orient: 'vertical',
+        right: 'right',
+        data: ['微博','博客','资讯','论坛','贴吧']
     },
     series: [{
-        name: '新浪微博',
+        name: '资源类型分布',
         type:'pie',
         radius : '55%',
         center: ['50%', '50%'],
+        itemStyle: {
+            emphasis: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: 'rgba(0, 0, 0, 0.5)'
+            }
+        },
         data:[
-            {value:335, name:'微博'},
-            {value:310, name:'博客'},
-            {value:274, name:'资讯'},
-            {value:235, name:'论坛'},
-            {value:400, name:'贴吧'}
-        ].sort(function (a, b) { return a.value - b.value})
+            {value:0, name:'微博'},
+            {value:0, name:'博客'},
+            {value:0, name:'资讯'},
+            {value:0, name:'论坛'},
+            {value:0, name:'贴吧'}
+        ]
     }
     ]
 };
@@ -125,30 +111,34 @@ var statTrendsGroupByMedia = {
     title: {
         text: '资源类型分类统计'
     },
+    legend: {
+        orient: 'vertical',
+        right: 'right',
+        data: ['微博','博客','资讯','论坛','贴吧']
+    },
     tooltip: {
         trigger: 'axis'
+    },
+    toolbox: {
+        feature: {
+            saveAsImage: {}
+        }
     },
     xAxis: {
         type: 'category',
         boundaryGap: false,
-        data: xdata
+        data: []
     },
     yAxis: {
         type: 'value',
         splitArea : {show : true}
     },
     series: [{
-        name: '统计',
+        name: '资源类型分类统计',
         type: 'line',
         smooth: true,
-        data: ydata,
-        itemStyle: {
-            normal: {
-                label: {
-                    show: true
-                }
-            }
-        } // itemStyle
+        areaStyle: {normal: {}},
+        data: []
     }]
 };
 
@@ -171,19 +161,16 @@ var statSentiment = {
         }
     },
     series: [{
-        name: '新浪微博',
+        name: '正负面统计',
         type:'pie',
         radius : '55%',
         center: ['50%', '50%'],
         data:[
-            {value:335, name:'微博'},
-            {value:310, name:'博客'},
-            {value:274, name:'资讯'},
-            {value:235, name:'论坛'},
-            {value:400, name:'贴吧'}
-        ].sort(function (a, b) { return a.value - b.value})
-    }
-    ]
+            {value:0, name:'正面'},
+            {value:0, name:'负面'},
+            {value:0, name:'中性'}
+        ]
+    }]
 };
 
 var statHotWords = {
@@ -295,61 +282,8 @@ var statTagComparation = {
 };
 
 $(document).ready(function () {
-    // 使用刚指定的配置项和数据显示图表
-    chartTrends.setOption(statTrends);
 
-    var chartOption = statTrends;
-    $("#FilterStatType").change(function () {
-        // $(".message").text(this.value);
-        var urlAction = "statTrends";
+    // "曝光量趋势"
+    $("#FilterStatType").trigger("change");
 
-        if (this.value == "曝光量趋势") {
-            chartOption = statTrends;
-            urlAction = "statTrends";
-        }
-        else if (this.value == "资源类型统计") {
-            chartOption = statMediaDistribution;
-            urlAction = "statMediaDistribution";
-        }
-        else if (this.value == "资源类型分类统计") {
-            chartOption = statTrendsGroupByMedia;
-            urlAction = "statTrendsGroupByMedia";
-        }
-        else if (this.value == "正负面统计") {
-            chartOption = statSentiment;
-            urlAction = "statSentiment";
-        }
-        else if (this.value == "预警报告") {
-            chartOption = statAlert;
-            urlAction = "statAlert";
-        }
-        else if (this.value == "焦点聚类") {
-            chartOption = statHotWords;
-            urlAction = "statHotWords";
-        }
-        else if (this.value == "热点话题") {
-            chartOption = statHotEvents;
-            urlAction = "statHotEvents";
-        }
-        else if (this.value == "标签对比") {
-            chartOption = statTagComparation;
-            urlAction = "statTagComparation";
-        }
-
-        var url = "/u/topics/" + urlAction + "/" + topicId + "/json";
-        var solrParamQ = "";
-        if (statQuery != undefined) {
-            solrParamQ = statQuery;
-        }
-
-        var message = url + "<br />";
-        message += solrParamQ + "<br />";
-
-        $.get(url, {solrParamQ : solrParamQ, format : "json"}, function (result) {
-            message += result + "<br />";
-            $('.message').html(message);
-        });
-
-        chartTrends.setOption(chartOption);
-    });
 });

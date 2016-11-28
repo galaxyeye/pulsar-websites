@@ -1,4 +1,12 @@
-<?php echo $html->script("charts/echarts.common.min"); ?>
+<?php
+    echo $html->script("charts/echarts.common.min");
+    $topicId = $topic['Topic']['id'];
+?>
+
+<script type="text/javascript">
+    var topicId = <?=$topicId ?>;
+    var queryAction = "stat";
+</script>
 
 <style type="text/css">
     .charts {
@@ -15,6 +23,7 @@
 <nav class="two columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><a>日常监测</a></li>
+        <li><?= $this->Html->link("所有主题", ['action' => 'stat', 0]) ?></li>
         <?php foreach ($topics as $t) : ?>
             <li><?= $this->Html->link($t['Topic']['name'], ['action' => 'stat', $t['Topic']['id']]) ?></li>
         <?php endforeach ?>
@@ -25,25 +34,13 @@
     </ul>
 </nav>
 
-<?php
-$topicId = $topic['Topic']['id'];
-$statQuery = "last_crawl_time:[NOW/DAY-30DAYS TO NOW]";
-?>
-
-<script type="text/javascript">
-    var topicId = <?=$topicId ?>;
-    var statQuery = "<?=$statQuery ?>";
-    var xdata = <?=json_encode($xdata) ?>;
-    var ydata = <?=json_encode($ydata) ?>;
-</script>
-
 <div class="topics ten columns content">
     <div class="actions">
         <div class="head cl">
             <div class="columns"><h2><?php echo $topic['Topic']['name'] ?></h2></div>
             <div class="sub-nav two columns">
                 <?= $this->Html->link("数据", ['action' => 'monitor', $topicId]) ?>
-                <a style="background: darkblue; padding: 3px; color: white">统计</a>
+                <a class="selected">统计</a>
                 <?= $this->Html->link("报告", ['action' => 'report', $topicId]) ?>
             </div>
             <div class="column"></div>
@@ -51,9 +48,10 @@ $statQuery = "last_crawl_time:[NOW/DAY-30DAYS TO NOW]";
         <div class="filter datetime cl">
             <div class="columns">
                 <span>时间：</span>
-                <?= $this->Html->link("今天", ['action' => 'monitor', $topicId, symmetric_encode("last_crawl_time:[NOW/DAY TO NOW]")]) ?> |
-                <?= $this->Html->link("昨天", ['action' => 'monitor', $topicId, symmetric_encode("last_crawl_time:[NOW-1DAY/DAY TO NOW/DAY]")]) ?> |
-                <?= $this->Html->link("最近七天", ['action' => 'monitor', $topicId, symmetric_encode("last_crawl_time:[NOW/DAY-7DAY TO NOW]")]) ?>
+                <a class="date today" data-start-date="NOW/DAY" data-end-date="NOW">今天</a>
+                <a class="date yesterday" data-start-date="NOW/DAY-1DAY" data-end-date="NOW/DAY">昨天</a>
+                <a class="date last-7-days" data-start-date="NOW/DAY-7DAY" data-end-date="NOW">最近七天</a>
+                <a class="date last-30-days selected" data-start-date="NOW/DAY-30DAY" data-end-date="NOW">最近30天</a>
                 <input type="text" id="dateFrom" name="dateFrom" />
                 <input type="text" id="dateTo" name="dateTo" />
             </div>
@@ -81,13 +79,12 @@ $statQuery = "last_crawl_time:[NOW/DAY-30DAYS TO NOW]";
             <?php echo $this->Form->input('Filter.statType', ['label' => '', 'div' => 'columns select', 'options' => $chartType]); ?>
         </div>
     </div>
-
-    <div class="message"></div>
-
+    <div class="debug message solr-query"></div>
     <div class="charts">
         <div id="chart-trends" class="chart"></div>
     </div>
 
     <br />
     <hr />
+
 </div>
