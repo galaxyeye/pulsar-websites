@@ -45,10 +45,10 @@ $resourceCategoryOptions = array_combine($resourceCategoryOptions, $resourceCate
         <div class="filter datetime cl">
             <div class="columns">
                 <span>时间：</span>
-                <a class="date today" data-start-date="NOW/DAY" data-end-date="NOW">今天</a>
+                <a class="date today selected" data-start-date="NOW/DAY" data-end-date="NOW">今天</a>
                 <a class="date yesterday" data-start-date="NOW/DAY-1DAY" data-end-date="NOW/DAY">昨天</a>
                 <a class="date last-7-days" data-start-date="NOW/DAY-7DAY" data-end-date="NOW">最近七天</a>
-                <a class="date last-30-days selected" data-start-date="NOW/DAY-30DAY" data-end-date="NOW">最近30天</a>
+                <a class="date last-30-days" data-start-date="NOW/DAY-30DAY" data-end-date="NOW">最近30天</a>
                 <input type="text" id="dateFrom" name="dateFrom" />
                 <input type="text" id="dateTo" name="dateTo" />
             </div>
@@ -56,15 +56,16 @@ $resourceCategoryOptions = array_combine($resourceCategoryOptions, $resourceCate
             <div class="columns"></div>
         </div>
         <div class="filter misc cl">
-            <?php echo $this->Form->input('Filter.alertLevel', ['label' => '', 'div' => 'one column', 'options' => $alertLevelOptions]); ?>
-            <?php echo $this->Form->input('Filter.sentiment', ['label' => '', 'div' => 'one column', 'options' => $sentimentOptions]); ?>
+<!--            --><?php //echo $this->Form->input('Filter.alertLevel', ['label' => '', 'div' => 'one column', 'options' => $alertLevelOptions]); ?>
+<!--            --><?php //echo $this->Form->input('Filter.sentiment', ['label' => '', 'div' => 'one column', 'options' => $sentimentOptions]); ?>
             <?php echo $this->Form->input('Filter.resource_category', ['label' => '', 'div' => 'one column', 'options' => $resourceCategoryOptions]); ?>
             <?php echo $this->Form->input('Filter.source_site', ['label' => '', 'value' => '来源', 'div' => 'one column']); ?>
             <?php echo $this->Form->input('Filter.author', ['label' => '', 'value' => '作者', 'div' => 'one column']); ?>
             <div class="columns"></div>
         </div>
     </div>
-    <div class="doc-list-actions cl">
+
+    <div class="doc-list-actions feature-disabled hidden cl">
         <div class="eight columns">
             <a class="button markRead">标已读</a>
             <a class="button download">下载</a>
@@ -99,7 +100,7 @@ $resourceCategoryOptions = array_combine($resourceCategoryOptions, $resourceCate
                     <th>预警</th>
                     <th>正负</th>
                     <th style="width:30em;">标题</th>
-                    <th class="hidden">内容</th>
+<!--                    <th class="hidden">内容</th>-->
                     <th>发布时间</th>
                     <th>采集时间</th>
                     <th>来源</th>
@@ -130,7 +131,7 @@ $resourceCategoryOptions = array_combine($resourceCategoryOptions, $resourceCate
                                 ['escape' => false, 'target' => '_blank'])
                             ?>
                         </td>
-                        <td class="abstract hidden w_60em"><?=$doc['abstract'] ?></td>
+<!--                        <td class="abstract hidden w_60em">--><?//=$doc['abstract'] ?><!--</td>-->
                         <td><?= $doc['publish_time_str'] ?></td>
                         <td><?= date_format($doc['last_crawl_time'], "Y-m-d H:i:s") ?></td>
                         <td><?= $doc['site_name'] ?></td>
@@ -167,7 +168,7 @@ $resourceCategoryOptions = array_combine($resourceCategoryOptions, $resourceCate
 
                 <div class="paging">
                     <?php echo $this->Paginator->prev('<< ' . "上一页", [], null, array('class'=>'disabled'));?>
-                    | 	<?php echo $this->Paginator->numbers();?>
+                    | 	<?php echo $this->Paginator->numbers(['href' => false]);?>
                     |
                     <?php echo $this->Paginator->next("下一页" . ' >>', [], null, array('class' => 'disabled'));?>
                 </div>
@@ -175,30 +176,4 @@ $resourceCategoryOptions = array_combine($resourceCategoryOptions, $resourceCate
         </div>
     </div>
 
-    <br />
-    <hr />
-
-    <h3>以下内容来自百度</h3>
-    <table cellpadding="0" cellspacing="0">
-        <thead>
-        <tr>
-            <th>标题</th>
-            <th>内容</th>
-            <th class="actions">操作</th>
-        </tr>
-        </thead>
-        <tbody>
-        <?php foreach ($docs as $doc): ?>
-            <?php if ($doc['provider'] === 'baidu') : ?>
-            <tr>
-                <td><?= $doc['title'] ?></td>
-                <td><?= $doc['shortContent'] ?></td>
-                <td class="actions">
-                    <?= $this->Html->link("快照", ['action' => 'quickView', $topicId, symmetric_encode($doc['url'])]) ?>
-                </td>
-            </tr>
-            <?php endif ?>
-        <?php endforeach; ?>
-        </tbody>
-    </table>
 </div>

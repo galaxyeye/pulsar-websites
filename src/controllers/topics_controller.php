@@ -771,6 +771,8 @@ class TopicsController extends AppController
         /** Solr q parameter */
         $solrParamQ = "";
         $solrParamQArray = [];
+        $solrParamQArray['group'] = [];
+
         if (isset($this->params['form']['solrParamQ'])) {
             $solrParamQ = $this->params['form']['solrParamQ'];
         }
@@ -783,16 +785,26 @@ class TopicsController extends AppController
             $params = explode("AND", $solrParamQ);
             foreach ($params as $param) {
                 $param = trim($param);
-                $kv = explode(':', $param);
+
+                // datetime
+                $kv = explode(':[', $param);
                 if (count($kv) == 2) {
-                    $solrParamQArray[$kv[0]] = $kv[1];
+                    $solrParamQArray[$kv[0]] = '['.$kv[1];
+                }
+
+                // group
+                if (startsWith($param, "(")) {
+                    $solrParamQArray['group'][] = $param;
                 }
             }
+        }
+        else if (is_array($solrParamQ)) {
+            $solrParamQArray = $solrParamQ;
         }
 
         /** Add some default parameters */
         if (empty($solrParamQArray['publish_time'])) {
-            $solrParamQArray['publish_time'] = '[NOW-3MONTH TO NOW]';
+            $solrParamQArray['publish_time'] = '[NOW/DAY TO NOW]';
         }
 
         if (empty($solrParamQArray['last_crawl_time'])) {
@@ -810,15 +822,25 @@ class TopicsController extends AppController
         $solrParamQ = "";
         $i = 0;
         foreach ($solrParamQArray as $k => $v) {
+            if (is_array($v)) {
+                continue;
+            }
+
             if ($i++ > 0) {
                 $solrParamQ .= " AND ";
             }
+
+            // expression
             if ($k == 'expression') {
                 $solrParamQ .= "$v";
             }
             else {
                 $solrParamQ .= "$k:$v";
             }
+        }
+
+        foreach ($solrParamQArray['group'] as $i => $v) {
+            $solrParamQ .= " AND $v";
         }
 
         return $solrParamQ;

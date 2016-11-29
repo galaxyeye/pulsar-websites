@@ -13,7 +13,8 @@ var solrParams = {};
 var chartOption = null;
 var statAction = "statTrends";
 
-var dateRange = {startTime : "NOW-30DAY/DAY", endTime : "NOW"};
+var pageNumber = 1;
+var dateRange = {startTime : "NOW/DAY", endTime : "NOW"};
 var alertLevel = "";
 var sentiment = "";
 var resourceCategory = "";
@@ -44,8 +45,11 @@ function calculateDateRange() {
     $('.filter.datetime .date').removeClass('selected');
   }
 
-  if (!dateFrom || !dateTo) {
-    dateFrom = "NOW-30DAY/DAY";
+  if (!dateFrom) {
+    dateFrom = "NOW/DAY";
+  }
+
+  if (!dateTo) {
     dateTo = "NOW";
   }
 
@@ -76,7 +80,7 @@ function calculateSolrParamQ() {
     solrParamQ += " AND resource_category:" + resourceCategory;
   }
   if (sourceSite != "" && sourceSite != "来源") {
-    solrParamQ += " AND (host:" + sourceSite + " OR site_name:" + sourceSite + ")";
+    solrParamQ += " AND (host:" + sourceSite + " OR site_name:" + sourceSite + " OR domain:" + sourceSite + ")";
   }
   if (author != "" && author != "作者") {
     solrParamQ += " AND (author:\"" + author + "\" OR director:\"" + author + "\")";
@@ -100,9 +104,12 @@ function reloadData() {
 function reloadMonitoredList() {
   solrParamQ = calculateSolrParamQ();
 
-  $('#reloadableArea').hide();
-  layer.msg('加载中...', {icon : 16, shade : [0.5, '#f5f5f5'], scrollbar : false, time:10000});
+ $('#reloadableArea').hide();
+ layer.msg('加载中...', {icon : 16, shade : [0.5, '#f5f5f5'], scrollbar : false, time:10000});
   var url = "/u/topics/" + queryAction + "/" + topicId;
+  if (pageNumber > 1) {
+    url += "/page:" + pageNumber;
+  }
 
   var message = url + "<br />";
   message += solrParamQ + "<br />";
@@ -113,6 +120,8 @@ function reloadMonitoredList() {
 
     var reloadableArea = $(html).find('#reloadableArea').get(0);
     $('#reloadableArea').html(reloadableArea.innerHTML).show();
+
+    installPaginatorEventHandler();
   });
 }
 
@@ -147,7 +156,27 @@ function reloadStatChart() {
   }, "json");
 }
 
+function installPaginatorEventHandler() {
+  $('.paginator .paging a').each(function () {
+    $(this).attr("href", "javascript:;");
+  });
+
+  pageNumber = $('.paginator .paging a.current').text();
+
+  $('.paginator .paging a').click(function () {
+    pageNumber = $(this).text();
+    reloadData();
+    return false;
+  });
+}
+
+function resetParams() {
+}
+
 $(document).ready(function() {
+
+  installPaginatorEventHandler();
+
   /**
    * Query filters
    * */
@@ -155,10 +184,13 @@ $(document).ready(function() {
     $('.filter.datetime .date').removeClass('selected');
     $(this).addClass('selected');
 
+    pageNumber = 1;
+    resetParams();
     reloadData();
   });
 
   $('.filter button.submit').click(function () {
+    pageNumber = 1;
     reloadData();
   });
 
@@ -232,11 +264,9 @@ $(document).ready(function() {
       statAction = "statTagComparation";
     }
 
+    pageNumber = 1;
     reloadStatChart(chartOption, statAction, topicId);
   }); // on change
-
-
-
 
   /**
    * Utilities
@@ -337,12 +367,12 @@ $(document).ready(function() {
 
     $('.message').html(message);
   });
-  
+
   $('.show-mode .show-list').click(function () {
     $('.doc-list .article-title').show();
     $('.doc-list .abstract').hide();
   });
-  
+
   $('.show-mode .show-abstract').click(function () {
     $('.doc-list .article-title').hide();
     $('.doc-list .abstract').show();
