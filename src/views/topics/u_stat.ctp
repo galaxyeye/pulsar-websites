@@ -48,10 +48,10 @@
         <div class="filter datetime cl">
             <div class="columns">
                 <span>时间：</span>
-                <a class="date today" data-start-date="NOW/DAY" data-end-date="NOW">今天</a>
+                <a class="date today selected" data-start-date="NOW/DAY" data-end-date="NOW">今天</a>
                 <a class="date yesterday" data-start-date="NOW/DAY-1DAY" data-end-date="NOW/DAY">昨天</a>
                 <a class="date last-7-days" data-start-date="NOW/DAY-7DAY" data-end-date="NOW">最近七天</a>
-                <a class="date last-30-days selected" data-start-date="NOW/DAY-30DAY" data-end-date="NOW">最近30天</a>
+                <a class="date last-30-days" data-start-date="NOW/DAY-30DAY" data-end-date="NOW">最近30天</a>
                 <input type="text" id="dateFrom" name="dateFrom" />
                 <input type="text" id="dateTo" name="dateTo" />
             </div>
