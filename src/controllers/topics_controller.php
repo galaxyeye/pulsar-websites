@@ -71,13 +71,13 @@ class TopicsController extends AppController
         $this->httpClient = new \HttpClient();
     }
 
-    function u_index()
+    function index()
     {
         $this->Topic->recursive = 0;
         $this->set('topics', parent::paginate());
     }
 
-    function u_view($id = null)
+    function view($id = null)
     {
         if (!$id) {
             $this->Session->setFlash(__('Invalid topic', true));
@@ -86,7 +86,7 @@ class TopicsController extends AppController
         $this->set('topic', $this->Topic->read(null, $id));
     }
 
-    function u_quickView($id, $encodedUrl = null)
+    function quickView($id, $encodedUrl = null)
     {
         global $defaultTopic;
         $topic = $defaultTopic;
@@ -113,7 +113,7 @@ class TopicsController extends AppController
         $this->set(compact('topic', 'doc', 'solrUrl'));
     }
 
-    function u_add()
+    function add()
     {
         if (!empty($this->data)) {
             $this->Topic->create();
@@ -128,7 +128,7 @@ class TopicsController extends AppController
         $this->set(compact('users'));
     }
 
-    function u_edit($id = null)
+    function edit($id = null)
     {
         if (!$id && empty($this->data)) {
             $this->Session->setFlash(__('Invalid topic', true));
@@ -149,11 +149,11 @@ class TopicsController extends AppController
         $this->set(compact('users'));
     }
 
-    function u_edit2($id = null)
+    function edit2($id = null)
     {
     }
 
-    function u_mark($topicId, $solrId, $markName, $markValue)
+    function mark($topicId, $solrId, $markName, $markValue)
     {
         $this->loadModel("MonitorRecord");
         $monitorRecord = $this->MonitorRecord->find("first", ['condition' => [
@@ -176,7 +176,7 @@ class TopicsController extends AppController
         $this->MonitorRecord->save($data);
     }
 
-    function u_delete($id = null)
+    function delete($id = null)
     {
         if (!$id) {
             $this->Session->setFlash(__('Invalid id for topic', true));
@@ -190,7 +190,7 @@ class TopicsController extends AppController
         $this->redirect(array('action' => 'index'));
     }
 
-    public function u_monitor($id = null)
+    public function monitor($id = null)
     {
         /** Get topic list */
         $this->Topic->recursive = -1;
@@ -229,7 +229,7 @@ class TopicsController extends AppController
         $this->set(compact('topic', 'header', 'docs', 'q', 'providers', 'id'));
     }
 
-    public function u_stat($id = null)
+    public function stat($id = null)
     {
         $this->Topic->recursive = -1;
         $topics = parent::paginate();
@@ -251,7 +251,7 @@ class TopicsController extends AppController
      * @param $format
      * @return string|object
      * */
-    public function u_statTrends($id = null, $format = "php")
+    public function statTrends($id = null, $format = "php")
     {
         $fl = $this->defaultTimeField;
         $defaultSolrParams = [
@@ -333,7 +333,7 @@ class TopicsController extends AppController
         }
     }
 
-    public function u_statMediaDistribution($id = null, $format = "php") {
+    public function statMediaDistribution($id = null, $format = "php") {
         $fl = $this->defaultTimeField;
         $defaultSolrParams = [
             "fl" => $fl,
@@ -392,7 +392,7 @@ class TopicsController extends AppController
         }
     }
 
-    public function u_statTrendsGroupByMedia($id = null, $format = "php") {
+    public function statTrendsGroupByMedia($id = null, $format = "php") {
         $fl = $this->defaultTimeField;
         global $allResourceCategories;
         $defaultSolrParams = [
@@ -469,7 +469,7 @@ class TopicsController extends AppController
         }
     }
 
-    public function u_statSentiment($id = null, $format = "php") {
+    public function statSentiment($id = null, $format = "php") {
         $fl = $this->defaultTimeField;
         $defaultSolrParams = [
             "fl" => $fl,
@@ -533,7 +533,7 @@ class TopicsController extends AppController
         }
     }
 
-    public function u_statAlert($id = null, $format = "php") {
+    public function statAlert($id = null, $format = "php") {
         $result = [
             'id' => $id,
             'name' => __FUNCTION__,
@@ -550,7 +550,7 @@ class TopicsController extends AppController
         }
     }
 
-    public function u_statHotWords($id = null, $format = "php") {
+    public function statHotWords($id = null, $format = "php") {
         $result = [
             'id' => $id,
             'name' => __FUNCTION__,
@@ -567,7 +567,7 @@ class TopicsController extends AppController
         }
     }
 
-    public function u_statHotEvents($id = null, $format = "php") {
+    public function statHotEvents($id = null, $format = "php") {
         $result = [
             'id' => $id,
             'name' => __FUNCTION__,
@@ -584,7 +584,7 @@ class TopicsController extends AppController
         }
     }
 
-    public function u_statTagComparation($id = null, $format = "php") {
+    public function statTagComparation($id = null, $format = "php") {
         $result = [
             'id' => $id,
             'name' => __FUNCTION__,
@@ -601,12 +601,12 @@ class TopicsController extends AppController
         }
     }
 
-    public function u_report($id = null)
+    public function report($id = null)
     {
-        $this->u_monitor($id);
+        $this->monitor($id);
     }
 
-    public function u_browseToday($expression = null)
+    public function browseToday($expression = null)
     {
         $fl = $this->defaultTimeField;
 
@@ -622,7 +622,7 @@ class TopicsController extends AppController
         $this->autoRender = false;
     }
 
-    public function u_transmissionPath($id = null, $provider = null)
+    public function transmissionPath($id = null, $provider = null)
     {
         if (!$id) {
             $this->Session->setFlash(__('Invalid topic', true));
@@ -633,7 +633,7 @@ class TopicsController extends AppController
         $this->set(compact('topic'));
     }
 
-    public function u_forwardChart($id = null, $provider = null)
+    public function forwardChart($id = null, $provider = null)
     {
         if (!$id) {
             $this->Session->setFlash(__('Invalid topic', true));
@@ -651,7 +651,8 @@ class TopicsController extends AppController
      * @param $options {array} other options
      * @return null
      * */
-    public function paginate($page, $limit, $current, $totalCount, $options)
+    // function paginate($object = null, $scope = array(), $whitelist = array())
+    public function paginate($page = 1, $limit = 40, $current = 1, $totalCount = 1, $options = [])
     {
         $pageCount = intval(ceil($totalCount / $limit));
         $paging = array(

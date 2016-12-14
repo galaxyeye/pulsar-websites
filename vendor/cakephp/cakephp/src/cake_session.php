@@ -213,7 +213,7 @@ class CakeSession extends Object {
 			return true;
 		}
 		if (function_exists('session_write_close')) {
-			session_write_close();
+			@session_write_close();
 		}
 		$this->__initSession();
 		$this->__startSession();
@@ -514,6 +514,7 @@ class CakeSession extends Object {
 						ini_set('session.cookie_path', $this->path);
 						ini_set('session.auto_start', 0);
 					}
+					// session_save_path('/tmp');
 				}
 				session_set_save_handler(
 					array('CakeSession','__open'),
@@ -703,7 +704,7 @@ class CakeSession extends Object {
  * @return boolean Success
  * @access private
  */
-	function __close() {
+	function __close() {		
 		$probability = mt_rand(1, 150);
 		if ($probability <= 3) {
 			switch (Configure::read('Session.save')) {

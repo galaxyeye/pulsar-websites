@@ -1,51 +1,64 @@
-<?php echo $this->element('search_syntax_help') ?>
+<?php $topicName = "全部主题" ?>
 
-<div class="monitorTasks index">
-	<h2><?php __('Monitor Tasks');?></h2>
+<nav class="two columns" id="actions-sidebar">
+	<ul class="side-nav">
+		<li class="heading"><a>日常监测</a></li>
+		<?php foreach ($monitorTasks as $monitorTask) : ?>
+			<li><?= $this->Html->link($monitorTask['MonitorTask']['name'], ['action' => 'view', $monitorTask['MonitorTask']['id']]) ?></li>
+		<?php endforeach ?>
+		
+		<li class="heading"><a>话题追踪</a></li>
+		<li class="heading"><a>评论分析</a></li>
+		<li class="heading"><a>风险人群</a></li>
+		<li class="heading"><a>收藏夹</a></li>
+	</ul>
+</nav>
+
+<div class="topics ten columns content">
+
 	<table cellpadding="0" cellspacing="0">
-	<tr>
-			<th><?php echo $this->Paginator->sort('id');?></th>
-			<th><?php echo $this->Paginator->sort('name');?></th>
-			<th><?php echo $this->Paginator->sort('expression');?></th>
-			<th class="actions"><?php __('Actions');?></th>
-	</tr>
-	<?php
-	$i = 0;
-	foreach ($monitorTasks as $monitorTask):
-		$class = null;
-		if ($i++ % 2 == 0) {
-			$class = ' class="altrow"';
-		}
-	?>
-	<tr<?php echo $class;?>>
-		<td><?php echo $monitorTask['MonitorTask']['id']; ?>&nbsp;</td>
-		<td><?php echo $monitorTask['MonitorTask']['name']; ?>&nbsp;</td>
-		<td><?php echo $monitorTask['MonitorTask']['expression']; ?>&nbsp;</td>
-		<td class="actions">
-			<?php echo $this->Html->link(__('View', true), array('action' => 'view', $monitorTask['MonitorTask']['id'])); ?>
-			<?php echo $this->Html->link(__('Edit', true), array('action' => 'edit', $monitorTask['MonitorTask']['id'])); ?>
-			<?php echo $this->Html->link(__('Delete', true), array('action' => 'delete', $monitorTask['MonitorTask']['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $monitorTask['MonitorTask']['id'])); ?>
-		</td>
-	</tr>
-<?php endforeach; ?>
+		<thead>
+		<tr>
+			<th>标题</th>
+			<th>内容</th>
+			<th>来源</th>
+			<th class="actions">操作</th>
+		</tr>
+		</thead>
+		<tbody>
+		<?php foreach ($docs as $doc): ?>
+			<tr>
+				<?php if ($doc['provider'] === 'baidu') : ?>
+					<td><?= $doc['title'] ?></td>
+				<?php else : ?>
+					<td><?= $this->Html->link(h($doc['title']), ['action' => 'quickView', symmetric_encode($doc['url'])]) ?></td>
+				<?php endif ?>
+				<td><?= $doc['shortContent'] ?></td>
+				<td><?= $doc['provider'] ?></td>
+				<td class="actions">
+					<?= $this->Html->link("快照", ['action' => 'quickView', symmetric_encode($doc['url'])]) ?>
+				</td>
+			</tr>
+		<?php endforeach; ?>
+		</tbody>
 	</table>
-	<p>
-	<?php
-	echo $this->Paginator->counter(array(
-	'format' => __('Page %page% of %pages%, showing %current% records out of %count% total, starting on record %start%, ending on %end%', true)
-	));
-	?>	</p>
 
-	<div class="paging">
-		<?php echo $this->Paginator->prev('<< ' . __('previous', true), array(), null, array('class'=>'disabled'));?>
-	 | 	<?php echo $this->Paginator->numbers();?>
- |
-		<?php echo $this->Paginator->next(__('next', true) . ' >>', array(), null, array('class' => 'disabled'));?>
+	<div class="paginator">
+		<p>
+			<?php
+			echo $this->Paginator->counter([
+					'format' => __('当前第%page%页，共计%pages%页， 显示 %current% 条记录， 共计%count%条记录', true)
+			]);
+			?>
+		</p>
+
+		<div class="paging">
+			<?php echo $this->Paginator->prev('<< ' . "上一页", [], null, array('class'=>'disabled'));?>
+			| 	<?php echo $this->Paginator->numbers();?>
+			|
+			<?php echo $this->Paginator->next("下一页" . ' >>', [], null, array('class' => 'disabled'));?>
+		</div>
 	</div>
 </div>
 
-<div class="actions">
-	<ul>
-		<li><?php echo $this->Html->link(__('New Monitor Task', true), array('action' => 'add')); ?></li>
-	</ul>
-</div>
+<?php // echo $this->element('search_syntax_help') ?>

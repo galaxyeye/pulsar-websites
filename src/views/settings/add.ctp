@@ -3,6 +3,7 @@
 	<fieldset>
  		<legend><?php __('Add Setting'); ?></legend>
 	<?php
+		echo $this->Form->input('category');
 		echo $this->Form->input('skey');
 		echo $this->Form->input('svalue');
 	?>

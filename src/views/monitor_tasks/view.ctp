@@ -1,105 +1,59 @@
-<?php $debug = false; ?>
+<?php $topicName = "全部主题" ?>
+
+<nav class="two columns" id="actions-sidebar">
+    <ul class="side-nav">
+        <li class="heading">日常监测</li>
+        <?php foreach ($taskNames as $taskName) : ?>
+            <li><a><?=$taskName ?></a></li>
+        <?php endforeach ?>
+        <li>话题追踪</li>
+        <li>评论分析</li>
+        <li>风险人群</li>
+        <li>收藏夹</li>
+    </ul>
+</nav>
+
+<div class="topics ten columns content">
+
+    <table cellpadding="0" cellspacing="0">
+        <thead>
+        <tr>
+            <th>标题</th>
+            <th>内容</th>
+            <th>来源</th>
+            <th class="actions">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($docs as $doc): ?>
+            <tr>
+                <td><?= $doc['title'] ?></td>
+                <td><?= $doc['shortContent'] ?></td>
+                <td><?= $doc['provider'] ?></td>
+                <td class="actions">
+                    <?= $this->Html->link("快照", ['action' => 'quickView', $doc['url']]) ?>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+
+    <div class="paginator">
+        <p>
+            <?php
+            echo $this->Paginator->counter([
+                'format' => __('当前第%page%页，共计%pages%页， 显示 %current% 条记录， 共计%count%条记录', true)
+            ]);
+            ?>
+        </p>
+
+        <div class="paging">
+            <?php echo $this->Paginator->prev('<< ' . "上一页", [], null, array('class'=>'disabled'));?>
+            | 	<?php echo $this->Paginator->numbers();?>
+            |
+            <?php echo $this->Paginator->next("下一页" . ' >>', [], null, array('class' => 'disabled'));?>
+        </div>
+    </div>
+</div>
 
 <?php echo $this->element('search_syntax_help') ?>
-
-<div class="monitorTasks view">
-    <h2><?php __('Monitor Task'); ?></h2>
-    <dl><?php $i = 0;
-        $class = ' class="altrow"'; ?>
-        <dt<?php if ($i % 2 == 0) echo $class; ?>><?php __('Id'); ?></dt>
-        <dd<?php if ($i++ % 2 == 0) echo $class; ?>>
-            <?php echo $monitorTask['MonitorTask']['id']; ?>
-            &nbsp;
-        </dd>
-        <dt<?php if ($i % 2 == 0) echo $class; ?>><?php __('Name'); ?></dt>
-        <dd<?php if ($i++ % 2 == 0) echo $class; ?>>
-            <?php echo $monitorTask['MonitorTask']['name']; ?>
-            &nbsp;
-        </dd>
-        <dt<?php if ($i % 2 == 0) echo $class; ?>><?php __('Expression'); ?></dt>
-        <dd<?php if ($i++ % 2 == 0) echo $class; ?>>
-            <?php echo $monitorTask['MonitorTask']['expression']; ?>
-            &nbsp;
-        </dd>
-    </dl>
-</div>
-
-<br/>
-
-<div class="actions">
-    <ul>
-        <li><?php echo $this->Html->link(__('Edit Monitor Task', true), array('action' => 'edit', $monitorTask['MonitorTask']['id'])); ?> </li>
-        <li><?php echo $this->Html->link(__('Delete Monitor Task', true), array('action' => 'delete', $monitorTask['MonitorTask']['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $monitorTask['MonitorTask']['id'])); ?> </li>
-        <li><?php echo $this->Html->link(__('List Monitor Tasks', true), array('action' => 'index')); ?> </li>
-        <li><?php echo $this->Html->link(__('New Monitor Task', true), array('action' => 'add')); ?> </li>
-    </ul>
-</div>
-
-<br/>
-
-<div class="docs index">
-    <?php $i = 0; ?>
-    <?php foreach ($providers as $provider) : ?>
-	<h2>数据引擎 － <?=$provider ?></h2>
-
-    <?php if ($provider == 'warpspeed') : ?>
-    <div>
-    	<p>
-    	<?php
-    	echo $this->Paginator->counter(array(
-    	'format' => __('Page %page% of %pages%, showing %current% records out of %count% total, starting on record %start%, ending on %end%', true)
-    	));
-    	?>	</p>
-    
-    	<div class="paging">
-    		<?php echo $this->Paginator->prev('<< ' . __('previous', true), array(), null, array('class'=>'disabled'));?>
-    	 | 	<?php echo $this->Paginator->numbers();?>
-     |
-    		<?php echo $this->Paginator->next(__('next', true) . ' >>', array(), null, array('class' => 'disabled'));?>
-    	</div>
-    </div>
-    <?php endif; ?>
-    
-    <br />
-    
-    <?php foreach ($docs as $doc): ?>
-    <?php if ($doc['provider'] == $provider) : ?>
-    <div class="doc">
-        <dl><?php $i = 0;
-            $class = ' class="altrow"' ?>
-            <dt<?php if ($i % 2 == 0) echo $class ?>>标题</dt>
-            <dd<?php if ($i++ % 2 == 0) echo $class ?>>
-                <?php echo $doc['title']; ?>
-                &nbsp;
-            </dd>
-            <dt<?php if ($i % 2 == 0) echo $class ?>>内容</dt>
-            <dd<?php if ($i++ % 2 == 0) echo $class ?>>
-                <?php echo $doc['shortContent']; ?>
-                &nbsp;
-            </dd>
-            <dt<?php if ($i % 2 == 0) echo $class ?>>来源</dt>
-            <dd<?php if ($i++ % 2 == 0) echo $class ?>>
-                <?php echo $doc['provider']; ?>
-                &nbsp;
-            </dd>
-            <dt<?php if ($i % 2 == 0) echo $class ?>>链接</dt>
-            <dd<?php if ($i++ % 2 == 0) echo $class ?>>
-                <?php echo $this->Html->link($doc['url'], $doc['url'], ['target' => '_blank']) ?>
-                &nbsp;
-            </dd>
-            <?php if ($debug) : ?>
-                <dt<?php if ($i % 2 == 0) echo $class ?>>调试信息</dt>
-                <dd<?php if ($i++ % 2 == 0) echo $class ?>>
-                    <pre><?php // echo json_encode($doc, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT) ?></pre>
-                    &nbsp;
-                </dd>
-            <?php endif; ?>
-        </dl>
-    </div>
-    <hr/>
-    <?php endif; ?>
-    <?php endforeach; ?>
-    <br />
-    <br />
-    <?php endforeach; ?>
-</div>

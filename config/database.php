@@ -3,7 +3,7 @@
 class DATABASE_CONFIG {
 
 	public $default_ = array(
-			'driver' => 'mysql',
+			'driver' => 'mysqli',
 			'persistent' => true,
 			'host' => 'localhost',
 			'login' => 'root',
@@ -14,7 +14,7 @@ class DATABASE_CONFIG {
 	);
 
 	public $default__ = array(
-			'driver' => 'mysql',
+			'driver' => 'mysqli',
 			'persistent' => true,
 			'host' => 'localhost',
 			'login' => 'vincent',
@@ -25,7 +25,7 @@ class DATABASE_CONFIG {
 	);
 
 	public $default = array(
-			'driver' => 'mysql',
+			'driver' => 'mysqli',
 			'persistent' => true,
 			'host' => 'qiwur.com',
 			'login' => 'vincent',

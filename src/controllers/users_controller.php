@@ -685,14 +685,6 @@ class UsersController extends AppController {
 		$this->redirect($this->Auth->logout());
 	}
 	
-	public function u_login() {
-	}
-
-	public function u_logout() {
-		$this->currentUser = DEFAULT_USER;
-		$this->redirect($this->Auth->logout());
-	}
-	
 	public function loginService() {
 		$id = isset($this->params['url']['id']) ? $this->params['url']['id'] : false;
 		$s = isset($this->params['url']['s']) ? $this->params['url']['s'] : false;

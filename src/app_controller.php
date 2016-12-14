@@ -85,15 +85,6 @@ class AppController extends Controller {
       $this->autoLayout = false;
     }
 
-    if ($this->isAnonymous()) {
-    	$this->layout = 'anonymous';
-    }
-
-    if ($this->isCustomer()) {
-      // TODO : check account role
-      $this->layout = 'customer';
-    }
-
     // Javascript support is supplied by default
     // TODO : check if this is useful
     array_push($this->helpers, 'Js');

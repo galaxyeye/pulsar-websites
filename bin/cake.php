@@ -33,6 +33,8 @@ require CONFIG . 'service_config.php';
 
 require CONFIG . 'global_vars.php';
 
-include CORE_PATH . "console/cake.php";
+require CORE_PATH . "console/cake.php";
+
+require CORE_PATH . 'console' . DS . 'error.php';
 
 exit(ShellDispatcher::run($argv));

@@ -2,8 +2,6 @@
 
 App::import('Lib', ['solr/solr_client', 'meta_search/meta_searcher']);
 
-use Icecave\Dialekt\Renderer\ExpressionRenderer;
-use Icecave\Dialekt\Parser\ExpressionParser;
 use MetaSearch\MetaSearcher;
 use Solr\SolrClient;
 
@@ -21,7 +19,7 @@ class MonitorTasksController extends AppController {
 //		$this->layout = "slim";
 //	}
 
-	public function u_index($id = null, $provider = null) {
+	public function index($id = null, $provider = null) {
 		$this->MonitorTask->recursive = 0;
 		$monitorTasks = parent::paginate();
 
@@ -60,20 +58,20 @@ class MonitorTasksController extends AppController {
 		$this->set(compact('monitorTask', 'header', 'docs', 'expression', 'providers', 'id'));
 	}
 
-	public function u_view() {
-		$this->u_index();
-		$this->render("u_index");
+	public function view() {
+		$this->index();
+		$this->render("index");
 	}
 
-	public function u_add() {
+	public function add() {
 		$this->add();
 	}
 
-	public function u_edit() {
+	public function edit() {
 		$this->edit();
 	}
 
-	public function u_delete() {
+	public function delete() {
 		$this->delete();
 	}
 

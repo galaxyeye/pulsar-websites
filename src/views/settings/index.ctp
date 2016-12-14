@@ -1,49 +1,79 @@
-<div class="settings index">
-	<h2><?php __('Settings');?></h2>
-	<table cellpadding="0" cellspacing="0">
-	<tr>
-			<th><?php echo $this->Paginator->sort('id');?></th>
-			<th><?php echo $this->Paginator->sort('skey');?></th>
-			<th><?php echo $this->Paginator->sort('svalue');?></th>
-			<th class="actions"><?php __('Actions');?></th>
-	</tr>
-	<?php
-	$i = 0;
-	foreach ($settings as $setting):
-		$class = null;
-		if ($i++ % 2 == 0) {
-			$class = ' class="altrow"';
-		}
-	?>
-	<tr<?php echo $class;?>>
-		<td><?php echo $setting['Setting']['id']; ?>&nbsp;</td>
-		<td><?php echo $setting['Setting']['skey']; ?>&nbsp;</td>
-		<td><?php echo $setting['Setting']['svalue']; ?>&nbsp;</td>
-		<td class="actions">
-			<?php echo $this->Html->link(__('View', true), array('action' => 'view', $setting['Setting']['id'])); ?>
-			<?php echo $this->Html->link(__('Edit', true), array('action' => 'edit', $setting['Setting']['id'])); ?>
-			<?php echo $this->Html->link(__('Delete', true), array('action' => 'delete', $setting['Setting']['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $setting['Setting']['id'])); ?>
-		</td>
-	</tr>
-<?php endforeach; ?>
-	</table>
-	<p>
-	<?php
-	echo $this->Paginator->counter(array(
-	'format' => __('Page %page% of %pages%, showing %current% records out of %count% total, starting on record %start%, ending on %end%', true)
-	));
-	?>	</p>
+<style>
+	.settings table tr th { width : 20em; }
+	.settings table tr td { text-align: left; }
+	.settings table tr td input[type="radio"] { margin: 0	}
+</style>
 
-	<div class="paging">
-		<?php echo $this->Paginator->prev('<< ' . __('previous', true), array(), null, array('class'=>'disabled'));?>
-	 | 	<?php echo $this->Paginator->numbers();?>
- |
-		<?php echo $this->Paginator->next(__('next', true) . ' >>', array(), null, array('class' => 'disabled'));?>
-	</div>
-</div>
-<div class="actions">
-	<h3><?php __('Actions'); ?></h3>
-	<ul>
-		<li><?php echo $this->Html->link(__('New Setting', true), array('action' => 'add')); ?></li>
+<nav class="two columns" id="actions-sidebar">
+	<ul class="side-nav">
+		<li><a>浏览器提醒</a></li>
+		<li><a>修改密码</a></li>
 	</ul>
+</nav>
+
+<div class="settings ten columns content">
+	<table class="vertical-table">
+		<tr>
+			<th>浏览器提醒</th>
+			<td>
+				<?= $this->Form->input("browserMessage", ['options' => ['开启', '关闭'], 'default' => '开启', 'type' => 'radio']) ?>
+			</td>
+		</tr>
+		<tr>
+			<th>浏览器声音提醒</th>
+			<td>
+				<?= $this->Form->input("browserMessageSound", ['options' => ['开启', '关闭'], 'default' => '开启', 'type' => 'radio']) ?>
+			</td>
+		</tr>
+		<tr>
+			<th>APP提醒</th>
+			<td>
+				<?= $this->Form->input("appMessage", ['options' => ['开启', '关闭'], 'default' => '开启', 'type' => 'radio']) ?>
+			</td>
+		</tr>
+		<tr>
+			<th>主题</th>
+			<td>
+				<?= $this->Form->input("topic", [
+					'label' => false,
+					'class' => 'medium',
+					'options' => ['主题１', '主题2', '主题3', '主题4']
+				])
+				?>
+			</td>
+		</tr>
+		<tr>
+			<th>预警等级</th>
+			<td>
+				<?= $this->Form->input("alertLevel", ['label' => false, 'options' => ['全部', '一级', '二级', '三级', '四级', '正常数据'], 'multiple' => true]) ?>
+			</td>
+		</tr>
+		<tr>
+			<th>资源类型</th>
+			<td>
+				<?= $this->Form->input("sourceCategory", ['label' => false, 'options' => ['全部', '资讯', '微博', '论坛', '贴吧', '博客', '视频', '微信'], 'multiple' => true]) ?>
+			</td>
+		</tr>
+		<tr>
+			<th>多久提醒一次</th>
+			<td>
+				<?= $this->Form->input("messagePeriod", ['options' => ['实时', '1分钟', '5分钟', '10分钟'], 'type' => 'radio']) ?>
+			</td>
+		</tr>
+		<tr>
+			<th>相似数据只提醒一次</th>
+			<td>
+				<?= $this->Form->input("showSimilarMessage", ['options' => ['是', '否'], 'type' => 'radio']) ?>
+			</td>
+		</tr>
+		<tr>
+			<th>&nbsp;</th>
+			<td><a>恢复默认设置</a></td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><button type="button">确定</button>
+			</td>
+		</tr>
+	</table>
 </div>

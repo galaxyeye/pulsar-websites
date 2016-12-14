@@ -30,8 +30,6 @@ $includes = array(
     CAKE . 'cache.php',
     CAKE . 'text.php',
     CAKE . 'class_registry.php',
-#    CAKE . 'error.php'
-#    CORE_PATH . 'console' . DS . 'error.php'
 );
 
 foreach ($includes as $inc) {
@@ -43,6 +41,13 @@ foreach ($includes as $inc) {
 }
 
 Configure::getInstance();
+
+// Bad API design
+App::import('Controller', 'Controller', false);
+
+if (!class_exists("ErrorHandler")) {
+	require_once CAKE . DS . 'error.php';
+}
 
 require CORE_PATH . 'dispatcher.php';
 

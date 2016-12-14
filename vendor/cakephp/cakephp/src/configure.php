@@ -916,7 +916,7 @@ class App extends Object {
         }
         $_this =& App::getInstance();
         $_this->return = $return;
-
+        
         if (isset($ext)) {
             $file = Inflector::underscore($name) . ".{$ext}";
         }
@@ -961,7 +961,7 @@ class App extends Object {
                 $file = $find;
                 $directory = $_this->__find($find, true);
             }
-
+            
             if ($directory !== null) {
                 $_this->__cache = true;
                 $_this->__map($directory . $file, $name . $ext['class'], $type, $plugin);

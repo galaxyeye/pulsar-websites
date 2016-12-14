@@ -178,8 +178,8 @@ class JsHelper extends AppHelper {
  * @return string a JavaScript-safe/JSON representation of $val
  * @access public
  **/
-	function value($val, $quoteString = true) {
-		return $this->{$this->__engineName}->value($val, $quoteString);
+	function value($options = [], $field = null, $key = 'value') {
+		return $this->{$this->__engineName}->value($options, $field);
 	}
 
 /**
@@ -639,31 +639,31 @@ class JsBaseEngineHelper extends AppHelper {
  * @return string a JavaScript-safe/JSON representation of $val
  * @access public
  */
-	function value($val, $quoteString = true) {
+	function value($options = [], $field = null, $key = 'value') {
 		switch (true) {
-			case (is_array($val) || is_object($val)):
-				$val = $this->object($val);
+			case (is_array($options) || is_object($options)):
+				$options = $this->object($options);
 			break;
-			case ($val === null):
-				$val = 'null';
+			case ($options === null):
+				$options = 'null';
 			break;
-			case (is_bool($val)):
-				$val = ($val === true) ? 'true' : 'false';
+			case (is_bool($options)):
+				$options = ($options === true) ? 'true' : 'false';
 			break;
-			case (is_int($val)):
-				$val = $val;
+			case (is_int($options)):
+				$options = $options;
 			break;
-			case (is_float($val)):
-				$val = sprintf("%.11f", $val);
+			case (is_float($options)):
+				$options = sprintf("%.11f", $options);
 			break;
 			default:
-				$val = $this->escape($val);
+				$options = $this->escape($options);
 				if ($quoteString) {
-					$val = '"' . $val . '"';
+					$options = '"' . $options . '"';
 				}
 			break;
 		}
-		return $val;
+		return $options;
 	}
 
 /**

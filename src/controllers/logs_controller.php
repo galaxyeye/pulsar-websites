@@ -11,7 +11,7 @@ class LogsController extends AppController
         $this->Auth->allow('*');
     }
 
-    public function u_index()
+    public function index()
     {
     }
 }

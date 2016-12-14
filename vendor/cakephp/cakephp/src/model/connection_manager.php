@@ -289,7 +289,7 @@ class ConnectionManager extends Object {
  */
 	function __destruct() {
 		if (Configure::read('Session.save') == 'database' && function_exists('session_write_close')) {
-			session_write_close();
+			@session_write_close();
 		}
 	}
 }
