@@ -14,7 +14,7 @@ class StopUrlsControllerTestCase extends CakeTestCase {
 	var $fixtures = array('src.stop_url', 'src.crawl', 'src.user', 'src.group', 'src.crawl_filter', 'src.seed', 'src.human_action', 'src.web_authorization');
 
 	function startTest() {
-		$this->StopUrls =& new TestStopUrlsController();
+		$this->StopUrls = new TestStopUrlsController();
 		$this->StopUrls->constructClasses();
 	}
 

@@ -14,7 +14,7 @@ class PrivilegeGrantorShell extends Shell {
 		App::import('Core','Controller');
 		App::import('Component','Acl');
 
-		$this->Acl =& new AclComponent();
+		$this->Acl = new AclComponent();
 		$controller = null;
 		$this->Acl->startup($controller);
 

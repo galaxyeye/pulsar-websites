@@ -146,7 +146,7 @@ class PHPExcel_Writer_Excel5 implements PHPExcel_Writer_IWriter
 		$this->_str_total       = 0;
 		$this->_str_unique      = 0;
 		$this->_str_table       = array();
-		$this->_parser          = new PHPExcel_Writer_Excel5_Parser($this->_BIFF_version);
+		$this->_parser         = new PHPExcel_Writer_Excel5_Parser($this->_BIFF_version);
 		
 	}
 

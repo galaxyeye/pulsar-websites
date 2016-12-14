@@ -66,7 +66,7 @@ class CaptchaComponent extends Object {
     	$this->_audio_path = CAPTCHA_VENDOR_DIR.$this->_audio_path;
     	$this->_wordlist_file = CAPTCHA_VENDOR_DIR.$this->_wordlist_file; 
 		//CaptchaComponent instance of controller is replaced by a securimage instance
-		$controller->captcha =& new securimage();
+		$controller->captcha = new securimage();
 		$controller->captcha->arc_line_colors = $this->_arc_line_colors;
 		$controller->captcha->audio_path = $this->_audio_path;
 		$controller->captcha->charset = $this->_charset;
