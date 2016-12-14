@@ -237,7 +237,7 @@ class TestTask extends BakeTask {
 		if (strtolower($type) == 'model') {
 			$instance =& ClassRegistry::init($class);
 		} else {
-			$instance =& new $class();
+			$instance = new $class();
 		}
 		return $instance;
 	}

@@ -483,7 +483,7 @@ class Dom {
 		}
 
 		$tag   = strtolower($this->content->copyByToken('slash', true));
-		$node  = new HtmlNode($tag);
+		$node = new HtmlNode($tag);
 
 		// attributes
 		while ($this->content->char() != '>' and

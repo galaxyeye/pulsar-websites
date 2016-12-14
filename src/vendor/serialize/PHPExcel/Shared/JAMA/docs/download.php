@@ -29,7 +29,7 @@ if($_GET['op'] == "download") {
   
 	require_once('Archive/Tar.php');  
 	
-	$tar   = new Archive_Tar($tarPath);
+	$tar  = new Archive_Tar($tarPath);
 
   // create $pkgName archive under $pkgName folder
   $files = glob("$pkgName/*.php");

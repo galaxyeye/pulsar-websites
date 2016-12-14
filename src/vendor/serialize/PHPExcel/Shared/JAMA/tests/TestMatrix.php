@@ -270,7 +270,7 @@ class TestMatrix {
       $this->try_failure("Condition number...", "incorrect condition number calculation");
 
     $SUB = new Matrix($subavals);
-    $O   = new Matrix($SUB->getRowDimension(),1,1.0);
+    $O  = new Matrix($SUB->getRowDimension(),1,1.0);
     $SOL = new Matrix($sqSolution);
     $SQ = $SUB->getMatrix(0,$SUB->getRowDimension()-1,0,$SUB->getRowDimension()-1);
     if ( $this->checkMatrices($SQ->solve($SOL),$O) )

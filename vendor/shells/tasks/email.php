@@ -41,8 +41,8 @@ class EmailTask extends Shell {
     function initialize() {
 	    include CONFIGS . 'routes.php';
 
-		$this->Controller =& new Controller();
-        $this->Email =& new EmailComponent(null);
+		$this->Controller = new Controller();
+        $this->Email = new EmailComponent(null);
         $this->Email->initialize($this->Controller);
 
 	    loadEmailSettings('default', $this->Email);

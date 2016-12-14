@@ -14,7 +14,7 @@ class SparkJobsControllerTestCase extends CakeTestCase {
 	var $fixtures = array('src.spark_job', 'src.crawl', 'src.user', 'src.group', 'src.seed', 'src.crawl_filter', 'src.page_entity', 'src.page_entity_field', 'src.scent_job', 'src.nutch_job', 'src.human_action', 'src.web_authorization', 'src.stop_url');
 
 	function startTest() {
-		$this->SparkJobs =& new TestSparkJobsController();
+		$this->SparkJobs = new TestSparkJobsController();
 		$this->SparkJobs->constructClasses();
 	}
 
