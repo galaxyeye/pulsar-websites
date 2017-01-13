@@ -39,7 +39,7 @@ class UsersController extends AppController {
 		}
 	}
 
-	public function u_index(){
+	public function index(){
 		$this->paginate['User'] = array('limit'=> 500, 'order' => 'User.id DESC');
 
 		if (!isset($this->params['url']['status'])) {
