@@ -96,7 +96,7 @@ class Cache {
  * @access public
  * @static
  */
-	function config($name = null, $settings = array()) {
+	static function config($name = null, $settings = array()) {
 		$self =& Cache::getInstance();
 		if (is_array($name)) {
 			$settings = $name;

@@ -96,7 +96,7 @@ class ClassRegistry {
  * @access public
  * @static
  */
-	function &init($class, $type = null) {
+	static function &init($class, $type = null) {
 		$_this =& ClassRegistry::getInstance();
 		$id = $false = false;
 		$true = true;

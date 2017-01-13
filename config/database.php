@@ -3,6 +3,17 @@
 class DATABASE_CONFIG {
 
 	public $default_ = array(
+		'driver' => 'mysqli',
+		'persistent' => true,
+		'host' => 'localhost',
+		'login' => 'root',
+		'password' => 'abc123',
+		'database' => 'monitor_ui_0_1_0',
+		'encoding'=> 'utf8',
+		'prefix' => ''
+	);
+
+	public $default__ = array(
 			'driver' => 'mysqli',
 			'persistent' => true,
 			'host' => 'localhost',
@@ -13,24 +24,13 @@ class DATABASE_CONFIG {
 			'prefix' => ''
 	);
 
-	public $default__ = array(
-			'driver' => 'mysqli',
-			'persistent' => true,
-			'host' => 'localhost',
-			'login' => 'vincent',
-			'password' => 'ViVopu__zpoooiq',
-			'database' => 'qiwu_data_engine',
-			'encoding'=> 'utf8',
-			'prefix' => ''
-	);
-
 	public $default = array(
 			'driver' => 'mysqli',
 			'persistent' => true,
 			'host' => 'qiwur.com',
-			'login' => 'vincent',
-			'password' => 'ViVopu__zpoooiq@vincent',
-			'database' => 'qiwu_data_engine',
+			'login' => 'monitor_ui',
+			'password' => 'VoVon__i8ooie@monitor_ui',
+			'database' => 'monitor_ui_0_1_0',
 			'encoding'=> 'utf8',
 			'prefix' => ''
 	);

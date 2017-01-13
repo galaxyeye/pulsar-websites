@@ -1,6 +1,6 @@
 <?php
-    echo $html->script("charts/echarts.common.min");
-    $topicId = $topic['Topic']['id'];
+echo $html->script("charts/echarts.common.min");
+$topicId = $topic['Topic']['id'];
 ?>
 
 <script type="text/javascript">
@@ -52,13 +52,15 @@
                 <a class="date yesterday" data-start-date="NOW/DAY-1DAY" data-end-date="NOW/DAY">昨天</a>
                 <a class="date last-7-days" data-start-date="NOW/DAY-7DAY" data-end-date="NOW">最近七天</a>
                 <a class="date last-30-days" data-start-date="NOW/DAY-30DAY" data-end-date="NOW">最近30天</a>
-                <input type="text" id="dateFrom" name="dateFrom" />
-                <input type="text" id="dateTo" name="dateTo" />
+                <input type="text" id="dateFrom" name="dateFrom"/>
+                <input type="text" id="dateTo" name="dateTo"/>
             </div>
-            <div class="one column"><button class="submit">确定</button></div>
+            <div class="one column">
+                <button class="submit">确定</button>
+            </div>
             <div class="column"></div>
         </div>
-        <hr />
+        <hr/>
         <div class="filter misc cl">
             <?php
             $alertLevelOptions = ['预警级别', '一级', '二级', '三级', '四级', '全部预警', '无预警'];
@@ -84,7 +86,7 @@
         <div id="chart-trends" class="chart"></div>
     </div>
 
-    <br />
-    <hr />
+    <br/>
+    <hr/>
 
 </div>

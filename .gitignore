@@ -1,9 +1,7 @@
 .settings
 .idea
-/config/core.php
 /config/database.php
 /logs/*
-/data
 /vendor
 !/vendor/cakephp
 !/vendor/shells

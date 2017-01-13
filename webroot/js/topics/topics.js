@@ -106,7 +106,7 @@ function reloadMonitoredList() {
 
  $('#reloadableArea').hide();
  layer.msg('加载中...', {icon : 16, shade : [0.5, '#f5f5f5'], scrollbar : false, time:10000});
-  var url = "/u/topics/" + queryAction + "/" + topicId;
+  var url = "/topics/" + queryAction + "/" + topicId;
   if (pageNumber > 1) {
     url += "/page:" + pageNumber;
   }
@@ -129,7 +129,7 @@ function reloadMonitoredList() {
 function reloadStatChart() {
   solrParamQ = calculateSolrParamQ();
 
-  var url = "/u/topics/" + statAction + "/" + topicId + "/json";
+  var url = "/topics/" + statAction + "/" + topicId + "/json";
 
   var message = url + "<br />";
   message += solrParamQ + "<br />";
@@ -284,7 +284,7 @@ $(document).ready(function() {
     $('.doc-list td input.select').each(function () {
       if (this.checked) {
         var solrId = $(this).parent().find(".data").attr("data-solr-id");
-        var url = "/u/monitor/mark/" + topicId + "/" + solrId + "/is_read/" + 1;
+        var url = "/monitor/mark/" + topicId + "/" + solrId + "/is_read/" + 1;
         // $.get(url);
         message += url + "<br />";
       }
@@ -299,7 +299,7 @@ $(document).ready(function() {
     $('.doc-list td input.select').each(function () {
       if (this.checked) {
         var solrId = $(this).parent().find(".data").attr("data-solr-id");
-        var url = "/u/monitor/mark/" + topicId + "/" + solrId + "/is_keeped/" + 1;
+        var url = "/monitor/mark/" + topicId + "/" + solrId + "/is_keeped/" + 1;
         // $.get(url);
         message += url + "<br />";
       }
@@ -314,7 +314,7 @@ $(document).ready(function() {
     $('.doc-list td input.select').each(function () {
       if (this.checked) {
         var solrId = $(this).parent().find(".data").attr("data-solr-id");
-        var url = "/u/monitor/mark/" + topicId + "/" + solrId + "/is_keeped/" + 0;
+        var url = "/monitor/mark/" + topicId + "/" + solrId + "/is_keeped/" + 0;
         // $.get(url);
         message += url + "<br />";
       }
@@ -329,7 +329,7 @@ $(document).ready(function() {
     $('.doc-list td input.select').each(function () {
       if (this.checked) {
         var solrId = $(this).parent().find(".data").attr("data-solr-id");
-        var url = "/u/monitor/mark/" + topicId + "/" + solrId + "/is_deleted/" + 1;
+        var url = "/monitor/mark/" + topicId + "/" + solrId + "/is_deleted/" + 1;
         // $.get(url);
         message += url + "<br />";
       }
@@ -344,7 +344,7 @@ $(document).ready(function() {
     $('.doc-list td input.select').each(function () {
       if (this.checked) {
         var solrId = $(this).parent().find(".data").attr("data-solr-id");
-        var url = "/u/monitor/sendEmail/" + topicId + "/" + solrId;
+        var url = "/monitor/sendEmail/" + topicId + "/" + solrId;
         // $.get(url);
         message += url + "<br />";
       }
@@ -359,7 +359,7 @@ $(document).ready(function() {
     $('.doc-list td input.select').each(function () {
       if (this.checked) {
         var solrId = $(this).parent().find(".data").attr("data-solr-id");
-        var url = "/u/monitor/download/" + topicId + "/" + solrId;
+        var url = "/monitor/download/" + topicId + "/" + solrId;
         // $.get(url);
         message += url + "<br />";
       }

@@ -16,7 +16,7 @@
 <script type="text/javascript">
         var globalPageData = {
             "webroot": "<?=$this->Html->webroot?>",
-            "prefix": "<?=$this->params['prefix']?>",
+            "prefix": "<?=isset($this->params['prefix']) ? $this->params['prefix'] : null ?>",
             "controller": "<?=$this->params['controller']?>",
             "action": "<?=$this->params['action']?>",
             "here": "<?=$this->here ?>"
@@ -60,7 +60,7 @@
 
     <?= $this->Session->flash(); ?>
     <div id="stage" class="container clearfix">
-        <?= $content_for_layout?>
+        <?=$content_for_layout ?>
     </div>
 	</div>
 	<img id="bottom" src="/img/bottom.png" alt="" />

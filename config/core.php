@@ -33,7 +33,7 @@
  * In production mode, flash messages redirect after a time interval.
  * In development mode, you need to click the flash message to continue.
  */
-  Configure::write('debug', 1);
+  Configure::write('debug', 0);
 
   Configure::write('Config.language', 'chi');
 
@@ -90,8 +90,7 @@
  *
  * [Note Routing.admin is deprecated in 1.3.  Use Routing.prefixes instead]
  */
-//  Configure::write('Routing.prefixes', array('admin', 'ajax'));
-	Configure::write('Routing.prefixes', array('admin', 'anonymous', 'u'));
+	Configure::write('Routing.prefixes', array('admin', 'anonymous'));
 
 /**
  * Turn off all caching application-wide.
