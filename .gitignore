@@ -1,5 +1,6 @@
 .settings
 .idea
+/config/core.php
 /config/database.php
 /logs/*
 /vendor
