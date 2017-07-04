@@ -34,25 +34,13 @@
 		<div class="user"><?=$currentUser['name'] ?></div>
 		<ul id="menu" class="clearfix">
 			<li class="item main"><a href="<?=Router::url('/') ?>">首页</a></li>
-			<li class="item2 topics"><a
-				href="<?=Router::url(['controller' => 'topics', 'action' => 'monitor']) ?>">主题</a>
-			</li>
-			<li class="item2 manage"><a
-				href="<?=Router::url(['controller' => 'topics', 'action' => 'index']) ?>">管理</a>
-			</li>
-			<li class="item2"><a
-				href="<?=Router::url(['controller' => 'users']) ?>">用户</a>
-			</li>
-			<li class="item2 logs"><a
-				href="<?=Router::url(['controller' => 'logs']) ?>">日志</a>
-			</li>
-			<li class="item2 settings"><a
-				href="<?=Router::url(['controller' => 'settings']) ?>">设置</a>
-			</li>
-			<li class="item2 search"><input class="form-control" type="text"
-				value="站内搜索"></li>
-			<li class="lgo"><a
-				href="<?php echo Router::url(['controller' => 'users', 'action' => 'logout']) ?>">退出</a>
+			<li class="item2 topics"><a href="<?=Router::url(['controller' => 'topics', 'action' => 'monitor']) ?>">主题</a></li>
+			<li class="item2 manage"><a href="<?=Router::url(['controller' => 'topics', 'action' => 'index']) ?>">管理</a></li>
+			<li class="item2"><a href="<?=Router::url(['controller' => 'users']) ?>">用户</a></li>
+			<li class="item2 logs"><a href="<?=Router::url(['controller' => 'logs']) ?>">日志</a></li>
+			<li class="item2 settings"><a href="<?=Router::url(['controller' => 'settings']) ?>">设置</a></li>
+			<li class="item2 search"><input class="form-control" type="text" value="搜索"></li>
+			<li class="lgo"><a href="<?php echo Router::url(['controller' => 'users', 'action' => 'logout']) ?>">退出</a>
 			</li>
 		</ul>
 		</nav>

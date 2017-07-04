@@ -168,15 +168,15 @@ pre { background: none repeat scroll 0% 0% #FFF; box-shadow: 1px 2px 4px rgba(0,
 .form fieldset legend { color: #e32; font-size: 140%; font-weight: bold; }
 .form label { padding-left: 4px; vertical-align: middle; line-height:2em; width:12em; }
 .form fieldset input(:not[type="submit"]) { margin-left: 12em; margin-top: -2.5em; vertical-align: middle; width:28em; }
-.form select { margin-left: 166px; padding:5px 0;　margin:2px auto; }
+.form select { margin-left: 166px; padding:5px 0;    margin:2px auto; }
 .form div.select select { margin-top: -2.5em; vertical-align: middle; width:27em; }
 .form div.datetime select { margin-top: -2.5em; vertical-align: middle; }
 .form div.datetime select[name*="year"] { margin-left: 166px; }
 .form textarea { margin-left: 167px; margin-top: -2.5em; }
 
 .form button:hover, .form button:focus { background: #1798A5; box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.26) !important; }
-.form button[type="submit"] { text-transform: uppercase; padding:10px; margin:25px 0; color:#FFF;　}
-.form button[type="submit"]:hover { cursor:pointer;　}
+.form button[type="submit"] { text-transform: uppercase; padding:10px; margin:25px 0; color:#FFF;    }
+.form button[type="submit"]:hover { cursor:pointer;    }
 .form .error-message { color: rgba(0, 0, 0, 0.54); display: block; font-size: 0.75rem; font-style: italic; font-weight: normal; margin-bottom: 1rem; margin-top: -1px; padding: 0.375rem 0.5625rem 0.5625rem; }
 
 .side-nav li.heading {
