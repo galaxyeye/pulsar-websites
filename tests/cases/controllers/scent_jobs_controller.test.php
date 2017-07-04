@@ -14,7 +14,7 @@ class ScentJobsControllerTestCase extends CakeTestCase {
 	var $fixtures = array('src.scent_job', 'src.page_entity', 'src.page_entity_field', 'src.user', 'src.group');
 
 	function startTest() {
-		$this->ScentJobs =& new TestScentJobsController();
+		$this->ScentJobs = new TestScentJobsController();
 		$this->ScentJobs->constructClasses();
 	}
 

@@ -1274,7 +1274,7 @@ class util
         }
 
         $from = new \DateTime(date('Y-m-d H:i:s', $from));
-        $to   = new \DateTime(date('Y-m-d H:i:s', $to));
+        $to  = new \DateTime(date('Y-m-d H:i:s', $to));
         $diff = $from->diff($to);
 
         if ($diff->y > 1) {

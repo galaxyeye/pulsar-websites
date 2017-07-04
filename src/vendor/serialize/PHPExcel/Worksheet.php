@@ -397,7 +397,7 @@ class PHPExcel_Worksheet implements PHPExcel_IComparable
 		$this->_headerFooter 		= new PHPExcel_Worksheet_HeaderFooter();
 
 		// Set sheet view
-		$this->_sheetView           = new PHPExcel_Worksheet_SheetView();
+		$this->_sheetView          = new PHPExcel_Worksheet_SheetView();
 
     	// Drawing collection
     	$this->_drawingCollection 	= new ArrayObject();

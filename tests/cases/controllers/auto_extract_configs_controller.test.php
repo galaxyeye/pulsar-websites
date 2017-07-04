@@ -14,7 +14,7 @@ class AutoExtractConfigsControllerTestCase extends CakeTestCase {
 	var $fixtures = array('src.auto_extract_config');
 
 	function startTest() {
-		$this->AutoExtractConfigs =& new TestAutoExtractConfigsController();
+		$this->AutoExtractConfigs = new TestAutoExtractConfigsController();
 		$this->AutoExtractConfigs->constructClasses();
 	}
 
