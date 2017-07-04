@@ -422,15 +422,17 @@ class View extends Object {
 		if ($layout === null) {
 			$layout = $this->layout;
 		}
-
+		
 		if ($out !== false) {
-			if ($layout && $this->autoLayout) {
+				
+			if ($layout && $this->autoLayout) {				
 				$out = $this->renderLayout($out, $layout);
+				
 				$isCached = (
 					isset($this->loaded['cache']) &&
 					(($this->cacheAction != false)) && (Configure::read('Cache.check') === true)
 				);
-
+				
 				if ($isCached) {
 					$replace = array('<cakephp:nocache>', '</cakephp:nocache>');
 					$out = str_replace($replace, '', $out);
@@ -438,6 +440,7 @@ class View extends Object {
 			}
 			$this->hasRendered = true;
 		} else {
+				
 			$out = $this->_render($viewFileName, $this->viewVars);
 			trigger_error(sprintf(__("Error in view %s, got: <blockquote>%s</blockquote>", true), $viewFileName, $out), E_USER_ERROR);
 		}
@@ -456,7 +459,7 @@ class View extends Object {
  * @return mixed Rendered output, or false on error
  * @access public
  */
-	function renderLayout($content_for_layout, $layout = null) {
+	function renderLayout($content_for_layout, $layout = null) {		
 		$layoutFileName = $this->_getLayoutFileName($layout);
 		if (empty($layoutFileName)) {
 			return $this->output;
@@ -796,7 +799,7 @@ class View extends Object {
 						return false;
 					}
 				}
-				$loaded[$helper] =& new $helperCn($options);
+				$loaded[$helper] = new $helperCn($options);
 				$vars = array('base', 'webroot', 'here', 'params', 'action', 'data', 'theme', 'plugin');
 				$c = count($vars);
 

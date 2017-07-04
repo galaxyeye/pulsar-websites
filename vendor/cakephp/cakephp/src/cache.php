@@ -70,7 +70,7 @@ class Cache {
 	function &getInstance() {
 		static $instance = array();
 		if (!$instance) {
-			$instance[0] =& new Cache();
+			$instance[0] = new Cache();
 		}
 		return $instance[0];
 	}
@@ -96,7 +96,7 @@ class Cache {
  * @access public
  * @static
  */
-	function config($name = null, $settings = array()) {
+	static function config($name = null, $settings = array()) {
 		$self =& Cache::getInstance();
 		if (is_array($name)) {
 			$settings = $name;
@@ -147,7 +147,7 @@ class Cache {
 			return false;
 		}
 		$cacheClass = $class . 'Engine';
-		$this->_engines[$name] =& new $cacheClass();
+		$this->_engines[$name] = new $cacheClass();
 		if ($this->_engines[$name]->init($config)) {
 			if (time() % $this->_engines[$name]->settings['probability'] === 0) {
 				$this->_engines[$name]->gc();

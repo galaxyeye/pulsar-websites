@@ -812,7 +812,7 @@ class EmailComponent extends Object{
 			'timeout' => 30
 		);
 		$this->smtpOptions = array_merge($defaults, $this->smtpOptions);
-		$this->__smtpConnection =& new CakeSocket($this->smtpOptions);
+		$this->__smtpConnection = new CakeSocket($this->smtpOptions);
 
 		if (!$this->__smtpConnection->connect()) {
 			$this->smtpError = $this->__smtpConnection->lastError();

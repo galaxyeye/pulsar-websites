@@ -94,7 +94,7 @@ class Dispatcher extends Object {
  * @return boolean Success
  * @access public
  */
-	function dispatch($url = null, $additionalParams = array()) {
+	function dispatch($url = null, $additionalParams = array()) {		
 		if ($this->base === false) {
 			$this->base = $this->baseUrl();
 		}
@@ -137,7 +137,7 @@ class Dispatcher extends Object {
 				$privateAction = in_array($prefix, $prefixes);
 			}
 		}
-
+		
 		Router::setRequestInfo(array(
 			$this->params, array('base' => $this->base, 'here' => $this->here, 'webroot' => $this->webroot)
 		));
@@ -170,6 +170,7 @@ class Dispatcher extends Object {
 		if (!empty($this->params['bare'])) {
 			$controller->autoLayout = false;
 		}
+		
 		return $this->_invoke($controller, $this->params);
 	}
 
@@ -187,7 +188,7 @@ class Dispatcher extends Object {
 	function _invoke(&$controller, $params) {
 		$controller->constructClasses();
 		$controller->startupProcess();
-
+		
 		$methods = array_flip($controller->methods);
 
 		if (!isset($methods[strtolower($params['action'])])) {
@@ -204,12 +205,13 @@ class Dispatcher extends Object {
 			)));
 		}
 		$output = call_user_func_array(array(&$controller, $params['action']), $params['pass']);
-
+		
 		if ($controller->autoRender) {
 			$controller->output = $controller->render();
 		} elseif (empty($controller->output)) {
 			$controller->output = $output;
 		}
+		
 		$controller->shutdownProcess();
 
 		if (isset($params['return'])) {
@@ -384,7 +386,7 @@ class Dispatcher extends Object {
 		}
 		$ctrlClass .= 'Controller';
 		if (class_exists($ctrlClass)) {
-			$controller =& new $ctrlClass();
+			$controller = new $ctrlClass();
 		}
 		return $controller;
 	}
@@ -535,7 +537,7 @@ class Dispatcher extends Object {
 					App::import('View', 'View', false);
 				}
 				$controller = null;
-				$view =& new View($controller);
+				$view = new View($controller);
 				$return = $view->renderCache($filename, getMicrotime());
 				if (!$return) {
 					ClassRegistry::removeObject('view');

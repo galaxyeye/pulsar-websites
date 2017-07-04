@@ -158,7 +158,7 @@ class ModelBehavior extends Object {
  * @access public
  * @return mixed
  */
-	function dispatchMethod(&$model, $method, $params = array()) {
+	function dispatchMethod($model = null, $method = null, $params = []) {
 		if (empty($params)) {
 			return $this->{$method}($model);
 		}
@@ -312,7 +312,7 @@ class BehaviorCollection extends Object {
 				if (PHP5) {
 					$this->{$name} = new $class;
 				} else {
-					$this->{$name} =& new $class;
+					$this->{$name} = new $class;
 				}
 				ClassRegistry::addObject($class, $this->{$name});
 				if (!empty($plugin)) {
@@ -434,7 +434,7 @@ class BehaviorCollection extends Object {
  * @return array All methods for all behaviors attached to this object
  * @access public
  */
-	function dispatchMethod(&$model, $method, $params = array(), $strict = false) {
+	function dispatchMethod($model = null, $method = null, $params = [], $strict = false) {
 		$methods = array_keys($this->__methods);
 		foreach ($methods as $key => $value) {
 			$methods[$key] = strtolower($value);
@@ -464,7 +464,7 @@ class BehaviorCollection extends Object {
 		}
 
 		if (!empty($call)) {
-			return $this->{$call[1]}->dispatchMethod($model, $call[0], $params);
+			return @$this->{$call[1]}->dispatchMethod($model, $call[0], $params);
 		}
 		return array('unhandled');
 	}
@@ -491,7 +491,7 @@ class BehaviorCollection extends Object {
 			if (in_array($name, $this->_disabled)) {
 				continue;
 			}
-			$result = $this->{$name}->dispatchMethod($model, $callback, $params);
+			$result = @$this->{$name}->dispatchMethod($model, $callback, $params);
 
 			if ($options['break'] && ($result === $options['breakOn'] || (is_array($options['breakOn']) && in_array($result, $options['breakOn'], true)))) {
 				return $result;

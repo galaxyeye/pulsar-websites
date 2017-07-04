@@ -104,7 +104,7 @@ class Object {
  * @return mixed  Returns the result of the method call
  * @access public
  */
-	function dispatchMethod($method, $params = array()) {
+	function dispatchMethod($method = null, $params = []) {
 		switch (count($params)) {
 			case 0:
 				return $this->{$method}();
@@ -194,17 +194,12 @@ class Object {
 				include_once (APP_SRC . 'app_error.php');
 			}
 		}
-		
+
 		if (class_exists('AppError')) {
-			echo 1;
 			$error = new AppError($method, $messages);
 		} else {
-			echo 2;
 			$error = new ErrorHandler($method, $messages);
-			echo 3;
 		}
-
-		pr($error);
 
 		return $error;
 	}
