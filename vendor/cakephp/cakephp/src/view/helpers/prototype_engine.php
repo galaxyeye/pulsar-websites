@@ -108,7 +108,7 @@ class PrototypeEngineHelper extends JsBaseEngineHelper {
  * Create javascript selector for a CSS rule
  *
  * @param string $selector The selector that is targeted
- * @return object instance of $this. Allows chained methods.
+ * @return CakeObject instance of $this. Allows chained methods.
  */
 	function get($selector) {
 		$this->_multiple = false;

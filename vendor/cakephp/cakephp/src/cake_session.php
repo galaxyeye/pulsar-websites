@@ -32,7 +32,7 @@
  * @package       cakephp
  * @subpackage    cakephp.cakephp.src
  */
-class CakeSession extends Object {
+class CakeSession extends CakeObject {
 
 /**
  * True if the Session is still valid

@@ -29,7 +29,7 @@ App::import('Core', 'l10n');
  * @package       cakephp
  * @subpackage    cakephp.cakephp.libs
  */
-class I18n extends Object {
+class I18n extends CakeObject {
 
 /**
  * Instance of the I10n class for localization
@@ -102,7 +102,7 @@ class I18n extends Object {
 /**
  * Return a static instance of the I18n class
  *
- * @return object I18n
+ * @return CakeObject I18n
  * @access public
  */
 	function &getInstance() {

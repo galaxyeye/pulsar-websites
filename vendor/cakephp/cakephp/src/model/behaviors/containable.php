@@ -60,7 +60,7 @@ class ContainableBehavior extends ModelBehavior {
  * - autoFields: (boolean, optional) auto-add needed fields to fetch requested
  *   bindings. DEFAULTS TO: true
  *
- * @param object $Model Model using the behavior
+ * @param CakeObject $Model Model using the behavior
  * @param array $settings Settings to override for model.
  * @access public
  */
@@ -91,7 +91,7 @@ class ContainableBehavior extends ModelBehavior {
  * )));
  * }}}
  *
- * @param object $Model	Model using the behavior
+ * @param CakeObject $Model	Model using the behavior
  * @param array $query Query parameters as set by cakephp
  * @return array
  * @access public
@@ -223,7 +223,7 @@ class ContainableBehavior extends ModelBehavior {
  * Resets original associations on models that may have receive multiple,
  * subsequent unbindings.
  *
- * @param object $Model Model on which we are resetting
+ * @param CakeObject $Model Model on which we are resetting
  * @param array $results Results of the find operation
  * @param bool $primary true if this is the primary model that issued the find operation, false otherwise
  * @access public
@@ -241,7 +241,7 @@ class ContainableBehavior extends ModelBehavior {
  * Unbinds all relations from a model except the specified ones. Calling this function without
  * parameters unbinds all related models.
  *
- * @param object $Model Model on which binding restriction is being applied
+ * @param CakeObject $Model Model on which binding restriction is being applied
  * @return void
  * @access public
  * @link http://book.cakephp.org/view/1323/Containable#Using-Containable-1324
@@ -257,7 +257,7 @@ class ContainableBehavior extends ModelBehavior {
  * for restoring the bindings after using 'reset' => false as part of the
  * contain call.
  *
- * @param object $Model Model on which to reset bindings
+ * @param CakeObject $Model Model on which to reset bindings
  * @return void
  * @access public
  */
@@ -279,7 +279,7 @@ class ContainableBehavior extends ModelBehavior {
 /**
  * Process containments for model.
  *
- * @param object $Model Model on which binding restriction is being applied
+ * @param CakeObject $Model Model on which binding restriction is being applied
  * @param array $contain Parameters to use for restricting this model
  * @param array $containments Current set of containments
  * @param bool $throwErrors Wether unexisting bindings show throw errors
@@ -384,7 +384,7 @@ class ContainableBehavior extends ModelBehavior {
 /**
  * Calculate needed fields to fetch the required bindings for the given model.
  *
- * @param object $Model Model
+ * @param CakeObject $Model Model
  * @param array $map Map of relations for given model
  * @param mixed $fields If array, fields to initially load, if false use $Model as primary model
  * @return array Fields

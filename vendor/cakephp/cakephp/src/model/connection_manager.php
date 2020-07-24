@@ -28,7 +28,7 @@ include_once CONFIGS . 'database.php';
  * @package       cakephp
  * @subpackage    cakephp.cakephp.src.model
  */
-class ConnectionManager extends Object {
+class ConnectionManager extends CakeObject {
 
 /**
  * Holds a loaded instance of the Connections object
@@ -68,7 +68,7 @@ class ConnectionManager extends Object {
 /**
  * Gets a reference to the ConnectionManger object instance
  *
- * @return object Instance
+ * @return CakeObject Instance
  * @access public
  * @static
  */
@@ -86,7 +86,7 @@ class ConnectionManager extends Object {
  * Gets a reference to a DataSource object
  *
  * @param string $name The name of the DataSource, as defined in src/config/database.php
- * @return object Instance
+ * @return CakeObject Instance
  * @access public
  * @static
  */
@@ -135,7 +135,7 @@ class ConnectionManager extends Object {
  *
  * **Warning** this method may cause fatal errors in PHP4.
  *
- * @param object $source DataSource object
+ * @param CakeObject $source DataSource object
  * @return string Datasource name, or null if source is not present
  *    in the ConnectionManager.
  * @access public
@@ -207,7 +207,7 @@ class ConnectionManager extends Object {
  *
  * @param string $name The DataSource name
  * @param array $config The DataSource configuration settings
- * @return object A reference to the DataSource object, or null if creation failed
+ * @return CakeObject A reference to the DataSource object, or null if creation failed
  * @access public
  * @static
  */

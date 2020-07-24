@@ -93,7 +93,7 @@ class MediaView extends View {
 /**
  * Constructor
  *
- * @param object $controller
+ * @param CakeObject $controller
  */
 	function __construct(&$controller) {
 		parent::__construct($controller);

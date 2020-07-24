@@ -290,7 +290,7 @@ class Inflector {
 /**
  * Gets a reference to the Inflector object instance
  *
- * @return object
+ * @return CakeObject
  * @access public
  */
 	public static function &getInstance() {

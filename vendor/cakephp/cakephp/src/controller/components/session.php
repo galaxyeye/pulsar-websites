@@ -65,7 +65,7 @@ class SessionComponent extends CakeSession {
 /**
  * Startup method.
  *
- * @param object $controller Instantiating controller
+ * @param CakeObject $controller Instantiating controller
  * @return void
  * @access public
  */

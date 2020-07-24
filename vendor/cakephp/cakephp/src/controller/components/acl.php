@@ -31,12 +31,12 @@
  * @subpackage    cakephp.cakephp.libs.controller.components
  * @link http://book.cakephp.org/view/1242/Access-Control-Lists
  */
-class AclComponent extends Object {
+class AclComponent extends CakeObject {
 
 /**
  * Instance of an ACL class
  *
- * @var object
+ * @var CakeObject
  * @access protected
  */
 	var $_Instance = null;
@@ -62,7 +62,7 @@ class AclComponent extends Object {
 /**
  * Startup is not used
  *
- * @param object $controller Controller using this component
+ * @param CakeObject $controller Controller using this component
  * @return boolean Proceed with component usage (true), or fail (false)
  * @access public
  */
@@ -169,7 +169,7 @@ class AclComponent extends Object {
  * @subpackage    cakephp.cakephp.src.controller.components
  * @abstract
  */
-class AclBase extends Object {
+class AclBase extends CakeObject {
 
 /**
  * This class should never be instantiated, just subclassed.
@@ -196,7 +196,7 @@ class AclBase extends Object {
 /**
  * Empty method to be overridden in subclasses
  *
- * @param object $component Component
+ * @param CakeObject $component Component
  * @access public
  */
 	function initialize(&$component) {

@@ -24,7 +24,7 @@
  * @package       cakephp
  * @subpackage    cakephp.cakephp.src
  */
-class Security extends Object {
+class Security extends CakeObject {
 
 /**
  * Default hash method
@@ -37,7 +37,7 @@ class Security extends Object {
 /**
  * Singleton implementation to get object instance.
  *
- * @return object
+ * @return CakeObject
  * @access public
  * @static
  */

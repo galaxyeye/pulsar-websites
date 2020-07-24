@@ -24,7 +24,7 @@
  * @package       cakephp
  * @subpackage    cakephp.cakephp.src.model.datasources
  */
-class DataSource extends Object {
+class DataSource extends CakeObject {
 
 /**
  * Are we connected to the DataSource?

@@ -51,7 +51,7 @@ class CacheHelper extends AppHelper {
 /**
  * cache action time
  *
- * @var object
+ * @var CakeObject
  * @access public
  */
 	var $cacheAction;

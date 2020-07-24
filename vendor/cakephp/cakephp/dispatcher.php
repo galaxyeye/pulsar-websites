@@ -35,7 +35,7 @@ App::import('Controller', 'Controller', false);
  * @package       cakephp
  * @subpackage    cakephp.cakephp
  */
-class Dispatcher extends Object {
+class Dispatcher extends CakeObject {
 
 /**
  * Base URL
@@ -179,7 +179,7 @@ class Dispatcher extends Object {
  * Triggers the controller action, and invokes the rendering if Controller::$autoRender is true and echo's the output.
  * Otherwise the return value of the controller action are returned.
  *
- * @param object $controller Controller to invoke
+ * @param CakeObject $controller Controller to invoke
  * @param array $params Parameters with at least the 'action' to invoke
  * @param boolean $missingAction Set to true if missing action should be rendered, false otherwise
  * @return string Output as sent by controller

@@ -33,7 +33,7 @@ App::import('Core', 'Security');
  * @link http://book.cakephp.org/view/1280/Cookies
  *
  */
-class CookieComponent extends Object {
+class CookieComponent extends CakeObject {
 
 /**
  * The name of the cookie.
@@ -160,7 +160,7 @@ class CookieComponent extends Object {
 /**
  * Main execution method.
  *
- * @param object $controller A reference to the instantiating controller object
+ * @param CakeObject $controller A reference to the instantiating controller object
  * @access public
  */
 	function initialize(&$controller, $settings) {

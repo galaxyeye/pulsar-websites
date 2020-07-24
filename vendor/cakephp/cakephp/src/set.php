@@ -111,7 +111,7 @@ class Set {
  *
  * @param string $class A class name of the type of object to map to
  * @param string $tmp A temporary class name used as $class if $class is an array
- * @return object Hierarchical object
+ * @return CakeObject Hierarchical object
  * @access public
  * @static
  */
@@ -979,7 +979,7 @@ class Set {
 
 /**
  * Converts an object into an array.
- * @param object $object Object to reverse
+ * @param CakeObject $object Object to reverse
  * @return array Array representation of given object
  * @public
  * @static
