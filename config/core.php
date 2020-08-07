@@ -33,7 +33,7 @@
  * In production mode, flash messages redirect after a time interval.
  * In development mode, you need to click the flash message to continue.
  */
-  Configure::write('debug', 2);
+  Configure::write('debug', 1);
 
   Configure::write('Config.language', 'chi');
 
@@ -90,7 +90,8 @@
  *
  * [Note Routing.admin is deprecated in 1.3.  Use Routing.prefixes instead]
  */
-	Configure::write('Routing.prefixes', array('admin', 'anonymous'));
+//  Configure::write('Routing.prefixes', array('admin', 'ajax'));
+	Configure::write('Routing.prefixes', array('admin', 'anonymous', 'u'));
 
 /**
  * Turn off all caching application-wide.
@@ -149,7 +150,7 @@
  * Defines the default error type when using the log() function. Used for
  * differentiating error logging and debugging. Currently PHP supports LOG_DEBUG.
  */
-//	define('LOG_ERROR', 2);
+	// define('LOG_ERROR', 2);
 
 /**
  * The preferred session handling method. Valid values:
