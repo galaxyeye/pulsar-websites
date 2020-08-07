@@ -25,7 +25,7 @@
  * @subpackage    cakephp.cakephp.src
  * @link          http://book.cakephp.org/view/924/The-Configuration-Class
  */
-class Configure extends Object {
+class Configure extends CakeObject {
 
 /**
  * Current debug level.
@@ -442,7 +442,7 @@ class Configure extends Object {
  * @package       cakephp
  * @subpackage    cakephp.cakephp.src
  */
-class App extends Object {
+class App extends CakeObject {
 
 /**
  * List of object types and their properties
@@ -980,7 +980,7 @@ class App extends Object {
 /**
  * Returns a single instance of App.
  *
- * @return object
+ * @return CakeObject
  * @access public
  */
     function &getInstance() {

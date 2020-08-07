@@ -27,7 +27,7 @@ if (!class_exists('Multibyte')) {
  * @subpackage    cakephp.cakephp.libs
  * @since         CakePHP v 1.2.0.3830
  */
-class Validation extends Object {
+class Validation extends CakeObject {
 
 /**
  * Set the the value of methods $check param.
@@ -93,7 +93,7 @@ class Validation extends Object {
 /**
  * Gets a reference to the Validation object instance
  *
- * @return object Validation instance
+ * @return CakeObject Validation instance
  * @access public
  * @static
  */
@@ -900,7 +900,7 @@ class Validation extends Object {
  * Runs an user-defined validation.
  *
  * @param mixed $check value that will be validated in user-defined methods.
- * @param object $object class that holds validation method
+ * @param CakeObject $object class that holds validation method
  * @param string $method class method name for validation to run
  * @param array $args arguments to send to method
  * @return mixed user-defined class class method returns

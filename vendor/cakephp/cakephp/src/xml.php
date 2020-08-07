@@ -30,7 +30,7 @@ App::import('Core', 'Set');
  * @subpackage    cakephp.cakephp.src
  * @since         CakePHP v .0.10.3.1400
  */
-class XmlNode extends Object {
+class XmlNode extends CakeObject {
 
 /**
  * Name of node
@@ -149,7 +149,7 @@ class XmlNode extends Object {
  * @param string $name Node name
  * @param string $value Node value
  * @param string $namespace Node namespace
- * @return object XmlNode
+ * @return CakeObject XmlNode
  */
 	function &createNode($name = null, $value = null, $namespace = false) {
 		$node = new XmlNode($name, $value, $namespace);
@@ -164,7 +164,7 @@ class XmlNode extends Object {
  * @param string $value Element value
  * @param array $attributes Element attributes
  * @param string $namespace Node namespace
- * @return object XmlElement
+ * @return CakeObject XmlElement
  */
 	function &createElement($name = null, $value = null, $attributes = array(), $namespace = false) {
 		$element = new XmlElement($name, $value, $attributes, $namespace);
@@ -176,7 +176,7 @@ class XmlNode extends Object {
  * Creates an XmlTextNode object that can be appended to this document or a node in it
  *
  * @param string $value Node value
- * @return object XmlTextNode
+ * @return CakeObject XmlTextNode
  */
 	function &createTextNode($value = null) {
 		$node = new XmlTextNode($value);
@@ -187,7 +187,7 @@ class XmlNode extends Object {
 /**
  * Gets the XML element properties from an object.
  *
- * @param object $object Object to get properties from
+ * @param CakeObject $object Object to get properties from
  * @return array Properties from object
  * @access public
  */
@@ -367,7 +367,7 @@ class XmlNode extends Object {
 /**
  * Returns a copy of self.
  *
- * @return object Cloned instance
+ * @return CakeObject Cloned instance
  * @access public
  */
 	function cloneNode() {
@@ -377,7 +377,7 @@ class XmlNode extends Object {
 /**
  * Compares $node to this XmlNode object
  *
- * @param object An XmlNode or subclass instance
+ * @param CakeObject An XmlNode or subclass instance
  * @return boolean True if the nodes match, false otherwise
  * @access public
  */
@@ -389,9 +389,9 @@ class XmlNode extends Object {
 /**
  * Append given node as a child.
  *
- * @param object $child XmlNode with appended child
+ * @param CakeObject $child XmlNode with appended child
  * @param array $options XML generator options for objects and arrays
- * @return object A reference to the appended child node
+ * @return CakeObject A reference to the appended child node
  * @access public
  */
 	function &append(&$child, $options = array()) {
@@ -444,7 +444,7 @@ class XmlNode extends Object {
 /**
  * Returns first child node, or null if empty.
  *
- * @return object First XmlNode
+ * @return CakeObject First XmlNode
  * @access public
  */
 	function &first() {
@@ -459,7 +459,7 @@ class XmlNode extends Object {
 /**
  * Returns last child node, or null if empty.
  *
- * @return object Last XmlNode
+ * @return CakeObject Last XmlNode
  * @access public
  */
 	function &last() {
@@ -475,7 +475,7 @@ class XmlNode extends Object {
  * Returns child node with given ID.
  *
  * @param string $id Name of child node
- * @return object Child XmlNode
+ * @return CakeObject Child XmlNode
  * @access public
  */
 	function &child($id) {
@@ -518,7 +518,7 @@ class XmlNode extends Object {
 /**
  * Gets a reference to the next child node in the list of this node's parent.
  *
- * @return object A reference to the XmlNode object
+ * @return CakeObject A reference to the XmlNode object
  * @access public
  */
 	function &nextSibling() {
@@ -538,7 +538,7 @@ class XmlNode extends Object {
 /**
  * Gets a reference to the previous child node in the list of this node's parent.
  *
- * @return object A reference to the XmlNode object
+ * @return CakeObject A reference to the XmlNode object
  * @access public
  */
 	function &previousSibling() {
@@ -558,7 +558,7 @@ class XmlNode extends Object {
 /**
  * Returns parent node.
  *
- * @return object Parent XmlNode
+ * @return CakeObject Parent XmlNode
  * @access public
  */
 	function &parent() {
@@ -568,7 +568,7 @@ class XmlNode extends Object {
 /**
  * Returns the XML document to which this node belongs
  *
- * @return object Parent XML object
+ * @return CakeObject Parent XML object
  * @access public
  */
 	function &document() {
@@ -1019,7 +1019,7 @@ class Xml extends XmlNode {
 /**
  * Get next element. NOT implemented.
  *
- * @return object
+ * @return CakeObject
  * @access public
  */
 	function &next() {
@@ -1030,7 +1030,7 @@ class Xml extends XmlNode {
 /**
  * Get previous element. NOT implemented.
  *
- * @return object
+ * @return CakeObject
  * @access public
  */
 	function &previous() {
@@ -1041,7 +1041,7 @@ class Xml extends XmlNode {
 /**
  * Get parent element. NOT implemented.
  *
- * @return object
+ * @return CakeObject
  * @access public
  */
 	function &parent() {
@@ -1349,7 +1349,7 @@ class XmlTextNode extends XmlNode {
 /**
  * Construct text node with the given parent object and data
  *
- * @param object $parent Parent XmlNode/XmlElement object
+ * @param CakeObject $parent Parent XmlNode/XmlElement object
  * @param mixed $value Node value
  */
 	function __construct($value = null) {
@@ -1452,7 +1452,7 @@ class XmlManager {
 /**
  * Returns a reference to the global XML object that manages src-wide XML settings
  *
- * @return object
+ * @return CakeObject
  * @access public
  */
 	function &getInstance() {

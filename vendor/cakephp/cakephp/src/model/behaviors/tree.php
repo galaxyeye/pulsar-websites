@@ -53,7 +53,7 @@ class TreeBehavior extends ModelBehavior {
 /**
  * Initiate Tree behavior
  *
- * @param object $Model instance of model
+ * @param CakeObject $Model instance of model
  * @param array $config array of configuration settings.
  * @return void
  * @access public

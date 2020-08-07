@@ -28,7 +28,7 @@
  * @link http://book.cakephp.org/view/1291/Request-Handling
  *
  */
-class RequestHandlerComponent extends Object {
+class RequestHandlerComponent extends CakeObject {
 
 /**
  * The layout that will be switched to for Ajax requests
@@ -192,7 +192,7 @@ class RequestHandlerComponent extends Object {
  * corresponding content-type is pushed onto the list of accepted content-types
  * as the first item.
  *
- * @param object $controller A reference to the controller
+ * @param CakeObject $controller A reference to the controller
  * @param array $settings Array of settings to _set().
  * @return void
  * @see Router::parseExtensions()
@@ -219,7 +219,7 @@ class RequestHandlerComponent extends Object {
  * - If the XML data is POSTed, the data is parsed into an XML object, which is assigned
  *   to the $data property of the controller, which can then be saved to a model object.
  *
- * @param object $controller A reference to the controller
+ * @param CakeObject $controller A reference to the controller
  * @return void
  * @access public
  */
@@ -258,7 +258,7 @@ class RequestHandlerComponent extends Object {
 /**
  * Handles (fakes) redirects for Ajax requests using requestAction()
  *
- * @param object $controller A reference to the controller
+ * @param CakeObject $controller A reference to the controller
  * @param mixed $url A string or array containing the redirect location
  * @param mixed HTTP Status for redirect
  * @access public
@@ -635,7 +635,7 @@ class RequestHandlerComponent extends Object {
 /**
  * Sets the layout and template paths for the content type defined by $type.
  *
- * @param object $controller A reference to a controller object
+ * @param CakeObject $controller A reference to a controller object
  * @param string $type Type of response to send (e.g: 'ajax')
  * @return void
  * @access public

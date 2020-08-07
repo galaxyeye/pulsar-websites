@@ -26,7 +26,7 @@ App::import('Core', array('String', 'Security'));
  * @subpackage    cakephp.cakephp.src.controller.components
  * @link http://book.cakephp.org/view/1296/Security-Component
  */
-class SecurityComponent extends Object {
+class SecurityComponent extends CakeObject {
 
 /**
  * The controller method that will be called if this request is black-hole'd
@@ -172,7 +172,7 @@ class SecurityComponent extends Object {
 /**
  * Initialize the SecurityComponent
  *
- * @param object $controller Controller instance for the request
+ * @param CakeObject $controller Controller instance for the request
  * @param array $settings Settings to set to the component
  * @return void
  * @access public
@@ -184,7 +184,7 @@ class SecurityComponent extends Object {
 /**
  * Component startup. All security checking happens here.
  *
- * @param object $controller Instantiating controller
+ * @param CakeObject $controller Instantiating controller
  * @return void
  * @access public
  */
@@ -417,7 +417,7 @@ class SecurityComponent extends Object {
  * Black-hole an invalid request with a 404 error or custom callback. If SecurityComponent::$blackHoleCallback
  * is specified, it will use this callback by executing the method indicated in $error
  *
- * @param object $controller Instantiating controller
+ * @param CakeObject $controller Instantiating controller
  * @param string $error Error method
  * @return mixed If specified, controller blackHoleCallback's response, or no return otherwise
  * @access public
@@ -455,7 +455,7 @@ class SecurityComponent extends Object {
 /**
  * Check if HTTP methods are required
  *
- * @param object $controller Instantiating controller
+ * @param CakeObject $controller Instantiating controller
  * @return bool true if $method is required
  * @access protected
  */
@@ -480,7 +480,7 @@ class SecurityComponent extends Object {
 /**
  * Check if access requires secure connection
  *
- * @param object $controller Instantiating controller
+ * @param CakeObject $controller Instantiating controller
  * @return bool true if secure connection required
  * @access protected
  */
@@ -502,7 +502,7 @@ class SecurityComponent extends Object {
 /**
  * Check if authentication is required
  *
- * @param object $controller Instantiating controller
+ * @param CakeObject $controller Instantiating controller
  * @return bool true if authentication required
  * @access protected
  */
@@ -538,7 +538,7 @@ class SecurityComponent extends Object {
 /**
  * Check if login is required
  *
- * @param object $controller Instantiating controller
+ * @param CakeObject $controller Instantiating controller
  * @return bool true if login is required
  * @access protected
  */
@@ -586,7 +586,7 @@ class SecurityComponent extends Object {
 /**
  * Validate submitted form
  *
- * @param object $controller Instantiating controller
+ * @param CakeObject $controller Instantiating controller
  * @return bool true if submitted form is valid
  * @access protected
  */
@@ -667,7 +667,7 @@ class SecurityComponent extends Object {
 /**
  * Add authentication key for new form posts
  *
- * @param object $controller Instantiating controller
+ * @param CakeObject $controller Instantiating controller
  * @return bool Success
  * @access protected
  */
@@ -730,7 +730,7 @@ class SecurityComponent extends Object {
 /**
  * Calls a controller callback method
  *
- * @param object $controller Controller to run callback on
+ * @param CakeObject $controller Controller to run callback on
  * @param string $method Method to execute
  * @param array $params Parameters to send to method
  * @return mixed Controller callback method's response

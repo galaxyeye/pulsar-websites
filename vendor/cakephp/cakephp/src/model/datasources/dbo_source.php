@@ -193,7 +193,7 @@ class DboSource extends DataSource {
  * Returns an object to represent a database identifier in a query
  *
  * @param string $identifier
- * @return object An object representing a database identifier to be used in a query
+ * @return CakeObject An object representing a database identifier to be used in a query
  * @access public
  */
 	function identifier($identifier) {
@@ -207,7 +207,7 @@ class DboSource extends DataSource {
  * Returns an object to represent a database expression in a query
  *
  * @param string $expression
- * @return object An object representing a database expression to be used in a query
+ * @return CakeObject An object representing a database expression to be used in a query
  * @access public
  */
 	function expression($expression) {
@@ -861,7 +861,7 @@ class DboSource extends DataSource {
  * Passes association results thru afterFind filters of corresponding model
  *
  * @param array $results Reference of resultset to be filtered
- * @param object $model Instance of model to operate against
+ * @param CakeObject $model Instance of model to operate against
  * @param array $filtered List of classes already filtered, to be skipped
  * @return array Array of results that have been filtered through $model->afterFind
  * @access private
@@ -1080,8 +1080,8 @@ class DboSource extends DataSource {
  * @param array $resultSet Data to merge into
  * @param array $merge Data to merge
  * @param string $association Name of Model being Merged
- * @param object $model Model being merged onto
- * @param object $linkModel Model being merged
+ * @param CakeObject $model Model being merged onto
+ * @param CakeObject $linkModel Model being merged
  * @return void
  */
 	function __mergeHasMany(&$resultSet, $merge, $association, &$model, &$linkModel) {
@@ -1368,7 +1368,7 @@ class DboSource extends DataSource {
  * Returns a conditions array for the constraint between two models
  *
  * @param string $type Association type
- * @param object $model Model object
+ * @param CakeObject $model Model object
  * @param array $association Association array
  * @return array Conditions array defining the constraint between $model and $association
  * @access public
@@ -1436,7 +1436,7 @@ class DboSource extends DataSource {
  * Builds and generates an SQL statement from an array.	 Handles final clean-up before conversion.
  *
  * @param array $query An array defining an SQL query
- * @param object $model The model object which initiated the query
+ * @param CakeObject $model The model object which initiated the query
  * @return string An executable SQL statement
  * @access public
  * @see DboSource::renderStatement()
@@ -1709,7 +1709,7 @@ class DboSource extends DataSource {
 /**
  * Returns an array of SQL JOIN fragments from a model's associations
  *
- * @param object $model
+ * @param CakeObject $model
  * @return array
  * @access protected
  */
@@ -1843,7 +1843,7 @@ class DboSource extends DataSource {
  * If conditions are supplied then they will be returned.  If a model doesn't exist and no conditions
  * were provided either null or false will be returned based on what was input.
  *
- * @param object $model
+ * @param CakeObject $model
  * @param mixed $conditions Array of conditions, conditions string, null or false. If an array of conditions,
  *   or string conditions those conditions will be returned.  With other values the model's existance will be checked.
  *   If the model doesn't exist a null or false will be returned depending on the input value.
@@ -2390,7 +2390,7 @@ class DboSource extends DataSource {
  *
  * @param string $key Field reference, as a key (i.e. Post.title)
  * @param string $direction Direction (ASC or DESC)
- * @param object $model model reference (used to look for virtual field)
+ * @param CakeObject $model model reference (used to look for virtual field)
  * @return string ORDER BY clause
  * @access public
  */
@@ -2622,7 +2622,7 @@ class DboSource extends DataSource {
 /**
  * Generate a database-native schema for the given Schema object
  *
- * @param object $schema An instance of a subclass of CakeSchema
+ * @param CakeObject $schema An instance of a subclass of CakeSchema
  * @param string $tableName Optional.  If specified only the table name given will be generated.
  *   Otherwise, all tables defined in the schema are generated.
  * @return string
@@ -2684,7 +2684,7 @@ class DboSource extends DataSource {
 /**
  * Generate a "drop table" statement for the given Schema object
  *
- * @param object $schema An instance of a subclass of CakeSchema
+ * @param CakeObject $schema An instance of a subclass of CakeSchema
  * @param string $table Optional.  If specified only the table name given will be generated.
  *   Otherwise, all tables defined in the schema are generated.
  * @return string

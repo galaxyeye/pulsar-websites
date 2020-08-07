@@ -125,7 +125,7 @@ class ModelTask extends BakeTask {
  * Get a model object for a class name.
  *
  * @param string $className Name of class you want model to be.
- * @return object Model instance
+ * @return CakeObject Model instance
  */
 	function &_getModelObject($className, $table = null) {
 		if (!$table) {
@@ -309,7 +309,7 @@ class ModelTask extends BakeTask {
 /**
  * Handles Generation and user interaction for creating validation.
  *
- * @param object $model Model to have validations generated for.
+ * @param CakeObject $model Model to have validations generated for.
  * @return array $validate Array of user selected validations.
  * @access public
  */
@@ -444,7 +444,7 @@ class ModelTask extends BakeTask {
 /**
  * Handles associations
  *
- * @param object $model
+ * @param CakeObject $model
  * @return array $assocaitons
  * @access public
  */
@@ -495,7 +495,7 @@ class ModelTask extends BakeTask {
 /**
  * Find belongsTo relations and add them to the associations list.
  *
- * @param object $model Model instance of model being generated.
+ * @param CakeObject $model Model instance of model being generated.
  * @param array $associations Array of inprogress associations
  * @return array $associations with belongsTo added in.
  */
@@ -524,7 +524,7 @@ class ModelTask extends BakeTask {
 /**
  * Find the hasOne and HasMany relations and add them to associations list
  *
- * @param object $model Model instance being generated
+ * @param CakeObject $model Model instance being generated
  * @param array $associations Array of inprogress associations
  * @return array $associations with hasOne and hasMany added in.
  */
@@ -567,7 +567,7 @@ class ModelTask extends BakeTask {
 /**
  * Find the hasAndBelongsToMany relations and add them to associations list
  *
- * @param object $model Model instance being generated
+ * @param CakeObject $model Model instance being generated
  * @param array $associations Array of inprogress associations
  * @return array $associations with hasAndBelongsToMany added in.
  */
@@ -635,7 +635,7 @@ class ModelTask extends BakeTask {
 /**
  * Interact with the user and generate additional non-conventional associations
  *
- * @param object $model Temporary model instance
+ * @param CakeObject $model Temporary model instance
  * @param array $associations Array of associations.
  * @return array Array of associations.
  */

@@ -30,7 +30,7 @@ App::import('Core', 'Multibyte');
  * @link http://book.cakephp.org/view/1283/Email
  *
  */
-class EmailComponent extends Object{
+class EmailComponent extends CakeObject{
 
 /**
  * Recipient of the email
@@ -301,7 +301,7 @@ class EmailComponent extends Object{
 /**
  * Initialize component
  *
- * @param object $controller Instantiating controller
+ * @param CakeObject $controller Instantiating controller
  * @access public
  */
 	function initialize(&$controller, $settings = array()) {
@@ -315,7 +315,7 @@ class EmailComponent extends Object{
 /**
  * Startup component
  *
- * @param object $controller Instantiating controller
+ * @param CakeObject $controller Instantiating controller
  * @access public
  */
 	function startup(&$controller) {}

@@ -63,7 +63,7 @@ class Cache {
 /**
  * Returns a singleton instance
  *
- * @return object
+ * @return CakeObject
  * @access public
  * @static
  */

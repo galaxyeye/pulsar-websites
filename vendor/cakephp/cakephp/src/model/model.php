@@ -2816,7 +2816,7 @@ class Model extends Overloadable {
  * Gets the DataSource to which this model is bound.
  * Not safe for use with some versions of PHP4, because this class is overloaded.
  *
- * @return object A DataSource object
+ * @return CakeObject A DataSource object
  * @access public
  */
 	function &getDataSource() {
@@ -2872,7 +2872,7 @@ class Model extends Overloadable {
  * Gets the name and fields to be used by a join model.  This allows specifying join fields
  * in the association definition.
  *
- * @param object $model The model to be joined
+ * @param CakeObject $model The model to be joined
  * @param mixed $with The 'with' key of the model association
  * @param array $keys Any join keys which must be merged with the keys queried
  * @return array

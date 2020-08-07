@@ -17,7 +17,7 @@
  * @since         CakePHP(tm) v 1.2.0
  * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
-if (!class_exists('Object')) {
+if (!class_exists('CakeObject')) {
 	require LIBS . 'object.php';
 }
 if (!class_exists('File')) {
@@ -30,7 +30,7 @@ if (!class_exists('File')) {
  * @package       cakephp.tests
  * @subpackage    cakephp.tests.cases.src
  */
-class MagicDb extends Object {
+class MagicDb extends CakeObject {
 
 /**
  * Holds the parsed MagicDb for this class instance
@@ -178,7 +178,7 @@ class MagicDb extends Object {
  * @package       cakephp.tests
  * @subpackage    cakephp.tests.cases.src
  */
-class MagicFileResource extends Object{
+class MagicFileResource extends CakeObject{
 
 /**
  * undocumented variable

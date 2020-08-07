@@ -2,29 +2,18 @@
 
 class DATABASE_CONFIG {
 
-	public $default_ = array(
+	public $default = array(
 		'driver' => 'mysqli',
 		'persistent' => true,
 		'host' => 'localhost',
-		'login' => 'root',
-		'password' => 'abc123',
-		'database' => 'media_ui_0_1_0',
+		'login' => 'vincent',
+		'password' => 'ViVopu__zpoooiq@vincent',
+		'database' => 'monitor_ui_0_1_0',
 		'encoding'=> 'utf8',
 		'prefix' => ''
 	);
 
 	public $default__ = array(
-		'driver' => 'mysqli',
-		'persistent' => true,
-		'host' => 'localhost',
-		'login' => 'root',
-		'password' => 'abc123',
-		'database' => 'qiwu_ui_v1',
-		'encoding'=> 'utf8',
-		'prefix' => ''
-	);
-
-	public $default = array(
 		'driver' => 'mysqli',
 		'persistent' => true,
 		'host' => 'qiwur.com',

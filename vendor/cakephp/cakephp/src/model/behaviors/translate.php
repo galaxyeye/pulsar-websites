@@ -372,7 +372,7 @@ class TranslateBehavior extends ModelBehavior {
  * name to find/use.  If no translateModel property is found 'I18nModel' will be used.
  *
  * @param Model $model Model to get a translatemodel for.
- * @return object
+ * @return CakeObject
  * @access public
  */
 	function &translateModel(&$model) {
@@ -402,7 +402,7 @@ class TranslateBehavior extends ModelBehavior {
  * Bind translation for fields, optionally with hasMany association for
  * fake field
  *
- * @param object instance of model
+ * @param CakeObject instance of model
  * @param mixed string with field or array(field1, field2=>AssocName, field3)
  * @param boolean $reset
  * @return bool
@@ -475,7 +475,7 @@ class TranslateBehavior extends ModelBehavior {
  * Unbind translation for fields, optionally unbinds hasMany association for
  * fake field
  *
- * @param object $model instance of model
+ * @param CakeObject $model instance of model
  * @param mixed $fields string with field, or array(field1, field2=>AssocName, field3), or null for 
  *    unbind all original translations
  * @return bool

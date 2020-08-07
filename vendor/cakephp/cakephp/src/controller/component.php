@@ -24,12 +24,12 @@
  * @subpackage    cakephp.cakephp.src.controller
  * @link          http://book.cakephp.org/view/993/Components
  */
-class Component extends Object {
+class Component extends CakeObject {
 
 /**
  * Contains various controller variable information (plugin, name, base).
  *
- * @var object
+ * @var CakeObject
  * @access private
  */
 	var $__controllerVars = array('plugin' => null, 'name' => null, 'base' => null);
@@ -37,7 +37,7 @@ class Component extends Object {
 /**
  * List of loaded components.
  *
- * @var object
+ * @var CakeObject
  * @access protected
  */
 	var $_loaded = array();
@@ -46,7 +46,7 @@ class Component extends Object {
  * List of components attached directly to the controller, which callbacks
  * should be executed on.
  *
- * @var object
+ * @var CakeObject
  * @access protected
  */
 	var $_primary = array();
@@ -62,7 +62,7 @@ class Component extends Object {
 /**
  * Used to initialize the components for current controller.
  *
- * @param object $controller Controller with components to load
+ * @param CakeObject $controller Controller with components to load
  * @return void
  * @access public
  */
@@ -81,7 +81,7 @@ class Component extends Object {
 /**
  * Called before the Controller::beforeFilter().
  *
- * @param object $controller Controller with components to initialize
+ * @param CakeObject $controller Controller with components to initialize
  * @return void
  * @access public
  * @link http://book.cakephp.org/view/998/MVC-Class-Access-Within-Components
@@ -103,7 +103,7 @@ class Component extends Object {
 /**
  * Called after the Controller::beforeFilter() and before the controller action
  *
- * @param object $controller Controller with components to startup
+ * @param CakeObject $controller Controller with components to startup
  * @return void
  * @access public
  * @link http://book.cakephp.org/view/998/MVC-Class-Access-Within-Components
@@ -117,7 +117,7 @@ class Component extends Object {
  * Called after the Controller::beforeRender(), after the view class is loaded, and before the
  * Controller::render()
  *
- * @param object $controller Controller with components to beforeRender
+ * @param CakeObject $controller Controller with components to beforeRender
  * @return void
  * @access public
  * @deprecated See Component::triggerCallback()
@@ -129,7 +129,7 @@ class Component extends Object {
 /**
  * Called before Controller::redirect().
  *
- * @param object $controller Controller with components to beforeRedirect
+ * @param CakeObject $controller Controller with components to beforeRedirect
  * @return void
  * @access public
  */
@@ -153,7 +153,7 @@ class Component extends Object {
 /**
  * Called after Controller::render() and before the output is printed to the browser.
  *
- * @param object $controller Controller with components to shutdown
+ * @param CakeObject $controller Controller with components to shutdown
  * @return void
  * @access public
  * @deprecated See Component::triggerCallback()
@@ -191,8 +191,8 @@ class Component extends Object {
 /**
  * Loads components used by this component.
  *
- * @param object $object Object with a Components array
- * @param object $parent the parent of the current object
+ * @param CakeObject $object Object with a Components array
+ * @param CakeObject $parent the parent of the current object
  * @return void
  * @access protected
  */

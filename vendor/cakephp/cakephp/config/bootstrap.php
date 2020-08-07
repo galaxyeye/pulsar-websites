@@ -23,7 +23,7 @@ if (!defined("PHP5")) {
 }
 
 $includes = array(
-    CAKE . 'object.php',
+    CAKE . 'cake_object.php',
     CAKE . 'inflector.php',
     CAKE . 'configure.php',
     CAKE . 'file.php',

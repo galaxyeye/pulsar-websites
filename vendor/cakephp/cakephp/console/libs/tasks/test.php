@@ -227,7 +227,7 @@ class TestTask extends BakeTask {
  *
  * @param string $type The Type of object you are generating tests for eg. controller
  * @param string $class the Classname of the class the test is being generated for.
- * @return object And instance of the class that is going to be tested.
+ * @return CakeObject And instance of the class that is going to be tested.
  * @access public
  */
 	function &buildTestSubject($type, $class) {
@@ -282,7 +282,7 @@ class TestTask extends BakeTask {
  * Generate the list of fixtures that will be required to run this test based on
  * loaded models.
  *
- * @param object $subject The object you want to generate fixtures for.
+ * @param CakeObject $subject The object you want to generate fixtures for.
  * @return array Array of fixtures to be included in the test.
  * @access public
  */

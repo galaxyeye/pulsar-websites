@@ -31,7 +31,7 @@ App::import('Core', array('Router', 'Security'), false);
  * @subpackage    cakephp.cakephp.libs.controller.components
  * @link http://book.cakephp.org/view/1250/Authentication
  */
-class AuthComponent extends Object {
+class AuthComponent extends CakeObject {
 
 /**
  * Maintains current user login state.
@@ -52,7 +52,7 @@ class AuthComponent extends Object {
 /**
  * A reference to the object used for authentication
  *
- * @var object
+ * @var CakeObject
  * @access public
  * @link http://book.cakephp.org/view/1278/authenticate
  */
@@ -265,7 +265,7 @@ class AuthComponent extends Object {
 /**
  * Initializes AuthComponent for use in the controller
  *
- * @param object $controller A reference to the instantiating controller object
+ * @param CakeObject $controller A reference to the instantiating controller object
  * @return void
  * @access public
  */
@@ -302,7 +302,7 @@ class AuthComponent extends Object {
  * Main execution method.  Handles redirecting of invalid users, and processing
  * of login form data.
  *
- * @param object $controller A reference to the instantiating controller object
+ * @param CakeObject $controller A reference to the instantiating controller object
  * @return boolean
  * @access public
  */
@@ -455,7 +455,7 @@ class AuthComponent extends Object {
  * Attempts to introspect the correct values for object properties including
  * $userModel and $sessionKey.
  *
- * @param object $controller A reference to the instantiating controller object
+ * @param CakeObject $controller A reference to the instantiating controller object
  * @return boolean
  * @access private
  */
@@ -808,7 +808,7 @@ class AuthComponent extends Object {
  * to load it if it is not found.
  *
  * @param string $name Model name (defaults to AuthComponent::$userModel)
- * @return object A reference to a model object
+ * @return CakeObject A reference to a model object
  * @access public
  */
 	function &getModel($name = null) {
@@ -949,7 +949,7 @@ class AuthComponent extends Object {
 /**
  * Component shutdown.  If user is logged in, wipe out redirect.
  *
- * @param object $controller Instantiating controller
+ * @param CakeObject $controller Instantiating controller
  * @access public
  */
 	function shutdown(&$controller) {

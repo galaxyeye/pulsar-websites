@@ -26,7 +26,7 @@
  * @package       cakephp
  * @subpackage    cakephp.cakephp.src
  */
-class Overloadable extends Object {
+class Overloadable extends CakeObject {
 
 /**
  * Constructor.
@@ -86,7 +86,7 @@ Overloadable::overload('Overloadable');
  * @package       cakephp
  * @subpackage    cakephp.cakephp.src
  */
-class Overloadable2 extends Object {
+class Overloadable2 extends CakeObject {
 
 /**
  * Constructor

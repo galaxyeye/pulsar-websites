@@ -24,7 +24,7 @@
  * @package       cakephp
  * @subpackage    cakephp.cakephp.console
  */
-class ErrorHandler extends Object
+class ErrorHandler extends CakeObject
 {
 
     /**

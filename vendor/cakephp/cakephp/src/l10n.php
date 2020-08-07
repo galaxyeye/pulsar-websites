@@ -24,7 +24,7 @@
  * @package       cakephp
  * @subpackage    cakephp.cakephp.libs
  */
-class L10n extends Object {
+class L10n extends CakeObject {
 
 /**
  * The language for current locale

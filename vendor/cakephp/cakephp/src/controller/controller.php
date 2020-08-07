@@ -34,7 +34,7 @@ App::import('View', 'View', false);
  * @subpackage    cakephp.cakephp.src.controller
  * @link          http://book.cakephp.org/view/956/Introduction
  */
-class Controller extends Object {
+class Controller extends CakeObject {
 
 /**
  * The name of this controller. Controller names are plural, named after the model they manipulate.
