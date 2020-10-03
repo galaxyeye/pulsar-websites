@@ -196,6 +196,15 @@
     once: true,
     mirror: false
   });
+
+  $('#list-tab a.list-group-item-action').on('click', function (e) {
+    e.preventDefault();
+
+    var target = $(this).attr('href').substr(1);
+    var labelledby = 'list-' + target + '-list';
+    $("#nav-tabContent .tab-pane.fade.show").removeClass('show').removeClass('active');
+    $("#nav-tabContent" + " div[aria-labelledby~=" + labelledby + "]").addClass('show').addClass('active');
+  })
 })(jQuery);
 
 hljs.initHighlightingOnLoad();
