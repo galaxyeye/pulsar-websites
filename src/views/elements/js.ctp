@@ -11,8 +11,8 @@ if (isset($html)) {
     echo $html->script("../vendor/isotope-layout/isotope.pkgd.min.js") . PHP_EOL;
     echo $html->script("../vendor/venobox/venobox.min.js") . PHP_EOL;
     echo $html->script("../vendor/aos/aos.js") . PHP_EOL;
-
     echo $html->script("../vendor/highlightjs/highlight.pack.js") . PHP_EOL;
+
     echo $html->script("../js/main.js") . PHP_EOL;
 }
 

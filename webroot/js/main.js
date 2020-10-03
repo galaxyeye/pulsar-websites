@@ -197,4 +197,7 @@
     mirror: false
   });
 
+  $(document).ready(function () {
+    hljs.initHighlightingOnLoad();
+  });
 })(jQuery);

@@ -19,26 +19,11 @@
             '../vendor/boxicons/css/boxicons.min',
             '../vendor/owl.carousel/owl.carousel.min',
             '../vendor/venobox/venobox',
+            '../vendor/highlightjs/styles/default',
             '../vendor/aos/aos',
             'style',
         )));
     ?>
-
-    <style type="text/css">
-		.debug.message, .debug.field {
-		display: <?=(Configure::read('debug')> 0)? 'block': 'none'?>;
-	}
-</style>
-
-<script type="text/javascript">
-        var globalPageData = {
-            "webroot": "<?=$this->Html->webroot?>",
-            "prefix": "<?=isset($this->params['prefix']) ? $this->params['prefix'] : null ?>",
-            "controller": "<?=$this->params['controller']?>",
-            "action": "<?=$this->params['action']?>",
-            "here": "<?=$this->here ?>"
-        };
-    </script>
 </head>
 
 <body id="<?php echo Inflector::variable($this->params['controller']) . Inflector::classify($this->params['action']) ?>">
@@ -121,12 +106,6 @@ if (isset($js))
         ) );
     }
 ?>
-
-<script type="javascript">
-    $(document).ready({
-        hljs.initHighlightingOnLoad();
-    })
-</script>
 
 </body>
 </html>
