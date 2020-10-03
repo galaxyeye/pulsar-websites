@@ -110,42 +110,6 @@
  */
 	//Configure::write('Cache.check', true);
 
-	Cache::config('minute', array(
-    	'engine' => 'File',
-    	'duration'=> '+1 minute',
-    	'path' => CACHE. 'common' . DS . 'minute_' . DS
-	));
-
-	Cache::config('minutes2', array(
-    	'engine' => 'File',
-    	'duration'=> '+2 minutes',
-    	'path' => CACHE. 'common' . DS . 'minutes2_' . DS
-	));
-
-	Cache::config('minutes5', array(
-    	'engine' => 'File',
-    	'duration'=> '+5 minutes',
-    	'path' => CACHE. 'common' . DS . 'minutes5_' . DS
-	));
-
-	Cache::config('minutes10', array(
-    	'engine' => 'File',
-    	'duration'=> '+10 minutes',
-    	'path' => CACHE. 'common' . DS . 'minutes10_' . DS
-	));
-
-	Cache::config('hourly', array(
-    	'engine' => 'File',
-    	'duration'=> '+1 hours',
-    	'path' => CACHE. 'common' . DS . 'hourly_' . DS
-	));
-
-	Cache::config('daily', array(
-    	'engine' => 'File',
-    	'duration'=> '+1 day',
-    	'path' => CACHE. 'common' . DS . 'daily_' . DS
-	));
-
 /**
  * Defines the default error type when using the log() function. Used for
  * differentiating error logging and debugging. Currently PHP supports LOG_DEBUG.

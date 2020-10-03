@@ -23,16 +23,6 @@ require ROOT . DS . 'vendor' . DS . 'autoload.php';
  */
 require CORE_PATH . 'config' . DS . 'bootstrap.php';
 
-require CONFIG . 'functions.php';
-
-require CONFIG . 'switch_config.php';
-
-require CONFIG . 'project_config.php';
-
-require CONFIG . 'service_config.php';
-
-require CONFIG . 'global_vars.php';
-
 require CORE_PATH . "console/cake.php";
 
 require CORE_PATH . 'console' . DS . 'error.php';

@@ -1,11 +1,20 @@
 <?php
-echo "<!-- common javascript -->" . PHP_EOL;
-echo $html->script(JQUERY) . PHP_EOL;
-echo $html->script(JQUERY_UI) . PHP_EOL;
-echo $html->script(JSRENDER) . PHP_EOL;
-echo $html->script(COMMON) . PHP_EOL;
-echo $html->script(LAYER) . PHP_EOL;
-echo $html->script(DUMP) . PHP_EOL;
+
+if (isset($html)) {
+    echo $html->script("../vendor/jquery/jquery.min.js") . PHP_EOL;
+    echo $html->script("../vendor/bootstrap/js/bootstrap.bundle.min.js") . PHP_EOL;
+    echo $html->script("../vendor/jquery.easing/jquery.easing.min.js") . PHP_EOL;
+    echo $html->script("../vendor/php-email-form/validate.js") . PHP_EOL;
+    echo $html->script("../vendor/waypoints/jquery.waypoints.min.js") . PHP_EOL;
+    echo $html->script("../vendor/counterup/counterup.min.js") . PHP_EOL;
+    echo $html->script("../vendor/owl.carousel/owl.carousel.min.js") . PHP_EOL;
+    echo $html->script("../vendor/isotope-layout/isotope.pkgd.min.js") . PHP_EOL;
+    echo $html->script("../vendor/venobox/venobox.min.js") . PHP_EOL;
+    echo $html->script("../vendor/aos/aos.js") . PHP_EOL;
+
+    echo $html->script("../vendor/highlightjs/highlight.pack.js") . PHP_EOL;
+    echo $html->script("../js/main.js") . PHP_EOL;
+}
 
 if (isset($scripts_for_layout)) {
     echo "<!-- page specified external scripts -->" . PHP_EOL;
@@ -30,4 +39,6 @@ if (is_file($base_dir . DS . $this->params["action"] . ".js")) {
     echo PHP_EOL;
 }
 
-echo $js->writeBuffer();
+if (isset($js)) {
+    echo $js->writeBuffer();
+}

@@ -1,4 +1,0 @@
-User defined avatars are placed under this folder, and follow the format below:
-1) To prevent too many files in one directory (there is a system limit), the custom folder
-must seperated into subfolders named by month.
-2) Image files must named by user id with image suffix.

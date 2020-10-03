@@ -1,10 +1,7 @@
 <?php
 
 // version
-define('VERSION', '0.90');
-
-// database deploy
-define('STAT_DB', 'default');
+define('VERSION', '0.0.1');
 
 /**
  * Environment information

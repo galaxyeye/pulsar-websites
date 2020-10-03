@@ -1,8 +1,6 @@
 <?php
-App::import('Lib', array('function_core', 'ip'));
 
-// TODO : use a vendor library to do this
-define('CLIENT_IP', IPv6ToIPv4MappedFormat(getRealRemoteIp()));
+require "config/project_config.php";
 
 class AppController extends Controller {
 
@@ -27,8 +25,6 @@ class AppController extends Controller {
 
   public $settings = array();
 
-  public $uniqueCookie = null;
-
   public function beforeFilter() {
     parent::beforeFilter();
 
@@ -51,7 +47,7 @@ class AppController extends Controller {
 
     // disable all cached item?
     // Cache::clear();
-    
+
     // FIX mb_split/mbregex problem on aliyun servers : "mbregex compile err: invalid regular expression"
     // This problem does not see on dev machine.
     // TODO : check the difference between dev server and aliyun server
@@ -64,9 +60,9 @@ class AppController extends Controller {
     $this->set('currentUser', $this->currentUser);
     $this->set('settings', $this->settings);
 
-    $this->set('title_for_layout', DEFAULT_TITLE);
-    $this->set('meta_keywords', DEFAULT_KEYWORDS);
-    $this->set('meta_description', DEFAULT_DESCRIPTION);
+      $this->set('title_for_layout', DEFAULT_TITLE);
+      $this->set('meta_keywords', DEFAULT_KEYWORDS);
+      $this->set('meta_description', DEFAULT_DESCRIPTION);
 
     if (isset($this->params['named']['preview']) && $this->params['named']['preview']) {
       $this->layout = 'preview';
@@ -88,25 +84,6 @@ class AppController extends Controller {
   }
 
   public function afterFilter() {
-    $ACTION_LOG_OPEN = false;
-    if ($ACTION_LOG_OPEN && $this->_needLogAction()) {
-      $db =& ConnectionManager::getDataSource(STAT_DB);
-
-      // Logging
-      $sql = sprintf(<<<TAG
-INSERT INTO `stat_accesses` (`controller`, `action`, `param1`, `param2`, `param3`, `ip`, `referer`, `uucookie`, `user_id`) 
-TAG
-          ."VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', %d)",
-          $this->params['controller'], $this->params['action'],
-          isset($this->params['pass'][0]) ? $this->params['pass'][0] : null,
-          isset($this->params['pass'][1]) ? $this->params['pass'][1] : null,
-          isset($this->params['pass'][2]) ? $this->params['pass'][2] : null,
-          CLIENT_IP,
-          isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : null,
-          $this->uniqueCookie,
-          $this->currentUser['id']);
-      $db->query($sql);
-    } // if
   }
 
   /**
@@ -231,19 +208,6 @@ TAG;
     }
   }
 
-  protected function _needLogAction() {
-    // This program need no log
-    return false;
-
-    $blackList = array('image', 'css', 'js');
-    $controller = $this->params['controller'];
-    if (in_array($controller, $blackList) || $this->isAdmin()) {
-      return false;
-    }
-
-    return true;
-  }
-
   protected function _updateUser($user) {
     if (!$user['id']) {
       return ;
@@ -255,101 +219,5 @@ SELECT `User`.* FROM `users` AS `User` WHERE `User`.`id`=$user[id]
 TAG;
     $data = $db->query($sql);
     $this->currentUser = array_merge($user, $data[0]['User']);
-  }
-
-  protected function redirect2Index($msg = '', $logLevel = false) {
-    if ($logLevel && !empty($msg)) {
-      $this->log($msg, $logLevel);
-    }
-
-    $this->Session->setFlash($msg);
-    $this->redirect(array('action' => 'index'));
-  }
-
-  protected function redirect2View($id, $msg = '', $logLevel = false) {
-    if ($logLevel && !empty($msg)) {
-      $this->log($msg, $logLevel);
-    }
-
-    $this->Session->setFlash($msg);
-    $this->redirect(array('action' => 'view', $id));
-  }
-
-  protected function _validateId($id, $redirect = ['action' => 'index']) {
-    $modelClass = $this->modelClass;
-    if (is_array($id)) {
-      if (!isset($id[$modelClass]['id'])) {
-        $id = false;
-      }
-      else {
-        $id = $id[$modelClass]['id'];        
-      }
-    }
-
-    if (!$id) {
-      $this->Session->setFlash("Invalid ".$modelClass);
-      $this->redirect($redirect);
-    }
-
-    if(!$this->checkTenantPrivilege($id)) {
-      $this->Session->setFlash(__('Privilege denied', true));
-      $this->redirect($redirect);
-    }
-  }
-
-  /**
-   * Multiple tenant support
-   * @param $id integer The tenant user id
-   * @param $modelClass string Model class name
-   * @return boolean
-   * */
-  protected function checkTenantPrivilege($id, $modelClass = null) {
-    if ($modelClass == null) {
-      $modelClass = $this->modelClass;
-    }
-
-    if (empty($id)) {
-      return false;
-    }
-
-    if (is_array($id)) {
-      if (!isset($id[$modelClass]['id'])) {
-        return false;
-      }
-
-      $id = $id[$modelClass]['id'];
-    }
-
-    // it's not a multi-tanent table
-    if (!$this->{$modelClass}->hasField('user_id')) {
-      return true;
-    }
-
-    $lastRecursive = $this->{$modelClass}->recursive;
-    $this->{$modelClass}->recursive = - 1;
-    $model = $this->{$modelClass}->read(array('user_id'), $id);
-    $this->{$modelClass}->recursive = $lastRecursive;
-
-    if ($model[$modelClass]['user_id'] !== $this->currentUser['id']) {
-      return false;
-    }
-
-    return true;
-  }
-
-  // TODO : move to a library?
-  protected function _tidyCrawlFilter($crawlFilters) {
-    $tidiedCrawlFilters = array();
-
-    foreach ($crawlFilters as $crawlFilter) {
-      $this->loadModel('CrawlFilter');
-      $crawlFilter = $this->CrawlFilter->tidyCrawlFilter($crawlFilter);
-
-      if (!empty($crawlFilter)) {
-        array_push($tidiedCrawlFilters, $crawlFilter);
-      }
-    }
-  
-    return $tidiedCrawlFilters;
   }
 }
