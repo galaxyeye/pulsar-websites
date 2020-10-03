@@ -17,7 +17,7 @@
             '../vendor/icofont/icofont.min',
             '../vendor/remixicon/remixicon',
             '../vendor/boxicons/css/boxicons.min',
-            '../vendor/owl.carousel/owl.carousel.min',
+            '../vendor/owl.carousel/assets/owl.carousel.min',
             '../vendor/venobox/venobox',
             '../vendor/highlightjs/styles/default',
             '../vendor/aos/aos',

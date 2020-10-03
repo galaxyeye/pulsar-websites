@@ -4,9 +4,9 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-6 pt-5 pt-lg-0 order-2 order-lg-1 d-flex flex-column justify-content-center">
-                <h1 data-aos="fade-up-del">Web 即数据库</h1>
-                <h2 data-aos="fade-up-del" data-aos-delay="400">使用 AI 和 SQL 将任意授权网站完整精确转变成数据。现在，您可以直接在 Web 上应用商业智能。</h2>
-                <div data-aos="fade-up-del" data-aos-delay="800">
+                <h1 data-aos="fade-up">Web 即数据库</h1>
+                <h2 data-aos="fade-up" data-aos-delay="400">使用 AI 和 SQL 将任意授权网站完整精确转变成数据。现在，您可以直接在 Web 上应用商业智能。</h2>
+                <div data-aos="fade-up" data-aos-delay="800">
                     <a href="#about" class="btn-get-started scrollto">开始</a>
                     <a class="btn-get-started" href="http://bi.platonic.fun/dashboard/11" target="_blank">亚马逊全站数据</a>
                 </div>
@@ -60,12 +60,12 @@
     <section id="about" class="about">
         <div class="container">
 
-            <div class="section-title" data-aos="fade-up-del">
+            <div class="section-title" data-aos="fade-up">
                 <h2>产品介绍</h2>
             </div>
 
             <div class="row content">
-                <div class="col-lg-5" data-aos="fade-up-del" data-aos-delay="150">
+                <div class="col-lg-5" data-aos="fade-up" data-aos-delay="150">
                     <p>
                         <b>Web 即数据库</b>
                     </p>
@@ -76,7 +76,7 @@
                         <li><i class="ri-check-double-line"></i> <b>商业智能</b> - 在 Web 上应用商业智能，捕捉成千上万高价值事件，回答利益攸关的业务问题</li>
                     </ul>
                 </div>
-                <div class="col-lg-7 pt-4 pt-lg-0" data-aos="fade-up-del" data-aos-delay="300">
+                <div class="col-lg-7 pt-4 pt-lg-0" data-aos="fade-up" data-aos-delay="300">
             <pre><code class="language-sql">-- 将一组亚马逊产品页转变成本地表
 select
     dom_base_uri(dom) as `url`,
@@ -102,12 +102,12 @@ from load_out_pages('https://www.amazon.com/b?node=3117954011', 'a[href~=/dp/]',
     <section id="technology" class="about">
         <div class="container">
 
-            <div class="section-title" data-aos="fade-up-del">
+            <div class="section-title" data-aos="fade-up">
                 <h2>智能挖掘</h2>
             </div>
 
             <div class="row content">
-                <div class="col-lg-10" data-aos="fade-up-del" data-aos-delay="150">
+                <div class="col-lg-10" data-aos="fade-up" data-aos-delay="150">
                     <p>
                         <b>零干预将网站还原为数据</b>
                     </p>
@@ -174,12 +174,12 @@ from load_out_pages('https://www.amazon.com/b?node=3117954011', 'a[href~=/dp/]',
     <section id="saas-service" class="about">
         <div class="container">
 
-            <div class="section-title" data-aos="fade-up-del">
+            <div class="section-title" data-aos="fade-up">
                 <h2>SAAS 服务</h2>
             </div>
 
             <div class="row content">
-                <div class="col-lg-7 pt-4 pt-lg-0" data-aos="fade-up-del" data-aos-delay="300">
+                <div class="col-lg-7 pt-4 pt-lg-0" data-aos="fade-up" data-aos-delay="300">
 <pre><code class="language-sql">POST http://api.platonic.fun/api/x/a/q
 Content-Type: application/json
 
@@ -201,7 +201,7 @@ from load_out_pages('https://www.amazon.com/b?node=3117954011', 'a[href~=/dp/]',
 }
               </code></pre>
                 </div>
-                <div class="col-lg-5" data-aos="fade-up-del" data-aos-delay="150">
+                <div class="col-lg-5" data-aos="fade-up" data-aos-delay="150">
                     <p>
                         支持 X-SQL 的 REST API
                     </p>
@@ -275,7 +275,7 @@ from load_out_pages('https://www.amazon.com/b?node=3117954011', 'a[href~=/dp/]',
     <section id="solutions" class="solutions">
         <div class="container">
 
-            <div class="section-title" data-aos="fade-up-del">
+            <div class="section-title" data-aos="fade-up">
                 <h2>解决方案</h2>
                 <p>告诉我们您在进行何种类型的项目</p>
             </div>
@@ -283,7 +283,7 @@ from load_out_pages('https://www.amazon.com/b?node=3117954011', 'a[href~=/dp/]',
             <div class="row">
 
                 <div id="price-intelligent" class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0">
-                    <div class="icon-box" data-aos="fade-up-del" data-aos-delay="300">
+                    <div class="icon-box" data-aos="fade-up" data-aos-delay="300">
                         <div class="icon"><i class="bx bx-tachometer"></i></div>
                         <h4 class="title"><a href="">价格情报</a></h4>
                         <h6 class="description">通过 Web 数据提取实现卓越的定价数据智能。</h6>
@@ -293,7 +293,7 @@ from load_out_pages('https://www.amazon.com/b?node=3117954011', 'a[href~=/dp/]',
                 </div>
 
                 <div id="ecommerce" class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0">
-                    <div class="icon-box" data-aos="fade-up-del" data-aos-delay="400">
+                    <div class="icon-box" data-aos="fade-up" data-aos-delay="400">
                         <div class="icon"><i class="bx bxl-dribbble"></i></div>
                         <h4 class="title"><a href="">电商选品</a></h4>
                         <h6 class="description">使用 Web BI 实现电商选品决策。</h6>
@@ -303,7 +303,7 @@ from load_out_pages('https://www.amazon.com/b?node=3117954011', 'a[href~=/dp/]',
                 </div>
 
                 <div id="marketing-channel" class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0">
-                    <div class="icon-box" data-aos="fade-up-del" data-aos-delay="400">
+                    <div class="icon-box" data-aos="fade-up" data-aos-delay="400">
                         <div class="icon"><i class="bx bx-tachometer"></i></div>
                         <h4 class="title"><a href="">渠道巡检</a></h4>
                         <h6 class="description">使用 Web BI 监测产品渠道，确保渠道合法合规。</h6>
@@ -313,7 +313,7 @@ from load_out_pages('https://www.amazon.com/b?node=3117954011', 'a[href~=/dp/]',
                 </div>
 
                 <div id="customer-discovery" class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0">
-                    <div class="icon-box" data-aos="fade-up-del" data-aos-delay="400">
+                    <div class="icon-box" data-aos="fade-up" data-aos-delay="400">
                         <div class="icon"><i class="bx bx-world"></i></div>
                         <h4 class="title"><a href="">潜在顾客生成</a></h4>
                         <h6 class="description">使用高质量的 Web 提取数据构建高质量潜在客户列表。</h6>
@@ -327,7 +327,7 @@ from load_out_pages('https://www.amazon.com/b?node=3117954011', 'a[href~=/dp/]',
             <div class="row">
 
                 <div id="brand-monitoring" class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0">
-                    <div class="icon-box" data-aos="fade-up-del" data-aos-delay="400">
+                    <div class="icon-box" data-aos="fade-up" data-aos-delay="400">
                         <div class="icon"><i class="bx bx-world"></i></div>
                         <h4 class="title"><a href="">品牌监测</a></h4>
                         <h6 class="description">通过网络数据提取进行品牌监控，跟踪并保护您的品牌。</h6>
@@ -337,7 +337,7 @@ from load_out_pages('https://www.amazon.com/b?node=3117954011', 'a[href~=/dp/]',
                 </div>
 
                 <div id="recruitment" class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0">
-                    <div class="icon-box" data-aos="fade-up-del" data-aos-delay="300">
+                    <div class="icon-box" data-aos="fade-up" data-aos-delay="300">
                         <div class="icon"><i class="bx bx-tachometer"></i></div>
                         <h4 class="title"><a href="">招聘</a></h4>
                         <h6 class="description">通过网络数据提取，提供具有高质量人力资源和招聘数据的顶尖人才。</h6>
@@ -347,7 +347,7 @@ from load_out_pages('https://www.amazon.com/b?node=3117954011', 'a[href~=/dp/]',
                 </div>
 
                 <div id="financial" class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0">
-                    <div class="icon-box" data-aos="fade-up-del" data-aos-delay="200">
+                    <div class="icon-box" data-aos="fade-up" data-aos-delay="200">
                         <div class="icon"><i class="bx bx-file"></i></div>
                         <h4 class="title"><a href="">金融替代数据</a></h4>
                         <h6 class="description">使用高质量的金融 Web 数据做出利益攸关的决策。</h6>
@@ -357,7 +357,7 @@ from load_out_pages('https://www.amazon.com/b?node=3117954011', 'a[href~=/dp/]',
                 </div>
 
                 <div class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0">
-                    <div class="icon-box" data-aos="fade-up-del" data-aos-delay="400">
+                    <div class="icon-box" data-aos="fade-up" data-aos-delay="400">
                         <div class="icon"><i class="bx bxl-dribbble"></i></div>
                         <h4 class="title"><a href="">业务自动化</a></h4>
                         <h6 class="description">使用 Web BI 实现业务各个方面的自动化。</h6>
@@ -371,7 +371,7 @@ from load_out_pages('https://www.amazon.com/b?node=3117954011', 'a[href~=/dp/]',
             <div class="row">
 
                 <div id="product-building" class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0">
-                    <div class="icon-box" data-aos="fade-up-del" data-aos-delay="100">
+                    <div class="icon-box" data-aos="fade-up" data-aos-delay="100">
                         <div class="icon"><i class="bx bxl-dribbble"></i></div>
                         <h4 class="title"><a href="">构建产品</a></h4>
                         <h6 class="description">通过 Web 数据提取为数据驱动项目提供产品数据。</h6>
@@ -381,7 +381,7 @@ from load_out_pages('https://www.amazon.com/b?node=3117954011', 'a[href~=/dp/]',
                 </div>
 
                 <div id="market-research" class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0">
-                    <div class="icon-box" data-aos="fade-up-del" data-aos-delay="200">
+                    <div class="icon-box" data-aos="fade-up" data-aos-delay="200">
                         <div class="icon"><i class="bx bx-file"></i></div>
                         <h4 class="title"><a href="">市场调查</a></h4>
                         <h6 class="description">通过 Web 数据提取创新您的市场调查。</h6>
@@ -391,7 +391,7 @@ from load_out_pages('https://www.amazon.com/b?node=3117954011', 'a[href~=/dp/]',
                 </div>
 
                 <div class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0">
-                    <div class="icon-box" data-aos="fade-up-del" data-aos-delay="200">
+                    <div class="icon-box" data-aos="fade-up" data-aos-delay="200">
                         <div class="icon"><i class="bx bx-file"></i></div>
                         <h4 class="title"><a href="">网络舆情</a></h4>
                         <h6 class="description">监测网络民情民意，为相关政府部门提供数据支撑。</h6>
@@ -401,7 +401,7 @@ from load_out_pages('https://www.amazon.com/b?node=3117954011', 'a[href~=/dp/]',
                 </div>
 
                 <div class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0">
-                    <div class="icon-box" data-aos="fade-up-del" data-aos-delay="400">
+                    <div class="icon-box" data-aos="fade-up" data-aos-delay="400">
                         <div class="icon"><i class="bx bx-world"></i></div>
                         <h4 class="title"><a href="">背景调查</a></h4>
                         <h6 class="description">使用 Web BI 和知识图谱，洞察人员背景，控制合作风险。</h6>
@@ -422,7 +422,7 @@ from load_out_pages('https://www.amazon.com/b?node=3117954011', 'a[href~=/dp/]',
             <div class="row">
 
                 <div class="col-md-6 d-flex align-items-stretch">
-                    <div class="card" style='background-image: url("img/more-services-1.jpg");' data-aos="fade-up-del" data-aos-delay="100">
+                    <div class="card" style='background-image: url("img/more-services-1.jpg");' data-aos="fade-up" data-aos-delay="100">
                         <div class="card-body">
                             <h5 class="card-title"><a href="">机器学习全部字段</a></h5>
                             <p class="card-text">
@@ -438,7 +438,7 @@ from
                 </div>
 
                 <div class="col-md-6 d-flex align-items-stretch mt-4 mt-md-0">
-                    <div class="card" style='background-image: url("img/more-services-2.jpg");' data-aos="fade-up-del" data-aos-delay="200">
+                    <div class="card" style='background-image: url("img/more-services-2.jpg");' data-aos="fade-up" data-aos-delay="200">
                         <div class="card-body">
                             <h5 class="card-title"><a href="">百思买批量计算折扣</a></h5>
                             <p class="card-text"><pre><code class="language-sql">select
@@ -453,7 +453,7 @@ from
 
                 </div>
                 <div class="col-md-6 d-flex align-items-stretch mt-4">
-                    <div class="card" style='background-image: url("img/more-services-3.jpg");' data-aos="fade-up-del" data-aos-delay="100">
+                    <div class="card" style='background-image: url("img/more-services-3.jpg");' data-aos="fade-up" data-aos-delay="100">
                         <div class="card-body">
                             <h5 class="card-title"><a href="">京东手机价格监测</a></h5>
                             <p class="card-text"><pre><code class="language-sql">select
@@ -468,7 +468,7 @@ from load_and_select('https://list.jd.com/list.html?cat=9987,653,655 -expires 1d
 
 
                 <div class="col-md-6 d-flex align-items-stretch mt-4">
-                    <div class="card" style='background-image: url("img/more-services-4.jpg");' data-aos="fade-up-del" data-aos-delay="200">
+                    <div class="card" style='background-image: url("img/more-services-4.jpg");' data-aos="fade-up" data-aos-delay="200">
                         <div class="card-body">
                             <h5 class="card-title"><a href="">亚马逊新品跟踪</a></h5>
                             <p class="card-text"><pre><code class="language-sql">select
@@ -491,12 +491,12 @@ from load_and_select('https://www.amazon.com/gp/new-releases/home-garden/ref=zg_
     <section id="features" class="features">
         <div class="container">
 
-            <div class="section-title" data-aos="fade-up-del">
+            <div class="section-title" data-aos="fade-up">
                 <h2>产品特性</h2>
                 <p>柏拉图提供了一系列高级能力来解决客户面临的关键问题</p>
             </div>
 
-            <div class="row" data-aos="fade-up-del" data-aos-delay="300">
+            <div class="row" data-aos="fade-up" data-aos-delay="300">
                 <div class="col-lg-3 col-md-4">
                     <div class="icon-box">
                         <i class="ri-aliens-line" style="color: #ffbb2c;"></i>
@@ -578,12 +578,12 @@ from load_and_select('https://www.amazon.com/gp/new-releases/home-garden/ref=zg_
     <section id="testimonials" class="testimonials section-bg">
         <div class="container">
 
-            <div class="section-title" data-aos="fade-up-del">
+            <div class="section-title" data-aos="fade-up">
                 <h2>客户评价</h2>
                 <p>他们这么说 。。。</p>
             </div>
 
-            <div class="owl-carousel testimonials-carousel" data-aos="fade-up-del" data-aos-delay="200">
+            <div class="owl-carousel testimonials-carousel" data-aos="fade-up" data-aos-delay="200">
 
                 <div class="testimonial-wrap">
                     <div class="testimonial-item">
@@ -633,12 +633,12 @@ from load_and_select('https://www.amazon.com/gp/new-releases/home-garden/ref=zg_
     <section id="portfolio" class="portfolio" style="display: none">
         <div class="container">
 
-            <div class="section-title" data-aos="fade-up-del">
+            <div class="section-title" data-aos="fade-up">
                 <h2>案例演示</h2>
                 <p>使用柏拉图，轻松获得目标数据。</p>
             </div>
 
-            <div class="row" data-aos="fade-up-del" data-aos-delay="200">
+            <div class="row" data-aos="fade-up" data-aos-delay="200">
                 <div class="col-lg-12 d-flex justify-content-center">
                     <ul id="portfolio-flters">
                         <li data-filter="*" class="filter-active">All</li>
@@ -649,7 +649,7 @@ from load_and_select('https://www.amazon.com/gp/new-releases/home-garden/ref=zg_
                 </div>
             </div>
 
-            <div class="row portfolio-container" data-aos="fade-up-del" data-aos-delay="400">
+            <div class="row portfolio-container" data-aos="fade-up" data-aos-delay="400">
 
                 <div class="col-lg-4 col-md-6 portfolio-item filter-app">
                     <div class="portfolio-wrap">
@@ -865,10 +865,10 @@ from load_and_select('https://www.amazon.com/gp/new-releases/home-garden/ref=zg_
     </section><!-- End Pricing Section -->
 
     <!-- ======= Team Section ======= -->
-    <section id="team" class="team section-bg hide">
+    <section id="team" class="team section-bg">
         <div class="container">
 
-            <div class="section-title" data-aos="fade-up-del">
+            <div class="section-title" data-aos="fade-up">
                 <h2>团队介绍</h2>
                 <p></p>
             </div>
@@ -876,7 +876,7 @@ from load_and_select('https://www.amazon.com/gp/new-releases/home-garden/ref=zg_
             <div class="row">
 
                 <div class="col-lg-3 col-md-6 d-flex align-items-stretch">
-                    <div class="member" data-aos="fade-up-del" data-aos-delay="100">
+                    <div class="member" data-aos="fade-up" data-aos-delay="100">
                         <div class="member-img">
                             <img src="img/team/team-10.jpg" class="img-fluid" alt="">
                             <div class="social">
@@ -894,7 +894,7 @@ from load_and_select('https://www.amazon.com/gp/new-releases/home-garden/ref=zg_
                 </div>
 
                 <div class="col-lg-3 col-md-6 d-flex align-items-stretch">
-                    <div class="member" data-aos="fade-up-del" data-aos-delay="200">
+                    <div class="member" data-aos="fade-up" data-aos-delay="200">
                         <div class="member-img">
                             <img src="img/team/team-11.jpg" class="img-fluid" alt="">
                             <div class="social">
@@ -912,7 +912,7 @@ from load_and_select('https://www.amazon.com/gp/new-releases/home-garden/ref=zg_
                 </div>
 
                 <div class="col-lg-3 col-md-6 d-flex align-items-stretch">
-                    <div class="member" data-aos="fade-up-del" data-aos-delay="400">
+                    <div class="member" data-aos="fade-up" data-aos-delay="400">
                         <div class="member-img">
                             <img src="img/team/team-12.jpg" class="img-fluid" alt="">
                             <div class="social">
@@ -929,8 +929,8 @@ from load_and_select('https://www.amazon.com/gp/new-releases/home-garden/ref=zg_
                     </div>
                 </div>
 
-                <div class="col-lg-3 col-md-6 d-flex align-items-stretch hide">
-                    <div class="member" data-aos="fade-up-del" data-aos-delay="300">
+                <div class="col-lg-3 col-md-6 d-flex align-items-stretch">
+                    <div class="member" data-aos="fade-up" data-aos-delay="300">
                         <div class="member-img">
                             <img src="img/team/team-3.jpg" class="img-fluid" alt="">
                             <div class="social">
@@ -956,11 +956,11 @@ from load_and_select('https://www.amazon.com/gp/new-releases/home-garden/ref=zg_
     <section id="faq" class="faq">
         <div class="container">
 
-            <div class="section-title" data-aos="fade-up-del">
+            <div class="section-title" data-aos="fade-up">
                 <h2>常见问题</h2>
             </div>
 
-            <div class="row faq-item d-flex align-items-stretch" data-aos="fade-up-del" data-aos-delay="100">
+            <div class="row faq-item d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
                 <div class="col-lg-5">
                     <i class="ri-question-line"></i>
                     <h4>柏拉图是如何实现自动网页结构化的?</h4>
@@ -972,7 +972,7 @@ from load_and_select('https://www.amazon.com/gp/new-releases/home-garden/ref=zg_
                 </div>
             </div><!-- End F.A.Q Item-->
 
-            <div class="row faq-item d-flex align-items-stretch" data-aos="fade-up-del" data-aos-delay="200">
+            <div class="row faq-item d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="200">
                 <div class="col-lg-5">
                     <i class="ri-question-line"></i>
                     <h4>柏拉图由什么语言写成？</h4>
@@ -985,7 +985,7 @@ from load_and_select('https://www.amazon.com/gp/new-releases/home-garden/ref=zg_
                 </div>
             </div><!-- End F.A.Q Item-->
 
-            <div class="row faq-item d-flex align-items-stretch" data-aos="fade-up-del" data-aos-delay="300">
+            <div class="row faq-item d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="300">
                 <div class="col-lg-5">
                     <i class="ri-question-line"></i>
                     <h4>柏拉图是否支持开源？</h4>
@@ -997,7 +997,7 @@ from load_and_select('https://www.amazon.com/gp/new-releases/home-garden/ref=zg_
                 </div>
             </div><!-- End F.A.Q Item-->
 
-            <div class="row faq-item d-flex align-items-stretch" data-aos="fade-up-del" data-aos-delay="400">
+            <div class="row faq-item d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="400">
                 <div class="col-lg-5">
                     <i class="ri-question-line"></i>
                     <h4>可以使用哪些编程语言来获得柏拉图 SaaS 服务？</h4>
@@ -1009,7 +1009,7 @@ from load_and_select('https://www.amazon.com/gp/new-releases/home-garden/ref=zg_
                 </div>
             </div><!-- End F.A.Q Item-->
 
-            <div class="row faq-item d-flex align-items-stretch" data-aos="fade-up-del" data-aos-delay="500">
+            <div class="row faq-item d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="500">
                 <div class="col-lg-5">
                     <i class="ri-question-line"></i>
                     <h4>柏拉图为什么要支持 SQL?</h4>
@@ -1028,13 +1028,13 @@ from load_and_select('https://www.amazon.com/gp/new-releases/home-garden/ref=zg_
     <section id="contact" class="contact">
         <div class="container">
 
-            <div class="section-title" data-aos="fade-up-del">
+            <div class="section-title" data-aos="fade-up">
                 <h2>联系我们</h2>
             </div>
 
             <div class="row">
 
-                <div class="col-lg-4 col-md-6" data-aos="fade-up-del" data-aos-delay="100">
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
                     <div class="contact-about">
                         <h3>柏拉图</h3>
                         <p>加入柏拉图，开启企业级 Web 数据管理革命。</p>
@@ -1047,7 +1047,7 @@ from load_and_select('https://www.amazon.com/gp/new-releases/home-garden/ref=zg_
                     </div>
                 </div>
 
-                <div class="col-lg-3 col-md-6 mt-4 mt-md-0" data-aos="fade-up-del" data-aos-delay="200">
+                <div class="col-lg-3 col-md-6 mt-4 mt-md-0" data-aos="fade-up" data-aos-delay="200">
                     <div class="info">
                         <!--              <div>-->
                         <!--                <i class="ri-map-pin-line"></i>-->
@@ -1067,7 +1067,7 @@ from load_and_select('https://www.amazon.com/gp/new-releases/home-garden/ref=zg_
                     </div>
                 </div>
 
-                <div class="col-lg-5 col-md-12" data-aos="fade-up-del" data-aos-delay="300">
+                <div class="col-lg-5 col-md-12" data-aos="fade-up" data-aos-delay="300">
                     <form action="forms/contact.php" method="post" role="form" class="php-email-form">
                         <div class="form-group">
                             <input type="text" name="name" class="form-control" id="name" placeholder="姓名" data-rule="minlen:4" data-msg="Please enter at least 4 chars" />

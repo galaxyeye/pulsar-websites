@@ -196,8 +196,6 @@
     once: true,
     mirror: false
   });
-
-  $(document).ready(function () {
-    hljs.initHighlightingOnLoad();
-  });
 })(jQuery);
+
+hljs.initHighlightingOnLoad();

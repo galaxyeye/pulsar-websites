@@ -7,10 +7,11 @@ if (isset($html)) {
     echo $html->script("../vendor/php-email-form/validate.js") . PHP_EOL;
     echo $html->script("../vendor/waypoints/jquery.waypoints.min.js") . PHP_EOL;
     echo $html->script("../vendor/counterup/counterup.min.js") . PHP_EOL;
-    echo $html->script("../vendor/owl.carousel/owl.carousel.min.js") . PHP_EOL;
     echo $html->script("../vendor/isotope-layout/isotope.pkgd.min.js") . PHP_EOL;
     echo $html->script("../vendor/venobox/venobox.min.js") . PHP_EOL;
     echo $html->script("../vendor/aos/aos.js") . PHP_EOL;
+    echo $html->script("../vendor/owl.carousel/owl.carousel.min.js") . PHP_EOL;
+
     echo $html->script("../vendor/highlightjs/highlight.pack.js") . PHP_EOL;
 
     echo $html->script("../js/main.js") . PHP_EOL;
