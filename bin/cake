@@ -36,6 +36,13 @@ canonicalize() {
 CONSOLE=$(dirname -- "$(canonicalize "$0")")
 APP=$(dirname "$CONSOLE")
 
+[ ! -e 'logs' ] && mkdir logs
+[ ! -e 'tmp/cache/models' ] && mkdir -p tmp/cache/models
+[ ! -e 'tmp/cache/persistent' ] && mkdir -p tmp/cache/persistent
+[ ! -e 'tmp/sessions' ] && mkdir -p tmp/sessions
+
+chmod -R 777 tmp
+
 if [ $(basename $0) != 'cake' ]
 then
     exec php "$CONSOLE"/cake.php $(basename $0) "$@"

@@ -1,5 +1,4 @@
 <?php
-App::import('Lib', 'lib/ip');
 
 class UsersController extends AppController {
 
@@ -270,18 +269,6 @@ class UsersController extends AppController {
 			return $response;
 		}
 
-		// Ipv6
-		$ip = CLIENT_IP;
-		$count = $this->User->find('count', array('conditions' => array('User.ip' => $ip, 
-				'User.created >=' => date('Y-m-d H:m:s', strtotime('1 week ago')))));
-		if ($count > REGISTER_LIMIT_PER_IP) {
-			$this->log('Register failed, for register limit : '.REGISTER_LIMIT_PER_IP.', from ip : '.CLIENT_IP, LOG_INFO);
-			$response['validate'] = false;
-			$response['message'] = '注册失败！这可能是由于您在同一台电脑上注册了多个帐号所致。如有疑问，请联系客服人员。';
-
-			return $response;
-		}
-
 		// Create a new user
 		$this->User->Group->recursive = -1;
 		$group = $this->User->Group->findByName('user', array('fields' => 'Group.id'));
@@ -296,7 +283,6 @@ class UsersController extends AppController {
 		$user['User']['group_id'] = $group['Group']['id'];
 		$user['User']['avatar'] = AVATAR_DEFAULT;
 		$user['User']['referrer'] = 0;
-		$user['User']['ip'] = $ip;
 
 		if ($this->User->save($user)){
 		}
@@ -393,47 +379,6 @@ class UsersController extends AppController {
 		}
 		if ($this->currentUser['id'] > 0) {
 			$this->Auth->logout();
-		}
-
-		// 2. Delete spamming
-		if ($this->Session->check('Message.auth')) {
-			$this->Session->delete('Message.auth');
-		}
-
-		// 3. Promotion channel
-		App::import('Lib', 'promotion_manager');
-		if ($this->Session->check('Channel')) {
-			$channel = $this->Session->read('Channel');
-
-			$corpUser = array(
-				'channel_id' => $channel['channel_id'],						// 1
-				'session_id' => $channel['session_id'],						// 2
-				'date' => date('Y-m-d', $_SERVER['REQUEST_TIME']),			// 3
-				'time' => date('H:i:s', $_SERVER['REQUEST_TIME']),			// 4
-				'info' => $channel['info'],									// 5
-				'cookie' => isset($_COOKIE['LTINFO']) ? $_COOKIE['LTINFO'] : '',	// 6
-				'user_id' => $user['User']['id'],							// 7
-				'user_name' => $user['User']['name'],						// 8
-				'user_referrer' => $user['User']['referrer'],				// 9
-				'order_code' => $user['User']['id'],						// 10
-				'category_code' => $user['User']['referrer'],				// 11
-				'ip' => CLIENT_IP,									// 12
-				'referrer' => $this->referer(),								// 13
-				'stat' => 2 												// 14	0 : error, 1 : visit, 2 : register, 3 : activate, 4 : profile
-			);
-
-			$this->loadModel('CorpUser');
-			if ($this->CorpUser->save($corpUser)) {
-				if ($channel['channel_id'] == $user['User']['referrer']) {
-					$this->set('channel', $channel);
-				}
-				else {
-					$this->log('Channel id and user referrer unmatch, the user is '.$user['User']['id']);
-				}
-			}
-			else {
-				$this->log('Failed to save corp user, the user is '.$user['User']['id']);
-			}
 		}
 	}
 

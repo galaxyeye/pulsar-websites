@@ -1,6 +1,6 @@
 <?php
 
-require "config/project_config.php";
+require_once CONFIG . DS . "project_config.php";
 
 class AppController extends Controller {
 
