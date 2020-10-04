@@ -1,7 +1,7 @@
 {
-    "name": "warpspeed/controller",
-    "description": "Warp Speed Control System",
-    "homepage": "http://warpspeed.cn",
+    "name": "platon.ai/official_website",
+    "description": "Platon AI Officail Home",
+    "homepage": "http://platon.ai",
     "type": "project",
     "license": "Apache 2.0",
     "require": {

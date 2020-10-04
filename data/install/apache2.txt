@@ -1,0 +1,18 @@
+# /etc/apache2/sites-available/official_website.conf
+# sudo a2enmod rewrite
+
+<VirtualHost *:80>
+	ServerName platonic.fun
+	ServerAlias platonic.fun www.platonic.fun
+
+	ServerAdmin webmaster@localhost
+	DocumentRoot /home/vincent/platonic.fun/official_website/webroot
+
+    <Directory /home/vincent/platonic.fun/official_website/webroot>
+        Options Indexes FollowSymLinks MultiViews
+        AllowOverride All
+        Order allow,deny
+        allow from all
+    </Directory>
+
+</VirtualHost>
