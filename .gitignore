@@ -9,5 +9,6 @@
 !/vendor/shells
 
 /tmp/cache/models/*
+/tmp/cache/persistent/*
 /tmp/sessions/*
 /platon-ui.iml

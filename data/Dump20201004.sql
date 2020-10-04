@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 5.7.31, for Linux (x86_64)
 --
--- Host: 127.0.0.1    Database: qiwu_data_engine
+-- Host: 127.0.0.1    Database: official_website_0_0_1
 -- ------------------------------------------------------
 -- Server version	5.7.31-0ubuntu0.18.04.1
 
@@ -268,6 +268,28 @@ LOCK TABLES `common` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `dashboards`
+--
+
+DROP TABLE IF EXISTS `dashboards`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `dashboards` (
+  `id` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `dashboards`
+--
+
+LOCK TABLES `dashboards` WRITE;
+/*!40000 ALTER TABLE `dashboards` DISABLE KEYS */;
+/*!40000 ALTER TABLE `dashboards` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `geos`
 --
 
@@ -318,6 +340,32 @@ LOCK TABLES `groups` WRITE;
 /*!40000 ALTER TABLE `groups` DISABLE KEYS */;
 INSERT INTO `groups` VALUES (1,'root','root','2011-01-12 15:38:47','2011-01-12 15:38:47',0,1,12),(2,'superuser','superuser','2011-01-12 15:39:21','2011-01-12 15:39:21',1,2,3),(6,'system','system','2011-01-12 15:40:16','2011-01-12 15:40:16',1,10,11),(4,'user','user','2011-01-12 15:39:54','2011-01-12 15:39:54',1,6,7),(5,'enterprise','enterprise','2011-01-12 15:40:05','2011-01-12 15:40:05',1,8,9),(3,'manager','manager','2011-01-12 15:39:34','2011-01-12 15:39:34',1,4,5);
 /*!40000 ALTER TABLE `groups` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `jobs`
+--
+
+DROP TABLE IF EXISTS `jobs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `jobs` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `location` varchar(255) NOT NULL,
+  `salary` varchar(255) NOT NULL,
+  `description` text NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `jobs`
+--
+
+LOCK TABLES `jobs` WRITE;
+/*!40000 ALTER TABLE `jobs` DISABLE KEYS */;
+/*!40000 ALTER TABLE `jobs` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -430,4 +478,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-10-03 19:24:12
+-- Dump completed on 2020-10-04 12:04:50
