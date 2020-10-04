@@ -12,3 +12,5 @@
 /tmp/cache/persistent/*
 /tmp/sessions/*
 /platon-ui.iml
+
+composer.lock
