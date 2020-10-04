@@ -4,6 +4,10 @@
 /config/database.php
 /logs/*
 /vendor
+
+!/vendor/cakephp
+!/vendor/shells
+
 /tmp/cache/models/*
 /tmp/sessions/*
 /platon-ui.iml
