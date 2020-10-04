@@ -11,17 +11,13 @@ define('TIME_START', time());
 define('CURRENT_TIME_ZONE', 'Asia/Shanghai');
 define('CURRENT_TIME_ZONE_OFFSET_HOURS', +8);
 
-// System directories
-define("GLOBAL_DATA_DIR", "/tmp/warps");
-define("ROOT_DATA_DIR", GLOBAL_DATA_DIR . "/satellite");
-
 /**
  * Global configuration
  * */
 define('DEFAULT_LAYOUT', 'default');
-define('DEFAULT_TITLE', 'Warp Speed Controller');
-define('DEFAULT_KEYWORDS', 'Warp Speed Controller');
-define('DEFAULT_DESCRIPTION', 'Warp Speed Controller');
+define('DEFAULT_TITLE', 'Platon AI');
+define('DEFAULT_KEYWORDS', 'Web mining, web scraping');
+define('DEFAULT_DESCRIPTION', 'The advanced algorithm and system for web data');
 
 // Account
 define('ACCOUNT_ACTIVATION_EMAIL_EXPIRED', 60 * DAY);
@@ -55,16 +51,5 @@ define('AVATAR_DEFAULT', AVATAR_PREDEFINED_ROOT . 'default.gif');
 define('AVATAR_PREDEFINED_MAX', 40);
 
 // Cookie
-define('COOKIE_NAME', 'warp.speed.management');
+define('COOKIE_NAME', 'platon.ai');
 define('COOKIE_KEY', 'wsiTIx32bs!2*woi!');
-
-// Javascript
-define('COMMON', 'common');
-define('JSON2', 'json2');
-define('DUMP', 'dump');
-
-define('JQUERY', 'jquery/jquery-1.11.4');
-define('JQUERY_UI', 'jquery/jquery-ui-1.11.4');
-define('JQUERY_UI_CSS', 'jquery/jquery-ui-1.11.4');
-define('JSRENDER', 'jquery/jsrender');
-define('LAYER', 'layer-v2.4/layer/layer');
