@@ -1,5 +1,4 @@
-# /etc/apache2/sites-available/official_website.conf
-# sudo a2enmod rewrite
+# sudo vi /etc/apache2/sites-available/official_website.conf
 
 <VirtualHost *:80>
 	ServerName platonic.fun

@@ -1,8 +1,12 @@
 $ sudo mysql -u root
 
 mysql> CREATE DATABASE official_website_0_0_1;
-mysql> GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP,ALTER ON official_website_0_0_1.* TO vincent@localhost IDENTIFIED BY 'ViVopu__zpoooiq@vincent';
+mysql> GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP,ALTER ON official_website_0_0_1.* TO 'vincent'@'localhost' IDENTIFIED BY 'abc123@vincent';
 mysql> FLUSH PRIVILEGES;
 mysql> USE official_website_0_0_1;
 mysql> source $OFFICIAL_WEBSITE_HOME/data/Dump20201003.sql;
 mysql> quit;
+
+# other useful commands
+mysql> ALTER USER 'vincent'@'localhost' IDENTIFIED BY 'abc123@vincent';
+mysql> GRANT ALL ON official_website_0_0_1.* TO 'vincent'@'localhost' IDENTIFIED BY 'abc123@vincent';

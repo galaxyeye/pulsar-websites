@@ -1,3 +1,5 @@
+<?php assert(isset($html)) ?>
+
 <!-- ======= Header ======= -->
 <header id="header" class="fixed-top d-flex align-items-center">
     <div class="container d-flex align-items-center">
@@ -34,8 +36,8 @@
                         <?php endforeach; ?>
                     </ul>
                 </li>
-                <li><?php echo $html->link('产品介绍', '/#more-services') ?></li>
-                <li><?php echo $html->link('案例演示', '/#pricing') ?></li>
+                <li><?php echo $html->link('案例演示', '/#more-services') ?></li>
+                <li><?php echo $html->link('价格方案', '/#pricing') ?></li>
                 <li><?php echo $html->link('加入我们', '/jobs') ?></li>
                 <li><?php echo $html->link('联系我们', '/#contact') ?></li>
 

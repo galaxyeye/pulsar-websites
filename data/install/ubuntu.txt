@@ -1,5 +1,5 @@
-$ sudo apt update && sudo apt upgrade
-$ sudo apt install composer php libapache2-mod-php mysql-server php-mysql apache2 apache2-utils
+sudo apt update && sudo apt upgrade
+sudo apt install composer php libapache2-mod-php mysql-server php-mysql apache2 apache2-utils
 
-$ sudo a2enmod rewrite
-$ sudo service apache2 reload
+sudo a2enmod rewrite
+sudo systemctl restart apache2
