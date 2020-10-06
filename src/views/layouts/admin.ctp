@@ -27,19 +27,17 @@ assert(isset($html));
 
 <body>
 
-<!-- ======= Header ======= -->
-<header id="header" class="fixed-top d-flex align-items-center">
+<header id="header">
     <div class="container d-flex align-items-center">
 
         <div class="logo mr-auto">
             <h1 class="text-light"><?php echo $html->link('柏拉图智能', "/"); ?></h1>
-            <!-- Uncomment below if you prefer to use an image logo -->
-            <!-- <a href="index.html"><img src="img/logo.png" alt="" class="img-fluid"></a>-->
         </div>
 
         <nav class="nav-menu d-none d-lg-block">
             <ul>
-                <li class="active"><?php echo $html->link('Jobs', 'jobs') ?></li>
+                <li class="active"><?php echo $html->link('Solutions', '/admin/solutions') ?></li>
+                <li><?php echo $html->link('Jobs', '/admin/jobs') ?></li>
             </ul>
         </nav><!-- .nav-menu -->
 
