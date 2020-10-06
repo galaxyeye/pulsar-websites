@@ -1,3 +1,7 @@
+<?php
+assert(isset($html));
+?>
+
 <div class="jobs form">
 <?php echo $this->Form->create('Job');?>
 	<fieldset>

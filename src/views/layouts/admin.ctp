@@ -1,3 +1,4 @@
+<!DOCTYPE HTML>
 <html lang="zh">
 <head>
     <meta charset="utf-8">
@@ -20,7 +21,30 @@
     ?>
 </head>
 
+<?php
+assert(isset($html));
+?>
+
 <body>
+
+<!-- ======= Header ======= -->
+<header id="header" class="fixed-top d-flex align-items-center">
+    <div class="container d-flex align-items-center">
+
+        <div class="logo mr-auto">
+            <h1 class="text-light"><?php echo $html->link('柏拉图智能', "/"); ?></h1>
+            <!-- Uncomment below if you prefer to use an image logo -->
+            <!-- <a href="index.html"><img src="img/logo.png" alt="" class="img-fluid"></a>-->
+        </div>
+
+        <nav class="nav-menu d-none d-lg-block">
+            <ul>
+                <li class="active"><?php echo $html->link('Jobs', 'jobs') ?></li>
+            </ul>
+        </nav><!-- .nav-menu -->
+
+    </div>
+</header><!-- End Header -->
 
 <?php if (!empty($content_for_layout)) {
     echo $content_for_layout;
@@ -29,6 +53,8 @@
 <!-- JavaScript -->
 <?php if (isset($scripts_for_layout)) {
     echo $this->element('js', array ('scripts_for_layout' => $scripts_for_layout));
+    echo $html->script("vendor/tinymce.min.js") . PHP_EOL;
+    echo $html->scriptBlock("tinymce.init({selector:'textarea'});", array('inline' => true));
 } ?>
 
 </body>
