@@ -10,12 +10,12 @@
         <?php
         assert(isset($jobs));
         foreach ($jobs as $key => &$job) {
-            $job['jobId'] = "job-" . $key;
+            $job['Job']['jobId'] = "job-" . $key;
         }
 
         $groupedJobs = array();
         foreach ($jobs as $key => $job) {
-            $groupedJobs[$job['category']][$key] = $job;
+            $groupedJobs[$job['Job']['category']][$key] = $job['Job'];
         }
         ?>
 
@@ -54,8 +54,10 @@
                     <?php
                     $i = 0;
                     foreach ($jobs as $job):
-                        ++$i;
-                        ?>
+                    if (!isset($job['Job'])) continue;
+                    $job = $job['Job'];
+                    ++$i;
+                    ?>
                         <div id="<?php echo "list-" . $job['jobId'] ?>"
                              class="tab-pane fade <?php if ($i == 1) echo "show active" ?>"
                              role="tabpanel"

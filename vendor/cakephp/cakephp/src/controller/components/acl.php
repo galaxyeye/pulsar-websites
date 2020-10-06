@@ -324,11 +324,11 @@ class DbAcl extends AclBase {
 							return true;
 						}
 					} else {
+					    if ($perm['_' . $action] == 0) continue;
+
 						switch ($perm['_' . $action]) {
 							case -1:
 								return false;
-							case 0:
-								continue;
 							break;
 							case 1:
 								return true;

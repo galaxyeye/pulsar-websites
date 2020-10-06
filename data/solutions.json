@@ -1,0 +1,74 @@
+[
+   {
+      "symbol": "price-intelligent",
+      "title": "价格情报",
+      "description": "通过 Web 数据提取实现卓越的定价数据智能。",
+      "content": "通过 Web 数据提取，通过高质量的定价数据智能定位产品并做出盈利决策。"
+   },
+   {
+      "symbol": "ecommerce",
+      "title": "电商选品",
+      "description": "使用 Web BI 实现电商选品决策。",
+      "content": "通过 Web BI，分析全网电商多维度数据，实现热卖和爆款商品预测。"
+   },
+   {
+      "symbol": "marketing-channel",
+      "title": "渠道巡检",
+      "description": "使用 Web BI 监测产品渠道，确保渠道合法合规。",
+      "content": "使用 Web BI 监测产品渠道，确保渠道合法合规，渠道价格定价正确。"
+   },
+   {
+      "symbol": "customer-discovery",
+      "title": "潜在顾客生成",
+      "description": "使用高质量的 Web 提取数据构建高质量潜在客户列表。",
+      "content": "构建目标客户列表，通过 Web 数据提取促进收入增长并生成智能潜在客户。"
+   },
+   {
+      "symbol": "brand-monitoring",
+      "title": "品牌监测",
+      "description": "通过网络数据提取进行品牌监控，跟踪并保护您的品牌。",
+      "content": "使用高质量和可靠的品牌和定价数据，确保您的品牌声誉在线受到保护。"
+   },
+   {
+      "symbol": "recruitment",
+      "title": "招聘",
+      "description": "通过网络数据提取，提供具有高质量人力资源和招聘数据的顶尖人才。",
+      "content": "使用高质量的数据进行职位列表、应聘者来源、薪酬水平和市场洞察，以做出更好的招聘决策并吸引人才。"
+   },
+   {
+      "symbol": "financial",
+      "title": "金融替代数据",
+      "description": "使用高质量的金融 Web 数据做出利益攸关的决策。",
+      "content": "利用来自 Web 的替代财务数据，在不断加速的市场中获取可操作的见解并做出明智的投资决策。"
+   },
+   {
+      "symbol": "rpa",
+      "title": "业务自动化",
+      "description": "使用 Web BI 实现业务各个方面的自动化。",
+      "content": "通过 Web 数据提取，实现业务内部流程的自动化，并在整个业务中快速移动数据。"
+   },
+   {
+      "symbol": "product-building",
+      "title": "构建产品",
+      "description": "通过 Web 数据提取为数据驱动项目提供产品数据。",
+      "content": "从 Web 中提取的高质量产品数据，可保持数据管道健康，让您专注于产品开发。"
+   },
+   {
+      "symbol": "market-research",
+      "title": "市场调查",
+      "description": "通过 Web 数据提取创新您的市场调查。",
+      "content": "借助高质量和可靠的市场数据，了解您的市场、提供研究，并随时了解趋势。"
+   },
+   {
+      "symbol": "public-opinion",
+      "title": "网络舆情",
+      "description": "监测网络民情民意，为相关政府部门提供数据支撑。",
+      "content": "利用来自新闻、论坛、贴吧、微博等来源的数据，为相关政府部门做出正确决策、舆情应对和政务实施提供数据支撑。"
+   },
+   {
+      "symbol": "background-check",
+      "title": "背景调查",
+      "description": "使用 Web BI 和知识图谱，洞察人员背景，控制合作风险。",
+      "content": "使用 Web BI 和知识图谱，洞察合作伙伴、谈判对手、重要嘉宾、求职者等人员的背景，以控制合作风险。"
+   }
+]

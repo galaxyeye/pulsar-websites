@@ -1727,14 +1727,17 @@ class Model extends Overloadable {
 				$this->validationErrors = $validationErrors[$this->alias];
 			}
 
+			if ($options['validate'] === 'first') {
+			    $options['validate'] = true;
+			    $return = array();
+			    continue;
+			}
+		        
+			
 			switch (true) {
 				case ($options['validate'] === 'only'):
 					return ($options['atomic'] ? $validates : $return);
 				break;
-				case ($options['validate'] === 'first'):
-					$options['validate'] = true;
-					$return = array();
-					continue;
 				break;
 				default:
 					if ($options['atomic']) {
