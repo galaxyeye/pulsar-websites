@@ -49,6 +49,11 @@ define('APP_DIR', APP_SRC_DIR);
 define('APP_SRC', ROOT . DS . APP_SRC_DIR . DS);
 
 /**
+ * Path to the data directory.
+ */
+define('APP_DATA', ROOT . DS . 'data' . DS);
+
+/**
  * Path to the config directory.
  */
 define('CONFIG', ROOT . DS . 'config' . DS);

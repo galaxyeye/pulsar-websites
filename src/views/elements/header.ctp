@@ -13,7 +13,7 @@
         <nav class="nav-menu d-none d-lg-block">
             <ul>
                 <li class="active">
-                    <?php echo $html->link('首页', '/#header') ?>
+                    <?php echo $html->link('首页', '/#hero') ?>
                 </li>
                 <li><?php echo $html->link('产品介绍', '/#about') ?></li>
                 <li class="drop-down"><a href="#">解决方案</a>
