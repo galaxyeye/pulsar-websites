@@ -75,7 +75,7 @@
                                                 <div class="join-us__content-item-jd">
                                                     <?php echo $job['duty'] ?>
                                                 </div>
-                                                <p class="m-5">
+                                                <p class="mt-5">
                                                     任职要求：
                                                 </p>
                                                 <div class="join-us__content-item-jd">
