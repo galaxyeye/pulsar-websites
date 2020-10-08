@@ -26,7 +26,7 @@
 assert(isset($html));
 ?>
 
-<body class="admin">
+<body class="admin p-5">
 
 <header id="header">
     <div class="container d-flex align-items-center">
