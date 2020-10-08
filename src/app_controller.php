@@ -184,7 +184,7 @@ TAG;
         $this->Auth->authorize = 'actions'; // Every request will be checked using $this->Acl->check($aro, '/controllers/{controller}/{action}')
         $this->Auth->actionPath = 'controllers/';
         $this->Auth->userScope = array('User.status' => 'ACTIVATED');
-        $this->Auth->autoRedirect = false;
+        $this->Auth->autoRedirect = true;
 
         // Specified Authorization
         if ($this->isAdmin()) {
@@ -193,6 +193,7 @@ TAG;
                 Configure::write('debug', 1);
             }
 
+            $this->Auth->loginRedirect = array('controller' => 'jobs');
             $this->Auth->loginAction = array('controller' => 'users', 'action' => 'admin_login');
         } else {
             $this->Auth->allow('*');

@@ -24,6 +24,7 @@
 
 <?php
 assert(isset($html));
+assert(isset($currentUser));
 ?>
 
 <body class="admin p-5">
@@ -39,10 +40,20 @@ assert(isset($html));
             <ul>
                 <li><?php echo $html->link('Solutions', '/admin/solutions') ?></li>
                 <li><?php echo $html->link('Jobs', '/admin/jobs') ?></li>
-                <li><?php echo $html->link('Login', '/admin/users/login') ?></li>
-                <li><?php echo $html->link('Logout', '/admin/users/logout') ?></li>
             </ul>
         </nav><!-- .nav-menu -->
+
+        <div class="nav-menu d-none d-lg-block">
+            <ul>
+                <li><a class="btn btn-block disabled">|</a></li>
+                <?php if (!$currentUser['id']): ?>
+                    <li><?php echo $html->link('Login', '/admin/users/login') ?></li>
+                <?php else: ?>
+                    <li><?php echo $html->link($currentUser['name'], '/admin/users/view/' . $currentUser['id']) ?></li>
+                    <li><?php echo $html->link('Logout', '/admin/users/logout') ?></li>
+                <?php endif ?>
+            </ul>
+        </div>
 
     </div>
 </header><!-- End Header -->
@@ -51,10 +62,12 @@ assert(isset($html));
     echo $content_for_layout;
 } ?>
 
+<script src="https://cdn.tiny.cloud/1/gpw4yulkkc5t5q2scdljahcoh1mge1vmpxiudb3lziap021x/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+
 <!-- JavaScript -->
 <?php if (isset($scripts_for_layout)) {
     echo $this->element('js', array ('scripts_for_layout' => $scripts_for_layout));
-    echo $html->script("vendor/tinymce.min.js") . PHP_EOL;
+//    echo $html->script("vendor/tinymce.min.js") . PHP_EOL;
     echo $html->scriptBlock("tinymce.init({selector:'textarea'});", array('inline' => true));
 } ?>
 
