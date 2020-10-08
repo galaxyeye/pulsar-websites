@@ -16,6 +16,7 @@
             '../vendor/icofont/icofont.min',
             '../vendor/remixicon/remixicon',
             '../vendor/boxicons/css/boxicons.min',
+            'style',
             'admin',
         )));
     ?>
@@ -25,7 +26,7 @@
 assert(isset($html));
 ?>
 
-<body>
+<body class="admin">
 
 <header id="header">
     <div class="container d-flex align-items-center">
@@ -36,8 +37,9 @@ assert(isset($html));
 
         <nav class="nav-menu d-none d-lg-block">
             <ul>
-                <li class="active"><?php echo $html->link('Solutions', '/admin/solutions') ?></li>
+                <li><?php echo $html->link('Solutions', '/admin/solutions') ?></li>
                 <li><?php echo $html->link('Jobs', '/admin/jobs') ?></li>
+                <li><?php echo $html->link('Login', '/admin/users/login') ?></li>
             </ul>
         </nav><!-- .nav-menu -->
 

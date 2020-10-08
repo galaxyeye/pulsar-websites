@@ -5,13 +5,13 @@ a { color: #1798A5; }
 
 p { color: #222222; }
 pre { text-align: left; }
-ul, ul li { list-style:none }
-ol { list-style: inside none decimal; }
+/*ul, ul li { list-style:none }*/
+/*ol { list-style: inside none decimal; }*/
 em { color:#e52600; font-style:normal }
-dl { line-height: 2em; margin: 0em 0em; width: 60%; }
-dl.altrow { background: #f4f4f4; }
-dt { font-weight: bold; padding-left: 4px; vertical-align: top; }
-dd { margin-left: 13em; margin-top: -2em; vertical-align: top; }
+/*dl { line-height: 2em; margin: 0em 0em; width: 60%; }*/
+/*dl.altrow { background: #f4f4f4; }*/
+/*dt { font-weight: bold; padding-left: 4px; vertical-align: top; }*/
+/*dd { margin-left: 13em; margin-top: -2em; vertical-align: top; }*/
 
 /* table's style*/
 table { background: #fff; border-right:0; clear: both; color: #333; margin-bottom: 10px; width: 100%; }
@@ -99,7 +99,6 @@ pre { background: none repeat scroll 0% 0% #FFF; box-shadow: 1px 2px 4px rgba(0,
 .cl:after { content:"."; display:block; height:0; clear:both; visibility:hidden; }
 .cl { zoom:1; }
 
-.loading { background: url("/img/loader2.gif") no-repeat scroll 0 center transparent; color: #999999; display: block; font-size: 14px; font-weight: bold; line-height: 20px; padding: 3px 0 0 20px; }
 .inline { display: inline !important; }
 .center { text-align: center !important; }
 .left { float: left; }
@@ -153,7 +152,7 @@ pre { background: none repeat scroll 0% 0% #FFF; box-shadow: 1px 2px 4px rgba(0,
 .form fieldset { border: 1px solid #ccc; margin-top: 20px; padding: 16px 20px; width:70% }
 .form fieldset legend { color: #e32; font-size: 140%; font-weight: bold; }
 .form label { padding-left: 4px; vertical-align: middle; line-height:2em; width:12em; }
-.form fieldset input(:not[type="submit"]) { margin-left: 12em; margin-top: -2.5em; vertical-align: middle; width:28em; }
+.form fieldset input { margin-left: 1rem; margin-top: -1.2rem; width: 70% }
 .form select { margin-left: 166px; padding:5px 0;　margin:2px auto; }
 .form div.select select { margin-top: -2.5em; vertical-align: middle; width:27em; }
 .form div.datetime select { margin-top: -2.5em; vertical-align: middle; }
@@ -161,8 +160,8 @@ pre { background: none repeat scroll 0% 0% #FFF; box-shadow: 1px 2px 4px rgba(0,
 .form textarea { margin-left: 167px; margin-top: -2.5em; }
 
 .form button:hover, .form button:focus { background: #7A6058; box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.26) !important; }
-.form button[type="submit"] { text-transform: uppercase; padding:10px; margin:25px 0; color:#FFF;　}
-.form button[type="submit"]:hover { cursor:pointer;　}
+.form button[type="submit"] { text-transform: uppercase; padding:10px; margin:25px 0; color:#FFF; }
+.form button[type="submit"]:hover { cursor:pointer; }
 .form .error-message { color: rgba(0, 0, 0, 0.54); display: block; font-size: 0.75rem; font-style: italic; font-weight: normal; margin-bottom: 1rem; margin-top: -1px; padding: 0.375rem 0.5625rem 0.5625rem; }
 
 .side-nav li.heading {
@@ -189,65 +188,5 @@ div.actions ul li a:hover { text-decoration: underline; }
 .actions.columns h3 { color: #15848F; }
 
 /*************************
- * jQuery-ui integration
- ************************/
-.ui-widget form { text-align: left; }
-.ui-widget input { line-height: 2em; margin-left: 6em; margin-top: -2em; padding: 2px 5px; width: 40em; }
-
-/*************************
- * Layer integration
- ************************/
-.xubox_page { width: 100%; }
-.xubox_page div.form { text-align: left; }
-.xubox_page dl { width: 95%; }
-.xubox_page .movable { padding-left: 0px; padding-right: 0px; }
-.xubox_page div.actions { display:none; }
-.xubox_page div.view, .xubox_page div.related { border-bottom: 1px solid #B7D58B; border-left: 1px solid #B7D58B; border-right: 1px solid #B7D58B; text-align: left; background-color: white; padding:25px; height:300px; overflow:scroll; }
-.xubox_title { text-align: left; }
-.xubox_setwin { }
-
-/*************************
- * Theme and layout
- ************************/
-
-#container { position: relative; text-align: left; }
-
-#nav { background: url("/img/bghome.png") repeat-y scroll right center #CF3B19; border-left: 1px solid #B83A1F; border-top: 1px solid #B83A1F; height: 3em; }
-#nav[id] { height: auto; }
-#nav .user { position: absolute; left: 10px; padding:10px; top: 0; font-size:14px; background-color: #A52610; color: #FFDA68; }
-
-#stage { background: none repeat scroll 0 0 #FFFFFF; padding: 20px 20px 12px; }
-
-#container, #bottom, #footer { margin: 0 auto; min-width:960px; width:85% }
-
-#menu { list-style: none outside none; margin: 0 10px 0 0; position: absolute; right: 0; top: 13px; }
-
-#footer { padding: 7px 0 10px; text-align: left; }
-#footer h1 { float: right; margin: -3px 5px 0 0; }
-#footer p { color: #B6381F; font-weight: bold; margin: 0 5px; }
-#footer a, #footer span { color: #333333; font-size: 85%; text-decoration: none; }
-#footer a:hover { text-decoration: underline; }
-
-/*************************
  * Project relative
  ************************/
-
-.seed-url-testing-message { margin-left: 13em; padding: 2px;}
-
-.intelligent-analysis div.input input {
-  	margin-top:0;
-    margin-left:0;
-}
-
-.scentJobs li {
-	border-bottom: 1px solid #F1E59A;
-	margin-bottom: 8px;
-}
-
-#crawlsAnalysis .add-wes.form {
-  background: repeat scroll 0px 0px #F8E088;
-}
-
-#crawlsAnalysis .add-wes.form form, #crawlsAnalysis .add-wes.form .message {
-	background: none repeat scroll 0px 0px #E5F0FF;
-}

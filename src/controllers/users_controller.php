@@ -16,10 +16,6 @@ class UsersController extends AppController {
 			'register_ok', 'ajaxRegister', 'testRegister');
 	}
 
-	public function mine() {
-		
-	}
-
 	/**
 	 * serialize the object in json format
 	 *
@@ -353,35 +349,6 @@ class UsersController extends AppController {
 		return $referrer;
 	}
 
-	private function __getEurl($email) {
-		$domain = substr(strstr($email, '@'), 1);
-		// Get the email agent entrance
-		include_once(CONFIGS . 'email.php');
-
-		$agent = new EMAIL_AGENT();
-		$entrances = $agent->entrance;
-
-		if (array_key_exists($domain, $entrances)) {
-			return $entrances[$domain];
-		}
-		else {
-			return '';
-		}
-	}
-
-	private function __afterRegister($user) {
-		// 1. Older login user logout
-		if ($this->Cookie->read(COOKIE_NAME.'['.TOOL_BAR_COOKIE_NAME.']')) {
-			$this->Cookie->delete(COOKIE_NAME.'['.TOOL_BAR_COOKIE_NAME.']');
-		}
-		if ($this->Cookie->read(COOKIE_NAME.'['.MESSENGER_COOKIE_NAME.']')) {
-			$this->Cookie->delete(COOKIE_NAME.'['.MESSENGER_COOKIE_NAME.']');
-		}
-		if ($this->currentUser['id'] > 0) {
-			$this->Auth->logout();
-		}
-	}
-
 	public function activate($hint = null){
 		if (is_numeric($hint)) {
 			$verson = 2;
@@ -589,27 +556,6 @@ class UsersController extends AppController {
 		else {
 			$this->cakeError('error404');
 		}
-	}
-
-	public function securimage(){
-        //override variables set in the component - look in component for full list 
-		$this->captcha->image_height = 35;
-		$this->captcha->image_width = 110;
-		$this->captcha->image_bg_color = '#e1e1e1';
-		$this->captcha->draw_lines = false;
-	    $this->captcha->arc_line_colors = '#999999,#cccccc';
-		$this->captcha->code_length = 4;
-		$this->captcha->font_size = 18;
-		$this->captcha->text_transparency_percentage = 25;
-		$this->captcha->text_color = '#000000';
-		$this->captcha->text_minimum_distance = 20;
-		$this->captcha->text_maximum_distance = 25;
-		srand ( $_SERVER ['REQUEST_TIME'] );
-		$this->set ( 'captcha_data', $this->captcha->show () ); // dynamically creates an image
-		
-		Configure::write ( 'debug', 0 );
-		$this->autoRender = false;
-		exit ();
 	}
 
 	public function login() {
