@@ -1,7 +1,7 @@
 .settings
 .idea
 /config/core.php
-/config/database.php
+/config/public/database.php
 /logs/*
 
 /vendor/*
@@ -16,3 +16,4 @@
 composer.lock
 /.buildpath
 /.project
+/config/private/*
