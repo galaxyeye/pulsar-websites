@@ -1216,7 +1216,7 @@ class Model extends Overloadable {
 
 		if (!is_array($validate)) {
             $location_vars = array('validate', 'fieldList', 'callbacks');
-            $location_vars = array_filter($location_vars, fn ($v) => isset(${$v}));
+            $location_vars = array_filter($location_vars, function ($v) { return isset(${$v}); });
 			$options = array_merge($defaults, compact($location_vars));
 		} else {
 			$options = array_merge($defaults, $validate);

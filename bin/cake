@@ -41,7 +41,7 @@ APP=$(dirname "$CONSOLE")
 [ ! -e 'tmp/cache/persistent' ] && mkdir -p tmp/cache/persistent
 [ ! -e 'tmp/sessions' ] && mkdir -p tmp/sessions
 
-chmod -R 777 tmp
+# chmod -R 777 tmp
 
 if [ $(basename $0) != 'cake' ]
 then
