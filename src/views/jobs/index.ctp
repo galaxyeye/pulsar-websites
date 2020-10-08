@@ -31,6 +31,7 @@
                         </a>
                         <?php
                         $j = 0;
+                        usort($jobList, function ($a, $b) { return ($a['order'] <=> $b['order']); });
                         foreach ($jobList as $job):
                             ++$jobId;
                             ++$j;

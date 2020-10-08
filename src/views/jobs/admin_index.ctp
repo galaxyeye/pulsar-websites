@@ -14,6 +14,7 @@
 	</tr>
 	<?php
 	$i = 0;
+    usort($jobs, function ($a, $b) { return ($a['order'] <=> $b['order']); });
 	foreach ($jobs as $job):
 		$class = null;
 		if ($i++ % 2 == 0) {
