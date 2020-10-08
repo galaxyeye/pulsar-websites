@@ -1,11 +1,47 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b49730f5deeb62ed1eeb2067f41273d7",
-    "packages": [],
+    "content-hash": "8c69981d06143ca0a65cba0e0db08583",
+    "packages": [
+        {
+            "name": "yidas/client-ip",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/yidas/php-client-ip.git",
+                "reference": "2986db258265173b69796616fa1d9a7363df0d29"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/yidas/php-client-ip/zipball/2986db258265173b69796616fa1d9a7363df0d29",
+                "reference": "2986db258265173b69796616fa1d9a7363df0d29",
+                "shasum": ""
+            },
+            "type": "project",
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Get client IP with safe and coincident way from server even behind Proxy or Load-Balancer",
+            "homepage": "https://github.com/yidas/php-client-ip",
+            "keywords": [
+                "IP",
+                "client ip",
+                "loadbalancer ip",
+                "proxy ip",
+                "real ip"
+            ],
+            "time": "2017-09-05T09:23:13+00:00"
+        }
+    ],
     "packages-dev": [
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -894,7 +930,9 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=7.2.0"
+        "php": ">=7.2.0",
+        "ext-json": "*"
     },
-    "platform-dev": []
+    "platform-dev": [],
+    "plugin-api-version": "1.1.0"
 }

@@ -1215,11 +1215,13 @@ class Model extends Overloadable {
 		$fields = array();
 
 		if (!is_array($validate)) {
-			$options = array_merge($defaults, compact('validate', 'fieldList', 'callbacks'));
+            $location_vars = array('validate', 'fieldList', 'callbacks');
+            $location_vars = array_filter($location_vars, fn ($v) => isset(${$v}));
+			$options = array_merge($defaults, compact($location_vars));
 		} else {
 			$options = array_merge($defaults, $validate);
 		}
-
+		
 		if (!empty($options['fieldList'])) {
 			$this->whitelist = $options['fieldList'];
 		} elseif ($options['fieldList'] === null) {

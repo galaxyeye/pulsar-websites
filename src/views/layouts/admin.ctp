@@ -40,6 +40,7 @@ assert(isset($html));
                 <li><?php echo $html->link('Solutions', '/admin/solutions') ?></li>
                 <li><?php echo $html->link('Jobs', '/admin/jobs') ?></li>
                 <li><?php echo $html->link('Login', '/admin/users/login') ?></li>
+                <li><?php echo $html->link('Logout', '/admin/users/logout') ?></li>
             </ul>
         </nav><!-- .nav-menu -->
 

@@ -1,13 +1,13 @@
-<?php 
-$this->viewVars['css_for_layout'] = $html->css('admin', false);
-$this->layout = 'blank';
+<?php
+assert(isset($html));
+assert(isset($form));
 ?>
 
-<div id='fit'>
-	<div class='box'>
+<div class='container-fluid m-auto'>
+	<div class='card'>
 		<h1>登录</h1>
 
-		<form id='loginForm' action="<?php echo $html->url('/admin/users/login'); ?>" method="post">
+		<form id='loginForm' class="card-body" action="<?php echo $html->url('/admin/users/login'); ?>" method="post">
 			<div class='email'>
 				<label for='UserEmail'>邮箱地址</label>
 				<?php echo $form->text('User.email', array('size' => 20)); ?>

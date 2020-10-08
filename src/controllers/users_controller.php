@@ -233,12 +233,17 @@ class UsersController extends AppController {
 	public function testRegister($password = null) {
 		Configure::Write('debug', 1);
 
-		$email = genRandomString(5).'-'.rand(10000, 100000).'@logoloto.com';
-		$name = genRandomString(5).'-'.rand(10000, 100000);
+		$str = rand();
+		$str = sha1($str).substr(0, 5);
+		$email = $str.'-'.rand(10000, 100000).'@logoloto.com';
+		$name = $str.'-'.rand(10000, 100000);
 
-		if ($password == null) $password = 'abc123';
+		if ($password == null) $password = '432916^platonic';
 
-		$response = $this->__doSimpleRegister($email, $name, $password);
+		echo $password;
+		echo "<br />";
+		echo $this->Auth->password($password);
+		// $response = $this->__doSimpleRegister($email, $name, $password);
 
 		die();
 	}
@@ -296,9 +301,6 @@ class UsersController extends AppController {
 
 		$this->User->recursive = -1;
 
-		// Ipv6
-		$ip = CLIENT_IP;
-
 		// Create a new user
 		$user['User']['email'] = $email;
 		$user['User']['name'] = $name;
@@ -310,9 +312,9 @@ class UsersController extends AppController {
 		$user['User']['group_id'] = 4;
 		$user['User']['avatar'] = AVATAR_DEFAULT;
 		$user['User']['referrer'] = 4;
-		$user['User']['ip'] = $ip;
 
 		if ($this->User->save($user)){
+
 		}
 		else {
 			$this->log('Failed to save user, registration failure', LOG_ERR);
@@ -437,44 +439,6 @@ class UsersController extends AppController {
 		$toolBarCookie = 'lstMsgT='.time().'&msgid=fts&fts=activate';
 		$cookieName = TOOL_BAR_COOKIE_NAME.$this->currentUser['id'];
 		$this->Cookie->write($cookieName, $toolBarCookie, false, '1 day');
-
-		// 4. Promotion Channel
-		if ($this->Session->check('Channel')) {
-			App::import('Lib', 'promotion_manager');
-			$channel = $this->Session->read('Channel');
-
-			$this->loadModel('CorpUser');
-			$corpUser = array(
-				'channel_id' => $channel['channel_id'],						// 1
-				'session_id' => $channel['session_id'],						// 2
-				'date' => date('Y-m-d', $_SERVER['REQUEST_TIME']),			// 3
-				'time' => date('H:i:s', $_SERVER['REQUEST_TIME']),			// 4
-				'info' => $channel['info'],									// 5
-				'cookie' => isset($_COOKIE['LTINFO']) ? $_COOKIE['LTINFO'] : '',	// 6
-				'user_id' => $user['User']['id'],							// 7
-				'user_name' => $user['User']['name'],						// 8
-				'user_referrer' => $user['User']['referrer'],				// 9
-				'order_code' => $user['User']['id'],						// 10
-				'category_code' => $user['User']['referrer'],				// 11
-				'ip' => CLIENT_IP,									// 12
-				'referrer' => $this->referer(),								// 13
-				'stat' => 3 												// 14	0 : error, 1 : visit, 2 : register, 3 : activate, 4 : profile
-			);
-
-			if ($this->CorpUser->save($corpUser)) {
-				if ($channel['channel_id'] == $user['User']['referrer']) {
-					$this->set('channel', $channel);
-				}
-				else {
-					$this->log('Channel id and user referrer unmatch, the user is '.$user['User']['id']);
-				}
-
-				$this->Session->delete("Channel");
-			}
-			else {
-				$this->log('Failed to save corp user, the user is '.$user['User']['id']);
-			}
-		}
 	}
 
 	public function retrievePassword(){
