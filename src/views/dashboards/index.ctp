@@ -10,7 +10,7 @@
     class="col-lg-6 pt-5 pt-lg-0 order-2 order-lg-1 d-flex flex-column justify-content-center">
     <h1 data-aos="fade-up">Web 即数据库</h1>
     <h2 data-aos="fade-up" data-aos-delay="400">使用 AI 和 SQL
-     将任意授权网站完整精确转变成数据。现在，您可以直接在 Web 上应用商业智能。</h2>
+     将任意规模授权网站完整精确转变成数据。现在，您可以直接在 Web 上应用商业智能。</h2>
     <div data-aos="fade-up" data-aos-delay="800">
      <a href="#about" class="btn-get-started scrollto">开始</a> <a
       class="btn-get-started" href="http://bi.platonic.fun/dashboard/11"
