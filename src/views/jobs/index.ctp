@@ -23,6 +23,7 @@
             <div id="job-list-tab-container" class="col-3 overflow-auto">
                 <div class="list-group" id="list-tab" role="tablist">
                     <?php
+                    $i = 0;
                     $jobId = 0;
                     foreach ($groupedJobs as $category => $jobList):
                         ?>
@@ -31,13 +32,20 @@
                         </a>
                         <?php
                         $j = 0;
-                        usort($jobList, function ($a, $b) { return ($a['order'] <=> $b['order']); });
+                        usort($jobList, function ($a, $b) {
+                            return ($a['order'] <=> $b['order']);
+                        });
                         foreach ($jobList as $job):
                             ++$jobId;
+                            ++$i;
                             ++$j;
+                            $class = "list-group-item list-group-item-action";
+                            if ($i == 0) {
+                                $class = $class." active";
+                            }
                             ?>
                             <a id="<?php echo "list-" . $job['jobId'] . "-list" ?>"
-                               class="list-group-item list-group-item-action"
+                               class="<?php echo $class ?>"
                                data-toggle="list"
                                role="tab"
                                aria-controls="<?php echo $job['jobId'] ?>"
@@ -55,10 +63,10 @@
                     <?php
                     $i = 0;
                     foreach ($jobs as $job):
-                    if (!isset($job['Job'])) continue;
-                    $job = $job['Job'];
-                    ++$i;
-                    ?>
+                        if (!isset($job['Job'])) continue;
+                        $job = $job['Job'];
+                        ++$i;
+                        ?>
                         <div id="<?php echo "list-" . $job['jobId'] ?>"
                              class="tab-pane fade <?php if ($i == 1) echo "show active" ?>"
                              role="tabpanel"
