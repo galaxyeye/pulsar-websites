@@ -40,7 +40,7 @@
                             ++$i;
                             ++$j;
                             $class = "list-group-item list-group-item-action";
-                            if ($i == 0) {
+                            if ($i == 1) {
                                 $class = $class." active";
                             }
                             ?>
