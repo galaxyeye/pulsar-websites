@@ -1641,3 +1641,7 @@ div.table td {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+#job-list-tab-container {
+  height: 800px;
+}

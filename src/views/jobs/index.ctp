@@ -19,8 +19,8 @@
         }
         ?>
 
-        <div class="row h-75">
-            <div class="col-3 h-100 overflow-auto">
+        <div class="row">
+            <div id="job-list-tab-container" class="col-3 overflow-auto">
                 <div class="list-group" id="list-tab" role="tablist">
                     <?php
                     $jobId = 0;
