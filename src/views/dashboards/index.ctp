@@ -848,7 +848,7 @@ from load_and_select('https://www.amazon.com/gp/new-releases/home-garden/ref=zg_
       <h4>总经理 &amp; 合伙人</h4>
       <p>
        <i class="bx bxs-quote-alt-left quote-icon-left"></i>
-       使用柏拉图，我们现在每天采集三百万电商数据，相比原本预算，硬件成本减少了一半，产品研发周期缩短到了三个月。 <i
+       使用柏拉图，我们现在每天采集一千万电商数据，相比原本预算，硬件成本减少了一半，产品研发周期缩短到了三个月。 <i
         class="bx bxs-quote-alt-right quote-icon-right"></i>
       </p>
      </div>
