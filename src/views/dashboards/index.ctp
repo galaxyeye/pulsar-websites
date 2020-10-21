@@ -441,7 +441,7 @@ from load_out_pages('https://www.amazon.com/b?node=3117954011', 'a[href~=/dp/]',
   <div class="container">
 
    <div class="section-title" data-aos="fade-up">
-    <h2>SAAS 服务</h2>
+    <h2>SAAS</h2>
    </div>
 
    <div class="row content">
@@ -477,9 +477,9 @@ from load_out_pages('https://www.amazon.com/b?node=3117954011', 'a[href~=/dp/]',
        完成从网页数据到本地业务模型的转换</li>
       <li><i class="ri-check-double-line"></i> <b>DATA API</b> -
        柏拉图的弹性计算使得规模化 Web 数据唾手可得</li>
-      <li><i class="ri-check-double-line"></i> <b>高阶 SaaS 服务</b> - X-SQL
+      <li><i class="ri-check-double-line"></i> <b>高阶 SaaS</b> - X-SQL
        灵活的内置函数，提供进一步的数据处理能力：情绪判定，知识图谱构建等</li>
-      <li><i class="ri-check-double-line"></i> <b>领域 SaaS 服务</b> -
+      <li><i class="ri-check-double-line"></i> <b>领域 SaaS</b> -
        对常见领域，柏拉图已内置开箱即用的解决方案</li>
      </ul>
      <a href="http://bi.platonic.fun" class="btn-learn-more"
@@ -1084,7 +1084,7 @@ from load_and_select('https://www.amazon.com/gp/new-releases/home-garden/ref=zg_
        <li>Web BI</li>
        <li>浏览器支持</li>
        <li class="na">机器学习</li>
-       <li class="na">SaaS 服务</li>
+       <li class="na">SaaS</li>
        <li class="na">分布式支持</li>
        <li class="na">可选存储方案</li>
        <li class="na">资源配置优化</li>
@@ -1110,7 +1110,7 @@ from load_and_select('https://www.amazon.com/gp/new-releases/home-garden/ref=zg_
        <li>Web BI</li>
        <li>浏览器支持</li>
        <li>机器学习</li>
-       <li>SaaS 服务</li>
+       <li>SaaS</li>
        <li>分布式支持</li>
        <li class="na">可选存储方案</li>
        <li class="na">资源配置优化</li>
@@ -1134,7 +1134,7 @@ from load_and_select('https://www.amazon.com/gp/new-releases/home-garden/ref=zg_
        <li>Web BI</li>
        <li>浏览器支持</li>
        <li>机器学习</li>
-       <li>SaaS 服务</li>
+       <li>SaaS</li>
        <li>分布式支持</li>
        <li>可选存储方案</li>
        <li>资源配置优化</li>
