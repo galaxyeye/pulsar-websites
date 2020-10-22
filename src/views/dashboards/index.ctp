@@ -145,7 +145,7 @@ from load_out_pages('https://www.amazon.com/b?node=3117954011', 'a[href~=/dp/]',
       <p class="text-secondary">
        <i class="bx bxs-quote-alt-left quote-icon-left"></i> AI 已浏览<i
         class="px-2">120</i>个网页，已理解<i class="px-2">8</i>组数据共<i
-        class="px-2">188</i>个字段。 以下显示第<i class="px-2">2</i>组数据，该组数据共包含<i
+        class="px-2">142</i>个字段。 以下显示第<i class="px-2">2</i>组数据，该组数据共包含<i
         class="px-2">10</i>个字段，对应网页区域 <i>#centerCol</i> <i
         class="bx bxs-quote-alt-right quote-icon-right"></i>
       </p>
