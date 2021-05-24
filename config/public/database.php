@@ -6,8 +6,8 @@ class DATABASE_CONFIG {
 		'driver' => 'mysqli',
 		'persistent' => true,
 		'host' => 'localhost',
-		'login' => 'vincent',
-		'password' => 'ViVopu__zpoooiq@vincent',
+		'login' => 'sa',
+		'password' => 'sa',
 		'database' => 'official_website_0_0_1',
 		'encoding'=> 'utf8',
 		'prefix' => ''
