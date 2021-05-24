@@ -104,7 +104,7 @@ select
     dom_first_slim_html(dom, '#landingImage, #imgTagWrapperId img, #imageBlock img:expr(width > 400)') as `img`,
     dom_first_text(dom, '#price tr td:contains(List Price) ~ td') as `listprice`,
     dom_first_text(dom, '#price tr td:matches(^Price) ~ td') as `price`,
-    str_first_float(dom_first_text(dom, '#reviewsMedley .AverageCustomerReviews span:contains(out of)'), 0.0) as `score`,
+    str_first_float(dom_first_text(dom, '#reviewsMedley .AverageCustomerReviews span:contains(out of)'), 0.0) as `score`
 from load_out_pages('https://www.amazon.com/b?node=3117954011', 'a[href~=/dp/]', 1, 10);
               </code>
      </pre>
@@ -448,26 +448,18 @@ from load_out_pages('https://www.amazon.com/b?node=3117954011', 'a[href~=/dp/]',
     <div class="col-lg-7 pt-4 pt-lg-0" data-aos="fade-up"
      data-aos-delay="300">
      <pre>
-      <code class="language-sql">POST http://api.platonic.fun/api/x/a/q
-Content-Type: application/json
-
-{
-  "sql": "select
-    dom_base_uri(dom) as `url`,
-    dom_first_text(dom, '#productTitle') as `title`,
-    str_substring_after(dom_first_href(dom, '#wayfinding-breadcrumbs_container ul li:last-child a'), '&node=') as `category`,
-    dom_first_slim_html(dom, '#bylineInfo') as `brand`,
-    cast(dom_all_slim_htmls(dom, '#imageBlock img') as varchar) as `gallery`,
-    dom_first_slim_html(dom, '#landingImage, #imgTagWrapperId img, #imageBlock img:expr(width > 400)') as `img`,
-    dom_first_text(dom, '#price tr td:contains(List Price) ~ td') as `listprice`,
-    dom_first_text(dom, '#price tr td:matches(^Price) ~ td') as `price`,
-    str_first_float(dom_first_text(dom, '#reviewsMedley .AverageCustomerReviews span:contains(out of)'), 0.0) as `score`,
-from load_out_pages('https://www.amazon.com/b?node=3117954011', 'a[href~=/dp/]', 1, 10);
-",
-  "callbackUrl": "http://{{host-of-your-callback-api}}/{{path-of-your-callback-api}}",
-  "authToken": "fake-auth-gJn6fUBh-1-af1639a924d7232099a037e9544cf43f"
-}
-              </code>
+      <code class="language-sql">curl -X POST --location "http://platonic.fun:8182/api/x/e" -H "Content-Type: text/plain" -d "
+  select
+      dom_base_uri(dom) as url,
+      dom_first_text(dom, '#productTitle') as title,
+      str_substring_after(dom_first_href(dom, '#wayfinding-breadcrumbs_container ul li:last-child a'), '&node=') as category,
+      dom_first_slim_html(dom, '#bylineInfo') as brand,
+      cast(dom_all_slim_htmls(dom, '#imageBlock img') as varchar) as gallery,
+      dom_first_slim_html(dom, '#landingImage, #imgTagWrapperId img, #imageBlock img:expr(width > 400)') as img,
+      dom_first_text(dom, '#price tr td:contains(List Price) ~ td') as listprice,
+      dom_first_text(dom, '#price tr td:matches(^Price) ~ td') as price,
+      str_first_float(dom_first_text(dom, '#reviewsMedley .AverageCustomerReviews span:contains(out of)'), 0.0) as score
+  from load_out_pages('https://www.amazon.com/b?node=3117954011 -i 20s -ignF', 'a[href~=/dp/]', 1, 10);"</code>
      </pre>
     </div>
     <div class="col-lg-5" data-aos="fade-up" data-aos-delay="150">
