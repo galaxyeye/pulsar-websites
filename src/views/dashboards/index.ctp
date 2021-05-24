@@ -459,7 +459,7 @@ from load_out_pages('https://www.amazon.com/b?node=3117954011', 'a[href~=/dp/]',
       dom_first_text(dom, '#price tr td:contains(List Price) ~ td') as listprice,
       dom_first_text(dom, '#price tr td:matches(^Price) ~ td') as price,
       str_first_float(dom_first_text(dom, '#reviewsMedley .AverageCustomerReviews span:contains(out of)'), 0.0) as score
-  from load_out_pages('https://www.amazon.com/b?node=3117954011 -i 20s -ignF', 'a[href~=/dp/]', 1, 10);"</code>
+  from load_and_select('https://www.amazon.com/dp/B0777XZBMZ -i 20s', 'body');"</code>
      </pre>
     </div>
     <div class="col-lg-5" data-aos="fade-up" data-aos-delay="150">
