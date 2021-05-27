@@ -1,5 +1,5 @@
 <?php 
-	$this->set('title_for_layout', '合作方 - 乐够乐透网');
+	$this->set('title_for_layout', '合作方 - 柏拉图智能');
 	$html->scriptBlock('$(document).ready(function(){$("#framenFB1F2_center_content").load("../enterprises #enterprise_list");});', 
 		array('inline' => false));
 ?>

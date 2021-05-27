@@ -2,7 +2,7 @@
 				<div class="retrie-box">
 					<span class="retrie-info">
 					<?php if ($resetStatus == 'MAIL_SENT_OUT') : ?>
-					请到你的 <?php echo $user['User']['email'] ?> 邮箱中查阅来自乐够乐透网的邮件, 按照邮件的提示重新设置你的密码。
+					请到你的 <?php echo $user['User']['email'] ?> 邮箱中查阅来自柏拉图智能的邮件, 按照邮件的提示重新设置你的密码。
 					<?php elseif ($resetStatus == 'INVALID_LINK'): ?>
 					抱歉，该请求已经失效，请重新请求更改密码。
 					<?php elseif ($resetStatus == 'PASSWORD_CONFLICT'): ?>

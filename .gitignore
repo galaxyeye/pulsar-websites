@@ -17,5 +17,6 @@ composer.lock
 /.buildpath
 /.project
 
+/config/private
 /config/private/*
 /config/database.php

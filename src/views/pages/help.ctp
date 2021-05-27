@@ -1,5 +1,5 @@
 ﻿<?php 
-	$this->set('title_for_layout', '新手入门 - 帮助指南 - 乐够乐透网');
+	$this->set('title_for_layout', '新手入门 - 帮助指南 - 柏拉图智能');
  ?>
 
 <style>
@@ -30,7 +30,7 @@
 							<div><img src="../img/common/icon2.gif"/><a href="help_comment">用户评论</a></div>
                             <div><img src="../img/common/icon2.gif"/><a href="help_prize">奖品领取</a></div>
                             <div><img src="../img/common/icon2.gif"/><a href="help_logistics">物流配送</a></div>
-                            <div><img src="../img/common/icon2.gif"/><a href="help_privacy">乐够乐透网用户规则</a></div>
+                            <div><img src="../img/common/icon2.gif"/><a href="help_privacy">柏拉图智能用户规则</a></div>
 						</div>
 					</td>
 					<td width="609" valign="top">
@@ -52,18 +52,18 @@
 <div class="MsoNormal" style="margin: 0cm 0cm 0pt;"><b style="color: rgb(255, 153, 0);">何为“乐够乐透”？</b><br>
 乐够乐透，顾名思义，就是“乐够”+“乐透”，意思是指用户点击企业的LOGO参与“乐透游戏”，并有机会赢取企业提供的奖品，让你在广告娱乐中“乐够!乐透!”<br>
 <br>
-乐够乐透网（www.logoloto.com）是中国首创的企业广告娱乐平台，我们的企业合作方覆盖各行各业，能免费为广大网民提供生活中所需要的各种产品或服务，主要包括：<br>
+柏拉图智能（www.logoloto.com）是中国首创的企业广告娱乐平台，我们的企业合作方覆盖各行各业，能免费为广大网民提供生活中所需要的各种产品或服务，主要包括：<br>
 <br>
 <span style="color: rgb(61, 133, 198);">彩妆/护肤/香水&nbsp;&nbsp;&nbsp; 美容/美体/美发&nbsp;&nbsp;&nbsp; 服装/玩具/饰品&nbsp;&nbsp;&nbsp; 餐饮/食品/保健&nbsp;&nbsp;&nbsp; 图书/音乐/电影 </span><br style="color: rgb(61, 133, 198);">
 <span style="color: rgb(61, 133, 198);">演出/旅游/运动&nbsp;&nbsp;&nbsp; 数码/家电/办公&nbsp;&nbsp;&nbsp; 网络/游戏/虚拟&nbsp;&nbsp;&nbsp; 家居/日用/装饰&nbsp;&nbsp;&nbsp; 教育/医疗/其他 </span><br>
 <br>
-<b>对于网民：</b>乐够乐透网让每个参与者通过互动的形式去体验广告，并有机会得到企业免费提供的产品或服务。 <br>
+<b>对于网民：</b>柏拉图智能让每个参与者通过互动的形式去体验广告，并有机会得到企业免费提供的产品或服务。 <br>
 <b>对于企业：</b>企业的品牌、产品或服务在网民体验广告的过程中得到了充分的展示与推广，从而提升了企业的形象，增强了企业的市场知名度，并且以免费提供奖品的方式让网民真正地体验到企业的产品或服务。<br>
 <br>
 我们始终倡导“分享每一天”的理念，并且让这一理念贯穿于用户与企业之间，并致力于打造中国最有价值的企业广告娱乐平台，为用户和企业创造最大的价值。<br>
 <br>
 <b style="color: rgb(255, 153, 0);">什么是乐客？</b><br>
-乐客是乐够乐透网的正式注册会员，是追求快乐、乐于分享的“乐天一族”。<br>
+乐客是柏拉图智能的正式注册会员，是追求快乐、乐于分享的“乐天一族”。<br>
 <br>
 <b style="color: rgb(255, 153, 0);">金豆的作用？</b><br>
 会员可以通过“赚金豆”板块赚取足够的金豆来参与有奖广告游戏，并有机会获得企业提供的奖品。<br>

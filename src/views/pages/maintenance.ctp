@@ -1,5 +1,5 @@
 <?php 
-	$this->set('title_for_layout', '乐够乐透网 - 分享每一天，快乐每一天，乐够乐透无极限!');
+	$this->set('title_for_layout', '柏拉图智能 - 分享每一天，快乐每一天，乐够乐透无极限!');
 ?>
 
 <style>

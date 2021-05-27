@@ -1,4 +1,4 @@
-<?php $this->set('title_for_layout', '关于我们 - 乐够乐透网');?>
+<?php $this->set('title_for_layout', '关于我们 - 柏拉图智能');?>
 
 <style>
 #framenFB1F2 {border:0;}
@@ -31,13 +31,13 @@ h1 {line-height:40px; border-bottom:3px solid #FF6F0F; font-size:14px; padding-l
 		<div id="framenFB1F2_center" class="column frame-1-3-r">
 			<h1>关于我们</h1>
 			<div id="framenFB1F2_center_content" class="content">
-				<p>1. 乐够乐透网的定位 </p>
-				<p style="width:572px;">乐够乐透网（www.logoloto.com）隶属于上海朗景网络科技有限公司，是以打造中国最有价值的企业广告娱乐平台为目标，将创新的互联网营销理念结合不同行业的特点，通过新颖的模式为企业制定独特的市场推广方案，让企业产品以最新概念的<font style="color:#FF6F0F;">体验广告</font>和<font style="color:#FF6F0F;">有奖游戏广告</font>形式快速深入消费者，从而迅速提升市场曝光率和知名度。 </p>
+				<p>1. 柏拉图智能的定位 </p>
+				<p style="width:572px;">柏拉图智能（www.logoloto.com）隶属于上海朗景网络科技有限公司，是以打造中国最有价值的企业广告娱乐平台为目标，将创新的互联网营销理念结合不同行业的特点，通过新颖的模式为企业制定独特的市场推广方案，让企业产品以最新概念的<font style="color:#FF6F0F;">体验广告</font>和<font style="color:#FF6F0F;">有奖游戏广告</font>形式快速深入消费者，从而迅速提升市场曝光率和知名度。 </p>
 				<p>&nbsp;</p>
-				<p>2. 乐够乐透网的运营模式 </p>
+				<p>2. 柏拉图智能的运营模式 </p>
 				<p>网民通过看广告的方式（参与体验广告）来赚取乐豆（获得玩游戏的权利），凭足够数量的乐豆就可以去游乐场参与有奖游戏广告，并有机会获得企业提供的奖品。  <br /></p>
 				<p> <br /> <br /><img src="../img/pages/aboutus01.PNG" width="560" height="126" />  <br /> <br /><br /></p>
-				<p>○ <strong>对于网民： </strong>乐够乐透网让每个参与者通过互动的形式去体验广告，并有机会得到企业免费提供的产品或服务。 <br />
+				<p>○ <strong>对于网民： </strong>柏拉图智能让每个参与者通过互动的形式去体验广告，并有机会得到企业免费提供的产品或服务。 <br />
 					○ <strong>对于企业： </strong>企业的品牌、产品或服务在网民体验广告的过程中得到了充分的展示与推广，从而提升了企业的形象，增强了企业的市场知名度，并且以免费提供奖品的方式让网民真正地体验到企业的产品及服务，以达到口碑传播的广告外延效果。 </p>
 				<p>&nbsp;</p>
 				<p>3. 应用领域								</p>

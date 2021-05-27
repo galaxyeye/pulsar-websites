@@ -1,5 +1,5 @@
 <?php 
-	$this->set('title_for_layout', '帐户激活 - 乐够乐透网');
+	$this->set('title_for_layout', '帐户激活 - 柏拉图智能');
 ?>
 			<div id="active-frame">
 				<div class="active-box">
