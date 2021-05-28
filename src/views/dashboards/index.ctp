@@ -12,7 +12,7 @@
     <h2 data-aos="fade-up" data-aos-delay="400">使用 AI 和 SQL
      将任意规模授权网站完整精确转变成数据。现在，您可以直接在 Web 上应用商业智能。</h2>
     <div data-aos="fade-up" data-aos-delay="800">
-     <a href="#about" class="btn-get-started scrollto">开始</a> 
+     <a href="#about" class="btn-get-started scrollto">开始</a>
 	 <?php echo $this->Html->link(__('亚马逊解决方案', true), '/pages/amazon', array('class' => 'btn-get-started')); ?>
     </div>
    </div>
@@ -1051,96 +1051,183 @@ from load_and_select('https://www.amazon.com/gp/new-releases/home-garden/ref=zg_
  </section>
  <!-- End Portfolio Section -->
 
- <!-- ======= Pricing Section ======= -->
- <section id="pricing" class="pricing">
-  <div class="container">
 
-   <div class="section-title">
-    <h2>价格方案</h2>
-    <p>选择最适合您的方案</p>
-   </div>
 
-   <div class="row">
 
-    <div class="col-lg-4 col-md-6">
-     <div class="box" data-aos="zoom-in-right" data-aos-delay="200">
-      <h3>免费版</h3>
-      <h4>
-       <sup>¥</sup>0<span></span>
-      </h4>
-      <ul>
-       <li>本地 API</li>
-       <li>X-SQL</li>
-       <li>Web BI</li>
-       <li>浏览器支持</li>
-       <li class="na">机器学习</li>
-       <li class="na">SaaS</li>
-       <li class="na">分布式支持</li>
-       <li class="na">可选存储方案</li>
-       <li class="na">资源配置优化</li>
-       <li class="na">本地部署</li>
-      </ul>
-      <div class="btn-wrap">
-       <a href="ps://github.com/platonai" class="btn-buy"
-        target="_blank">立即下载</a>
+
+	 <!-- ======= Pricing Section ======= -->
+	 <section id="pricing" class="pricing">
+      <div class="container">
+
+       <div class="section-title">
+        <h2>参考价格方案</h2>
+        <p>选择最适合您的方案</p>
+       </div>
+
+       <div class="row">
+        <div class="col-lg-4 col-md-6 mt-md-2">
+         <div class="box" data-aos="zoom-in-right" data-aos-delay="200">
+          <h3>起步版</h3>
+          <h4>
+           <sup>¥</sup>286.56<span> / 月</span><!-- ¥45 -->
+          </h4>
+          <ul>
+            <li><b>10,000</b> 调用 / 月</li>
+            <li>+ ¥<b>0.029</b> 每额外请求</li>
+            <li class='d-none'><b>1</b> 用户</li>
+           </ul>
+          <div class="btn-wrap">
+          	<a href="#" class="btn-buy">立即购买</a>
+          </div>
+         </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 mt-md-2">
+         <div class="box" data-aos="zoom-in-right" data-aos-delay="200">
+          <h3>进阶版</h3>
+          <h4>
+           <sup>¥</sup>955.18<span> / 月</span><!-- ¥150 -->
+          </h4>
+          <ul>
+            <li><b>50,000</b> 调用 / 月</li>
+            <li>+ ¥<b>0.019</b> 每额外请求</li>
+            <li class='d-none'><b>2</b> 用户</li>
+           </ul>
+          <div class="btn-wrap">
+          	<a href="#" class="btn-buy">立即购买</a>
+          </div>
+         </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 mt-4 mt-md-2">
+         <div class="box" data-aos="zoom-in" data-aos-delay="100">
+          <h3>企业版</h3>
+          <h4>
+           <sup>¥</sup>1591.97<span> / 月</span><!-- ¥250 -->
+          </h4>
+          <ul>
+            <li><b>250,000</b> 调用 / 月</li>
+            <li>+ ¥<b>0.0064</b> 每额外请求</li>
+            <li class='d-none'><b>3</b> 用户</li>
+          </ul>
+          <div class="btn-wrap">
+           <a href="#" class="btn-buy">立即购买</a>
+          </div>
+         </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 mt-4 mt-md-2">
+         <div class="box" data-aos="zoom-in" data-aos-delay="100">
+          <h3>大数据版</h3>
+          <h4>
+           <sup>¥</sup>5412.72<span> / 月</span><!-- ¥850 -->
+          </h4>
+          <ul>
+            <li><b>1,000,000</b> 调用 / 月</li>
+            <li>+ ¥<b>0.0054</b> 每额外请求</li>
+            <li class='d-none'><b>5</b> 用户</li>
+          </ul>
+          <div class="btn-wrap">
+           <a href="#" class="btn-buy">立即购买</a>
+          </div>
+         </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 mt-4 mt-md-2">
+         <div class="box" data-aos="zoom-in" data-aos-delay="100">
+          <h3>平台版</h3>
+          <h4>
+           <sup>¥</sup>22287.65<span> / 月</span><!-- ¥3,500 -->
+          </h4>
+          <ul>
+            <li><b>5,000,000</b> 调用 / 月</li>
+            <li>+ ¥<b>0.0045</b> 每额外请求</li>
+            <li class='d-none'><b>10</b> 用户</li>
+          </ul>
+          <div class="btn-wrap">
+           <a href="#" class="btn-buy">立即购买</a>
+          </div>
+         </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 mt-4 mt-md-2">
+         <div class="box" data-aos="zoom-in"
+          data-aos-delay="100">
+          <h3>基础设施</h3>
+          <h4>
+           <sup>¥</sup>95518.50<span> / 月</span><!-- ¥15,000 -->
+          </h4>
+          <ul>
+            <li><b>50,000,000</b> 调用 / 月</li>
+            <li>+ ¥<b>0.0019</b> 每额外请求</li>
+            <li class='d-none'><b>25</b> 用户</li>
+          </ul>
+          <div class="btn-wrap">
+           <a href="#" class="btn-buy">立即购买</a>
+          </div>
+         </div>
+        </div>
+        
+        <div class="col-lg-4 col-md-6 mt-4 mt-md-2">
+         <div class="box" data-aos="zoom-in"
+          data-aos-delay="100">
+          <h3>基础设施 加强 I 版</h3>
+          <h4>
+           <sup>¥</sup>178301.20<span> / 月</span><!-- ¥28,000 -->
+          </h4>
+          <ul>
+            <li><b>100,000,000</b> 调用 / 月</li>
+            <li>+ ¥<b>0.0018</b> 每额外请求</li>
+            <li class='d-none'><b>50</b> 用户</li>
+          </ul>
+          <div class="btn-wrap">
+           <a href="#" class="btn-buy">立即购买</a>
+          </div>
+         </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 mt-4 mt-md-2">
+         <div class="box" data-aos="zoom-in"
+          data-aos-delay="100">
+          <h3>基础设施 加强 II 版</h3>
+          <h4>
+           <sup>¥</sup>305659.20<span> / 月</span><!-- ¥48,000 -->
+          </h4>
+          <ul>
+            <li><b>200,000,000</b> 调用 / 月</li>
+            <li>+ ¥<b>0.0015</b> 每额外请求</li>
+            <li class='d-none'><b>100</b> 用户</li>
+          </ul>
+          <div class="btn-wrap">
+           <a href="#" class="btn-buy">立即购买</a>
+          </div>
+         </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 mt-4 mt-md-2">
+         <div class="box" data-aos="zoom-in"
+          data-aos-delay="100">
+          <h3>基础设施 加强 III 版</h3>
+          <h4>
+           <sup>¥</sup>573111.00<span> / 月</span><!-- ¥90,000 -->
+          </h4>
+          <ul>
+            <li><b>500,000,000</b> 调用 / 月</li>
+            <li>+ ¥<b>0.0011</b> 每额外请求</li>
+            <li class='d-none'><b>250</b> 用户</li>
+          </ul>
+          <div class="btn-wrap">
+           <a href="#" class="btn-buy">立即购买</a>
+          </div>
+         </div>
+        </div>
+       </div>
       </div>
-     </div>
-    </div>
+	</section>
 
-    <div class="col-lg-4 col-md-6 mt-4 mt-md-0">
-     <div class="box recommended" data-aos="zoom-in"
-      data-aos-delay="100">
-      <h3>API 调用</h3>
-      <h4>
-       <sup>¥</sup>4000<span> / 百万网页</span>
-      </h4>
-      <ul>
-       <li>本地 API</li>
-       <li>X-SQL</li>
-       <li>Web BI</li>
-       <li>浏览器支持</li>
-       <li>机器学习</li>
-       <li>SaaS</li>
-       <li>分布式支持</li>
-       <li class="na">可选存储方案</li>
-       <li class="na">资源配置优化</li>
-       <li class="na">本地部署</li>
-      </ul>
-      <div class="btn-wrap">
-       <a href="#" class="btn-buy">立即购买</a>
-      </div>
-     </div>
-    </div>
 
-    <div class="col-lg-4 col-md-6 mt-4 mt-lg-0">
-     <div class="box" data-aos="zoom-in-left" data-aos-delay="200">
-      <h3>企业私有云</h3>
-      <h4>
-       <sup>¥</sup>10 ~ <sup>¥</sup>100 <span>万 / 年</span>
-      </h4>
-      <ul>
-       <li>本地 API</li>
-       <li>X-SQL</li>
-       <li>Web BI</li>
-       <li>浏览器支持</li>
-       <li>机器学习</li>
-       <li>SaaS</li>
-       <li>分布式支持</li>
-       <li>可选存储方案</li>
-       <li>资源配置优化</li>
-       <li>本地部署</li>
-      </ul>
-      <div class="btn-wrap">
-       <a href="#" class="btn-buy">立即购买</a>
-      </div>
-     </div>
-    </div>
 
-   </div>
 
-  </div>
- </section>
- <!-- End Pricing Section -->
 
  <!-- ======= Team Section ======= -->
  <section id="team" class="team section-bg">
