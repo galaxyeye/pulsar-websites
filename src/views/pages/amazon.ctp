@@ -42,6 +42,8 @@
         </div>
     </div>
 
+</section>
+
 <main id="main">
 
     <!-- ======= About Us Section ======= -->
