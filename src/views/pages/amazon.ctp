@@ -19,14 +19,13 @@
                 </div>
             </div>
 
-            <div class="col-lg-6 order-1 order-lg-2 hero-img" data-aos="fade-left" data-aos-delay="200">
-                <!--                -->
-<!--                <img src="../img/hero-img.png" class="img-fluid animated" alt="">-->
-                <ul>
+            <div class="col-lg-6 order-1 order-lg-2 pt-4" data-aos="fade-left" data-aos-delay="200">
+                <ul class="pt-4">
                     <li><b>Best Seller</b>&nbsp;<span>每日更新，约 25,000 类目，约 4,000,000 ASIN 关键数据</span></li>
                     <li><b>Most Wished For</b>&nbsp;<span>每日更新，约 25,000 类目，约 3,500,000 ASIN 关键数据</span></li>
-                    <li><b>New Releases</b>&nbsp;<span>约 每日更新，25,000 类目，约 3,000,000 ASIN 关键数据</span></li>
-                    <li><b>Movers and Shakers</b>&nbsp;<span>每小时更新</span></li>
+                    <li><b>New Releases</b>&nbsp;<span>每日更新，25,000 类目，约 3,000,000 ASIN 关键数据</span></li>
+                    <li><b>Movers and Shakers</b>&nbsp;<span>20 类目，每小时更新</span></li>
+                    <li><b>产品自然类目</b>&nbsp;<span>每日更新，20,000 类目，约 8,000,000 ASIN 关键数据</span></li>
                     <li><b>ASIN</b>&nbsp;<span>每日更新</span>
                     	<ul>
                     		<li>200+字段</li>
@@ -42,9 +41,6 @@
             </div>
         </div>
     </div>
-
-</section>
-<!-- End Hero -->
 
 <main id="main">
 
