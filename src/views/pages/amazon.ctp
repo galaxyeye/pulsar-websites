@@ -6,10 +6,10 @@
             <div class="col-lg-6 pt-5 pt-lg-0 order-2 order-lg-1 d-flex flex-column justify-content-center">
                 <h1 data-aos="fade-up">亚马逊解决方案</h1>
                 <h2 data-aos="fade-up" data-aos-delay="400">
+                	亚马逊即数据库<br />
                 	精准的采集时间<br />
                 	全面的数据字段<br />
                 	严格的数据质量<br />
-                	亚马逊即数据库<br />
                 </h2>
                 <div></div>
                 <div data-aos="fade-up" data-aos-delay="800">
