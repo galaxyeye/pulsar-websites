@@ -121,6 +121,53 @@ from load_out_pages('https://www.amazon.com/b?node=3117954011', 'a[href~=/dp/]',
     <!-- End About Us Section -->
 
 
+    <!-- ======= About Us Section ======= -->
+    <section id="about" class="about">
+        <div class="container">
+
+            <div class="section-title" data-aos="fade-up">
+                <h2>关键难题</h2>
+            </div>
+
+            <div class="row content">
+                <div class="col-lg-5" data-aos="fade-up" data-aos-delay="150">
+                    <p>
+                        <b>网络数据处理存在以下关键难题</b>
+                    </p>
+                    <ul>
+                        <li><i class="ri-check-double-line"></i> <b>自动网页提取</b> - 无人干预自动结构化互联网规模网页
+                        </li>
+                        <li><i class="ri-check-double-line"></i> <b>AI辅助网页提取</b> - 零干预或极少干预，将大规模网页完整精确结构化
+                    </ul>
+                </div>
+                <div class="col-lg-7 pt-4 pt-lg-0" data-aos="fade-up" data-aos-delay="300">
+                    <p>
+                        <b>行为良好的企业级Web数据处理系统需要解决以下问题</b>
+                    </p>
+                    <ul>
+                        <li><i class="ri-check-double-line"></i> <b>增强分析</b> - 需要机器学习、知识图谱等AI技术来增强数据分析</li>
+                        <li><i class="ri-check-double-line"></i> <b>机器学习</b> - 支持机器学习算法来降低数据处理门槛并提高效率</li>
+                        <li><i class="ri-check-double-line"></i> <b>云化服务</b> - 支持云化服务以降低使用门槛并提高交付效率</li>
+                        <li><i class="ri-check-double-line"></i> <b>操作语言</b> - 支持数据操作语言以简化远程数据操作</li>
+                        
+                        <li><i class="ri-check-double-line"></i> <b>质量保证</b> - 大规模采集下的数据质量保证</li>
+                        <li><i class="ri-check-double-line"></i> <b>性能优化</b> - 采集单元容器化以最大化节点效率，修改浏览器内核以提升性能</li>
+                        <li><i class="ri-check-double-line"></i> <b>弹性计算</b> - 支持弹性计算以实现无缝扩展</li>
+                        <li><i class="ri-check-double-line"></i> <b>健壮性</b> - 应对复杂的网络环境</li>
+
+                        <li><i class="ri-check-double-line"></i> <b>存储处理</b> - 需要完整的工具链处理网络大数据的存储问题</li>
+                        <li><i class="ri-check-double-line"></i> <b>运维工具</b> - 需要完整的运维工具以实时获取系统运行状态</li>
+                        <li><i class="ri-check-double-line"></i> <b>全流程</b> - 从采集网页等原始数据到结论形成、报表生成整个流程</li>
+
+                        <li><i class="ri-check-double-line"></i> <b>其它问题</b> - 获取成本、技能要求、数据规模、数据融合、时效价值、可维护性等</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </section>
+    <!-- End About Us Section -->
+
     <!-- ======= Auto Web Mining Section ======= -->
     <section id="technology" class="about">
         <div class="container">
