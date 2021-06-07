@@ -1136,7 +1136,7 @@ from load_and_select('https://www.amazon.com/gp/new-releases/home-garden/ref=zg_
       "大数据版" => array(1000000, 0.0055),
       "平台版" => array(5000000, 0.0045),
       "基础设施" => array(50000000, 0.002),
-      "基础设施 加强 I 版" => array(100000000, 0.002),
+      "基础设施 加强 I 版" => array(100000000, 0.0025),
       "基础设施 加强 II 版" => array(200000000, 0.0015),
       "基础设施 加强 III 版" => array(500000000, 0.001),
     )
