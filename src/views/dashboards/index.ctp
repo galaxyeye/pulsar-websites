@@ -795,7 +795,7 @@ from load_and_select('https://www.amazon.com/gp/new-releases/home-garden/ref=zg_
                     <div class="icon-box">
                         <i class="ri-cpu-line" style="color: #e80368;"></i>
                         <h3>
-                            <a href="">数据库内核</a>
+                            <a href="">定制数据库内核</a>
                         </h3>
                     </div>
                 </div>
