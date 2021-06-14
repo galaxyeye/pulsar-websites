@@ -12,16 +12,17 @@
                 <h2 data-aos="fade-up" data-aos-delay="400">使用 AI 和 SQL
                     将任意规模授权网站完整精确转变成数据。现在，您可以直接在 Web 上应用商业智能。</h2>
                 <div data-aos="fade-up" data-aos-delay="800">
-                    <a href="#about" class="btn-get-started scrollto">开始</a>
+                  <a href="#about" class="btn-get-started scrollto">开始</a>
+
                   <?php echo $this->Html->link(__('亚马逊解决方案', true), '/pages/amazon', array('class' => 'btn-get-started')); ?>
+
+                  <?php echo $this->Html->link(__('开源版 Github', true), 'https://github.com/platonai', array('class' => 'btn-github', 'target' => '_blank')); ?>
                 </div>
             </div>
-            <div class="col-lg-6 order-1 order-lg-2 hero-img"
-                 data-aos="fade-left" data-aos-delay="200">
+            <div class="col-lg-6 order-1 order-lg-2 hero-img" data-aos="fade-left" data-aos-delay="200">
                 <!--                -->
               <?php //echo $html->img("img/hero-img.png", array("class" => "img-fluid animated")) ?>
-                <img src="img/hero-img.png" class="img-fluid animated"
-                     alt="">
+                <img src="img/hero-img.png" class="img-fluid animated" alt="">
             </div>
         </div>
     </div>
@@ -132,7 +133,7 @@ from load_out_pages('https://www.amazon.com/b?node=3117954011', 'a[href~=/dp/]',
             <div class="row content">
                 <div class="col-lg-5" data-aos="fade-up" data-aos-delay="150">
                     <p>
-                        <b>网络数据处理存在以下关键难题</b>
+                        <b>网络数据处理存在以下关键理论难题</b>
                     </p>
                     <ul>
                         <li><i class="ri-check-double-line"></i> <b>自动网页提取</b> - 无人干预自动结构化互联网规模网页
@@ -142,21 +143,21 @@ from load_out_pages('https://www.amazon.com/b?node=3117954011', 'a[href~=/dp/]',
                 </div>
                 <div class="col-lg-7 pt-4 pt-lg-0" data-aos="fade-up" data-aos-delay="300">
                     <p>
-                        <b>行为良好的企业级Web数据处理系统需要解决以下问题</b>
+                        <b>行为良好的企业级网络数据处理系统需要解决以下工程问题</b>
                     </p>
                     <ul>
                         <li><i class="ri-check-double-line"></i> <b>增强分析</b> - 需要机器学习、知识图谱等AI技术来增强数据分析</li>
                         <li><i class="ri-check-double-line"></i> <b>机器学习</b> - 支持机器学习算法来降低数据处理门槛并提高效率</li>
                         <li><i class="ri-check-double-line"></i> <b>云化服务</b> - 支持云化服务以降低使用门槛并提高交付效率</li>
                         <li><i class="ri-check-double-line"></i> <b>操作语言</b> - 支持数据操作语言以简化远程数据操作</li>
-                        
-                        <li><i class="ri-check-double-line"></i> <b>质量保证</b> - 大规模采集下的数据质量保证</li>
+
+                        <li><i class="ri-check-double-line"></i> <b>质量保证</b> - 系统质量保证，以及大规模采集下的数据质量保证</li>
                         <li><i class="ri-check-double-line"></i> <b>性能优化</b> - 采集单元容器化以最大化节点效率，修改浏览器内核以提升性能</li>
-                        <li><i class="ri-check-double-line"></i> <b>弹性计算</b> - 支持弹性计算以实现无缝扩展</li>
+                        <li><i class="ri-check-double-line"></i> <b>弹性计算</b> - 支持弹性计算以实现无缝扩展，从而获得处理互联网规模数据的能力</li>
                         <li><i class="ri-check-double-line"></i> <b>健壮性</b> - 应对复杂的网络环境</li>
 
                         <li><i class="ri-check-double-line"></i> <b>存储处理</b> - 需要完整的工具链处理网络大数据的存储问题</li>
-                        <li><i class="ri-check-double-line"></i> <b>运维工具</b> - 需要完整的运维工具以实时获取系统运行状态</li>
+                        <li><i class="ri-check-double-line"></i> <b>运维工具</b> - 需要完整的运维工具以实时获取系统运行状态并对对系统进行诊断和维护</li>
                         <li><i class="ri-check-double-line"></i> <b>全流程</b> - 从采集网页等原始数据到结论形成、报表生成整个流程</li>
 
                         <li><i class="ri-check-double-line"></i> <b>其它问题</b> - 获取成本、技能要求、数据规模、数据融合、时效价值、可维护性等</li>
