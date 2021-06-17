@@ -20,6 +20,9 @@
             </div>
 
             <div class="col-lg-6 order-1 order-lg-2 pt-4" data-aos="fade-left" data-aos-delay="200">
+                <p>
+                    <b>默认方案</b>
+                </p>
                 <ul class="pt-4">
                     <li><b>Best Seller</b>&nbsp;<span>每日更新，约 25,000 类目，约 4,000,000 ASIN 关键数据</span></li>
                     <li><b>Most Wished For</b>&nbsp;<span>每日更新，约 25,000 类目，约 3,500,000 ASIN 关键数据</span></li>
