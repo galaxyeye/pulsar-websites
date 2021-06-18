@@ -15,31 +15,31 @@
                 <div data-aos="fade-up" data-aos-delay="800">
                 	 <?php echo $this->Html->link(__('价格', true), '/#pricing', array('class' => 'btn-get-started')); ?>
                     <a class="btn-get-started" href="http://bi.platonic.fun/browse/38" target="_blank">默认方案</a>
-                    <a class="btn-get-started" href="http://bi.platonic.fun/collection/4" target="_blank">实时采集</a>
+                    <a class="btn-get-started" href="http://bi.platonic.fun/collection/43" target="_blank">在线演示</a>
                 </div>
             </div>
 
             <div class="col-lg-6 order-1 order-lg-2 pt-4" data-aos="fade-left" data-aos-delay="200">
-                <p>
-                    <b>默认方案</b>
+                <p class="pt-4">
+                     <b>默认方案</b>
                 </p>
-                <ul class="pt-4">
+                <ul>
                     <li><b>Best Seller</b>&nbsp;<span>每日更新，约 25,000 类目，约 4,000,000 ASIN 关键数据</span></li>
                     <li><b>Most Wished For</b>&nbsp;<span>每日更新，约 25,000 类目，约 3,500,000 ASIN 关键数据</span></li>
                     <li><b>New Releases</b>&nbsp;<span>每日更新，25,000 类目，约 3,000,000 ASIN 关键数据</span></li>
                     <li><b>Movers and Shakers</b>&nbsp;<span>20 类目，每小时更新</span></li>
                     <li><b>产品自然类目</b>&nbsp;<span>每日更新，20,000 类目，约 8,000,000 ASIN 关键数据</span></li>
-                    <li><b>ASIN</b>&nbsp;<span>每日更新</span>
+                    <li><b>ASIN 详情页</b>&nbsp;<span>约 20,000,000 ASIN 详情页循环更新</span>
                     	<ul>
                     		<li>200+字段</li>
-                    		<li>价格，描述，店铺，跟买</li>
+                    		<li>标题，价格，库存，图片，描述，规格，店铺，跟买等</li>
                     		<li>广告商品，相似商品，推荐商品</li>
                     		<li>评分信息</li>
                     		<li>主要评论，关键词等</li>
                     	</ul>
                     </li>
                     <li><b>Review</b>&nbsp;<span>每日更新</span></li>
-                    <li>所有数据均可实时采集</li>
+                    <li>所有数据均可调整字段、采集周期、采集时间或者其他需求</li>
                 </ul>
             </div>
         </div>
