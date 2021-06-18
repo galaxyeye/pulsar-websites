@@ -476,7 +476,9 @@ from load_out_pages('https://www.amazon.com/b?node=3117954011', 'a[href~=/dp/]',
                             </table>
                         </div>
                         <a href="http://platonic.fun/i/ai?url=aHR0cHM6Ly93d3cuYW1hem9uLmNvbS9CZXN0LVNlbGxlcnMtQXV0b21vdGl2ZS96Z2JzL2F1dG9tb3RpdmUvcmVmPXpnX2JzX25hdl8w"
-                                class="btn-learn-more" target="_blank">AI 自动挖掘和AI 辅助挖掘</a>
+                                class="btn-learn-more" target="_blank">执行 AI 自动挖掘</a>
+                        <a href="http://platonic.fun/i/ai?mode=dev&url=aHR0cHM6Ly93d3cuYW1hem9uLmNvbS9CZXN0LVNlbGxlcnMtQXV0b21vdGl2ZS96Z2JzL2F1dG9tb3RpdmUvcmVmPXpnX2JzX25hdl8w"
+                                class="btn-learn-more" target="_blank">执行 AI 辅助挖掘</a>
                     </div>
                 </div>
             </div>
