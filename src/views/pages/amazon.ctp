@@ -14,7 +14,7 @@
                 <div></div>
                 <div data-aos="fade-up" data-aos-delay="800">
                 	 <?php echo $this->Html->link(__('价格', true), '/#pricing', array('class' => 'btn-get-started')); ?>
-                    <a class="btn-get-started" href="http://bi.platonic.fun/browse/38" target="_blank">默认方案</a>
+                    <a class="btn-get-started" href="http://bi.platonic.fun/collection/44" target="_blank">默认方案</a>
                     <a class="btn-get-started" href="http://bi.platonic.fun/collection/43" target="_blank">在线演示</a>
                 </div>
             </div>
