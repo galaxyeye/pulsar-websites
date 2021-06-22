@@ -36,7 +36,7 @@
                         <?php endforeach; ?>
                     </ul>
                 </li>
-                <li><?php echo $html->link('案例演示', '/#more-services') ?></li>
+                <li><?php echo $html->link('案例演示', 'http://bi.platonic.fun/collection/43', array('target' => '_blank')) ?></li>
                 <li><?php echo $html->link('价格方案', '/#pricing') ?></li>
                 <li><?php echo $html->link('加入我们', '/jobs') ?></li>
                 <li><?php echo $html->link('联系我们', '/#contact') ?></li>

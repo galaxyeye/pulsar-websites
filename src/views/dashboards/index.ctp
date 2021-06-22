@@ -6,17 +6,21 @@
 
     <div class="container">
         <div class="row">
-            <div
-                    class="col-lg-6 pt-5 pt-lg-0 order-2 order-lg-1 d-flex flex-column justify-content-center">
+            <div class="col-lg-6 pt-5 pt-lg-0 order-2 order-lg-1 d-flex flex-column justify-content-center">
                 <h1 data-aos="fade-up">网络即数据库</h1>
-                <h2 data-aos="fade-up" data-aos-delay="400">使用 AI 和 SQL
-                    将任意规模授权网站完整精确转变成数据。现在，您可以直接在 Web 上应用商业智能。</h2>
+                <h2 data-aos="fade-up" data-aos-delay="400">使用 AI 和 SQL 将任意规模授权网站完整精确转变成数据。
+                现在，您可以直接在 Web 上应用商业智能。</h2>
                 <div data-aos="fade-up" data-aos-delay="800">
                   <a href="#about" class="btn-get-started scrollto">开始</a>
-
                   <?php echo $this->Html->link(__('亚马逊解决方案', true), '/pages/amazon', array('class' => 'btn-get-started')); ?>
-
-                  <?php echo $this->Html->link(__('开源版 Github', true), 'https://github.com/platonai', array('class' => 'btn-github', 'target' => '_blank')); ?>
+                </div>
+                <div data-aos="fade-up" data-aos-delay="1000" class='pt-5'>
+				  <a href="http://platonic.fun/i/ai?url=aHR0cHM6Ly93d3cuYW1hem9uLmNvbS9CZXN0LVNlbGxlcnMtQXV0b21vdGl2ZS96Z2JzL2F1dG9tb3RpdmUvcmVmPXpnX2JzX25hdl8w"
+                            class="demo" target="_blank">AI 自动挖掘</a>
+                  <a href="http://platonic.fun/i/ai?mode=dev&url=aHR0cHM6Ly93d3cuYW1hem9uLmNvbS9CZXN0LVNlbGxlcnMtQXV0b21vdGl2ZS96Z2JzL2F1dG9tb3RpdmUvcmVmPXpnX2JzX25hdl8w"
+                            class="demo" target="_blank">AI 辅助挖掘</a>
+                    <a class="demo" href="http://bi.platonic.fun/collection/43" target="_blank">X-SQL 演示</a>
+                    <a class="demo" href="https://github.com/platonai" target="_blank">开源版 Github</a>
                 </div>
             </div>
             <div class="col-lg-6 order-1 order-lg-2 hero-img" data-aos="fade-left" data-aos-delay="200">
@@ -112,8 +116,7 @@ select
 from load_out_pages('https://www.amazon.com/b?node=3117954011', 'a[href~=/dp/]', 1, 10);
               </code>
      </pre>
-                    <a href="http://bi.platonic.fun/question/41" class="btn-learn-more"
-                       target="_blank">执行</a>
+                    <a href="http://bi.platonic.fun/question/41" class="btn-learn-more" target="_blank">执行</a>
                 </div>
             </div>
 
@@ -136,9 +139,8 @@ from load_out_pages('https://www.amazon.com/b?node=3117954011', 'a[href~=/dp/]',
                         <b>网络数据处理存在以下关键理论难题</b>
                     </p>
                     <ul>
-                        <li><i class="ri-check-double-line"></i> <b>自动网页提取</b> - 无人干预自动结构化互联网规模网页
-                        </li>
-                        <li><i class="ri-check-double-line"></i> <b>AI辅助网页提取</b> - 零干预或极少干预，将大规模网页完整精确结构化
+                        <li><i class="ri-check-double-line"></i> <b>自动网页提取</b> - 无人干预自动结构化互联网规模网页</li>
+                        <li><i class="ri-check-double-line"></i> <b>AI辅助网页提取</b> - 零干预或极少干预，将大规模网页完整精确结构化</li>
                     </ul>
                 </div>
                 <div class="col-lg-7 pt-4 pt-lg-0" data-aos="fade-up" data-aos-delay="300">
@@ -202,278 +204,7 @@ from load_out_pages('https://www.amazon.com/b?node=3117954011', 'a[href~=/dp/]',
                         </p>
 
                         <div class="table">
-                            <table class="table text-secondary">
-                                <thead>
-                                <tr>
-                                    <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
-                                    <td>C1</td>
-                                    <td>C2</td>
-                                    <td>C3</td>
-                                    <td>C4</td>
-                                    <td>C5</td>
-                                    <td>C6</td>
-                                    <td>C7</td>
-                                    <td>C8</td>
-                                    <td>C9</td>
-                                    <td>C10</td>
-                                    <td></td>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td><a
-                                                href="https://www.amazon.com/BLACK-DECKER-Stainless-Multi-Cooker-PR100/dp/B01LZZA5S4/ref=sr_1_24?qid=1577342483&amp;s=kitchen&amp;sr=1-24"
-                                                title="Amazon.com: BLACK+DECKER 6 quart 11-in-1 Cooking Pot, Stainless Steel, Pressure Cooker, Slow Cooker, Multi-Cooker, PR100"
-                                                target="_blank">Amazon.com: BLACK+DECKER 6 quart 11-in-1
-                                            Cooking Pot, Stainless Steel, Pressure Cooker, Slow Cooker,
-                                            Multi-Cooker, PR100</a></td>
-                                    <td><span> BLACK+DECKER 6 quart 11-in-1 Cooking Pot, Stainless
-            Steel, Pressure Cooker, Slow Cooker, Multi-Cooker, PR100 </span></td>
-                                    <td><span> by </span></td>
-                                    <td><span>BLACK+DECKER</span></td>
-                                    <td><span>4.2 out of 5 stars</span></td>
-                                    <td><span>129 ratings</span></td>
-                                    <td><span> | </span></td>
-                                    <td><span> 89 answered questions </span></td>
-                                    <td><span> + No Import Fees Deposit &amp; ¥40.72 Shipping to
-            Hong Kong </span></td>
-                                    <td><span> New (5) from </span></td>
-                                    <td><em>¥54.17</em></td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td><a
-                                                href="https://www.amazon.com/BLACK-DECKER-Stainless-Multi-Cooker-PR100/dp/B01LZZA5S4/ref=sr_1_24?qid=1577370142&amp;s=kitchen&amp;sr=1-24"
-                                                title="Amazon.com: BLACK+DECKER 6 quart 11-in-1 Cooking Pot, Stainless Steel, Pressure Cooker, Slow Cooker, Multi-Cooker, PR100"
-                                                target="_blank">Amazon.com: BLACK+DECKER 6 quart 11-in-1
-                                            Cooking Pot, Stainless Steel, Pressure Cooker, Slow Cooker,
-                                            Multi-Cooker, PR100</a></td>
-                                    <td><span> BLACK+DECKER 6 quart 11-in-1 Cooking Pot, Stainless
-            Steel, Pressure Cooker, Slow Cooker, Multi-Cooker, PR100 </span></td>
-                                    <td><span> by </span></td>
-                                    <td><span>BLACK+DECKER</span></td>
-                                    <td><span>4.2 out of 5 stars</span></td>
-                                    <td><span>129 ratings</span></td>
-                                    <td><span> | </span></td>
-                                    <td><span> 89 answered questions </span></td>
-                                    <td><span> + No Import Fees Deposit &amp; ¥40.72 Shipping to
-            Hong Kong </span></td>
-                                    <td><span> New (5) from </span></td>
-                                    <td><em>¥54.17</em></td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td><a
-                                                href="https://www.amazon.com/Crock-Pot-Multi-Use-Programmable-Stainless-SCCPPC600-V1/dp/B074PHL51Y/ref=sr_1_21?qid=1577343218&amp;s=kitchen&amp;sr=1-21"
-                                                title="Amazon.com: Crock Pot 6 Quart 8 in 1 Multi Use Express Crock Programmable Pressure Cooker, Slow Cooker, Sauté &amp; Steamer | Stainless Steel (SCCPPC600 V1)"
-                                                target="_blank">Amazon.com: Crock Pot 6 Quart 8 in 1 Multi
-                                            Use Express Crock Programmable Pressure Cooker, Slow Cooker,
-                                            Sauté &amp; Steamer | Stainless Steel (SCCPPC60...</a></td>
-                                    <td><span> Crock Pot 6 Quart 8 in 1 Multi Use Express Crock
-            Programmable Pressure Cooker, Slow Cooker, Sauté &amp;
-            Steamer | Stainless Steel (SCCPPC600 V1) </span></td>
-                                    <td><span> by </span></td>
-                                    <td><span>Crockpot</span></td>
-                                    <td><span>4.2 out of 5 stars</span></td>
-                                    <td><span>2,086 ratings</span></td>
-                                    <td><span> | </span></td>
-                                    <td><span> 670 answered questions </span></td>
-                                    <td><span>There is a newer model of this item:</span></td>
-                                    <td><span> New (31) from </span></td>
-                                    <td><em>¥74.79</em></td>
-                                </tr>
-                                <tr>
-                                    <td>4</td>
-                                    <td><a
-                                                href="https://www.amazon.com/Crockpot-SCCPCT600-B-Thermoshield-Cooker-Quart/dp/B07CS96DXS/ref=sr_1_28?qid=1577343218&amp;s=kitchen&amp;sr=1-28"
-                                                title="Amazon.com: Crockpot Thermoshield 6 Quart Manual Slow Cooker, Black"
-                                                target="_blank">Amazon.com: Crockpot Thermoshield 6 Quart
-                                            Manual Slow Cooker, Black</a></td>
-                                    <td><span> Crockpot Thermoshield 6 Quart Manual Slow Cooker,
-            Black </span></td>
-                                    <td><span> by </span></td>
-                                    <td><span>Crockpot</span></td>
-                                    <td><span>4.1 out of 5 stars</span></td>
-                                    <td><span>150 ratings</span></td>
-                                    <td><span> | </span></td>
-                                    <td><span> 47 answered questions </span></td>
-                                    <td><span> + No Import Fees Deposit &amp; ¥47.40 Shipping to
-            Hong Kong </span></td>
-                                    <td><span> New &amp; Used (12) from </span></td>
-                                    <td><em>¥59.99</em></td>
-                                </tr>
-                                <tr>
-                                    <td>5</td>
-                                    <td><a
-                                                href="https://www.amazon.com/GoWISE-USA-GW22637-4th-Generation-measuring/dp/B01LVZY19H/ref=sr_1_32?qid=1577342483&amp;s=kitchen&amp;sr=1-32"
-                                                title="Amazon.com: GoWISE USA GW22637 4th-Generation Electric Pressure Cooker with rice scooper, and measuring cup, 14 QT"
-                                                target="_blank">Amazon.com: GoWISE USA GW22637 4th-Generation
-                                            Electric Pressure Cooker with rice scooper, and measuring
-                                            cup, 14 QT</a></td>
-                                    <td><span> GoWISE USA GW22637 4th-Generation Electric Pressure
-            Cooker with rice scooper, and measuring cup, 14 QT </span></td>
-                                    <td><span> by </span></td>
-                                    <td><span>GoWISE USA</span></td>
-                                    <td><span>3.9 out of 5 stars</span></td>
-                                    <td><span>927 ratings</span></td>
-                                    <td><span> | </span></td>
-                                    <td><span> 498 answered questions </span></td>
-                                    <td><span> + No Import Fees Deposit &amp; ¥70.96 Shipping to
-            Hong Kong </span></td>
-                                    <td><span> New &amp; Used (4) from </span></td>
-                                    <td><em>¥113.18</em></td>
-                                </tr>
-                                <tr>
-                                    <td>6</td>
-                                    <td><a
-                                                href="https://www.amazon.com/GoWISE-USA-GW22637-4th-Generation-measuring/dp/B01LVZY19H/ref=sr_1_32?qid=1577343218&amp;s=kitchen&amp;sr=1-32"
-                                                title="Amazon.com: GoWISE USA GW22637 4th-Generation Electric Pressure Cooker with rice scooper, and measuring cup, 14 QT"
-                                                target="_blank">Amazon.com: GoWISE USA GW22637 4th-Generation
-                                            Electric Pressure Cooker with rice scooper, and measuring
-                                            cup, 14 QT</a></td>
-                                    <td><span> GoWISE USA GW22637 4th-Generation Electric Pressure
-            Cooker with rice scooper, and measuring cup, 14 QT </span></td>
-                                    <td><span> by </span></td>
-                                    <td><span>GoWISE USA</span></td>
-                                    <td><span>3.9 out of 5 stars</span></td>
-                                    <td><span>927 ratings</span></td>
-                                    <td><span> | </span></td>
-                                    <td><span> 498 answered questions </span></td>
-                                    <td><span> + No Import Fees Deposit &amp; ¥70.96 Shipping to
-            Hong Kong </span></td>
-                                    <td><span> New &amp; Used (4) from </span></td>
-                                    <td><em>¥113.18</em></td>
-                                </tr>
-                                <tr>
-                                    <td>7</td>
-                                    <td><a
-                                                href="https://www.amazon.com/GoWISE-USA-GW22637-4th-Generation-measuring/dp/B01LVZY19H/ref=sr_1_32?qid=1577353748&amp;s=kitchen&amp;sr=1-32"
-                                                title="Amazon.com: GoWISE USA GW22637 4th-Generation Electric Pressure Cooker with rice scooper, and measuring cup, 14 QT"
-                                                target="_blank">Amazon.com: GoWISE USA GW22637 4th-Generation
-                                            Electric Pressure Cooker with rice scooper, and measuring
-                                            cup, 14 QT</a></td>
-                                    <td><span> GoWISE USA GW22637 4th-Generation Electric Pressure
-            Cooker with rice scooper, and measuring cup, 14 QT </span></td>
-                                    <td><span> by </span></td>
-                                    <td><span>GoWISE USA</span></td>
-                                    <td><span>3.9 out of 5 stars</span></td>
-                                    <td><span>927 ratings</span></td>
-                                    <td><span> | </span></td>
-                                    <td><span> 498 answered questions </span></td>
-                                    <td><span> + No Import Fees Deposit &amp; ¥70.96 Shipping to
-            Hong Kong </span></td>
-                                    <td><span> New &amp; Used (4) from </span></td>
-                                    <td><em>¥113.18</em></td>
-                                </tr>
-                                <tr>
-                                    <td>8</td>
-                                    <td><a
-                                                href="https://www.amazon.com/Gourmia-Multi-Mode-SmartPot-Removable-Automatic/dp/B07KJQKB22/ref=sr_1_20?qid=1577341334&amp;s=kitchen&amp;sr=1-20"
-                                                title="Amazon.com: Gourmia GPC400 4 Qt Digital Multi-Mode SmartPot Pressure Cooker - 13 Cook Modes - Removable Pot - 24-Hour Delay Timer - Automatic Keep Warm - LCD Display - Pressure Sensor Lid Lock - Recipe Book"
-                                                target="_blank">Amazon.com: Gourmia GPC400 4 Qt Digital
-                                            Multi-Mode SmartPot Pressure Cooker - 13 Cook Modes -
-                                            Removable Pot - 24-Hour Delay Timer - Automatic Keep ...</a></td>
-                                    <td><span> Gourmia GPC400 4 Qt Digital Multi-Mode SmartPot
-            Pressure Cooker - 13 Cook Modes - Removable Pot - 24-Hour
-            Delay Timer - Automatic Keep Warm - LCD Display - Pressure
-            Sensor Lid Lock - Recipe Book </span></td>
-                                    <td><span> by </span></td>
-                                    <td><span>Gourmia</span></td>
-                                    <td><span>4.2 out of 5 stars</span></td>
-                                    <td><span>363 ratings</span></td>
-                                    <td><span> | </span></td>
-                                    <td><span> 171 answered questions </span></td>
-                                    <td><span> + No Import Fees Deposit &amp; ¥31.80 Shipping to
-            Hong Kong </span></td>
-                                    <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
-                                </tr>
-                                <tr>
-                                    <td>9</td>
-                                    <td><a
-                                                href="https://www.amazon.com/Mealthy-MultiPot-Programmable-Pressure-Stainless/dp/B076QJNK8G/ref=sr_1_26?qid=1577370142&amp;s=kitchen&amp;sr=1-26"
-                                                title="Amazon.com: Mealthy MultiPot 9-in-1 Programmable Pressure Cooker 6 Quarts with Stainless Steel Pot, Steamer Basket, instant access to recipe app. Pressure cook, slow cook, sauté, rice cooker, yogurt, steam"
-                                                target="_blank">Amazon.com: Mealthy MultiPot 9-in-1
-                                            Programmable Pressure Cooker 6 Quarts with Stainless Steel
-                                            Pot, Steamer Basket, instant access to recipe app. P...</a></td>
-                                    <td><span> Mealthy MultiPot 9-in-1 Programmable Pressure
-            Cooker 6 Quarts with Stainless Steel Pot, Steamer Basket,
-            instant access to recipe app. Pressure cook, slow cook,
-            sauté, rice cooker, yogurt, steam </span></td>
-                                    <td><span> by </span></td>
-                                    <td><span>Mealthy</span></td>
-                                    <td><span>4.7 out of 5 stars</span></td>
-                                    <td><span>1,593 ratings</span></td>
-                                    <td><span> | </span></td>
-                                    <td><span> 934 answered questions </span></td>
-                                    <td>&nbsp;</td>
-                                    <td><span> New &amp; Used (3) from </span></td>
-                                    <td><em>¥169.99</em></td>
-                                </tr>
-                                <tr>
-                                    <td>10</td>
-                                    <td><a
-                                                href="https://www.amazon.com/Ninja-Instant-1000-Watt-Pressure-PC101/dp/B07FDNBSNT/ref=sr_1_23?qid=1577371163&amp;s=kitchen&amp;sr=1-23"
-                                                title="Amazon.com: Ninja Instant, 1000-Watt Pressure, Slow, Multi Cooker, and Steamer with 6-Quart Ceramic Coated Pot &amp; Steam Rack (PC101), Si, Black/Silver"
-                                                target="_blank">Amazon.com: Ninja Instant, 1000-Watt
-                                            Pressure, Slow, Multi Cooker, and Steamer with 6-Quart
-                                            Ceramic Coated Pot &amp; Steam Rack (PC101), Si,
-                                            Black/Silver</a></td>
-                                    <td><span> Ninja Instant, 1000-Watt Pressure, Slow, Multi
-            Cooker, and Steamer with 6-Quart Ceramic Coated Pot &amp;
-            Steam Rack (PC101), Si, Black/Silver </span></td>
-                                    <td><span> by </span></td>
-                                    <td><span>Ninja</span></td>
-                                    <td><span>4.7 out of 5 stars</span></td>
-                                    <td><span>120 ratings</span></td>
-                                    <td><span> | </span></td>
-                                    <td><span> 65 answered questions </span></td>
-                                    <td><span>This product is available as Renewed.</span></td>
-                                    <td><span> New &amp; Used (11) from </span></td>
-                                    <td><em>¥54.95</em></td>
-                                </tr>
-                                <tr>
-                                    <td>11</td>
-                                    <td><a
-                                                href="https://www.amazon.com/Power-Pressure-Cooker-XL-10/dp/B01BVV07KO/ref=sr_1_25?qid=1577371163&amp;s=kitchen&amp;sr=1-25"
-                                                title="Amazon.com: Power Pressure Cooker XL 10 Qt"
-                                                target="_blank">Amazon.com: Power Pressure Cooker XL 10 Qt</a></td>
-                                    <td><span> Power Pressure Cooker XL 10 Qt </span></td>
-                                    <td><span> by </span></td>
-                                    <td><span>Power Pressure Cooker XL</span></td>
-                                    <td><span>4.1 out of 5 stars</span></td>
-                                    <td><span>2,977 ratings</span></td>
-                                    <td><span> | </span></td>
-                                    <td><span> 1000+ answered questions </span></td>
-                                    <td><span> + No Import Fees Deposit &amp; ¥51.68 Shipping to
-            Hong Kong </span></td>
-                                    <td><span> New &amp; Used (6) from </span></td>
-                                    <td><em>¥159.00</em></td>
-                                </tr>
-                                <tr>
-                                    <td>12</td>
-                                    <td><a
-                                                href="https://www.amazon.com/Presto-02141-Electric-Pressure-Stainless/dp/B01LZZ4WOK/ref=sr_1_29?qid=1577341334&amp;s=kitchen&amp;sr=1-29"
-                                                title="Amazon.com: Presto 02141 6-Quart Electric Pressure Cooker, Stainless, Black, Silver"
-                                                target="_blank">Amazon.com: Presto 02141 6-Quart Electric
-                                            Pressure Cooker, Stainless, Black, Silver</a></td>
-                                    <td><span> Presto 02141 6-Quart Electric Pressure Cooker,
-            Stainless, Black, Silver </span></td>
-                                    <td><span> by </span></td>
-                                    <td><span>Presto</span></td>
-                                    <td><span>4.2 out of 5 stars</span></td>
-                                    <td><span>54 ratings</span></td>
-                                    <td><span> | </span></td>
-                                    <td><span> 17 answered questions </span></td>
-                                    <td><span> + No Import Fees Deposit &amp; ¥38.45 Shipping to
-            Hong Kong </span></td>
-                                    <td><span> New &amp; Used (33) from </span></td>
-                                    <td><em>¥59.99</em></td>
-                                </tr>
-                                </tbody>
-                            </table>
+                        	<?php echo $this->element('auto-mining-result') ?>
                         </div>
                         <a href="http://platonic.fun/i/ai?url=aHR0cHM6Ly93d3cuYW1hem9uLmNvbS9CZXN0LVNlbGxlcnMtQXV0b21vdGl2ZS96Z2JzL2F1dG9tb3RpdmUvcmVmPXpnX2JzX25hdl8w"
                                 class="btn-learn-more" target="_blank">执行 AI 自动挖掘</a>
@@ -489,17 +220,17 @@ from load_out_pages('https://www.amazon.com/b?node=3117954011', 'a[href~=/dp/]',
 
 
     <!-- ======= Data API Section ======= -->
-    <section id="saas-service" class="about">
-        <div class="container">
+	<section id="saas" class="about">
+		<div class="container">
 
-            <div class="section-title" data-aos="fade-up">
-                <h2>SAAS</h2>
-            </div>
+			<div class="section-title" data-aos="fade-up">
+				<h2>SAAS</h2>
+			</div>
 
-            <div class="row content">
-                <div class="col-lg-7 pt-4 pt-lg-0" data-aos="fade-up"
-                     data-aos-delay="300">
-     <pre>
+			<div class="row content">
+				<div class="col-lg-7 pt-4 pt-lg-0" data-aos="fade-up"
+					data-aos-delay="300">
+					<pre>
       <code class="language-sql">curl -X POST --location "http://platonic.fun:8182/api/x/e" -H "Content-Type: text/plain" -d "
   select
       dom_base_uri(dom) as url,
@@ -513,31 +244,27 @@ from load_out_pages('https://www.amazon.com/b?node=3117954011', 'a[href~=/dp/]',
       str_first_float(dom_first_text(dom, '#reviewsMedley .AverageCustomerReviews span:contains(out of)'), 0.0) as score
   from load_and_select('https://www.amazon.com/dp/B07XJ8C8F7 -i 20s', 'body');"</code>
      </pre>
-                </div>
-                <div class="col-lg-5" data-aos="fade-up" data-aos-delay="150">
-                    <p>支持 X-SQL 的 REST API</p>
-                    <ul>
-                        <li><i class="ri-check-double-line"></i> <b>业务模型映射</b> - 使用 X-SQL
-                            完成从网页数据到本地业务模型的转换
-                        </li>
-                        <li><i class="ri-check-double-line"></i> <b>DATA API</b> -
-                            柏拉图的弹性计算使得规模化 Web 数据唾手可得
-                        </li>
-                        <li><i class="ri-check-double-line"></i> <b>高阶 SaaS</b> - X-SQL
-                            灵活的内置函数，提供进一步的数据处理能力：情绪判定，知识图谱构建等
-                        </li>
-                        <li><i class="ri-check-double-line"></i> <b>领域 SaaS</b> -
-                            对常见领域，柏拉图已内置开箱即用的解决方案
-                        </li>
-                    </ul>
-                    <a href="http://bi.platonic.fun" class="btn-learn-more"
-                       target="_blank">了解更多</a>
-                </div>
-            </div>
+				</div>
+				<div class="col-lg-5" data-aos="fade-up" data-aos-delay="150">
+					<p>支持 X-SQL 的 REST API</p>
+					<ul>
+						<li><i class="ri-check-double-line"></i> <b>业务模型映射</b> - 使用 X-SQL
+							完成从网页数据到本地业务模型的转换</li>
+						<li><i class="ri-check-double-line"></i> <b>DATA API</b> -
+							柏拉图的弹性计算使得规模化 Web 数据唾手可得</li>
+						<li><i class="ri-check-double-line"></i> <b>高阶 SaaS</b> - X-SQL
+							灵活的内置函数，提供进一步的数据处理能力：情绪判定，知识图谱构建等</li>
+						<li><i class="ri-check-double-line"></i> <b>领域 SaaS</b> -
+							对常见领域，柏拉图已内置开箱即用的解决方案</li>
+					</ul>
+					<a href="http://bi.platonic.fun" class="btn-learn-more"
+						target="_blank">了解更多</a>
+				</div>
+			</div>
 
-        </div>
-    </section>
-    <!-- End Data API -->
+		</div>
+	</section>
+	<!-- End Data API -->
 
 
     <!-- ======= Counts Section ======= -->

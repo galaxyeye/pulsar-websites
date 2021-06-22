@@ -398,19 +398,13 @@ h1, h2, h3, h4, h5, h6 {
   color: #fff;
 }
 
-#hero .btn-github {
-  font-family: "Raleway", sans-serif;
-  font-weight: 500;
-  font-size: 16px;
-  letter-spacing: 1px;
-  display: inline-block;
-  padding: 10px 30px;
-  transition: 0.5s;
+#hero a.demo {
   color: #3498db;
-  border: 2px solid #fff;
+  margin-right: 10px;
+  padding: 5px 2px 5px 0;
 }
 
-#hero .btn-github:hover {
+#hero a.demo:hover {
   background: #3498db;
   color: #fff;
 }
