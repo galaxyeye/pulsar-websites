@@ -137,7 +137,7 @@ from load_out_pages('https://www.amazon.com/b?node=3117954011', 'a[href~=/dp/]',
             <div class="row content">
                 <div class="col-lg-5" data-aos="fade-up" data-aos-delay="150">
                     <p>
-                        <b>网络数据处理存在以下关键理论难题</b>
+                        <b>网络数据处理存在以下关键算法难题</b>
                     </p>
                     <ul>
                         <li><i class="ri-check-double-line"></i> <b>自动网页提取</b> - 无人干预自动结构化互联网规模网页</li>
@@ -154,7 +154,7 @@ from load_out_pages('https://www.amazon.com/b?node=3117954011', 'a[href~=/dp/]',
                         <li><i class="ri-check-double-line"></i> <b>云化服务</b> - 支持云化服务以降低使用门槛并提高交付效率</li>
                         <li><i class="ri-check-double-line"></i> <b>操作语言</b> - 支持数据操作语言以简化远程数据操作</li>
 
-                        <li><i class="ri-check-double-line"></i> <b>质量保证</b> - 系统质量保证，以及大规模采集下的数据质量保证</li>
+                        <li><i class="ri-check-double-line"></i> <b>质量保证</b> - 系统质量保证，大规模采集下的数据质量和调度质量保证</li>
                         <li><i class="ri-check-double-line"></i> <b>性能优化</b> - 采集单元容器化以最大化节点效率，修改浏览器内核以提升性能</li>
                         <li><i class="ri-check-double-line"></i> <b>弹性计算</b> - 支持弹性计算以实现无缝扩展，从而获得处理互联网规模数据的能力</li>
                         <li><i class="ri-check-double-line"></i> <b>健壮性</b> - 应对复杂的网络环境</li>
